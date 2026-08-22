@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO ═══ -->
+  <title>Upper Peninsula Mountain Bike Trails — Live Rideability, Copper Harbor, Marquette & More | 906 Travel</title>
+  <meta name="description" content="The 8 best Upper Peninsula mountain bike trail systems — Copper Harbor, Marquette NTN, RAMBA, Swedetown and more — with live weather-based rideability, DNR closure notices, difficulty, and trip planning tips." />
+  <meta name="keywords" content="UP mountain biking, Upper Peninsula mountain bike trails, Copper Harbor mountain biking, Marquette MTB trails, RAMBA trails, Marji Gesick, Michigan mountain biking, Noquemanon Trail Network, Swedetown trails, UP fat biking" />
+  <meta name="author" content="906 Travel Dashboard" />
+  <link rel="canonical" href="https://906dashboard.com/trails.html" />
+
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:title" content="Upper Peninsula Mountain Bike Trails — Live Rideability & Trip Guide" />
+  <meta property="og:description" content="Copper Harbor, Marquette, RAMBA and more — live weather-based trail status, closures, and everything you need to plan a UP riding trip." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://906dashboard.com/trails.html" />
+  <meta property="og:image" content="https://906dashboard.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="800" />
+  <meta property="og:image:alt" content="Discover Michigan's Upper Peninsula — 906 Dashboard" />
+  <meta name="twitter:image" content="https://906dashboard.com/og-image.jpg" />
+  <meta property="og:site_name" content="906 Travel Dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ═══ SCHEMA.ORG STRUCTURED DATA ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Best Upper Peninsula Mountain Bike Trail Systems",
+    "description": "A curated guide to the top mountain bike trail networks in Michigan's Upper Peninsula.",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"item":{"@type":"TouristAttraction","name":"Copper Harbor Trails","description":"IMBA Silver-Level Ride Center at the tip of the Keweenaw — world-class flow and technical singletrack.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Copper Harbor"}}},
+      {"@type":"ListItem","position":2,"item":{"@type":"TouristAttraction","name":"Noquemanon Trail Network — Marquette","description":"50+ miles of singletrack from flowy beginner loops to rugged Lake Superior shoreline tech.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Marquette"}}},
+      {"@type":"ListItem","position":3,"item":{"@type":"TouristAttraction","name":"RAMBA Trails — Ishpeming & Negaunee","description":"Rugged, rocky iron-range singletrack — home of the Marji Gesick race.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Ishpeming"}}},
+      {"@type":"ListItem","position":4,"item":{"@type":"TouristAttraction","name":"Swedetown Recreation Area","description":"Family-friendly cross-country trails in Calumet with groomed winter fat biking.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Calumet"}}},
+      {"@type":"ListItem","position":5,"item":{"@type":"TouristAttraction","name":"Michigan Tech Trails","description":"Fast, flowy cross-country network on the Michigan Tech campus in Houghton.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Houghton"}}},
+      {"@type":"ListItem","position":6,"item":{"@type":"TouristAttraction","name":"Pine Mountain & Fumee Lake — Iron Mountain","description":"Quiet singletrack and non-motorized lake loops in the southern UP.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Iron Mountain"}}},
+      {"@type":"ListItem","position":7,"item":{"@type":"TouristAttraction","name":"Grand Island — Munising","description":"Ferry-access island riding with Lake Superior cliff-top views.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Munising"}}},
+      {"@type":"ListItem","position":8,"item":{"@type":"TouristAttraction","name":"Marquette Mountain Bike Park","description":"Lift-served downhill laps minutes from downtown Marquette.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Marquette"}}}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #1a6fc4;
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header (matches main site) ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 360px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(2,8,20,0.55) 0%, rgba(4,13,26,0.78) 100%),
+        url('https://images.unsplash.com/photo-1546869357-184a730b0a31?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat,
+        #040d1a;
+      padding: 60px 20px;
+    }
+    .hero-content { text-align: center; max-width: 820px; position: relative; z-index: 2; }
+    .hero-eyebrow { font-size: 12px; color: #9ec5ff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+    .hero-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 16px; color: #c7d4e0; max-width: 640px; margin: 0 auto 22px; line-height: 1.55; }
+    .hero-meta { display: inline-flex; gap: 18px; font-size: 12px; color: #c7d4e0; opacity: 0.9; }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+    /* ── Section wrap ── */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px; }
+    .section-eyebrow { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-weight: 700; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .section-lead  { color: var(--muted); font-size: 14px; margin-bottom: 22px; max-width: 720px; }
+
+    /* ── Rideability banner ── */
+    .season-banner {
+      background: linear-gradient(135deg, var(--surf2), var(--surface));
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex; gap: 18px; align-items: center;
+      margin-bottom: 24px;
+    }
+    .season-icon { font-size: 32px; flex-shrink: 0; }
+    .season-body { flex: 1; }
+    .season-lbl  { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 4px; }
+    .season-headline { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+    .season-detail   { font-size: 13px; color: var(--muted); }
+
+    /* ── Race weekend banner ── */
+    .race-banner {
+      background: rgba(249,115,22,0.07);
+      border: 1px solid rgba(249,115,22,0.25);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #d8c5b4;
+      margin-bottom: 24px;
+    }
+    .race-banner b { color: var(--orange); }
+
+    /* ── Filter chips ── */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .filter-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .filter-lbl   { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-right: 4px; font-weight: 700; }
+    .chip {
+      background: var(--surf2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 11px; padding: 5px 11px;
+      border-radius: 20px; cursor: pointer; font-weight: 600;
+      transition: all .15s;
+    }
+    .chip:hover { color: var(--text); border-color: var(--accent); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .filter-divider { width: 1px; height: 22px; background: var(--border); margin: 0 6px; }
+
+    /* ── Trail network grid ── */
+    .tn-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .tn-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .tn-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    /* Banner strip — swap for real photos later by adding background-image */
+    .tn-banner {
+      position: relative;
+      height: 92px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+    }
+    .tn-banner.keweenaw { background: linear-gradient(135deg, #123a2b, #0d2137); }
+    .tn-banner.marquette{ background: linear-gradient(135deg, #33230f, #0d2137); }
+    .tn-banner.west     { background: linear-gradient(135deg, #2b1a33, #0d2137); }
+    .tn-banner.east     { background: linear-gradient(135deg, #103042, #0d2137); }
+    .tn-difficulty {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      padding: 4px 9px;
+      border-radius: 16px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      z-index: 2;
+    }
+    .tn-difficulty.easy   { color: var(--green); border-color: rgba(34,197,94,.4); }
+    .tn-difficulty.mixed  { color: var(--yellow); border-color: rgba(234,179,8,.4); }
+    .tn-difficulty.expert { color: var(--orange); border-color: rgba(249,115,22,.4); }
+    .tn-flag {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(26,111,196,0.9);
+      color: #fff; font-size: 9px; font-weight: 800;
+      padding: 4px 8px; border-radius: 14px;
+      text-transform: uppercase; letter-spacing: 1px;
+      z-index: 2;
+    }
+    .tn-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+    .tn-name { font-size: 17px; font-weight: 700; margin-bottom: 2px; line-height: 1.2; }
+    .tn-loc { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .tn-desc { font-size: 13px; color: #b8c4d0; line-height: 1.55; margin-bottom: 14px; flex: 1; }
+    .tn-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin-bottom: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .tn-stat { font-size: 11px; }
+    .tn-stat-lbl { color: var(--muted); }
+    .tn-stat-val { color: var(--text); font-weight: 600; }
+
+    /* Rideability status pill */
+    .tn-ride {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 11px;
+      margin-bottom: 12px;
+      font-size: 12px;
+    }
+    .tn-ride-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; background: var(--muted); }
+    .tn-ride.good  .tn-ride-dot { background: var(--green); }
+    .tn-ride.warn  .tn-ride-dot { background: var(--yellow); }
+    .tn-ride.bad   .tn-ride-dot { background: var(--red); }
+    .tn-ride.snow  .tn-ride-dot { background: var(--blue); }
+    .tn-ride-label { font-weight: 700; }
+    .tn-ride.good  .tn-ride-label { color: var(--green); }
+    .tn-ride.warn  .tn-ride-label { color: var(--yellow); }
+    .tn-ride.bad   .tn-ride-label { color: var(--red); }
+    .tn-ride.snow  .tn-ride-label { color: var(--blue); }
+    .tn-ride-note  { color: var(--muted); font-size: 11px; }
+
+    .tn-footer { display: flex; gap: 8px; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); }
+    .tn-site-btn {
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      flex: 1; text-align: center;
+      transition: border-color .15s;
+    }
+    .tn-site-btn:hover { border-color: var(--accent); }
+    .tn-map-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: filter .15s;
+    }
+    .tn-map-btn:hover { filter: brightness(1.15); }
+
+    /* ── DNR closures ── */
+    .closure-section { margin-top: 32px; }
+    .closure-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+    .closure-item {
+      background: var(--surf2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 13px;
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .closure-status {
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+      padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px;
+      background: rgba(234,179,8,.15); color: var(--yellow);
+    }
+    .closure-status.closed { background: rgba(239,68,68,.15); color: var(--red); }
+    .closure-status.open   { background: rgba(34,197,94,.15); color: var(--green); }
+    .closure-name    { font-size: 13px; font-weight: 700; }
+    .closure-county  { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .closure-comment { font-size: 12px; color: #b8c4d0; }
+
+    /* ── Plan Your Trip / Affiliate ── */
+    .plan-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-top: 32px;
+    }
+    .affiliate-disclosure {
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(26,111,196,0.08);
+      border: 1px solid rgba(26,111,196,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .gear-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .gear-card {
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: border-color .15s, transform .15s;
+      display: flex; flex-direction: column;
+    }
+    .gear-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .gear-icon { font-size: 28px; margin-bottom: 10px; }
+    .gear-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .gear-why  { font-size: 12px; color: var(--muted); margin-bottom: 12px; flex: 1; }
+    .gear-link {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .gear-link:hover { filter: brightness(1.15); }
+
+    /* ── Where to stay ── */
+    .stay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .stay-card {
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .stay-town { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .stay-for  { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
+    .stay-why  { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.55; }
+    .stay-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .stay-links a {
+      font-size: 11px; font-weight: 700;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 5px 11px; border-radius: 14px;
+      transition: border-color .15s;
+    }
+    .stay-links a:hover { border-color: var(--accent); }
+
+    /* ── FAQ ── */
+    .faq-section { margin-top: 32px; }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+    .faq-q { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .faq-a { font-size: 13px; color: #b8c4d0; line-height: 1.6; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 30px 20px 24px;
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media(max-width: 1000px) {
+      .tn-grid   { grid-template-columns: repeat(2, 1fr); }
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+      .stay-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 30px; }
+    }
+    @media(max-width: 640px) {
+      .tn-grid   { grid-template-columns: 1fr; }
+      .gear-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 24px; }
+      header { flex-wrap: wrap; row-gap: 6px; }
+      .hdr-nav { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; gap: 6px 4px; }
+      .hdr-nav a { white-space: nowrap; padding: 7px 10px; }
+      .hero-meta { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a href="/" class="logo" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">906</div>
+    <div>
+      <div class="logo-text">UP DASHBOARD</div>
+      <div class="logo-sub">Upper Peninsula Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="/#today">Today</a>
+    <a href="/#trip-planning">Plan a Trip</a>
+    <a href="/#conditions">Conditions</a>
+    <a href="/#oredock">Ore Dock</a>
+    <a href="waterfalls.html">Waterfalls</a>
+    <a href="trails.html" class="active">Trails</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="/#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<!-- TODO (Dan): swap the hero background for a real UP singletrack photo when you have one. -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">UP MOUNTAIN BIKING · LIVE RIDEABILITY</div>
+    <h1 class="hero-title">Upper Peninsula Mountain Bike Trails</h1>
+    <p class="hero-subtitle">Copper Harbor, Marquette, the iron range and beyond — the UP is one of the best riding destinations in the Midwest. Live weather-based trail status tells you where it's likely tacky, muddy, or fat-bike season.</p>
+    <div class="hero-meta">
+      <span>🚵 8 Trail Systems</span>
+      <span>📏 250+ Miles of Singletrack</span>
+      <span>🌤️ Live Conditions</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ═══ RIDEABILITY BANNER ═══ -->
+  <div class="season-banner">
+    <div class="season-icon" id="season-icon">🚵</div>
+    <div class="season-body">
+      <div class="season-lbl">Riding Conditions Right Now</div>
+      <div class="season-headline" id="season-headline">Loading live regional weather…</div>
+      <div class="season-detail"  id="season-detail">Pulling current observations from NWS stations in Marquette, Hancock, and Iron Mountain.</div>
+    </div>
+  </div>
+
+  <!-- ═══ RACE WEEKEND NOTE ═══ -->
+  <div class="race-banner" id="race-banner" style="display:none;">
+    🏁 <b>Race weekend heads-up:</b> <span id="race-text"></span>
+  </div>
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="section-eyebrow">Why ride the UP?</div>
+  <h2 class="section-title">Real rock, real woods, no crowds.</h2>
+  <p class="section-lead">The Upper Peninsula packs an IMBA Silver-Level Ride Center, a 100-mile race with a cult following, lift-served downhill, and hundreds of miles of hand-built singletrack into one peninsula — with Lake Superior as the backdrop. Trail status below is a live estimate from the nearest NWS weather station; always check the local club's reports before you ride, and stay off wet trails.</p>
+
+  <!-- ═══ FILTER BAR ═══ -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-lbl">Area</span>
+      <button class="chip active" data-filter="region" data-val="all">All</button>
+      <button class="chip" data-filter="region" data-val="keweenaw">Keweenaw</button>
+      <button class="chip" data-filter="region" data-val="marquette">Marquette Range</button>
+      <button class="chip" data-filter="region" data-val="west">West &amp; South</button>
+      <button class="chip" data-filter="region" data-val="east">Eastern UP</button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-group">
+      <span class="filter-lbl">Style</span>
+      <button class="chip active" data-filter="style" data-val="all">All</button>
+      <button class="chip" data-filter="style" data-val="flow">Flow</button>
+      <button class="chip" data-filter="style" data-val="tech">Technical</button>
+      <button class="chip" data-filter="style" data-val="xc">XC / Family</button>
+      <button class="chip" data-filter="style" data-val="lift">Lift / Shuttle</button>
+    </div>
+  </div>
+
+  <!-- ═══ TRAIL NETWORK GRID ═══ -->
+  <div class="tn-grid" id="tn-grid"></div>
+
+  <!-- ═══ DNR BIKE TRAIL NOTICES ═══ -->
+  <div class="closure-section">
+    <div class="section-eyebrow">Live From MI DNR</div>
+    <h2 class="section-title">DNR-Managed Bike Trail Notices</h2>
+    <p class="section-lead">Official closure and reroute notices for DNR-managed bike trails in the UP. Club-built systems (Copper Harbor, NTN, RAMBA) post their own closures — check their sites during spring thaw.</p>
+    <div class="closure-card" id="closure-card">Loading DNR notices…</div>
+  </div>
+
+  <!-- ═══ WHERE TO STAY ═══ -->
+  <div class="plan-section">
+    <div class="section-eyebrow">Base Camp</div>
+    <h2 class="section-title">Where to stay for a UP riding trip</h2>
+    <p class="section-lead">Three towns cover every trail system on this page. Book early for July–September weekends — and don't even try to find a room during Marji Gesick or Ore to Shore without months of lead time.</p>
+
+    <div class="affiliate-disclosure">
+      <strong>Disclosure:</strong> VRBO links below are affiliate links — 906 Travel Dashboard may earn a
+      commission on bookings at no extra cost to you.
+    </div>
+
+    <!-- VRBO link = Dan's existing affiliate link (same one as the "Rent a Cabin" card on index.html).
+         Booking.com links are plain for now — swap for tracking links if approved for their partner program. -->
+    <div class="stay-grid">
+      <div class="stay-card">
+        <div class="stay-town">Copper Harbor / Keweenaw</div>
+        <div class="stay-for">For: Copper Harbor · Swedetown · Tech Trails</div>
+        <div class="stay-why">Tiny town, limited rooms — book months out for peak summer. Calumet and Houghton/Hancock are solid fallback bases within an hour of all three Keweenaw systems. A group cabin rental is often the best value up here.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Copper+Harbor+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+      <div class="stay-card">
+        <div class="stay-town">Marquette</div>
+        <div class="stay-for">For: NTN · RAMBA · Marquette Mountain</div>
+        <div class="stay-why">The UP's biggest town — breweries, bike shops, and trailheads inside city limits. Ishpeming/Negaunee (RAMBA) is 20 minutes west.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Marquette+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+      <div class="stay-card">
+        <div class="stay-town">Munising</div>
+        <div class="stay-for">For: Grand Island + Pictured Rocks combo trips</div>
+        <div class="stay-why">Ride Grand Island by day, waterfall-hop after. Pairs perfectly with the <a href="waterfalls.html" style="color:var(--accent);">waterfalls guide</a> for a mixed adventure weekend.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Munising+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GEAR / AFFILIATE ═══ -->
+  <div class="plan-section">
+    <div class="section-eyebrow">Trail Essentials</div>
+    <h2 class="section-title">Gear that saves UP riding trips</h2>
+    <p class="section-lead">The UP is remote — the nearest bike shop can be an hour away and cell coverage in the Keweenaw is spotty. Ride self-sufficient.</p>
+
+    <div class="affiliate-disclosure">
+      <strong>Disclosure:</strong> As an Amazon Associate, 906 Travel Dashboard earns from qualifying purchases.
+      Links open on Amazon at no extra cost to you.
+    </div>
+
+    <!-- AFFILIATE TODO (Dan): these are Amazon search links with your tag. When you've picked
+         specific products, swap in direct /dp/ASIN links like the waterfalls page uses.
+         Longer term: apply at avantlink.com for REI / Jenson USA / Competitive Cyclist —
+         5-10% commissions vs Amazon's ~3% on sporting goods. -->
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-icon">🔧</div>
+        <div class="gear-name">Tubeless Plug Kit</div>
+        <div class="gear-why">RAMBA and Copper Harbor rock eats tires. A bacon-strip plug kit turns a ride-ending slash into a 2-minute fix. Non-negotiable up here.</div>
+        <a class="gear-link" href="https://www.amazon.com/s?k=tubeless+bike+tire+plug+repair+kit&tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">🎒</div>
+        <div class="gear-name">Hip Pack + Water</div>
+        <div class="gear-why">Most UP trailheads have no water. A 1.5L hip pack covers a 2-hour loop; bring a full hydration pack for RAMBA epics.</div>
+        <a class="gear-link" href="https://www.amazon.com/s?k=mtb+hip+pack+hydration&tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">🦟</div>
+        <div class="gear-name">Picaridin Bug Spray</div>
+        <div class="gear-why">Stable-fly and mosquito season (June–August) is real, especially near the lake. 20% picaridin works and won't melt your grips like DEET.</div>
+        <a class="gear-link" href="https://www.amazon.com/dp/B0D5QRXBS4?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">🧰</div>
+        <div class="gear-name">Multi-tool w/ Chain Breaker</div>
+        <div class="gear-why">Snap a chain 8 miles deep on the Marji course and you'll walk out in the dark without one. Get a tool with a chain breaker and spare quick link.</div>
+        <a class="gear-link" href="https://www.amazon.com/s?k=bike+multi+tool+chain+breaker&tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="faq-section">
+    <div class="section-eyebrow">Frequently Asked</div>
+    <h2 class="section-title">UP Mountain Biking FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">When is the best time to mountain bike in the UP?</div>
+      <div class="faq-a">Mid-June through early October is prime. Late May–early June trails are open but buggy; September is the sweet spot — tacky dirt, no bugs, fall color by month's end. Avoid spring thaw (roughly mid-April to mid-May) when most club trails close or ask riders to stay off soft dirt. December–March is groomed fat bike season at several networks.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Which UP trail system should I ride first?</div>
+      <div class="faq-a">If you're intermediate or better: Copper Harbor — it's the destination-grade experience. If you want variety and amenities: Marquette, where the NTN, RAMBA, and lift-served Marquette Mountain are all within 25 minutes. New riders and families do best at Swedetown, the Michigan Tech Trails, or Marquette's easier NTN loops.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What is the Marji Gesick?</div>
+      <div class="faq-a">A famously brutal 100-mile (with 50-mile and shorter options) mountain bike race on RAMBA's rugged singletrack around Ishpeming and Negaunee each September. Roughly half the 100-mile field typically doesn't finish — which is exactly why it sells out. Finishers earn a belt buckle; there's no prize money, only bragging rights.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need a trail pass to ride in the UP?</div>
+      <div class="faq-a">Most club systems (Copper Harbor, NTN, RAMBA, Swedetown) are donation- or membership-supported rather than gated — but these clubs hand-build and maintain everything, so buy the day pass or membership where offered and drop cash in the trailhead tube. Marquette Mountain lift access requires a ticket. DNR trails need a Recreation Passport for state trailhead parking.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I ride in winter?</div>
+      <div class="faq-a">Yes — the UP is one of the best fat biking regions in the country. The NTN in Marquette and Swedetown in Calumet groom dedicated snow bike trails, with 200+ inches of annual lake-effect snow to work with. Fat bike rentals are available in Marquette, Houghton, and Calumet.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Where can I rent a mountain bike in the UP?</div>
+      <div class="faq-a">Keweenaw Adventure Company in Copper Harbor (rentals + trail shuttles), several shops in Marquette, and outfitters in Houghton/Hancock. Reserve ahead in July and August — rental fleets are small and demand is not.</div>
+    </div>
+  </div>
+
+  <!-- ═══ CROSS-LINK ═══ -->
+  <div style="margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Planning a riding trip north?</div>
+    <a href="/#conditions" style="color:var(--accent);font-weight:700;font-size:15px;">→ Check live UP travel conditions on the dashboard</a>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  906 Travel Dashboard · Upper Peninsula Michigan · <a href="/">Main Dashboard</a> · <a href="waterfalls.html">Waterfalls</a> · <a href="aurora.html">Aurora</a> · <a href="fall.html">Fall Colors</a> · <a href="privacy.html">Privacy &amp; Disclosure</a><br>
+  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Weather data: NWS · Trail notices: MI DNR · Support your local trail club · ©2026</span>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ═══ TRAIL NETWORK DATA ═══
+// Mileage figures are approximate — update as clubs expand their systems.
+const NETWORKS = [
+  {
+    id:'copper-harbor',
+    name:'Copper Harbor Trails',
+    loc:'Copper Harbor · Keweenaw County',
+    region:'keweenaw',
+    styles:['flow','tech','lift'],
+    nws:'KCMX',
+    diff:'expert', diffLabel:'Int–Expert',
+    flag:'★ Ride Center',
+    icon:'🚵',
+    miles:'~37 mi singletrack',
+    season:'~Mid-May – October',
+    vibe:'Flow + rugged tech',
+    shuttle:'Shuttle: Keweenaw Adventure Co.',
+    desc:'An IMBA Silver-Level Ride Center at the very tip of the Keweenaw. Machine-built flow like Flying Squirrel, exposed Lake Superior ridgeline tech, and a genuine destination-trip feel. The gold standard of Midwest riding.',
+    site:'https://copperharbortrails.org', siteLabel:'Trails Club',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Copper+Harbor+Trails+Michigan'
+  },
+  {
+    id:'ntn-marquette',
+    name:'Noquemanon Trail Network',
+    loc:'Marquette · Marquette County',
+    region:'marquette',
+    styles:['flow','tech','xc'],
+    nws:'KSAW',
+    diff:'mixed', diffLabel:'Beginner–Expert',
+    flag:null,
+    icon:'🌲',
+    miles:'50+ mi singletrack',
+    season:'~Mid-May – Oct · groomed fat bike Dec–Mar',
+    vibe:'Everything — flow, tech, XC',
+    shuttle:'Trailheads in town',
+    desc:'Marquette\'s massive club-built network — flowy south-side classics, rooty north-side woods, and Lake Superior views. Add the town\'s shops and breweries and it\'s the most complete trail town in the UP.',
+    site:'https://noquetrails.org', siteLabel:'NTN Site',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Marquette+South+Trails+Trailhead'
+  },
+  {
+    id:'ramba',
+    name:'RAMBA Trails',
+    loc:'Ishpeming & Negaunee · Marquette County',
+    region:'marquette',
+    styles:['tech','xc'],
+    nws:'KSAW',
+    diff:'expert', diffLabel:'Int–Expert',
+    flag:'🏁 Marji Gesick',
+    icon:'⛏️',
+    miles:'100+ mi network',
+    season:'~Mid-May – October',
+    vibe:'Rugged, rocky, old-school',
+    shuttle:'Multiple town trailheads',
+    desc:'Hand-cut singletrack over the iron range — rock slabs, punchy climbs, and zero flow-trail hand-holding. Home of the Marji Gesick, the September sufferfest that put the 906 on the national map.',
+    site:'https://rambatrails.org', siteLabel:'RAMBA Site',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Jackson+Mine+Park+Negaunee+MI'
+  },
+  {
+    id:'swedetown',
+    name:'Swedetown Recreation Area',
+    loc:'Calumet · Houghton County',
+    region:'keweenaw',
+    styles:['xc','flow'],
+    nws:'KCMX',
+    diff:'easy', diffLabel:'Beginner–Int',
+    flag:null,
+    icon:'🌳',
+    miles:'~20 mi trails',
+    season:'~June – Oct · groomed fat bike Dec–Mar',
+    vibe:'Smooth XC + family loops',
+    shuttle:'Chalet trailhead',
+    desc:'Calumet\'s four-season trail hub — smooth, swoopy cross-country loops that are perfect for families and new riders, plus one of the UP\'s best groomed fat bike networks once the lake-effect snow machine turns on.',
+    site:'https://swedetowntrails.org', siteLabel:'Swedetown Site',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Swedetown+Recreation+Area+Calumet+MI'
+  },
+  {
+    id:'tech-trails',
+    name:'Michigan Tech Trails',
+    loc:'Houghton · Houghton County',
+    region:'keweenaw',
+    styles:['xc','flow'],
+    nws:'KCMX',
+    diff:'easy', diffLabel:'Beginner–Int',
+    flag:null,
+    icon:'🎓',
+    miles:'~20 mi trails',
+    season:'~June – Oct · ski season in winter',
+    vibe:'Fast, flowy campus XC',
+    shuttle:'On-campus trailhead',
+    desc:'Michigan Tech\'s recreational forest above Houghton — fast XC laps on well-drained trails that dry quickly after rain. A great warm-up day before heading north to Copper Harbor.',
+    site:'https://www.trailforks.com/region/upper-peninsula/', siteLabel:'Trailforks',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Michigan+Tech+Trails+Houghton+MI'
+  },
+  {
+    id:'pine-fumee',
+    name:'Pine Mountain & Fumee Lake',
+    loc:'Iron Mountain · Dickinson County',
+    region:'west',
+    styles:['xc','tech'],
+    nws:'KIMT',
+    diff:'mixed', diffLabel:'Beginner–Int',
+    flag:null,
+    icon:'⛰️',
+    miles:'~25 mi combined',
+    season:'~May – October',
+    vibe:'Quiet lake loops + singletrack',
+    shuttle:'Two trailhead areas',
+    desc:'The southern UP\'s under-the-radar riding: singletrack off Pine Mountain plus the non-motorized Fumee Lake Natural Area next door. Rarely crowded, and a natural stop between Green Bay and the deeper UP.',
+    site:'https://www.trailforks.com/region/upper-peninsula/', siteLabel:'Trailforks',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Fumee+Lake+Natural+Area+Iron+Mountain+MI'
+  },
+  {
+    id:'grand-island',
+    name:'Grand Island',
+    loc:'Munising · Alger County',
+    region:'east',
+    styles:['xc'],
+    nws:'KSAW',
+    diff:'easy', diffLabel:'Beginner–Int',
+    flag:'⛴️ Ferry Access',
+    icon:'🏝️',
+    miles:'~20 mi rideable loops',
+    season:'~Late May – early Oct (ferry season)',
+    vibe:'Adventure ride, big views',
+    shuttle:'Ferry from Munising',
+    desc:'Take the passenger ferry across, then ride the island loop past 200-foot cliffs overlooking Lake Superior and Pictured Rocks. More adventure cruise than shred session — bring a camera and a full day.',
+    site:'https://www.google.com/maps/place/Grand+Island+National+Recreation+Area', siteLabel:'Map / Info',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Grand+Island+Ferry+Munising+MI'
+  },
+  {
+    id:'marquette-mountain',
+    name:'Marquette Mountain Bike Park',
+    loc:'Marquette · Marquette County',
+    region:'marquette',
+    styles:['lift','flow','tech'],
+    nws:'KSAW',
+    diff:'expert', diffLabel:'Int–Expert',
+    flag:'🚡 Lift-Served',
+    icon:'🚡',
+    miles:'Lift-served DH laps',
+    season:'Summer weekends — check lift schedule',
+    vibe:'Downhill / gravity',
+    shuttle:'Chairlift access',
+    desc:'Gravity laps five minutes from downtown Marquette — jump lines, tech trails, and chairlift service on summer operating days. Verify the current lift schedule before building a trip around it.',
+    site:'https://www.marquettemountain.com', siteLabel:'Lift Schedule',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Marquette+Mountain+MI'
+  }
+];
+
+// ═══ RENDER NETWORK CARDS ═══
+function renderNetworks() {
+  const grid = document.getElementById('tn-grid');
+  grid.innerHTML = NETWORKS.map(n => `
+    <article class="tn-card" data-region="${n.region}" data-styles="${n.styles.join(' ')}" id="tn-${n.id}">
+      <div class="tn-banner ${n.region}">
+        <span>${n.icon}</span>
+        ${n.flag ? `<div class="tn-flag">${n.flag}</div>` : ''}
+        <div class="tn-difficulty ${n.diff}">${n.diffLabel}</div>
+      </div>
+      <div class="tn-body">
+        <h3 class="tn-name">${n.name}</h3>
+        <div class="tn-loc">${n.loc}</div>
+        <p class="tn-desc">${n.desc}</p>
+        <div class="tn-stats">
+          <div class="tn-stat"><span class="tn-stat-lbl">Trails:</span> <span class="tn-stat-val">${n.miles}</span></div>
+          <div class="tn-stat"><span class="tn-stat-lbl">Style:</span> <span class="tn-stat-val">${n.vibe}</span></div>
+          <div class="tn-stat"><span class="tn-stat-lbl">Season:</span> <span class="tn-stat-val">${n.season}</span></div>
+          <div class="tn-stat"><span class="tn-stat-lbl">Access:</span> <span class="tn-stat-val">${n.shuttle}</span></div>
+        </div>
+        <div class="tn-ride" id="ride-${n.id}">
+          <div class="tn-ride-dot"></div>
+          <div>
+            <span class="tn-ride-label">Checking conditions…</span>
+            <div class="tn-ride-note">Live weather from ${n.nws}</div>
+          </div>
+        </div>
+        <div class="tn-footer">
+          <a class="tn-site-btn" href="${n.site}" target="_blank" rel="noopener">${n.siteLabel} →</a>
+          <a class="tn-map-btn" href="${n.maps}" target="_blank" rel="noopener">Directions →</a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+// ═══ LIVE WEATHER → RIDEABILITY ═══
+// Same NWS source as the main dashboard; mirrors its muddy-trail inference,
+// tuned for MTB (dirt is more rain-sensitive than hiking trails).
+const WX_CACHE = {};
+const mmToIn = mm => mm == null ? 0 : mm / 25.4;
+const cToF   = c  => c  == null ? null : Math.round(c * 9/5 + 32);
+
+async function fetchStationWx(station) {
+  if (WX_CACHE[station]) return WX_CACHE[station];
+  try {
+    const r = await fetch(`https://api.weather.gov/stations/${station}/observations/latest`,
+      {headers:{Accept:'application/geo+json'}});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const p = (await r.json()).properties || {};
+    const wx = {
+      ok: true,
+      temp_f:  cToF(p.temperature?.value),
+      desc:    p.textDescription || '',
+      precip1: mmToIn(p.precipitationLastHour?.value),
+      precip3: mmToIn(p.precipitationLast3Hours?.value),
+      precip6: mmToIn(p.precipitationLast6Hours?.value),
+      snow:    mmToIn(p.snowDepth?.value) // snowDepth arrives in mm too
+    };
+    WX_CACHE[station] = wx;
+    return wx;
+  } catch(e) {
+    return { ok:false };
+  }
+}
+
+function rideability(wx) {
+  const month = new Date().getMonth(); // 0=Jan
+  if (!wx.ok) return { cls:'', label:'Conditions unknown', note:'Weather station unavailable — check local reports' };
+
+  const d = (wx.desc || '').toLowerCase();
+  const recentRain = wx.precip6 > 0.1 || wx.precip3 > 0.05 || wx.precip1 > 0;
+  const snowy = d.includes('snow') || d.includes('blizzard') || wx.snow > 1;
+  const freezing = d.includes('freezing') || d.includes('sleet') || d.includes('ice');
+
+  if (snowy || (wx.temp_f != null && wx.temp_f < 28 && (month >= 10 || month <= 2))) {
+    return { cls:'snow', label:'Snow — fat bike season', note:'NTN & Swedetown groom for fat bikes; regular MTB is done for the year' };
+  }
+  if (freezing) {
+    return { cls:'bad', label:'Icy — not rideable', note:'Freezing precip reported — stay off the trails' };
+  }
+  // Spring thaw window: soft trails even without fresh rain
+  if (month === 3 || (month === 4 && wx.temp_f != null && wx.temp_f < 55 && recentRain)) {
+    return { cls:'warn', label:'Spring thaw — respect closures', note:'Soft trails damage easily; check the club\'s reports before riding' };
+  }
+  if (d.includes('rain') || d.includes('shower') || d.includes('thunder') || recentRain) {
+    const amt = wx.precip6 > 0 ? ` · ${wx.precip6.toFixed(2)}" last 6h` : '';
+    return { cls:'warn', label:'Wet — likely muddy', note:`Recent rain${amt} — riding wet trails ruins them` };
+  }
+  if (wx.temp_f != null && wx.temp_f <= 38) {
+    return { cls:'warn', label:'Freeze-thaw — ride frozen AM', note:`${wx.temp_f}°F — trails soften as they thaw midday` };
+  }
+  if (wx.temp_f != null) {
+    return { cls:'good', label:'Likely dry & tacky', note:`${wx.temp_f}°F — ${wx.desc || 'fair'} · confirm with local reports` };
+  }
+  return { cls:'', label:'Conditions unknown', note:'Check local club reports' };
+}
+
+async function loadRideability() {
+  const stations = [...new Set(NETWORKS.map(n => n.nws))];
+  const results = {};
+  await Promise.all(stations.map(async s => { results[s] = await fetchStationWx(s); }));
+
+  NETWORKS.forEach(n => {
+    const el = document.getElementById(`ride-${n.id}`);
+    if (!el) return;
+    const r = rideability(results[n.nws]);
+    el.className = 'tn-ride ' + r.cls;
+    el.innerHTML = `<div class="tn-ride-dot"></div>
+      <div><span class="tn-ride-label">${r.label}</span>
+      <div class="tn-ride-note">${r.note} <span style="opacity:.55;">(${n.nws})</span></div></div>`;
+  });
+
+  // Season banner from the Marquette station (most central)
+  const mq = results['KSAW'];
+  const r  = rideability(mq && mq.ok ? mq : { ok:false });
+  const iconMap = { good:'✅', warn:'⚠️', bad:'🛑', snow:'❄️', '':'🚵' };
+  document.getElementById('season-icon').textContent = iconMap[r.cls] || '🚵';
+  document.getElementById('season-headline').textContent = r.label + (mq?.ok && mq.temp_f != null ? ` — ${mq.temp_f}°F in Marquette` : '');
+  document.getElementById('season-detail').textContent = r.note + '. Per-network status below uses the nearest NWS station.';
+}
+
+// ═══ RACE WEEKEND BANNER ═══
+function renderRaceBanner() {
+  const m = new Date().getMonth();
+  let text = null;
+  if (m === 6)      text = 'Ore to Shore (Negaunee → Marquette) runs in early August — Marquette-area lodging books solid that weekend. Plan around it or join in.';
+  else if (m === 7) text = 'Ore to Shore month: Marquette fills up race weekend (early August). Marji Gesick follows in September — Ishpeming/Negaunee lodging goes fast.';
+  else if (m === 8) text = 'Marji Gesick month: RAMBA trails see race traffic and Ishpeming/Negaunee/Marquette lodging sells out for race weekend in September.';
+  if (text) {
+    document.getElementById('race-text').textContent = text;
+    document.getElementById('race-banner').style.display = '';
+  }
+}
+
+// ═══ DNR BIKE TRAIL NOTICES ═══
+// Same ArcGIS feed as the main dashboard, filtered to notices that name a bike trail.
+async function loadDnrBikeNotices() {
+  const card = document.getElementById('closure-card');
+  try {
+    const yr = new Date().getFullYear();
+    const bbox = encodeURIComponent('{"xmin":-90.4,"ymin":45.7,"xmax":-82.4,"ymax":47.5,"spatialReference":{"wkid":4326}}');
+    const where = encodeURIComponent(`Year=${yr} AND Bike_Name IS NOT NULL`);
+    const url = 'https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/DNR_trails_temporarily_closed/FeatureServer/0/query'
+      + `?where=${where}&outFields=Comments%2CCounty%2CBike_Name%2CEditDate`
+      + `&geometry=${bbox}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=json`;
+    const d = await (await fetch(url)).json();
+    const seen = new Set(); const notices = [];
+    for (const f of (d.features || [])) {
+      const a = f.attributes;
+      const comment = (a.Comments || '').trim();
+      const name = a.Bike_Name || 'Bike trail';
+      const key = name + '|' + a.County;
+      if (seen.has(key)) continue; seen.add(key);
+      const lower = comment.toLowerCase();
+      let status = 'notice';
+      if      (lower.match(/:\s*open/) || lower.includes('open')) status = 'open';
+      else if (lower.includes('closed') || lower.includes('closing')) status = 'closed';
+      const edit = a.EditDate ? new Date(a.EditDate) : null;
+      notices.push({ name, county: a.County || '', comment: comment.slice(0, 200), status, edit });
+    }
+    notices.sort((x, y) => (y.edit?.getTime() || 0) - (x.edit?.getTime() || 0));
+
+    if (!notices.length) {
+      card.innerHTML = `<div style="color:var(--muted);font-size:13px;">✅ No active DNR bike-trail notices for the UP in ${yr}. Club trail systems post closures separately — check their sites during spring thaw.</div>`;
+      return;
+    }
+    const sLabel = { open:'Open', closed:'Closed', notice:'Notice' };
+    card.innerHTML = notices.map(c => `
+      <div class="closure-item">
+        <div class="closure-status ${c.status}">${sLabel[c.status]}</div>
+        <div>
+          <div class="closure-name">${esc(c.name)}</div>
+          <div class="closure-county">${esc(c.county)} County · MI DNR${c.edit ? ` · Updated ${c.edit.toLocaleDateString([], {month:'short', day:'numeric'})}` : ''}</div>
+          <div class="closure-comment">${esc(c.comment)}</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    card.innerHTML = `<div style="color:var(--muted);font-size:13px;">DNR notice feed unavailable right now — check <a href="https://www.michigan.gov/dnr/places/state-trails" target="_blank" style="color:var(--accent);">michigan.gov/dnr</a> directly.</div>`;
+  }
+}
+
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ═══ FILTERS ═══
+const filterState = { region: 'all', style: 'all' };
+
+function applyFilters() {
+  document.querySelectorAll('.tn-card').forEach(card => {
+    const matchesRegion = filterState.region === 'all' || card.dataset.region === filterState.region;
+    const matchesStyle  = filterState.style  === 'all' || card.dataset.styles.split(' ').includes(filterState.style);
+    card.style.display = (matchesRegion && matchesStyle) ? '' : 'none';
+  });
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const f = chip.dataset.filter;
+    filterState[f] = chip.dataset.val;
+    document.querySelectorAll(`.chip[data-filter="${f}"]`).forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    applyFilters();
+  });
+});
+
+// ═══ INIT ═══
+renderNetworks();
+renderRaceBanner();
+loadRideability();
+loadDnrBikeNotices();
+</script>
+
+</body>
+</html>

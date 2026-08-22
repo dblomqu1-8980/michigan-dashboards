@@ -1,0 +1,2525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>906 Travel Dashboard — Live Upper Peninsula Michigan Conditions, Cameras & Trip Planning</title>
+
+  <!-- ═══ SEO ═══ -->
+  <meta name="description" content="Real-time Upper Peninsula Michigan dashboard — live weather, road conditions, Mackinac Bridge status, Soo Locks & Ore Dock vessels, lake levels, ski reports, aurora forecasts, and 200+ UP waterfalls. Your one-stop UP travel planner." />
+  <meta name="keywords" content="Upper Peninsula Michigan, UP travel, UP weather, Mackinac Bridge, Soo Locks, UP cameras, UP waterfalls, Pictured Rocks, aurora Michigan, UP road conditions, 906" />
+  <meta name="author" content="906 Travel Dashboard" />
+  <link rel="canonical" href="https://906dashboard.com/" />
+
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:title" content="906 Travel Dashboard — Live Upper Peninsula Michigan" />
+  <meta property="og:description" content="Live UP weather, road conditions, Mackinac Bridge, Soo Locks vessels, aurora forecasts, ski reports, and waterfall guides. Updated every 5 minutes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://906dashboard.com/" />
+  <meta property="og:image" content="https://906dashboard.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="800" />
+  <meta property="og:image:alt" content="Discover Michigan's Upper Peninsula — 906 Dashboard" />
+  <meta name="twitter:image" content="https://906dashboard.com/og-image.jpg" />
+  <meta property="og:site_name" content="906 Travel Dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="906 Travel Dashboard — Live Upper Peninsula Michigan" />
+  <meta name="twitter:description" content="Live UP weather, road conditions, vessel tracking, and the best places to visit. Updated every 5 minutes." />
+
+  <!-- ═══ SCHEMA.ORG ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "906 Travel Dashboard",
+    "alternateName": "UP Dashboard",
+    "url": "https://906dashboard.com/",
+    "description": "Real-time Upper Peninsula Michigan travel dashboard with live weather, road conditions, vessel tracking, aurora forecasts, and trip planning guides.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://906dashboard.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #1a6fc4;
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+      --maple:   #e0603a;   /* fall color accent */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+    /* ── Header ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover { color: var(--text); background: var(--surf2); }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    .timestamp  { color: var(--muted); font-size: 12px; }
+    .refresh-btn { background: var(--surf2); border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 460px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #040d1a; /* fallback if all images fail */
+    }
+    /* Crossfading image slides */
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.8s ease-in-out;
+      will-change: opacity;
+    }
+    .hero-slide.active { opacity: 1; }
+    /* Dark overlay so text is always readable */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(2,8,20,0.55) 0%,
+        rgba(4,13,26,0.40) 45%,
+        rgba(4,13,26,0.65) 100%
+      );
+      z-index: 1;
+    }
+    /* Location caption bottom-left */
+    .hero-caption {
+      position: absolute;
+      bottom: 130px;
+      left: 24px;
+      z-index: 3;
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    /* Treeline silhouette */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%230d1117' d='M0,80 L20,60 L40,75 L60,45 L80,65 L100,30 L120,55 L140,40 L160,62 L180,25 L200,50 L220,35 L240,60 L260,20 L280,48 L300,35 L320,58 L340,15 L360,42 L380,30 L400,55 L420,22 L440,48 L460,38 L480,62 L500,18 L520,45 L540,32 L560,55 L580,20 L600,50 L620,38 L640,60 L660,25 L680,48 L700,35 L720,58 L740,22 L760,45 L780,32 L800,55 L820,18 L840,42 L860,30 L880,55 L900,22 L920,48 L940,38 L960,62 L980,18 L1000,45 L1020,32 L1040,58 L1060,20 L1080,50 L1100,35 L1120,60 L1140,25 L1160,48 L1180,35 L1200,55 L1220,15 L1240,42 L1260,30 L1280,58 L1300,22 L1320,48 L1340,38 L1360,62 L1380,18 L1400,45 L1420,32 L1440,55 L1440,120 L0,120 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+      background-size: cover;
+    }
+    /* Stars */
+    .hero-stars {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background-image:
+        radial-gradient(1px 1px at 10% 12%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 42% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 58% 6%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 71% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 9%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 93% 22%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 28%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 32%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(2px 2px at 5% 5%,   rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(2px 2px at 88% 4%,  rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(2px 2px at 50% 3%,  rgba(255,255,255,0.6) 0%, transparent 100%);
+    }
+    /* Aurora shimmer */
+    .hero-aurora {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(32,180,100,0.04) 30%,
+        rgba(60,220,140,0.07) 45%,
+        rgba(32,180,100,0.04) 60%,
+        transparent 75%);
+      animation: aurora 8s ease-in-out infinite alternate;
+    }
+    @keyframes aurora {
+      0%   { opacity: 0.6; transform: translateY(-10px) scaleX(0.95); }
+      50%  { opacity: 1;   transform: translateY(0px)  scaleX(1);    }
+      100% { opacity: 0.5; transform: translateY(5px)  scaleX(1.05); }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 60px 24px 100px;
+      max-width: 760px;
+    }
+    .hero-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: rgba(100,200,160,0.9); font-weight: 600; margin-bottom: 16px; }
+    .hero-title {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    .hero-subtitle {
+      font-size: clamp(14px, 2.5vw, 20px);
+      color: rgba(180,220,240,0.9);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .hero-desc {
+      font-size: 14px;
+      color: rgba(150,190,210,0.75);
+      max-width: 540px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background .15s, transform .1s;
+      box-shadow: 0 4px 20px rgba(26,111,196,0.4);
+    }
+    .cta-primary:hover { background: #1a82e2; transform: translateY(-1px); }
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(220,240,255,0.9);
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      transition: background .15s, transform .1s;
+    }
+    .cta-secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+    /* ── Status Bar ── */
+    .status-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .status-bar::-webkit-scrollbar { display: none; }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-right: 1px solid var(--border);
+      flex: 1 1 auto;
+      min-width: max-content;
+      cursor: default;
+      transition: background .15s;
+    }
+    .sb-item:hover { background: var(--surf2); }
+    @media(max-width:700px){
+      .sb-item { padding: 10px 14px; }
+    }
+    .sb-icon { font-size: 16px; flex-shrink: 0; }
+    .sb-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; flex-shrink: 0; }
+    .sb-val { font-size: 12px; font-weight: 700; white-space: nowrap; color: var(--text); }
+    .sb-val.green { color: var(--green); }
+    .sb-val.yellow { color: var(--yellow); }
+    .sb-val.red { color: var(--red); }
+    .sb-val.blue { color: var(--blue); }
+
+    /* ── Section common ── */
+    .section-wrap { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+    .section-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+    .section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+
+    /* ── Today in the UP ── */
+    .today-section {
+      padding: 44px 0 48px;
+      background: linear-gradient(135deg, rgba(26,111,196,0.07) 0%, rgba(13,53,96,0.11) 100%);
+      border-top: 3px solid;
+      border-image: linear-gradient(90deg, var(--accent), #22c55e, var(--accent)) 1;
+    }
+    .today-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+    .today-section .section-title { font-size: 26px; margin-bottom: 0; }
+    .today-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    /* ── Aurora featured card (spans full width) ── */
+    .aurora-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(10,20,50,0.95) 0%, rgba(8,30,60,0.95) 100%);
+      border: 1px solid rgba(100,160,255,0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+    .aurora-left { text-align: center; min-width: 140px; }
+    .aurora-icon { font-size: 38px; display: block; margin-bottom: 8px; }
+    .aurora-topic { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(150,190,255,0.7); margin-bottom: 6px; }
+    .aurora-rating {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .aurora-rating.high { color: #f97316; }
+    .aurora-rating.med  { color: #eab308; }
+    .aurora-rating.low  { color: #7d8996; }
+    .aurora-tip { font-size: 11px; color: rgba(150,190,210,0.7); line-height: 1.4; max-width: 130px; margin: 0 auto; }
+    .aurora-more { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: #37d5b2; text-decoration: none; }
+    .aurora-more:hover { text-decoration: underline; }
+    .aurora-right { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .aurora-signal {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .aurora-signal-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(150,190,210,0.6); margin-bottom: 5px; }
+    .aurora-signal-val   { font-size: 14px; font-weight: 700; line-height: 1.3; }
+    .aurora-signal-val.sig-good { color: var(--green);  }
+    .aurora-signal-val.sig-warn { color: var(--yellow); }
+    .aurora-signal-val.sig-bad  { color: var(--red);    }
+    .aurora-signal-val.sig-neu  { color: var(--text);   }
+    .aurora-source { font-size: 10px; color: rgba(100,140,180,0.5); margin-top: 6px; letter-spacing: .5px; }
+    .today-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      transition: border-color .2s;
+    }
+    .today-card:hover { border-color: var(--accent); }
+    .tc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+    .tc-topic { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
+    .tc-status { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .tc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .tc-signals { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 6px; }
+    .tc-signal { display: flex; justify-content: space-between; font-size: 11px; }
+    .tc-signal span:first-child { color: var(--muted); }
+    .tc-signal span:last-child  { font-weight: 700; }
+    .sig-good { color: var(--green); }
+    .sig-warn { color: var(--yellow); }
+    .sig-bad  { color: var(--red); }
+    .sig-neu  { color: var(--muted); }
+    .tc-status.good  { color: var(--green); }
+    .tc-status.med   { color: var(--yellow); }
+    .tc-status.low   { color: var(--muted); }
+    .tc-status.high  { color: var(--orange); }
+    .edit-btn {
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: none; /* hidden from public — revealed via #admin in URL */
+    }
+    .edit-btn.admin-visible { display: inline-block; }
+    .edit-btn:hover { color: var(--text); border-color: var(--accent); }
+    .today-edit-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+      display: none; /* hidden by default; toggled to 'grid' via JS */
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .edit-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .edit-field input, .edit-field select, .edit-field textarea {
+      width: 100%;
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .edit-field textarea { resize: vertical; min-height: 54px; }
+    .edit-field input:focus, .edit-field select:focus, .edit-field textarea:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .edit-actions { grid-column: span 2; display: flex; gap: 8px; padding-top: 4px; }
+    .btn-save { background: var(--accent); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+    .btn-save:hover { background: #1a82e2; }
+    .btn-cancel { background: var(--surf2); color: var(--muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+
+    /* ── Trip Planning ── */
+    .trip-section { padding: 0 0 40px; border-top: 1px solid var(--border); padding-top: 40px; }
+    .trip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .trip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color .2s, transform .1s;
+    }
+    .trip-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .trip-card-icon { font-size: 26px; margin-bottom: 4px; }
+    .trip-card-title { font-size: 14px; font-weight: 700; }
+    .trip-card-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .trip-card-link { font-size: 11px; color: var(--accent); margin-top: auto; padding-top: 8px; }
+
+    /* ── Dashboard Section ── */
+    .dashboard-section { padding: 0 0 20px; }
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0 20px;
+    }
+    .live-badge-lg {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+      background: rgba(34,197,94,.08);
+      border: 1px solid rgba(34,197,94,.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    /* ── Dashboard Panels ── */
+    .panel-toggle { margin-bottom: 10px; }
+    .panel-hdr {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      user-select: none;
+      transition: border-color .15s, background .15s;
+    }
+    .panel-hdr:hover { border-color: var(--accent); background: var(--surf2); }
+    .panel-toggle.open .panel-hdr { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: var(--accent); }
+    .panel-chevron { color: var(--muted); font-size: 12px; transition: transform .25s; }
+    .panel-toggle.open .panel-chevron { transform: rotate(180deg); color: var(--accent); }
+    .panel-body { display: none; }
+    .panel-toggle.open .panel-body { display: block; }
+    .panel-inner-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 13px;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 13px;
+    }
+    .panel-inner-grid .span2 { grid-column: span 2; }
+    .panel-inner-grid .span3 { grid-column: span 3; }
+
+    /* ── Cards ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .card-head { background: var(--surf2); padding: 9px 13px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .card-title { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .card-body  { padding: 13px; }
+
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+    .bg-green  { background: rgba(34,197,94,.15);  color: var(--green);  }
+    .bg-yellow { background: rgba(234,179,8,.15);  color: var(--yellow); }
+    .bg-red    { background: rgba(239,68,68,.15);  color: var(--red);    }
+    .bg-blue   { background: rgba(59,130,246,.15); color: var(--blue);   }
+    .bg-muted  { background: rgba(125,137,150,.15);color: var(--muted);  }
+    .bg-orange { background: rgba(249,115,22,.15); color: var(--orange); }
+
+    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+    .dot-g { background:var(--green); }
+    .dot-y { background:var(--yellow); animation:pulse 1.5s infinite; }
+    .dot-r { background:var(--red);    animation:pulse 1s   infinite; }
+    .dot-m { background:var(--muted); }
+
+    .stat { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+    .stat:last-child { border-bottom:none; }
+    .stat-lbl { color:var(--muted); font-size:12px; }
+    .stat-val { font-weight:600; font-size:13px; }
+
+    /* ── Weather ── */
+    .wx-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .wx-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+    .wx-city { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; }
+    .wx-icon { font-size:26px; margin-bottom:5px; }
+    .wx-temp { font-size:30px; font-weight:700; line-height:1; margin-bottom:3px; }
+    .wx-desc { font-size:11px; color:var(--muted); margin-bottom:8px; height:28px; }
+    .wx-meta { display:grid; grid-template-columns:1fr 1fr; gap:3px; font-size:11px; }
+    .wx-lbl  { color:var(--muted); }
+    .wx-val  { color:var(--text); font-weight:600; }
+
+    /* ── Alerts ── */
+    .alert-bar { background:rgba(234,179,8,.08); border:1px solid rgba(234,179,8,.25); border-radius:8px; padding:10px 13px; display:flex; gap:10px; align-items:flex-start; margin-bottom:6px; }
+    .alert-bar.sev-extreme,.alert-bar.sev-severe { background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.25); }
+    .alert-bar.emerg { background:rgba(239,68,68,.12); border:2px solid rgba(239,68,68,.5); }
+    .alert-icon { font-size:17px; flex-shrink:0; margin-top:1px; }
+    .alert-text-area { flex:1; }
+    .alert-title { font-weight:700; font-size:13px; margin-bottom:3px; }
+    .alert-bar .alert-title { color:var(--yellow); }
+    .alert-bar.sev-extreme .alert-title,.alert-bar.sev-severe .alert-title,.alert-bar.emerg .alert-title { color:var(--red); }
+    .alert-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+    .no-alerts { color:var(--muted); font-size:13px; text-align:center; padding:12px 0; }
+    .alert-section-hdr { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:700; padding:4px 0 8px; }
+
+    /* ── Bridge ── */
+    .bridge-center { text-align:center; padding:14px 0 10px; }
+    .bridge-glyph  { font-size:44px; display:block; margin-bottom:8px; }
+    .bridge-status { font-size:18px; font-weight:700; margin-bottom:4px; }
+    .bridge-detail { font-size:12px; color:var(--muted); margin-bottom:12px; }
+    .bridge-grid   { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .bridge-cell   { background:var(--surf2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+    .bcell-lbl     { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .bcell-val     { font-weight:700; font-size:14px; }
+    .bcell-sub     { font-size:11px; color:var(--muted); margin-top:2px; }
+
+    /* ── Lakes ── */
+    .lake-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .lake-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+    .lake-name { font-size:12px; font-weight:700; margin-bottom:8px; }
+    .lake-stat { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .lake-stat span { color:var(--text); font-weight:600; }
+    .level-bar { height:4px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
+    .level-fill { height:100%; border-radius:2px; background:var(--blue); transition:width .4s; }
+
+    /* ── Routes ── */
+    .route-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+    .route-item { padding:9px 0; border-bottom:1px solid var(--border); }
+    .route-item:last-child,.route-item:nth-last-child(2):nth-child(odd) { border-bottom:none; }
+    .route-hdr  { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+    .route-name { font-weight:600; font-size:12px; }
+    .route-bar  { height:5px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:3px; }
+    .route-fill { height:100%; border-radius:3px; transition:width .4s; }
+    .route-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+    @media(max-width:700px){.route-grid{grid-template-columns:1fr;}}
+
+    /* ── Cameras ── */
+    .featured-cams-section { padding: 0 0 40px; }
+    .featured-cams-section .section-title { margin-bottom: 6px; }
+    .cam-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+    .featured-cam-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom: 14px; }
+    .cam-section-hdr { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-weight:700; padding:2px 0 8px; margin-top:4px; }
+    .cam-section-hdr:first-child { margin-top:0; }
+    .cam-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+    .cam-grid:last-child { margin-bottom:0; }
+    .cam-tile { background:var(--surf2); border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; transition:border-color .15s; }
+    .cam-tile:hover { border-color:var(--accent); }
+    .cam-tile.featured { border-color: rgba(26,111,196,0.4); }
+    .cam-tile.featured:hover { border-color: var(--accent); }
+    .cam-img-wrap { position:relative; aspect-ratio:3/2; background:#000; overflow:hidden; }
+    .cam-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+    .cam-featured-badge { position:absolute; top:6px; left:6px; background: var(--accent); color:#fff; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding: 2px 6px; border-radius:4px; }
+    .cam-label { padding:6px 8px; font-size:11px; color:var(--muted); line-height:1.3; }
+    .cam-label strong { color:var(--text); display:block; font-size:11px; }
+
+    .view-all-btn {
+      width: 100%;
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      padding: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      transition: color .15s, border-color .15s;
+      margin-top: 8px;
+    }
+    .view-all-btn:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ── Gas ── */
+    .gas-grid  { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .gas-item  { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+    .gas-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .gas-price { font-size:26px; font-weight:700; color:var(--green); line-height:1.1; }
+    .gas-unit  { font-size:11px; color:var(--muted); }
+    .gas-note  { font-size:11px; color:var(--muted); margin-top:10px; text-align:center; }
+    .gas-note a { color:var(--blue); text-decoration:none; }
+
+    /* ── Ski ── */
+    .ski-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .ski-tile{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+    .ski-name{font-size:13px;font-weight:700;margin-bottom:5px;}
+    .ski-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px;}
+    .ski-chip{font-size:11px;background:var(--border);border-radius:4px;padding:2px 6px;}
+    .ski-chip b{color:var(--text);}
+    .ski-link{font-size:11px;color:var(--blue);text-decoration:none;}
+    .ski-err{font-size:11px;color:var(--muted);margin-bottom:4px;}
+
+    /* ── Trails ── */
+    .trail-closure-list { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .trail-closure-item { background:var(--surf2); border-radius:7px; border:1px solid var(--border); padding:9px 12px; display:flex; gap:10px; align-items:flex-start; }
+    .tcl-status { font-size:10px; font-weight:700; text-transform:uppercase; padding:2px 7px; border-radius:10px; white-space:nowrap; margin-top:1px; flex-shrink:0; }
+    .tcl-status.open     { background:rgba(34,197,94,.15);  color:var(--green);  }
+    .tcl-status.closed   { background:rgba(239,68,68,.15);  color:var(--red);    }
+    .tcl-status.rerouted { background:rgba(234,179,8,.15);  color:var(--yellow); }
+    .tcl-status.caution  { background:rgba(249,115,22,.15); color:var(--orange); }
+    .tcl-status.modified { background:rgba(59,130,246,.15); color:var(--blue);   }
+    .tcl-body    { flex:1; min-width:0; }
+    .tcl-name    { font-size:13px; font-weight:600; }
+    .tcl-county  { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .tcl-comment { font-size:12px; color:var(--text); line-height:1.4; }
+    .trail-links-hdr  { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin:0 0 8px; padding-top:12px; border-top:1px solid var(--border); }
+    .trail-links-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+    .trail-link-card  { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px; text-decoration:none; color:var(--text); display:flex; flex-direction:column; gap:4px; transition:border-color .2s; }
+    .trail-link-card:hover { border-color:var(--accent); }
+    .tlc-icon  { font-size:20px; }
+    .tlc-label { font-size:12px; font-weight:600; }
+    .tlc-sub   { font-size:11px; color:var(--muted); }
+
+    /* ── Soo Locks ── */
+    .soo-body { line-height:2.1; font-size:12px; }
+    .soo-map-wrap { position:relative; width:100%; aspect-ratio:4/3; min-height:220px; background:var(--surf2); overflow:hidden; border-radius:8px; margin-bottom:10px; }
+    .soo-map-wrap iframe { width:100%; height:100%; border:0; display:block; }
+
+    /* ── Marquette Ore Dock — vessel tracking ── */
+    .oredock-map-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      min-height: 380px;
+      background: var(--surf2);
+      overflow: hidden;
+    }
+    .oredock-map-wrap iframe { width: 100%; height: 100%; }
+    .oredock-map-overlay {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      pointer-events: none;
+      z-index: 2;
+      border: 1px solid var(--border);
+    }
+    .oredock-links { display: flex; flex-direction: column; gap: 6px; }
+    .oredock-link {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .15s, transform .15s;
+    }
+    .oredock-link:hover { border-color: var(--accent); transform: translateX(2px); }
+    .oredock-link > span:first-child { font-size: 18px; flex-shrink: 0; }
+    .oredock-link-name {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .oredock-link-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    @media(max-width:700px) {
+      .oredock-map-wrap { aspect-ratio: 4/3; min-height: 280px; }
+    }
+
+    /* ── Misc ── */
+    .skeleton { background:linear-gradient(90deg,var(--surf2) 25%,var(--border) 50%,var(--surf2) 75%); background-size:400% 100%; animation:shimmer 1.5s infinite; border-radius:4px; height:14px; }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .err-msg  { color:var(--red); font-size:11px; padding:6px 0; }
+    .src-note { font-size:10px; color:var(--muted); margin-top:8px; font-style:italic; }
+    .all-cams-panel { display:none; }
+    .all-cams-panel.open { display:block; }
+
+    footer { text-align:center; padding:20px; color:var(--muted); font-size:11px; border-top:1px solid var(--border); margin-top:20px; }
+
+    /* ── Responsive ── */
+    @media(max-width:1100px){
+      .panel-inner-grid{grid-template-columns:1fr 1fr;}
+      .panel-inner-grid .span2,.panel-inner-grid .span3{grid-column:span 2;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+      .featured-cam-grid,.cam-grid{grid-template-columns:repeat(2,1fr);}
+      .today-grid{grid-template-columns:repeat(2,1fr);}
+      .aurora-right{grid-template-columns:repeat(2,1fr);}
+      .trip-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:700px){
+      .panel-inner-grid{grid-template-columns:1fr;}
+      .panel-inner-grid .span2,.panel-inner-grid .span3{grid-column:span 1;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+      .featured-cam-grid,.cam-grid{grid-template-columns:repeat(2,1fr);}
+      .today-grid{grid-template-columns:1fr;}
+      .aurora-card{grid-template-columns:1fr;}
+      .aurora-right{grid-template-columns:repeat(2,1fr);}
+      .aurora-left{min-width:unset;}
+      .trip-grid{grid-template-columns:repeat(2,1fr);}
+      .today-edit-panel{grid-template-columns:1fr;}
+      .edit-actions{grid-column:span 1;}
+      .trail-links-grid{grid-template-columns:repeat(2,1fr);}
+      .hero-title{font-size:26px;}
+      header{flex-wrap:wrap;row-gap:6px;}
+      .hdr-nav{order:3;width:100%;flex-wrap:wrap;justify-content:center;gap:6px 4px;}
+      .hdr-nav a{white-space:nowrap;padding:7px 10px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">906</div>
+    <div>
+      <div class="logo-text">UP DASHBOARD</div>
+      <div class="logo-sub">Upper Peninsula Michigan</div>
+    </div>
+  </div>
+  <nav class="hdr-nav">
+    <a href="#today">Today</a>
+    <a href="#trip-planning">Plan a Trip</a>
+    <a href="#conditions">Conditions</a>
+    <a href="#oredock">Ore Dock</a>
+    <a href="waterfalls.html">Waterfalls</a>
+    <a href="trails.html">Trails</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="timestamp" id="ts">Loading…</div>
+    <button class="refresh-btn" onclick="fetchAll()">⟳ Refresh</button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <!-- Rotating background slides — images load progressively, gradient fallback always shows -->
+  <div class="hero-slide active" id="hero-slide-0" style="background-image:url('https://images.unsplash.com/photo-1658550812668-0233e3a24a26?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-1" style="background-image:url('https://images.unsplash.com/photo-1694759421163-f2fac730da5a?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-2" style="background-image:url('https://images.unsplash.com/photo-1546869357-184a730b0a31?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-3" style="background-image:url('https://images.unsplash.com/photo-1571079526232-4359c36885b4?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-stars"></div>
+  <div class="hero-aurora"></div>
+  <div class="hero-caption" id="hero-caption">Pictured Rocks National Lakeshore</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Michigan's Upper Peninsula</div>
+    <h1 class="hero-title">906 Travel Dashboard —<br>What to Do, See &amp; Expect Today</h1>
+    <p class="hero-subtitle">Your real-time guide to the UP</p>
+    <p class="hero-desc">Live weather, road conditions, northern lights forecasts, and local insights — everything you need before you head out.</p>
+    <div class="hero-ctas">
+      <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
+      <a href="#conditions" class="cta-secondary">🛣️ Check Travel Conditions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATUS BAR ═══ -->
+<div class="status-bar">
+  <div class="sb-item">
+    <span class="sb-icon">🌉</span>
+    <span class="sb-label">Bridge</span>
+    <span class="sb-val" id="sbv-bridge">…</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-icon">🛣️</span>
+    <span class="sb-label">Roads</span>
+    <span class="sb-val" id="sbv-roads">…</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-icon">⚠️</span>
+    <span class="sb-label">Alerts</span>
+    <span class="sb-val" id="sbv-alerts">…</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-icon">🌤️</span>
+    <span class="sb-label">Marquette</span>
+    <span class="sb-val" id="sbv-weather">…</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-icon">🌌</span>
+    <span class="sb-label">Aurora KP</span>
+    <span class="sb-val" id="sbv-kp">…</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-icon">⛽</span>
+    <span class="sb-label">Gas (Midwest)</span>
+    <span class="sb-val" id="sbv-gas">…</span>
+  </div>
+</div>
+
+<!-- ═══ TODAY IN THE UP ═══ -->
+<section class="today-section" id="today">
+  <div class="section-wrap">
+    <div class="today-header">
+      <div>
+        <div class="section-eyebrow">Updated Live</div>
+        <h2 class="section-title">🔥 Today in the UP</h2>
+      </div>
+      <button class="edit-btn" id="today-edit-btn" onclick="toggleTodayEdit()">✏️ Edit</button>
+    </div>
+    <div class="today-grid" id="today-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div class="today-edit-panel" id="today-edit-panel" style="display:none">
+      <div class="edit-field">
+        <label>Waterfalls Status</label>
+        <select id="ef-waterfall-status">
+          <option value="high">🌊 HIGH FLOW — Spring melt</option>
+          <option value="good">✅ Good Flow</option>
+          <option value="low">Low Flow</option>
+          <option value="frozen">❄️ Frozen / Winter</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Waterfall Note</label>
+        <input type="text" id="ef-waterfall-note" placeholder="e.g. Bond Falls running strong" />
+      </div>
+      <div class="edit-field">
+        <label>Hiking Conditions</label>
+        <select id="ef-hiking-status">
+          <option value="excellent">Excellent</option>
+          <option value="good">Good</option>
+          <option value="muddy">Muddy / Wet</option>
+          <option value="snowy">Snowy / Icy</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Hiking Note</label>
+        <input type="text" id="ef-hiking-note" placeholder="e.g. Trails clear in Marquette area" />
+      </div>
+      <div class="edit-field">
+        <label>Fishing Outlook</label>
+        <select id="ef-fishing-status">
+          <option value="peak">🎣 PEAK — Hot bite</option>
+          <option value="improving">↑ Improving</option>
+          <option value="fair">Fair</option>
+          <option value="slow">Slow</option>
+          <option value="closed">Closed / Off Season</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Fishing Note</label>
+        <input type="text" id="ef-fishing-note" placeholder="e.g. Walleye active on Lake Gogebic" />
+      </div>
+      <div class="edit-actions">
+        <button class="btn-save" onclick="saveTodayEdits()">💾 Save</button>
+        <button class="btn-cancel" onclick="toggleTodayEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRIP PLANNING ═══ -->
+<!-- ═══ FEATURED CAMERAS ═══ -->
+<section class="featured-cams-section" id="cameras">
+  <div class="section-wrap">
+    <div class="section-eyebrow">Live Views</div>
+    <h2 class="section-title">📹 Featured Cameras</h2>
+    <p class="cam-subtitle">Auto-refreshes every 60 seconds</p>
+    <div class="featured-cam-grid" id="cam-featured">
+      <!-- Populated by JS -->
+    </div>
+    <button class="view-all-btn" id="cam-all-toggle" onclick="toggleAllCams()">▼ View All Cameras (13 total)</button>
+    <div class="all-cams-panel" id="all-cams-panel">
+      <div class="cam-section-hdr" style="margin-top:14px;">🌉 Mackinac Bridge — MBA Cameras</div>
+      <div class="cam-grid" id="cam-bridge"></div>
+      <div class="cam-section-hdr">🛣️ MDOT UP Road Cameras</div>
+      <div class="cam-grid" id="cam-roads"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LIVE CONDITIONS DASHBOARD ═══ -->
+<section class="dashboard-section" id="conditions">
+  <div class="section-wrap">
+
+    <div class="dashboard-header">
+      <div>
+        <div class="section-eyebrow">Live Data</div>
+        <h2 class="section-title" style="margin-bottom:0;">📊 Live UP Conditions Dashboard</h2>
+      </div>
+      <div class="live-badge-lg"><div class="live-dot"></div> Live · Refreshes every 5 min</div>
+    </div>
+
+    <!-- Always-visible: Alerts -->
+    <div style="margin-bottom:10px;">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">⚠️ Active Alerts</div>
+          <div style="display:flex;gap:6px;">
+            <span class="badge bg-red"    id="emerg-badge" style="display:none"></span>
+            <span class="badge bg-yellow" id="alert-badge">—</span>
+          </div>
+        </div>
+        <div class="card-body" id="alerts-body"></div>
+      </div>
+    </div>
+
+    <!-- Panel: Weather & Bridge -->
+    <div class="panel-toggle open" id="panel-wx">
+      <div class="panel-hdr" onclick="togglePanel('wx')">
+        <span>🌤️ Weather &amp; Mackinac Bridge</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">🌤️ UP Weather — Key Cities</div>
+              <span class="badge bg-blue" id="wx-badge">Loading</span>
+            </div>
+            <div class="card-body">
+              <div class="wx-grid" id="wx-grid"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🌉 Mackinac Bridge</div>
+              <span class="badge bg-muted" id="bridge-badge">—</span>
+            </div>
+            <div class="card-body" id="bridge-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Roads -->
+    <div class="panel-toggle open" id="panel-roads">
+      <div class="panel-hdr" onclick="togglePanel('roads')">
+        <span>🛣️ UP Road Conditions</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🛣️ Route Risk Assessment</div>
+              <span class="badge bg-muted" id="traffic-badge">—</span>
+            </div>
+            <div class="card-body" id="traffic-body"></div>
+          </div>
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🚧 Live Incidents &amp; Construction</div>
+              <span class="badge bg-muted" id="mdot-badge">—</span>
+            </div>
+            <div class="card-body" id="mdot-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Infrastructure -->
+    <div class="panel-toggle" id="panel-infra">
+      <div class="panel-hdr" onclick="togglePanel('infra')">
+        <span>⚓ Soo Locks · 🌊 Great Lakes · ⛽ Gas Prices</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">⚓ Soo Locks</div>
+              <span class="badge bg-green">Season Open</span>
+            </div>
+            <div class="card-body soo-body">
+              <div class="soo-map-wrap">
+                <iframe
+                  title="Soo Locks / St. Marys River live AIS vessel map"
+                  src="https://www.marinetraffic.com/en/ais/embed/zoom:13/centery:46.5008/centerx:-84.3542/maptype:4/shownames:true/mmsi:0/imo:0/vtypes:/showmenu:false/remember:false"
+                  loading="lazy" scrolling="no"
+                  referrerpolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+              🚢 <b>Poe Lock</b> <span style="color:var(--muted)">1,200 ft</span> <span class="badge bg-green" style="margin-left:4px">Active</span><br>
+              ⛵ <b>MacArthur Lock</b> <span style="color:var(--muted)">800 ft</span> <span class="badge bg-green" style="margin-left:4px">Active</span><br>
+              🔧 <b>Davis &amp; Sabin</b> <span style="color:var(--muted)">Historic</span> <span class="badge bg-muted" style="margin-left:4px">Closed</span>
+              <div class="src-note" style="margin-top:8px;">Live AIS map: MarineTraffic — click any vessel for details &nbsp;·&nbsp; Lock status: lre.usace.army.mil &nbsp;·&nbsp; 🇨🇦 <a href="https://www.cbp.gov/travel/international-travelers/wait-times" target="_blank" style="color:var(--blue)">Soo border wait times →</a></div>
+            </div>
+          </div>
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">🌊 Great Lakes Water Levels</div>
+              <span class="badge bg-blue">NOAA CO-OPS</span>
+            </div>
+            <div class="card-body">
+              <div class="lake-grid" id="lakes-grid"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">⛽ Gas Prices</div>
+              <span class="badge bg-muted" id="gas-badge">EIA Midwest</span>
+            </div>
+            <div class="card-body" id="gas-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Ore Dock — Marquette vessel tracking -->
+    <div class="panel-toggle" id="panel-rec">
+      <div class="panel-hdr" onclick="togglePanel('rec')">
+        <span>🥾 Trails — Hiking · ORV · Biking &amp; ⛷️ Ski Conditions</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">⛷️ UP Ski Conditions</div>
+              <span class="badge bg-muted" id="ski-badge">Live</span>
+            </div>
+            <div class="card-body" id="ski-body"></div>
+          </div>
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🥾 UP Trail Conditions &amp; Resources — All Seasons</div>
+              <span class="badge bg-muted" id="trails-badge">DNR Live Notices</span>
+            </div>
+            <div class="card-body" id="trails-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /section-wrap -->
+</section>
+
+<section class="dashboard-section" id="oredock-section">
+  <div class="section-wrap">
+    <span id="oredock"></span>
+    <div class="panel-toggle open" id="panel-oredock">
+      <div class="panel-hdr" onclick="togglePanel('oredock')">
+        <span>🚢 Marquette Ore Dock — Live Vessel Tracking</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">🗺️ Live AIS Map — Upper Harbor</div>
+              <span class="badge bg-blue">MarineTraffic</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+              <div class="oredock-map-wrap">
+                <iframe
+                  title="Marquette Upper Harbor live AIS map"
+                  src="https://www.marinetraffic.com/en/ais/embed/zoom:12/centery:46.5378/centerx:-87.37/maptype:4/shownames:true/mmsi:0/imo:0/vtypes:/showmenu:false/remember:false"
+                  width="100%" height="100%" frameborder="0" scrolling="no"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  style="border:0;display:block;"></iframe>
+                <div class="oredock-map-overlay">📍 Upper Harbor · 46.54°N, 87.37°W</div>
+              </div>
+              <div class="src-note" style="padding:10px 13px;margin:0;">
+                Click any vessel on the map for name, type, last port, ETA &amp; speed. Live AIS feed.
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">⚓ Port Info &amp; Sources</div>
+              <span class="badge bg-green" id="oredock-season-badge">Season Open</span>
+            </div>
+            <div class="card-body">
+              <div class="stat">
+                <span class="stat-lbl">Operator</span>
+                <span class="stat-val">Cleveland-Cliffs</span>
+              </div>
+              <div class="stat">
+                <span class="stat-lbl">Cargo</span>
+                <span class="stat-val">Iron Ore Pellets</span>
+              </div>
+              <div class="stat">
+                <span class="stat-lbl">Rail Line</span>
+                <span class="stat-val">LS&amp;I Railway</span>
+              </div>
+              <div class="stat">
+                <span class="stat-lbl">Season</span>
+                <span class="stat-val" id="oredock-season">Open</span>
+              </div>
+
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:14px 0 8px;font-weight:700;">
+                Vessel Sources
+              </div>
+              <div class="oredock-links">
+                <a class="oredock-link" href="https://www.marinetraffic.com/en/ais/details/ports/2156" target="_blank" rel="noopener">
+                  <span>🗺️</span>
+                  <div>
+                    <div class="oredock-link-name">MarineTraffic — Marquette</div>
+                    <div class="oredock-link-sub">Live arrivals &amp; expected vessels</div>
+                  </div>
+                </a>
+                <a class="oredock-link" href="https://www.boatnerd.com/ports/marquette/" target="_blank" rel="noopener">
+                  <span>⚓</span>
+                  <div>
+                    <div class="oredock-link-name">BoatNerd — Marquette</div>
+                    <div class="oredock-link-sub">Recent arrivals, photos &amp; history</div>
+                  </div>
+                </a>
+                <a class="oredock-link" href="https://www.vesselfinder.com/?bbox=-87.55,46.45,-87.20,46.65" target="_blank" rel="noopener">
+                  <span>📡</span>
+                  <div>
+                    <div class="oredock-link-name">VesselFinder — Bay</div>
+                    <div class="oredock-link-sub">Alternate AIS view</div>
+                  </div>
+                </a>
+                <a class="oredock-link" href="https://greatlakes-seaway.com/en/" target="_blank" rel="noopener">
+                  <span>🛳️</span>
+                  <div>
+                    <div class="oredock-link-name">Great Lakes / Seaway</div>
+                    <div class="oredock-link-sub">Shipping season status</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Recreation -->
+  </div><!-- /section-wrap -->
+</section>
+
+<section class="trip-section" id="trip-planning">
+  <div class="section-wrap">
+    <div class="section-eyebrow">Explore the UP</div>
+    <h2 class="section-title">🗺️ Plan Your UP Trip</h2>
+    <div class="trip-grid">
+      <a href="fall.html" class="trip-card" style="border-color:rgba(224,96,58,.38);">
+        <div class="trip-card-icon">🍁</div>
+        <div class="trip-card-title">Fall Colors, Orchards &amp; Cider</div>
+        <div class="trip-card-sub">Live peak-color estimate for four UP bands, eight scenic color drives, and the orchards and farm stands actually selling apples and fresh cider.</div>
+        <div class="trip-card-link" style="color:var(--maple);">See the fall guide →</div>
+      </a>
+      <a href="https://www.uptravel.com/blog/post/plan-road-trip/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🚗</div>
+        <div class="trip-card-title">Ultimate UP Road Trip</div>
+        <div class="trip-card-sub">A region-by-region itinerary from the Bridge to Tahquamenon, Pictured Rocks, and the Keweenaw.</div>
+        <div class="trip-card-link">Plan this trip →</div>
+      </a>
+      <a href="https://www.uptravel.com/places-to-visit/regions/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🌄</div>
+        <div class="trip-card-title">Scenic Drives & Regional Itineraries</div>
+        <div class="trip-card-sub">Eastern, Central, and Western UP itineraries — including Brockway Mountain Drive and the Black River Scenic Byway.</div>
+        <div class="trip-card-link">See the routes →</div>
+      </a>
+      <a href="https://www.uptravel.com/places-to-stay/campgrounds-rv-parks/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🏕️</div>
+        <div class="trip-card-title">Best Camping Spots</div>
+        <div class="trip-card-sub">State and national forest campgrounds, lakeshore sites, glamping options, and reservation links.</div>
+        <div class="trip-card-link">Find a site →</div>
+      </a>
+      <a href="https://www.uptravel.com/plan-your-trip/know-before-you-go/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">📍</div>
+        <div class="trip-card-title">First-Time Visitor Guide</div>
+        <div class="trip-card-sub">8 things to know before you go — timing, weather, wildlife, the Bridge, and trail etiquette.</div>
+        <div class="trip-card-link">Read the guide →</div>
+      </a>
+      <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="noopener" class="trip-card" style="border-color:rgba(249,115,22,.35);">
+        <div class="trip-card-icon">🏡</div>
+        <div class="trip-card-title">Rent a Cabin in the UP</div>
+        <div class="trip-card-sub">Find the perfect cabin, cottage, or lakehouse for your UP getaway — search hundreds of UP rentals on VRBO.</div>
+        <div class="trip-card-link" style="color:var(--orange);">Browse cabins on VRBO →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  906 Dashboard — Upper Peninsula Michigan &nbsp;·&nbsp;
+  NWS · NOAA CO-OPS · NOAA SWPC · MBA · EIA · MI DNR &nbsp;·&nbsp; Data refreshes every 5 min, cameras every 60s &nbsp;·&nbsp; <a href="privacy.html">Privacy &amp; Disclosure</a> &nbsp;·&nbsp; ©2026
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// TODO: paste your Cloudflare Worker URL here after deploying tools/mdot-proxy/
+// (see tools/mdot-proxy/README.md). Until this is set, the Roads panel falls
+// back to weather-inferred risk only — MDOT's own API blocks direct browser
+// calls from this domain (no CORS header on their end), so a small proxy is
+// required to surface their real incident/construction data.
+const MDOT_PROXY_URL = 'https://up906-mdot-proxy.blomblog.workers.dev';
+
+const NWS_STATIONS = [
+  {name:"Sault Ste. Marie",station:"KANJ"},
+  {name:"Marquette",station:"KSAW"},
+  {name:"Houghton",station:"KCMX"},
+  {name:"Iron Mountain",station:"KIMT"},
+  {name:"Escanaba",station:"KESC"},
+  {name:"Ironwood",station:"KIWD"},
+  {name:"St. Ignace / Bridge",station:"KPLN"},
+];
+
+const UP_ZONES = new Set(
+  Array.from({length:30}, (_,i) => `MIZ${String(i+1).padStart(3,'0')}`)
+);
+
+const EMERGENCY_TYPES = new Set([
+  'Child Abduction Emergency','Blue Alert','Civil Danger Warning',
+  'Civil Emergency Message','Law Enforcement Warning','Evacuation Immediate',
+  'Local Area Emergency','Shelter In Place Warning','Radiological Hazard Warning',
+  'Hazardous Materials Warning',
+]);
+
+const LAKE_CONFIG = [
+  {name:"Lake Superior",coops:"9099004",mean_ft:600.7},
+  {name:"Lake Michigan",coops:"9087031",mean_ft:577.5},
+  {name:"Lake Huron",coops:"9075035",mean_ft:577.5},
+  {name:"Lake Erie",coops:"9063063",mean_ft:570.5},
+];
+
+const UP_ROUTES = [
+  {route:"I-75",name:"I-75 — Mackinac Bridge to Sault",stations:["KPLN","KANJ"]},
+  {route:"US-2",name:"US-2 — St. Ignace to Iron Mountain",stations:["KPLN","KIMT"]},
+  {route:"M-28",name:"M-28 — Marquette to Newberry",stations:["KSAW","KANJ"]},
+  {route:"US-41",name:"US-41 — Houghton to Copper Harbor",stations:["KCMX"]},
+  {route:"US-2-W",name:"US-2 — Iron Mountain to Ironwood",stations:["KIMT","KIWD"]},
+  {route:"US-2-E",name:"US-2 — Escanaba to Sault",stations:["KESC","KANJ"]},
+];
+
+const BRIDGE_CAMS = [
+  {label:"Admin Building",sub:"St. Ignace looking south",url:"https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image1_medium.jpg"},
+  {label:"St. Ignace Dock",sub:"Looking south",url:"https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg"},
+  {label:"Bridge View Park",sub:"St. Ignace",url:"https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image3_medium.jpg"},
+  {label:"Mackinaw City",sub:"Looking north",url:"https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image4_medium.jpg"},
+  {label:"US-2 / I-75",sub:"St. Ignace interchange",url:"https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image5_large.jpg"},
+];
+
+const ROAD_CAMS = [
+  {label:"I-75 @ Castle Rock",sub:"Mackinac County",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/711.jpg"},
+  {label:"Ashmun @ 12th Ave",sub:"Sault Ste. Marie",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/756.jpg"},
+  {label:"M-28 @ Marquette",sub:"Roadside Park",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/707.jpg"},
+  {label:"M-28 @ Seney",sub:"Schoolcraft County",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/710.jpg"},
+  {label:"US-2 @ Rapid River",sub:"Delta County",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/743.jpg"},
+  {label:"US-41 @ Houghton",sub:"Store St",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/740.jpg"},
+  {label:"US-2 @ Ironwood",sub:"Gogebic County",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/737.jpg"},
+  {label:"M-26 @ Poyhonen Rd",sub:"Houghton County",url:"https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/712.jpg"},
+];
+
+// Featured cameras: Bridge overview + 2 road cams
+const FEATURED_CAMS = [
+  {label:"Bridge Conditions Now",sub:"Mackinac Bridge — North View",url:BRIDGE_CAMS[2].url, featured:true},
+  {label:"Marquette Weather View",sub:"M-28 @ Marquette Roadside Park",url:ROAD_CAMS[2].url, featured:true},
+  {label:"Sault Ste. Marie",sub:"Ashmun & 12th Ave",url:ROAD_CAMS[1].url, featured:true},
+  {label:"Mackinaw City Approach",sub:"Looking north toward the bridge",url:BRIDGE_CAMS[3].url, featured:true},
+];
+
+// ── Utilities ──
+const cToF    = c => c!=null ? Math.round(c*9/5+32)        : null;
+const mpsToMph= v => v!=null ? Math.round(v*2.23694)       : null;
+const mToMi   = v => v!=null ? Math.round(v/1609.34*10)/10 : null;
+const mmToIn  = v => v!=null ? Math.round(v/25.4*10)/10    : null;
+
+function compass(deg) {
+  if (deg==null) return null;
+  const d=["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+  return d[Math.round(deg/22.5)%16];
+}
+function gv(obj,...keys){ for(const k of keys){ if(obj==null||typeof obj!=='object')return null; obj=obj[k]; } return obj??null; }
+function esc(s){ return String(s??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function fmt(v,sfx='',fb='—'){ return v!=null ? esc(v)+sfx : fb; }
+function fmtTime(iso){ if(!iso)return '—'; return new Date(iso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'}); }
+
+// ── Panel toggle ──
+function togglePanel(id) {
+  const el = document.getElementById('panel-'+id);
+  if (el) el.classList.toggle('open');
+}
+
+// ── Camera toggle ──
+function toggleAllCams() {
+  const panel = document.getElementById('all-cams-panel');
+  const btn   = document.getElementById('cam-all-toggle');
+  panel.classList.toggle('open');
+  btn.textContent = panel.classList.contains('open')
+    ? '▲ Hide All Cameras'
+    : '▼ View All Cameras (13 total)';
+}
+
+// ── Today in the UP ──
+const TODAY_STORAGE_KEY = '906-today-prefs';
+
+function loadTodayPrefs() {
+  try { return JSON.parse(localStorage.getItem(TODAY_STORAGE_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+
+function saveTodayEdits() {
+  const prefs = {
+    waterfall_status: document.getElementById('ef-waterfall-status').value,
+    waterfall_note:   document.getElementById('ef-waterfall-note').value,
+    hiking_status:    document.getElementById('ef-hiking-status').value,
+    hiking_note:      document.getElementById('ef-hiking-note').value,
+    fishing_status:   document.getElementById('ef-fishing-status').value,
+    fishing_note:     document.getElementById('ef-fishing-note').value,
+  };
+  localStorage.setItem(TODAY_STORAGE_KEY, JSON.stringify(prefs));
+  toggleTodayEdit();
+  renderTodayInUP(null, lastKpData);
+}
+
+function toggleTodayEdit() {
+  const panel = document.getElementById('today-edit-panel');
+  const btn   = document.getElementById('today-edit-btn');
+  const isOpen = panel.style.display !== 'none';
+  if (!isOpen) {
+    // Populate fields: manual pref takes priority; fall back to live auto-detected value
+    const p = loadTodayPrefs();
+    const av = lastAutoValues;
+
+    const wfSel = document.getElementById('ef-waterfall-status');
+    const hkSel = document.getElementById('ef-hiking-status');
+    const fsSel = document.getElementById('ef-fishing-status');
+
+    wfSel.value = p.waterfall_status || av.waterfall_status || 'good';
+    hkSel.value = p.hiking_status    || av.hiking_status    || 'good';
+    fsSel.value = p.fishing_status   || av.fishing_status   || 'fair';
+
+    // Notes: show saved value, or auto-detected value as placeholder, or generic hint
+    const wfNoteEl = document.getElementById('ef-waterfall-note');
+    const hkNoteEl = document.getElementById('ef-hiking-note');
+    const fsNoteEl = document.getElementById('ef-fishing-note');
+
+    wfNoteEl.value = p.waterfall_note || '';
+    hkNoteEl.value = p.hiking_note    || '';
+    fsNoteEl.value = p.fishing_note   || '';
+
+    // If note is empty, show the auto-detected value as placeholder so Dan can see what the system found
+    wfNoteEl.placeholder = av.waterfall_note || 'e.g. Bond Falls running strong';
+    hkNoteEl.placeholder = av.hiking_note    || 'e.g. Trails clear in Marquette area';
+    fsNoteEl.placeholder = av.fishing_note   || 'e.g. Walleye active on Lake Gogebic';
+
+    // Add a small "auto" label to selects that weren't manually overridden
+    const autoHint = (saved, auto) => saved ? '' : ` — auto (${auto||'detecting…'})`;
+    wfSel.title = 'Current auto-detected: ' + (av.waterfall_status || 'loading');
+    hkSel.title = 'Current auto-detected: ' + (av.hiking_status    || 'loading');
+    fsSel.title = 'Current auto-detected: ' + (av.fishing_status   || 'loading');
+  }
+  panel.style.display = isOpen ? 'none' : 'grid';
+  btn.textContent = isOpen ? '✏️ Edit' : '✕ Close';
+}
+
+let lastKpData     = null;
+let lastAutoValues = {}; // tracks what the system auto-detected for pre-filling the edit panel
+
+// Simple lunar illumination (0=new moon, ~50=quarter, 100=full)
+function moonIllumination() {
+  const knownNew = new Date('2000-01-06T18:14:00Z').getTime();
+  const cycle    = 29.53058770576 * 86400000;
+  const phase    = ((Date.now() - knownNew) % cycle + cycle) % cycle / cycle;
+  return Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
+}
+
+function kpToLevel(kp) {
+  if (kp >= 7) return { label:'EXTREME', cls:'high', desc:'Visible as far south as lower Michigan' };
+  if (kp >= 5) return { label:'HIGH',    cls:'high', desc:'Good chance of visible aurora tonight' };
+  if (kp >= 4) return { label:'MEDIUM',  cls:'med',  desc:'Possible aurora in dark northern skies' };
+  if (kp >= 2) return { label:'LOW',     cls:'low',  desc:'Activity likely confined to far north' };
+  return             { label:'QUIET',    cls:'low',  desc:'Minimal geomagnetic activity' };
+}
+
+// Multi-signal composite aurora chance
+// Combines: KP index + solar wind Bz + cloud cover + moon phase
+function computeAuroraChance(kp, bz, cloudDesc) {
+  // KP: primary signal, up to 60 pts (KP9 = full score)
+  let score = Math.min((kp / 9) * 60, 60);
+
+  // Bz: southward (negative) couples energy into magnetosphere — huge factor
+  if (bz != null) {
+    if      (bz < -20) score += 35;
+    else if (bz < -10) score += 25;
+    else if (bz <  -5) score += 15;
+    else if (bz <   0) score +=  8;
+    else if (bz >  10) score -= 10; // northward Bz suppresses aurora
+    else if (bz >   5) score -=  5;
+  }
+
+  // Cloud cover: doesn't affect activity but kills visibility
+  const sky = (cloudDesc || '').toLowerCase();
+  let skyPenalty = 0;
+  if      (sky.includes('overcast'))                       skyPenalty = 0.85;
+  else if (sky.includes('mostly cloudy'))                  skyPenalty = 0.60;
+  else if (sky.includes('partly cloudy')||sky.includes('scattered')) skyPenalty = 0.30;
+  score *= (1 - skyPenalty);
+
+  // Moon: bright moon washes out faint aurora
+  const moon = moonIllumination();
+  if      (moon > 85) score *= 0.80;
+  else if (moon > 60) score *= 0.90;
+
+  score = Math.min(100, Math.max(0, score));
+
+  if      (score >= 65) return { label:'HIGH CHANCE',  cls:'high', score, moon };
+  else if (score >= 35) return { label:'GOOD CHANCE',  cls:'med',  score, moon };
+  else if (score >= 15) return { label:'LOW CHANCE',   cls:'low',  score, moon };
+  else                  return { label:'VERY LOW',      cls:'low',  score, moon };
+}
+
+function renderTodayInUP(weatherData, kpData, streamflowData, solarWind) {
+  const prefs = loadTodayPrefs();
+  const month = new Date().getMonth(); // 0=Jan
+
+  // ── Waterfalls: live USGS gauge → manual override → seasonal fallback ──
+  let wfStatus, wfLabel, wfNote;
+  if (prefs.waterfall_status) {
+    // User has manually set a value — respect it
+    wfStatus = prefs.waterfall_status;
+    wfLabel  = { high:'HIGH FLOW', good:'Good Flow', low:'Low Flow', frozen:'Frozen / Icy' }[wfStatus] || wfStatus;
+    wfNote   = prefs.waterfall_note || '';
+  } else if (streamflowData?.ok) {
+    // Live USGS data
+    wfStatus = streamflowData.overallStatus;
+    wfLabel  = streamflowData.overallLabel;
+    wfNote   = streamflowData.note;
+  } else {
+    // Seasonal fallback if USGS is down
+    wfStatus = month >= 3 && month <= 5 ? 'high' : month >= 6 && month <= 9 ? 'good' : 'frozen';
+    wfLabel  = { high:'HIGH FLOW', good:'Normal Flow', low:'Low Flow', frozen:'Frozen / Icy' }[wfStatus];
+    wfNote   = streamflowData?.error
+      ? 'USGS gauge unavailable — seasonal estimate shown'
+      : 'USGS data loading…';
+  }
+  const wfIcons = { high:'🌊', good:'💧', low:'🪨', frozen:'❄️' };
+  const wfClss  = { high:'high', good:'good', low:'low', frozen:'low' };
+
+  // ── Hiking: manual override → multi-signal weather inference ──
+  let hkStatus = prefs.hiking_status || 'good';
+  let hkNote   = prefs.hiking_note   || '';
+  if (!prefs.hiking_status && weatherData) {
+    const mq = weatherData.stations.find(s=>s.station==='KSAW');
+    if (mq?.ok) {
+      const d       = (mq.description||'').toLowerCase();
+      const precip6 = mq.precip_6h_in || 0;
+      const precip3 = mq.precip_3h_in || 0;
+      const precip1 = mq.precip_1h_in || 0;
+      const recentRain = precip6 > 0.15 || precip3 > 0.08 || precip1 > 0;
+
+      if (d.includes('snow')||d.includes('blizzard')||(mq.snow_depth_in>2)) {
+        hkStatus = 'snowy';
+      } else if (d.includes('freezing')||d.includes('sleet')||d.includes('ice')) {
+        hkStatus = 'snowy';
+      } else if (d.includes('rain')||d.includes('shower')||recentRain) {
+        hkStatus = 'muddy';
+        // Even if it's not raining NOW, recent precip = muddy trails
+      } else if (mq.temp_f > 55) {
+        hkStatus = 'excellent';
+      } else if (mq.temp_f > 40) {
+        hkStatus = 'good';
+      }
+
+      if (!hkNote) {
+        const tempStr = mq.temp_f!=null ? `${mq.temp_f}°F` : '';
+        const precipHint = recentRain && hkStatus==='muddy'
+          ? ` · ${precip6.toFixed(2)}" rain last 6h`
+          : '';
+        hkNote = `Marquette ${tempStr} — ${mq.description}${precipHint}`;
+      }
+    }
+  }
+  if (!hkNote) hkNote = 'Check local conditions before heading out';
+  const hkLabels = { excellent:'Excellent', good:'Good', muddy:'Muddy / Wet', snowy:'Snowy / Icy', poor:'Poor' };
+  const hkClss   = { excellent:'good', good:'good', muddy:'med', snowy:'med', poor:'low' };
+
+  // ── Northern Lights: multi-signal composite (KP + solar wind Bz + cloud cover + moon) ──
+  const mqForNL   = weatherData?.stations?.find(s => s.station === 'KSAW');
+  const cloudDesc = mqForNL?.ok ? (mqForNL.description || '') : '';
+  const kpVal     = kpData?.ok  ? kpData.kp  : null;
+  const bzVal     = solarWind?.ok ? solarWind.bz : null;
+
+  let nlLabel, nlCls, nlScore, nlMoon;
+  let nlKpStr, nlBzStr, nlBzCls, nlSkyStr, nlSkyCls, nlMoonStr, nlMoonCls, nlTip;
+
+  if (kpVal != null) {
+    const chance = computeAuroraChance(kpVal, bzVal, cloudDesc);
+    nlLabel = chance.label;
+    nlCls   = chance.cls;
+    nlScore = chance.score;
+    nlMoon  = chance.moon;
+
+    // KP signal row
+    const kpLevel = kpToLevel(kpVal);
+    nlKpStr = `${kpVal.toFixed(1)} — ${kpLevel.label}`;
+
+    // Bz signal row
+    if (bzVal != null) {
+      nlBzStr = `${bzVal > 0 ? '+' : ''}${bzVal.toFixed(1)} nT`;
+      if      (bzVal < -10) { nlBzStr += ' ✅ Strong'; nlBzCls = 'sig-good'; }
+      else if (bzVal <  -5) { nlBzStr += ' ✅ Favorable'; nlBzCls = 'sig-good'; }
+      else if (bzVal <   0) { nlBzStr += ' Slightly south'; nlBzCls = 'sig-neu'; }
+      else if (bzVal <   5) { nlBzStr += ' Neutral'; nlBzCls = 'sig-neu'; }
+      else                  { nlBzStr += ' ⚠️ Northward'; nlBzCls = 'sig-warn'; }
+    } else {
+      nlBzStr = 'Unavailable'; nlBzCls = 'sig-neu';
+    }
+
+    // Sky row — derived from Marquette weather
+    const sky = cloudDesc.toLowerCase();
+    if      (sky.includes('overcast'))                              { nlSkyStr = 'Overcast ❌';        nlSkyCls = 'sig-bad';  }
+    else if (sky.includes('mostly cloudy'))                         { nlSkyStr = 'Mostly Cloudy ⚠️';  nlSkyCls = 'sig-warn'; }
+    else if (sky.includes('partly cloudy')||sky.includes('scattered')){ nlSkyStr = 'Partly Cloudy';  nlSkyCls = 'sig-warn'; }
+    else if (sky.includes('clear')||sky.includes('fair')||sky.includes('sunny')) { nlSkyStr = 'Clear ✅'; nlSkyCls = 'sig-good'; }
+    else if (cloudDesc)                                             { nlSkyStr = cloudDesc; nlSkyCls = 'sig-neu'; }
+    else                                                            { nlSkyStr = 'Loading…'; nlSkyCls = 'sig-neu'; }
+
+    // Moon row
+    const moonPct = nlMoon ?? moonIllumination();
+    const moonPhaseLabel = moonPct > 85 ? 'Full 🌕' : moonPct > 60 ? 'Gibbous 🌔' : moonPct > 35 ? 'Quarter 🌓' : moonPct > 10 ? 'Crescent 🌒' : 'New 🌑';
+    nlMoonStr = `${moonPct}% — ${moonPhaseLabel}`;
+    nlMoonCls = moonPct > 70 ? 'sig-warn' : 'sig-good';
+
+    // Tip line
+    if      (nlCls === 'high') nlTip = 'Head north — away from city lights — after 10pm';
+    else if (nlCls === 'med')  nlTip = 'Worth watching from a dark area tonight';
+    else                       nlTip = 'Faint at best; check again after dark';
+  } else {
+    nlLabel = 'Loading…'; nlCls = 'low';
+    nlKpStr = '…'; nlBzStr = '…'; nlBzCls = 'sig-neu';
+    nlSkyStr = '…'; nlSkyCls = 'sig-neu';
+    nlMoonStr = '…'; nlMoonCls = 'sig-neu';
+    nlTip = 'Fetching NOAA space weather data…';
+  }
+
+  // Fishing: manual
+  const fsStatus  = prefs.fishing_status || (month >= 4 && month <= 9 ? 'fair' : 'closed');
+  const fsLabels  = { peak:'PEAK — Hot bite', improving:'↑ Improving', fair:'Fair', slow:'Slow', closed:'Closed / Off Season' };
+  const fsClss    = { peak:'high', improving:'good', fair:'med', slow:'low', closed:'low' };
+  const fsNote    = prefs.fishing_note || (month >= 4 && month <= 9 ? 'Check DNR for current regulations' : 'Many species closed — ice fishing possible');
+
+  // Store auto-detected values so edit panel can pre-fill intelligently
+  lastAutoValues = {
+    waterfall_status: wfStatus,
+    waterfall_note:   wfNote,
+    hiking_status:    hkStatus,
+    hiking_note:      hkNote,
+    fishing_status:   fsStatus,
+    fishing_note:     fsNote,
+  };
+
+  // Moon phase is always available (pure math — no API needed)
+  const moonNow    = moonIllumination();
+  const moonLabel  = moonNow > 85 ? 'Full 🌕' : moonNow > 60 ? 'Gibbous 🌔' : moonNow > 35 ? 'Quarter 🌓' : moonNow > 10 ? 'Crescent 🌒' : 'New 🌑';
+  const moonCls    = moonNow > 70 ? 'sig-warn' : 'sig-good';
+  const moonDisplay = nlMoonStr || `${moonNow}% — ${moonLabel}`;
+  const moonClsFinal = nlMoonCls || moonCls;
+
+  document.getElementById('today-grid').innerHTML = `
+
+    <!-- ── Aurora Featured Card (full-width) ── -->
+    <div class="aurora-card">
+      <div class="aurora-left">
+        <span class="aurora-icon">🌌</span>
+        <div class="aurora-topic">Northern Lights Tonight</div>
+        <div class="aurora-rating ${nlCls||'low'}">${nlLabel||'Loading…'}</div>
+        <div class="aurora-tip">${esc(nlTip||'Fetching live space weather…')}</div>
+        <a class="aurora-more" href="aurora.html">Full forecast &amp; viewing spots →</a>
+      </div>
+      <div class="aurora-right">
+        <div class="aurora-signal">
+          <div class="aurora-signal-label">KP Index</div>
+          <div class="aurora-signal-val sig-neu">${esc(nlKpStr||'Loading…')}</div>
+          <div class="aurora-source">NOAA · live</div>
+        </div>
+        <div class="aurora-signal">
+          <div class="aurora-signal-label">Solar Wind Bz</div>
+          <div class="aurora-signal-val ${nlBzCls||'sig-neu'}">${esc(nlBzStr||'Loading…')}</div>
+          <div class="aurora-source">NOAA SWPC · live</div>
+        </div>
+        <div class="aurora-signal">
+          <div class="aurora-signal-label">Marquette Skies</div>
+          <div class="aurora-signal-val ${nlSkyCls||'sig-neu'}">${esc(nlSkyStr||'Loading…')}</div>
+          <div class="aurora-source">NWS · live</div>
+        </div>
+        <div class="aurora-signal">
+          <div class="aurora-signal-label">Moon Phase</div>
+          <div class="aurora-signal-val ${moonClsFinal}">${esc(moonDisplay)}</div>
+          <div class="aurora-source">Calculated</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Three bottom cards ── -->
+    <div class="today-card">
+      <span class="tc-icon">${wfIcons[wfStatus]||'💧'}</span>
+      <div class="tc-topic">Waterfalls</div>
+      <div class="tc-status ${wfClss[wfStatus]||'low'}">${wfLabel||wfStatus}</div>
+      <div class="tc-desc">${esc(wfNote)}</div>
+    </div>
+    <div class="today-card">
+      <span class="tc-icon">🥾</span>
+      <div class="tc-topic">Hiking Conditions</div>
+      <div class="tc-status ${hkClss[hkStatus]||'low'}">${hkLabels[hkStatus]||hkStatus}</div>
+      <div class="tc-desc">${esc(hkNote)}</div>
+    </div>
+    <div class="today-card">
+      <span class="tc-icon">🎣</span>
+      <div class="tc-topic">Fishing Outlook</div>
+      <div class="tc-status ${fsClss[fsStatus]||'low'}">${fsLabels[fsStatus]||fsStatus}</div>
+      <div class="tc-desc">${esc(fsNote)}</div>
+    </div>
+  `;
+}
+
+// ── USGS Streamflow (Waterfall Conditions) ──
+// Uses USGS WaterWatch — free, no API key, returns MI sites with classified flow levels
+const USGS_FALLS_SITES = [
+  { id:'04066030', name:'Tahquamenon R.',     falls:'Tahquamenon Falls'          },
+  { id:'04031000', name:'Presque Isle R.',    falls:'Porcupine Mtn Waterfalls'   },
+  { id:'04040500', name:'Black River',        falls:'Black River Falls (Bessemer)'},
+];
+
+async function fetchUSGSStreamflow() {
+  try {
+    const r = await fetch('https://waterwatch.usgs.gov/webservices/realtime?region=mi&format=json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    const siteMap = {};
+    for (const s of (data.sites || [])) siteMap[s.site_no] = s;
+
+    const sites = USGS_FALLS_SITES.map(cfg => {
+      const s = siteMap[cfg.id];
+      if (!s || !s.flow) return { ...cfg, ok: false };
+      return {
+        ...cfg, ok: true,
+        flow_cfs:   parseFloat(s.flow),
+        flow_class: s.class || 'not_ranked',  // high | much_above_normal | above_normal | normal | below_normal | much_below_normal | low | not_ranked
+      };
+    });
+
+    // Derive overall waterfall status from the best-flowing site
+    const ranked = sites.filter(s => s.ok && s.flow_class !== 'not_ranked');
+    const classRank = { high:6, much_above_normal:5, above_normal:4, normal:3, below_normal:2, much_below_normal:1, low:0 };
+    ranked.sort((a,b) => (classRank[b.flow_class]||0) - (classRank[a.flow_class]||0));
+    const topClass = ranked[0]?.flow_class || 'normal';
+
+    let overallStatus, overallLabel;
+    if      (['high','much_above_normal'].includes(topClass))  { overallStatus='high';  overallLabel='HIGH FLOW';    }
+    else if (topClass === 'above_normal')                       { overallStatus='good';  overallLabel='Above Normal'; }
+    else if (topClass === 'normal')                             { overallStatus='good';  overallLabel='Normal Flow';  }
+    else if (topClass === 'below_normal')                       { overallStatus='low';   overallLabel='Below Normal'; }
+    else                                                        { overallStatus='low';   overallLabel='LOW FLOW';     }
+
+    // Build a short note from available sites
+    const noteParts = ranked.slice(0,2).map(s => `${s.name} ${s.flow_cfs.toLocaleString()} cfs`);
+    const note = noteParts.length
+      ? `Live gauge: ${noteParts.join(' · ')}`
+      : 'USGS gauge data available';
+
+    return { ok:true, sites, overallStatus, overallLabel, note };
+  } catch(e) {
+    return { ok:false, error:e.message };
+  }
+}
+
+// ── Solar Wind (NOAA SWPC — real-time Bz) ──
+async function fetchSolarWind() {
+  try {
+    const r = await fetch('https://services.swpc.noaa.gov/products/solar-wind/mag-1-minute.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    if (!data || data.length < 2) throw new Error('No data');
+    // Header row is data[0]; latest reading is last entry
+    // Columns: time_tag, bx_gsm, by_gsm, bz_gsm, bt
+    const latest = data[data.length - 1];
+    const bz = parseFloat(latest[3]);
+    const bt = parseFloat(latest[4]);
+    return { ok: true, bz, bt, time: latest[0] };
+  } catch(e) {
+    return { ok: false, bz: null, error: e.message };
+  }
+}
+
+// ── KP Index (NOAA Space Weather) ──
+async function fetchKpIndex() {
+  try {
+    const r = await fetch('https://services.swpc.noaa.gov/json/planetary_k_index_1m.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    if (!data || !data.length) throw new Error('No data');
+    // Get latest reading. NOTE: this feed is an array of OBJECTS
+    // ({time_tag, kp_index, estimated_kp, kp}) — not an array of arrays —
+    // so we must read named fields, not numeric indexes.
+    const latest = data[data.length - 1];
+    const kp = parseFloat(latest.estimated_kp ?? latest.kp_index);
+    if (isNaN(kp)) throw new Error('Unexpected response shape');
+    return { ok: true, kp, time: latest.time_tag };
+  } catch(e) {
+    return { ok: false, kp: 0, error: e.message };
+  }
+}
+
+// ── Weather Fetch ──
+async function fetchNWSStation(stationId, retry = true) {
+  const r = await fetch(`https://api.weather.gov/stations/${stationId}/observations/latest`,
+    {headers:{Accept:'application/geo+json'}});
+  if(!r.ok) {
+    // api.weather.gov intermittently 404s on a single station's "latest" observation
+    // (e.g. between ob cycles) even though the station is fine — one retry clears most of these.
+    if (retry) {
+      await new Promise(res => setTimeout(res, 1500));
+      return fetchNWSStation(stationId, false);
+    }
+    throw new Error(`NWS ${stationId} HTTP ${r.status}`);
+  }
+  return (await r.json()).properties||{};
+}
+
+async function fetchAllWeather() {
+  const results = await Promise.all(NWS_STATIONS.map(async s => {
+    try {
+      const p=await fetchNWSStation(s.station);
+      const w=gv(p,'windSpeed','value'), g=gv(p,'windGust','value');
+      const wc=gv(p,'windChill','value'), hi=gv(p,'heatIndex','value');
+      return {
+        name:s.name, station:s.station,
+        temp_f:        cToF(gv(p,'temperature','value')),
+        feels_f:       cToF(wc!=null?wc:hi),
+        humidity:      Math.round(gv(p,'relativeHumidity','value')||0),
+        wind_mph:      mpsToMph(w),
+        wind_gust_mph: mpsToMph(g),
+        wind_dir:      compass(gv(p,'windDirection','value')),
+        visibility_mi: mToMi(gv(p,'visibility','value')),
+        description:   p.textDescription||'Unknown',
+        snow_depth_in: mmToIn(gv(p,'snowDepth','value')),
+        precip_1h_in:  mmToIn(gv(p,'precipitationLastHour','value')),
+        precip_3h_in:  mmToIn(gv(p,'precipitationLast3Hours','value')),
+        precip_6h_in:  mmToIn(gv(p,'precipitationLast6Hours','value')),
+        timestamp:     p.timestamp,
+        ok:true,
+      };
+    } catch(e){ return {name:s.name,station:s.station,ok:false,error:e.message}; }
+  }));
+  return {stations:results, updated:new Date().toISOString()};
+}
+
+async function fetchAlerts() {
+  try {
+    const r = await fetch('https://api.weather.gov/alerts/active?area=MI',
+      {headers:{Accept:'application/geo+json'}});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const features=(await r.json()).features||[];
+    const upAlerts=[], emergencyAlerts=[];
+    for(const f of features){
+      const p=f.properties||{};
+      const event=p.event||'';
+      const zones=new Set((p.affectedZones||[]).map(z=>z.split('/').pop()));
+      const obj={
+        event, headline:p.headline,
+        description:(p.description||'').slice(0,600),
+        severity:p.severity, urgency:p.urgency,
+        areas:p.areaDesc, effective:p.effective, expires:p.expires,
+      };
+      if(EMERGENCY_TYPES.has(event)){
+        emergencyAlerts.push(obj);
+      } else if([...zones].some(z=>UP_ZONES.has(z))){
+        upAlerts.push(obj);
+      }
+    }
+    return {upAlerts, emergencyAlerts, updated:new Date().toISOString()};
+  } catch(e){
+    return {upAlerts:[], emergencyAlerts:[], error:e.message, updated:new Date().toISOString()};
+  }
+}
+
+// ── NDBC buoys (via the same Cloudflare Worker proxy as MDOT) ──
+// NDBC's realtime2 text files hit the same cross-origin wall as MDOT in most
+// browser contexts, so this reuses tools/mdot-proxy's /buoys route.
+async function fetchBuoyData(){
+  if(!MDOT_PROXY_URL) return {ok:false, error:'Proxy not configured yet'};
+  try{
+    const r=await fetch(`${MDOT_PROXY_URL}/buoys`);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||'Proxy error');
+    return d;
+  }catch(e){
+    return {ok:false, error:e.message};
+  }
+}
+
+async function fetchAllLakes() {
+  const buoyData = await fetchBuoyData();
+  const lakes={};
+  await Promise.all(LAKE_CONFIG.map(async cfg => {
+    const buoy = buoyData?.ok ? buoyData.lakes?.[cfg.name] : null;
+    const entry={name:cfg.name, ok:true};
+    if(buoy?.ok){
+      Object.assign(entry,{
+        wave_height_ft: buoy.wave_height_ft,
+        water_temp_f:   buoy.water_temp_f,
+        buoy_time:      buoy.time,
+        note: `Live buoy: ${buoy.stationName} · ${fmtTime(buoy.time)}`,
+      });
+    } else if(buoyData?.error==='Proxy not configured yet'){
+      entry.note = 'Wave height / water temp: proxy not set up yet';
+    } else {
+      entry.note = `Wave height / water temp unavailable${buoy?.error?` (${buoy.error})`:''}`;
+    }
+    try {
+      const url=`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter`
+        +`?station=${cfg.coops}&product=water_level&datum=IGLD`
+        +`&units=english&time_zone=lst_ldt&format=json&date=latest`
+        +`&application=906dashboard`;
+      const r=await fetch(url);
+      if(!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data=await r.json();
+      const readings=data.data||[];
+      if(!readings.length) throw new Error(data.error?.message||'no data');
+      const level_ft=parseFloat(readings.at(-1).v);
+      const diff_in=Math.round((level_ft-cfg.mean_ft)*12*10)/10;
+      Object.assign(entry,{
+        level_ft:Math.round(level_ft*100)/100, mean_ft:cfg.mean_ft,
+        diff_in, diff_label:diff_in>=0?`+${diff_in}″`:`${diff_in}″`,
+      });
+    } catch(e){ entry.level_error=e.message; }
+    lakes[cfg.name]=entry;
+  }));
+  return {lakes, updated:new Date().toISOString()};
+}
+
+async function fetchBridge(stations){
+  const kpln=stations.find(s=>s.station==='KPLN');
+  let mbaStatus=null, mbaWindRange=null;
+  try {
+    const res=await fetch('https://www.mackinacbridge.org/wp-json/wp/v2/pages?slug=conditions&per_page=1');
+    const data=await res.json();
+    if(data&&data[0]){
+      const raw=(data[0].content?.rendered||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+      const sm=raw.match(/Status:\s*(.+?)(?:\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),)/i);
+      if(sm) mbaStatus=sm[1].trim();
+      const wm=raw.match(/\((\d+)\s*[-–]\s*(\d+)\s*mph\)/);
+      if(wm) mbaWindRange=`${wm[1]}–${wm[2]} mph`;
+    }
+  } catch(e){ console.warn('MBA status fetch failed:',e.message); }
+
+  let restr='none', detail='No restrictions — all traffic normal', level='clear';
+  if(mbaStatus){
+    const s=mbaStatus.toLowerCase();
+    if     (s.includes('closed'))                                                     [restr,detail,level]=['closed',     'Bridge closed — all traffic',                     'danger' ];
+    else if(s.includes('escort'))                                                     [restr,detail,level]=['escort',     'High-profile vehicles: mandatory escort',          'warning'];
+    else if(s.includes('center')||s.includes('restriction'))                          [restr,detail,level]=['center_lane','High-profile vehicles: center lanes only',         'caution'];
+    else if(s.includes('warning')||s.includes('watch')||s.includes('advisory'))      [restr,detail,level]=['warning',    'High wind warning — reduce speed, use outer lanes', 'caution'];
+  }
+  return {ok:true, mba_status:mbaStatus||'Unknown', mba_wind_range:mbaWindRange,
+    wind_mph:kpln?.wind_mph, wind_gust_mph:kpln?.wind_gust_mph,
+    wind_dir:kpln?.wind_dir, temp_f:kpln?.temp_f, visibility_mi:kpln?.visibility_mi,
+    restriction:restr, restriction_detail:detail, level, timestamp:kpln?.timestamp};
+}
+
+function roadRisk(obs){
+  let score=0;
+  const temp=obs.temp_f, wind=obs.wind_mph||0, gust=obs.wind_gust_mph||wind;
+  const vis=obs.visibility_mi, snow_d=obs.snow_depth_in||0;
+  const precip=obs.precip_1h_in||0, desc=(obs.description||'').toLowerCase();
+  if(temp!=null&&temp<=32)score+=20; if(temp!=null&&temp<=20)score+=10;
+  if(precip>0&&temp!=null&&temp<=32)score+=20;
+  if(desc.includes('snow')||desc.includes('blizzard'))score+=20;
+  if(desc.includes('heavy snow'))score+=10;
+  if(desc.includes('freezing')||desc.includes('sleet')||desc.includes('ice'))score+=25;
+  if(wind>=30)score+=10; if(gust>=40)score+=10;
+  if(vis!=null){if(vis<=0.25)score+=30;else if(vis<=1)score+=20;else if(vis<=3)score+=10;}
+  if(snow_d>=12)score+=15;else if(snow_d>=6)score+=8;
+  score=Math.min(score,100);
+  if(score>=60)return{score,level:'difficult',label:'Difficult',color:'red',summary:'Severe — 4WD/chains recommended'};
+  if(score>=35)return{score,level:'caution',label:'Caution',color:'yellow',summary:'Winter conditions — reduce speed'};
+  return{score,level:'clear',label:'Clear',color:'green',summary:'Normal driving conditions'};
+}
+
+function deriveTraffic(weatherData){
+  const stObs={};
+  for(const s of weatherData.stations||[]) if(s.ok)stObs[s.station]=s;
+  const routes=UP_ROUTES.map(rt=>{
+    const scores=[],summaries=[];
+    for(const sid of rt.stations){if(stObs[sid]){const r=roadRisk(stObs[sid]);scores.push(r.score);summaries.push(r.summary);}}
+    let risk;
+    if(scores.length){
+      const avg=scores.reduce((a,b)=>a+b,0)/scores.length;
+      if(avg>=60)risk={score:avg,level:'difficult',label:'Difficult',color:'red',   summary:summaries[0]||'Severe conditions'};
+      else if(avg>=35)risk={score:avg,level:'caution',label:'Caution',color:'yellow',summary:summaries[0]||'Winter conditions'};
+      else risk={score:avg,level:'clear',label:'Clear',color:'green',summary:'Normal conditions'};
+    } else risk={score:0,level:'unknown',label:'Unknown',color:'muted',summary:'No data'};
+    return {route:rt.route,name:rt.name,...risk};
+  });
+  return {ok:true,source:'weather_inference',
+    note:'Ambient route risk inferred from NWS weather data (not live incident reports) — see Live Incidents & Construction below',routes};
+}
+
+// ── MDOT MiDrive live incidents/construction (via Cloudflare Worker proxy) ──
+// MDOT's own API (mdotjboss.state.mi.us/MiDrive/.../loadIncidents,loadConstruction)
+// is real, free, and needs no key — but it doesn't send CORS headers, so a
+// browser on 906dashboard.com can't call it directly. tools/mdot-proxy/ has a small
+// Cloudflare Worker that fetches it server-side and re-serves it with CORS.
+// See tools/mdot-proxy/README.md to deploy, then set MDOT_PROXY_URL above.
+async function fetchMdotEvents(){
+  if(!MDOT_PROXY_URL) return {ok:false, error:'Proxy not configured yet'};
+  try{
+    const r=await fetch(`${MDOT_PROXY_URL}/events`);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||'Proxy error');
+    return d;
+  }catch(e){
+    return {ok:false, error:e.message};
+  }
+}
+
+function wxIcon(desc){
+  if(!desc)return '🌫️';
+  const d=desc.toLowerCase();
+  if(d.includes('thunder')||d.includes('storm'))return '⛈️';
+  if(d.includes('heavy snow')||d.includes('blizzard'))return '❄️';
+  if(d.includes('snow')||d.includes('flurries'))return '🌨️';
+  if(d.includes('freezing')||d.includes('sleet')||d.includes('ice'))return '🧊';
+  if(d.includes('rain')||d.includes('shower'))return '🌧️';
+  if(d.includes('drizzle')||d.includes('mist'))return '🌦️';
+  if(d.includes('fog')||d.includes('haze'))return '🌫️';
+  if(d.includes('windy')||d.includes('breezy')||d.includes('gust'))return '🌬️';
+  if(d.includes('overcast')||d.includes('cloudy'))return '☁️';
+  if(d.includes('mostly cloudy')||d.includes('partly cloudy'))return '⛅';
+  if(d.includes('clear')||d.includes('sunny')||d.includes('fair'))return '☀️';
+  return '🌡️';
+}
+
+// ── Status Bar Updates ──
+function updateStatusBar(key, text, level) {
+  const el = document.getElementById('sbv-' + key);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'sb-val ' + (level || '');
+}
+
+// ── Renderers ──
+function renderWeather(data){
+  if(!data?.stations){document.getElementById('wx-grid').innerHTML='<div class="err-msg">Weather unavailable</div>';return;}
+  const stations=data.stations;
+  document.getElementById('wx-badge').textContent=`${stations.filter(s=>s.ok).length} Stations`;
+  const primary=['Sault Ste. Marie','Marquette','Houghton','St. Ignace / Bridge'];
+  const show=primary.map(n=>stations.find(s=>s.name===n)).filter(Boolean);
+
+  // Status bar: Marquette summary
+  const mq = stations.find(s=>s.station==='KSAW');
+  if (mq?.ok && mq.temp_f != null) {
+    updateStatusBar('weather', `${mq.temp_f}°F · ${mq.description}`, '');
+  }
+
+  document.getElementById('wx-grid').innerHTML=show.map(s=>{
+    if(!s.ok)return `<div class="wx-card"><div class="wx-city">${esc(s.name)}</div><div class="err-msg">${esc(s.error||'Unavailable')}</div></div>`;
+    return `<div class="wx-card">
+      <div class="wx-city">${esc(s.name)}</div>
+      <div class="wx-icon">${wxIcon(s.description)}</div>
+      <div class="wx-temp">${fmt(s.temp_f,'°')}</div>
+      <div class="wx-desc">${esc(s.description||'Unknown')}</div>
+      <div class="wx-meta">
+        <div class="wx-lbl">Wind</div><div class="wx-val">${fmt(s.wind_dir,'')} ${fmt(s.wind_mph,' mph')}</div>
+        <div class="wx-lbl">Gust</div><div class="wx-val">${fmt(s.wind_gust_mph,' mph')}</div>
+        <div class="wx-lbl">Humid</div><div class="wx-val">${fmt(s.humidity,'%')}</div>
+        <div class="wx-val">${fmt(s.visibility_mi,' mi')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function alertIcon(ev,sev){
+  if(ev==='Child Abduction Emergency')return '🚨';
+  if(ev==='Blue Alert')return '🔵';
+  if(ev==='Civil Emergency Message'||ev==='Civil Danger Warning')return '⚠️';
+  if(ev==='Law Enforcement Warning')return '👮';
+  if(ev==='Evacuation Immediate')return '🚨';
+  const s=(sev||'').toLowerCase();
+  if(s==='extreme')return '🚨'; if(s==='severe')return '❗'; if(s==='moderate')return '⚠️';
+  return '📢';
+}
+
+function renderAlerts(data){
+  const badge=document.getElementById('alert-badge');
+  const emergBadge=document.getElementById('emerg-badge');
+  const body=document.getElementById('alerts-body');
+  const upAlerts=data?.upAlerts||[], emergAlerts=data?.emergencyAlerts||[];
+  const total=upAlerts.length+emergAlerts.length;
+
+  // Status bar
+  if (emergAlerts.length) {
+    updateStatusBar('alerts', `🚨 ${emergAlerts.length} Emergency`, 'red');
+  } else if (upAlerts.length) {
+    updateStatusBar('alerts', `${upAlerts.length} Active`, 'yellow');
+  } else {
+    updateStatusBar('alerts', 'None', 'green');
+  }
+
+  if(emergAlerts.length){ emergBadge.textContent=`🚨 ${emergAlerts.length} Emergency`; emergBadge.style.display=''; }
+  else { emergBadge.style.display='none'; }
+  badge.textContent=upAlerts.length?`${upAlerts.length} UP Alerts`:'No UP Alerts';
+  badge.className='badge '+(upAlerts.length?'bg-yellow':'bg-green');
+
+  if(!total){ body.innerHTML='<div class="no-alerts">✅ No active alerts for the UP</div>'; return; }
+
+  let html='';
+  if(emergAlerts.length){
+    html+=`<div class="alert-section-hdr" style="color:var(--red);">⚠️ Michigan Emergency Alerts</div>`;
+    html+=emergAlerts.map(a=>`
+    <div class="alert-bar emerg">
+      <div class="alert-icon">${alertIcon(a.event,a.severity)}</div>
+      <div class="alert-text-area">
+        <div class="alert-title">${esc(a.event)}${a.areas?' — '+esc(a.areas.substring(0,100)):''}</div>
+        <div class="alert-desc">${esc((a.headline||a.description||'').substring(0,250))}</div>
+      </div>
+      <span class="badge bg-red">${esc(a.severity||a.urgency||'Emergency')}</span>
+    </div>`).join('');
+  }
+  if(upAlerts.length){
+    if(emergAlerts.length) html+=`<div class="alert-section-hdr" style="margin-top:10px;">🌨️ UP Weather Alerts</div>`;
+    html+=upAlerts.map(a=>{
+      const sc=(a.severity||'').toLowerCase();
+      return `<div class="alert-bar sev-${sc}">
+        <div class="alert-icon">${alertIcon(a.event,a.severity)}</div>
+        <div class="alert-text-area">
+          <div class="alert-title">${esc(a.event)}${a.areas?' — '+esc(a.areas.substring(0,80)):''}</div>
+          <div class="alert-desc">${esc((a.headline||a.description||'').substring(0,200))}</div>
+        </div>
+        <span class="badge ${sc==='extreme'||sc==='severe'?'bg-red':'bg-yellow'}">${esc(a.severity||'')}</span>
+      </div>`;
+    }).join('');
+  }
+  body.innerHTML=html;
+}
+
+function renderBridge(data){
+  const badge=document.getElementById('bridge-badge'),body=document.getElementById('bridge-body');
+  if(!data?.ok){body.innerHTML=`<div class="err-msg">${esc(data?.error||'Bridge data unavailable')}</div>`;return;}
+  const lvl=data.level||'clear';
+  const statusColor={clear:'var(--green)',caution:'var(--yellow)',warning:'var(--orange)',danger:'var(--red)'}[lvl]||'var(--muted)';
+  const glyph={clear:'🌉',caution:'⚠️',warning:'🚧',danger:'🚫'}[lvl]||'🌉';
+  const badgeCls={clear:'bg-green',caution:'bg-yellow',warning:'bg-orange',danger:'bg-red'}[lvl]||'bg-muted';
+  const labelMap={clear:'All Clear',caution:'Restrictions',warning:'Escort Required',danger:'BRIDGE CLOSED'};
+  badge.textContent=labelMap[lvl]||'Unknown'; badge.className='badge '+badgeCls;
+
+  // Status bar
+  const sbColor = {clear:'green',caution:'yellow',warning:'yellow',danger:'red'}[lvl]||'';
+  updateStatusBar('bridge', `${glyph} ${labelMap[lvl]||'Unknown'}`, sbColor);
+
+  const mbaLine=data.mba_status
+    ? `${esc(data.mba_status)}${data.mba_wind_range?' ('+esc(data.mba_wind_range)+')':''}`
+    : esc(labelMap[lvl]||'Unknown');
+  body.innerHTML=`<div class="bridge-center">
+    <span class="bridge-glyph">${glyph}</span>
+    <div class="bridge-status" style="color:${statusColor}"><span class="dot ${lvl==='clear'?'dot-g':lvl==='danger'?'dot-r':'dot-y'}"></span>${mbaLine}</div>
+    <div class="bridge-detail">${esc(data.restriction_detail||'')}</div>
+  </div>
+  <div class="bridge-grid">
+    <div class="bridge-cell"><div class="bcell-lbl">Wind (KPLN)</div><div class="bcell-val">${fmt(data.wind_mph,' mph')} ${fmt(data.wind_dir)}</div><div class="bcell-sub">Gust ${fmt(data.wind_gust_mph,' mph')}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Deck Temp</div><div class="bcell-val">${fmt(data.temp_f,'°F')}</div><div class="bcell-sub">${data.temp_f!=null&&data.temp_f<=28?'⚠️ Black ice risk':''}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Visibility</div><div class="bcell-val">${fmt(data.visibility_mi,' mi')}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Source</div><div class="bcell-val" style="font-size:11px;font-weight:normal;color:var(--muted)">MBA Official</div><div class="bcell-sub">${fmtTime(data.timestamp)}</div></div>
+  </div>`;
+}
+
+function renderLakes(data){
+  const grid=document.getElementById('lakes-grid');
+  if(!data?.lakes){grid.innerHTML='<div class="err-msg">Lake data unavailable</div>';return;}
+  const ORDER=['Lake Superior','Lake Michigan','Lake Huron','Lake Erie'];
+  grid.innerHTML=ORDER.map(name=>{
+    const l=data.lakes[name];
+    if(!l)return `<div class="lake-card"><div class="lake-name">${esc(name)}</div><div class="err-msg">No data</div></div>`;
+    const hasLevel=l.level_ft!=null;
+    const diff=l.diff_in||0;
+    const barPct=hasLevel?Math.min(Math.max(50+(diff*3),5),95):50;
+    const barColor=diff>3?'var(--green)':diff<-3?'var(--red)':'var(--blue)';
+    const hasBuoy=l.wave_height_ft!=null || l.water_temp_f!=null;
+    return `<div class="lake-card">
+      <div class="lake-name">${esc(name)}</div>
+      ${hasLevel?`
+      <div class="lake-stat">Level <span>${l.level_ft} ft IGLD</span></div>
+      <div class="lake-stat">vs Long-term Mean <span style="color:${diff>=0?'var(--green)':'var(--red)'};">${esc(l.diff_label)}</span></div>
+      <div class="level-bar"><div class="level-fill" style="width:${barPct}%;background:${barColor}"></div></div>`
+      :`<div class="err-msg">${esc(l.level_error||'Unavailable')}</div>`}
+      ${hasBuoy?`
+      <div class="lake-stat">Wave Height <span>${l.wave_height_ft!=null?l.wave_height_ft+' ft':'—'}</span></div>
+      <div class="lake-stat">Water Temp <span>${l.water_temp_f!=null?l.water_temp_f+'°F':'—'}</span></div>`:''}
+      <div class="src-note" style="margin-top:6px;">${esc(l.note||'')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTraffic(data){
+  const badge=document.getElementById('traffic-badge'),body=document.getElementById('traffic-body');
+  if(!data?.routes){body.innerHTML='<div class="err-msg">Road data unavailable</div>';return;}
+  const diff=data.routes.filter(r=>r.level==='difficult').length;
+  const caut=data.routes.filter(r=>r.level==='caution').length;
+  const sbText = diff?`${diff} Routes Difficult`:caut?`${caut} Routes Caution`:'All Clear';
+  const sbColor = diff?'red':caut?'yellow':'green';
+  updateStatusBar('roads', sbText, sbColor);
+  badge.textContent=diff?`${diff} Difficult`:caut?`${caut} Caution`:'All Clear';
+  badge.className='badge '+(diff?'bg-red':caut?'bg-yellow':'bg-green');
+  const clr={red:'var(--red)',yellow:'var(--yellow)',green:'var(--green)',muted:'var(--muted)'};
+  body.innerHTML='<div class="route-grid">'+data.routes.map(r=>{
+    const bw=Math.min(Math.round(r.score||0),100);
+    const bc={difficult:'bg-red',caution:'bg-yellow',clear:'bg-green',unknown:'bg-muted'}[r.level]||'bg-muted';
+    return `<div class="route-item">
+      <div class="route-hdr"><span class="route-name">${esc(r.name)}</span><span class="badge ${bc}">${esc(r.label)}</span></div>
+      <div class="route-bar"><div class="route-fill" style="width:${bw}%;background:${clr[r.color]||'var(--muted)'}"></div></div>
+      <div class="route-meta"><span>${esc(r.summary)}</span><span>Score ${Math.round(r.score||0)}</span></div>
+    </div>`;
+  }).join('')+'</div>'+(data.note?`<div class="src-note">⚙ ${esc(data.note)}</div>`:'');
+}
+
+function renderMdotEvents(data){
+  const badge=document.getElementById('mdot-badge'), body=document.getElementById('mdot-body');
+  if(!badge||!body) return; // panel not present in this HTML build yet
+  if(!data?.ok){
+    const notConfigured = data?.error === 'Proxy not configured yet';
+    badge.textContent = notConfigured ? 'Not set up' : 'Unavailable';
+    badge.className = 'badge bg-muted';
+    body.innerHTML = notConfigured
+      ? '<div class="src-note">⚙ Live MDOT feed not configured yet — see tools/mdot-proxy/README.md</div>'
+      : `<div class="err-msg">${esc(data?.error||'Unavailable')}</div>`;
+    return;
+  }
+  const incidents=data.incidents||[], construction=data.construction||[];
+  const total=incidents.length+construction.length;
+  badge.textContent = total ? `${total} Active` : 'All Clear';
+  badge.className = 'badge ' + (incidents.length ? 'bg-red' : construction.length ? 'bg-yellow' : 'bg-green');
+
+  const pick=(obj,keys)=>{ for(const k of keys){ if(obj[k]!=null && obj[k]!=='') return obj[k]; } return null; };
+
+  const incidentHtml = incidents.map(i=>`
+    <div class="route-item">
+      <div class="route-hdr"><span class="route-name">🚨 ${esc(i.route||'Incident')}</span><span class="badge bg-red">${esc(i.county||'')}</span></div>
+      <div class="route-meta"><span>${esc(i.location||'')}</span></div>
+      ${i.message?`<div class="route-meta"><span>${esc(i.message)}</span></div>`:''}
+      <div class="route-meta"><span>${esc(i.lanesEffected||'')}</span><span>${esc(i.reported||'')}</span></div>
+    </div>`).join('');
+
+  const constructionHtml = construction.map(c=>{
+    const desc  = pick(c,['description','message','details','summary']) || `${c.route||'Construction'} — see MDOT for details`;
+    const start = pick(c,['startDate','start','beginDate','begin']);
+    const end   = pick(c,['endDate','end']);
+    return `<div class="route-item">
+      <div class="route-hdr"><span class="route-name">🚧 ${esc(c.route||'Construction')}</span><span class="badge bg-yellow">${esc(c.county||'')}</span></div>
+      <div class="route-meta"><span>${esc(desc)}</span></div>
+      ${(start||end)?`<div class="route-meta"><span>${esc(start||'')}${start&&end?' – ':''}${esc(end||'')}</span></div>`:''}
+    </div>`;
+  }).join('');
+
+  body.innerHTML = (incidentHtml+constructionHtml)
+    ? `<div class="route-grid">${incidentHtml}${constructionHtml}</div>`
+    : '<div class="src-note">✅ No active UP incidents or construction reported</div>';
+  body.innerHTML += `<div class="src-note">⚙ MDOT MiDrive (via proxy) · Updated ${fmtTime(data.updated)}</div>`;
+}
+
+const EIA_API_KEY = 'DkeNs7cg9SK8h76jPAqwOD7GWppNdKWddnR4b6rg'; // personal free key, registered 2026-07-10
+
+async function fetchGasPrices(){
+  try{
+    // NOTE: EPM0 is EIA's "All Grades" product code, not Regular — EPMR is Regular.
+    // Filtering by facets[product][] directly (rather than just sorting by period
+    // and grabbing N rows) matters: PADD 2 has ~10 product/grade combos per week,
+    // so a plain length=10 grab often missed the Regular row entirely once
+    // premium/midgrade rows crowded it out — confirmed live against the API.
+    const url=`https://api.eia.gov/v2/petroleum/pri/gnd/data/?api_key=${EIA_API_KEY}&frequency=weekly`
+      +'&data%5B0%5D=value&facets%5Bduoarea%5D%5B%5D=R20'
+      +'&facets%5Bproduct%5D%5B%5D=EPMR&facets%5Bproduct%5D%5B%5D=EPD2D'
+      +'&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&offset=0&length=10';
+    const res=await fetch(url);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d=await res.json();
+    if(d.error) throw new Error(d.error?.message||'EIA API error');
+    const rows=d.response?.data||[];
+    const pick=prod=>{ const r=rows.find(r=>r.product===prod); return r?.value!=null?parseFloat(r.value):null; };
+    const regular=pick('EPMR'), diesel=pick('EPD2D');
+    if(regular==null && diesel==null) throw new Error('No rows returned');
+    return{ok:true,regular,diesel,period:rows[0]?.period||null};
+  }catch(e){return{ok:false,error:e.message};}
+}
+
+function renderGasPrices(data){
+  const badge=document.getElementById('gas-badge'),body=document.getElementById('gas-body');
+  if(!data?.ok){body.innerHTML=`<div class="err-msg">${esc(data?.error||'Unavailable')}</div>`;return;}
+  const p=v=>v!=null?'$'+v.toFixed(2):'—';
+  const period=data.period?new Date(data.period+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+  badge.textContent=period?'Wk of '+period:'Midwest Avg';
+  badge.className='badge bg-blue';
+  // Status bar
+  if (data.regular != null) updateStatusBar('gas', `$${data.regular.toFixed(2)}/gal`, 'blue');
+  body.innerHTML=`<div class="gas-grid">
+    <div class="gas-item"><div class="gas-label">Regular</div><div class="gas-price">${p(data.regular)}</div><div class="gas-unit">/gal</div></div>
+    <div class="gas-item"><div class="gas-label">Diesel</div><div class="gas-price" style="color:var(--blue)">${p(data.diesel)}</div><div class="gas-unit">/gal</div></div>
+  </div>
+  <div class="gas-note">EIA Midwest avg &nbsp;·&nbsp; <a href="https://www.gasbuddy.com/gasprices/michigan" target="_blank">UP local prices →</a></div>`;
+}
+
+async function fetchSkiStatus(){
+  const wpTxt=async(host,id)=>{
+    const r=await fetch(`https://${host}/wp-json/wp/v2/pages/${id}`);
+    return((await r.json()).content?.rendered||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+  };
+  const num=(t,re)=>t.match(re)?.[1]||null;
+  const resorts=await Promise.allSettled([
+    (async()=>{
+      const t=await wpTxt('www.mtbohemia.com',817);
+      return{name:'Mt. Bohemia',loc:'Lac La Belle',
+        snow24:num(t,/24.{0,8}hour[s]?\D{0,5}([\d.]+)[″"']/i),
+        snowBase:num(t,/base.{0,8}([\d.]+)[″"']/i),
+        runs:num(t,/(\d+)\D{0,6}runs?\s+open/i),
+        url:'https://www.mtbohemia.com/conditions/'};
+    })(),
+    (async()=>{
+      const t=await wpTxt('www.bigpowderhorn.net',647);
+      return{name:'Big Powderhorn',loc:'Bessemer',
+        snow24:num(t,/24.{0,8}hour[s]?\D{0,5}([\d.]+)[″"']/i),
+        snowBase:num(t,/base.{0,8}([\d.]+)[″"']/i),
+        lifts:num(t,/(\d+)\D{0,6}lifts?\s+open/i),
+        url:'https://www.bigpowderhorn.net/mountain/snow-report/'};
+    })(),
+    (async()=>{
+      const posts=await(await fetch('https://www.skibrule.com/wp-json/wp/v2/posts?per_page=1&orderby=date')).json();
+      const t=(posts[0]?.content?.rendered||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+      return{name:'Ski Brule',loc:'Iron River',
+        snowBase:num(t,/base\s*depth\D{0,5}([\d]+)/i),
+        trails:num(t,/(\d+)\D{0,10}trails?\s+open/i),
+        url:'https://www.skibrule.com/conditions/'};
+    })(),
+  ]);
+  const names=['Mt. Bohemia','Big Powderhorn','Ski Brule'];
+  const locs=['Lac La Belle','Bessemer','Iron River'];
+  const urls=['https://www.mtbohemia.com/conditions/','https://www.bigpowderhorn.net/mountain/snow-report/','https://www.skibrule.com/conditions/'];
+  return[
+    ...resorts.map((r,i)=>r.status==='fulfilled'?{...r.value,ok:true}:{name:names[i],loc:locs[i],url:urls[i],ok:false}),
+    {name:'Marquette Mtn',loc:'Marquette',url:'https://www.marquettemountain.com/conditions/',link:true},
+    {name:'Pine Mountain',loc:'Iron Mountain',url:'https://www.pinemountainresort.com/mountain/conditions/',link:true},
+  ];
+}
+
+function renderSkiStatus(resorts){
+  const badge=document.getElementById('ski-badge'),body=document.getElementById('ski-body');
+  const live=resorts.filter(r=>r.ok&&(r.snow24||r.snowBase||r.runs||r.lifts||r.trails));
+  badge.textContent=live.length?`${live.length} live feeds`:'Links only';
+  badge.className='badge '+(live.length?'bg-blue':'bg-muted');
+  body.innerHTML='<div class="ski-grid">'+resorts.map(r=>{
+    const chips=[];
+    if(r.snow24)  chips.push(`<span class="ski-chip">❄️ <b>${esc(r.snow24)}"</b> 24hr</span>`);
+    if(r.snowBase)chips.push(`<span class="ski-chip">📏 <b>${esc(r.snowBase)}"</b> base</span>`);
+    if(r.runs)    chips.push(`<span class="ski-chip">🎿 <b>${esc(r.runs)}</b> runs</span>`);
+    if(r.lifts)   chips.push(`<span class="ski-chip">🚡 <b>${esc(r.lifts)}</b> lifts</span>`);
+    if(r.trails)  chips.push(`<span class="ski-chip">🎿 <b>${esc(r.trails)}</b> trails</span>`);
+    const statLine=chips.length?`<div class="ski-meta">${chips.join('')}</div>`
+      :`<div class="ski-err">${r.link?'No live API':'Live data unavailable'}</div>`;
+    return`<div class="ski-tile">
+      <div class="ski-name">${esc(r.name)} <span style="font-size:10px;color:var(--muted);font-weight:400">${esc(r.loc)}</span></div>
+      ${statLine}
+      <a class="ski-link" href="${esc(r.url)}" target="_blank">Conditions →</a>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+async function fetchTrailClosures(){
+  try{
+    const yr=new Date().getFullYear();
+    const bbox=encodeURIComponent('{"xmin":-90.4,"ymin":45.7,"xmax":-82.4,"ymax":47.5,"spatialReference":{"wkid":4326}}');
+    const url='https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/DNR_trails_temporarily_closed/FeatureServer/0/query'
+      +`?where=Year%3D${yr}&outFields=Comments%2CCounty%2CSnowmobile_Name%2CBike_Name%2CHiking_Name%2CEditDate`
+      +`&geometry=${bbox}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=json`;
+    const res=await fetch(url);
+    const d=await res.json();
+    const seen=new Set(); const closures=[];
+    const month=new Date().getMonth();            // 0=Jan
+    const isSnowSeason=month>=11||month<=2;       // Dec–Mar
+    for(const f of(d.features||[])){
+      const a=f.attributes;
+      const comment=(a.Comments||'').trim();
+      // Hide stale snowmobile-only notices outside snow season (>60 days since DNR last edit)
+      const edit=a.EditDate?new Date(a.EditDate):null;
+      const ageDays=edit?(Date.now()-edit.getTime())/864e5:null;
+      const snowOnly=!!a.Snowmobile_Name&&!a.Bike_Name&&!a.Hiking_Name;
+      if(!isSnowSeason&&snowOnly&&ageDays!==null&&ageDays>60)continue;
+      const raw=a.Snowmobile_Name||a.Bike_Name||a.Hiking_Name||'';
+      let trail=raw;
+      if(/^\d+$/.test(raw)){
+        const m=comment.match(/Snowmobile Trail (UP\s*\d+)/i)||comment.match(/(UP\s*\d+)/i);
+        trail=m?m[1].trim():'Trail #'+raw;
+      }
+      const key=trail+'|'+a.County;
+      if(seen.has(key))continue; seen.add(key);
+      const lower=comment.toLowerCase();
+      let status='modified';
+      if(lower.match(/:\s*open/))          status='open';
+      else if(lower.includes('reroute'))   status='rerouted';
+      else if(lower.includes('closed')||lower.includes('closing')) status='closed';
+      else if(lower.includes('ungroomed')||lower.includes('caution')) status='caution';
+      else if(lower.includes('open'))      status='open';
+      closures.push({trail,county:a.County||'',comment:comment.slice(0,200),status,edit});
+    }
+    closures.sort((x,y)=>(y.edit?.getTime()||0)-(x.edit?.getTime()||0));
+    return{ok:true,closures};
+  }catch(e){return{ok:false,error:e.message};}
+}
+
+function renderTrails(data){
+  const badge=document.getElementById('trails-badge'),body=document.getElementById('trails-body');
+  if(!data?.ok){body.innerHTML=`<div class="err-msg">${esc(data?.error||'Unavailable')}</div>`;return;}
+  const{closures}=data;
+  badge.textContent=closures.length?`${closures.length} UP notices`:'No active notices';
+  badge.className='badge '+(closures.some(c=>c.status==='closed')?'bg-red':closures.length?'bg-yellow':'bg-green');
+  const sLabel={open:'Open',closed:'Closed',rerouted:'Rerouted',caution:'Caution',modified:'Updated'};
+  const cHtml=closures.length
+    ?`<div class="trail-closure-list">`+closures.map(c=>`
+      <div class="trail-closure-item">
+        <div class="tcl-status ${c.status}">${sLabel[c.status]||'Notice'}</div>
+        <div class="tcl-body">
+          <div class="tcl-name">${esc(c.trail)}</div>
+          <div class="tcl-county">${esc(c.county)} County · MI DNR${c.edit?` · Updated ${c.edit.toLocaleDateString([],{month:'short',day:'numeric'})}`:''}</div>
+          <div class="tcl-comment">${esc(c.comment)}</div>
+        </div>
+      </div>`).join('')+`</div>`
+    :`<div style="color:var(--muted);font-size:13px;margin-bottom:14px;">✅ No active UP trail closure notices from DNR for ${new Date().getFullYear()}.</div>`;
+  body.innerHTML=cHtml+`<div class="trail-links-hdr">UP Trail Resources</div>
+  <div class="trail-links-grid">
+    <a href="trails.html" class="trail-link-card" style="border-color:var(--accent);"><div class="tlc-icon">🚵</div><div class="tlc-label">UP MTB Guide</div><div class="tlc-sub">Live rideability · 8 trail systems</div></a>
+    <a href="https://www.michigan.gov/dnr/places/state-trails" target="_blank" class="trail-link-card"><div class="tlc-icon">🏔️</div><div class="tlc-label">DNR Trail Maps</div><div class="tlc-sub">Snowmobile, ORV, hiking</div></a>
+    <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports" target="_blank" class="trail-link-card"><div class="tlc-icon">🛷</div><div class="tlc-label">Snowmobile Reports</div><div class="tlc-sub">Trail conditions · MI DNR</div></a>
+    <a href="https://www.alltrails.com/lists/upper-peninsula-michigan" target="_blank" class="trail-link-card"><div class="tlc-icon">🥾</div><div class="tlc-label">AllTrails UP</div><div class="tlc-sub">Hiking &amp; trail maps</div></a>
+    <a href="https://www.trailforks.com/region/upper-peninsula/" target="_blank" class="trail-link-card"><div class="tlc-icon">🚵</div><div class="tlc-label">Trailforks</div><div class="tlc-sub">Mountain biking UP</div></a>
+    <a href="https://www.onxmaps.com/offroad/app" target="_blank" rel="sponsored noopener" class="trail-link-card"><div class="tlc-icon">🛻</div><div class="tlc-label">onX Offroad</div><div class="tlc-sub">ORV maps &amp; open/closed trails</div></a>
+  </div>`;
+  // AFFILIATE TODO (Dan): apply at avantlink.com for the onX affiliate program (~10% commission).
+  // Once approved, replace the onxmaps.com URL above with your AvantLink tracking link.
+}
+
+// ── Cameras ──
+function camTile(cam, ts, isFeatured) {
+  const src = cam.url + '?t=' + ts;
+  return `<div class="cam-tile${isFeatured?' featured':''}" onclick="window.open('${esc(cam.url)}','_blank')">
+    <div class="cam-img-wrap">
+      ${isFeatured?'<div class="cam-featured-badge">LIVE</div>':''}
+      <img class="cam-img" data-src="${esc(cam.url)}" src="${esc(src)}" alt="${esc(cam.label)}"
+           onerror="this.style.opacity='.3'" loading="lazy">
+    </div>
+    <div class="cam-label"><strong>${esc(cam.label)}</strong>${esc(cam.sub)}</div>
+  </div>`;
+}
+
+function renderCameras(){
+  const ts = Date.now();
+  document.getElementById('cam-featured').innerHTML = FEATURED_CAMS.map(c => camTile(c, ts, true)).join('');
+  document.getElementById('cam-bridge').innerHTML   = BRIDGE_CAMS.map(c => camTile(c, ts, false)).join('');
+  document.getElementById('cam-roads').innerHTML    = ROAD_CAMS.map(c => camTile(c, ts, false)).join('');
+}
+
+function refreshCameraImages(){
+  const ts = Date.now();
+  document.querySelectorAll('.cam-img').forEach(img => {
+    const base = img.dataset.src;
+    if (base) img.src = base + '?t=' + ts;
+  });
+}
+
+// ── Main fetch ──
+async function fetchAll(){
+  document.getElementById('ts').textContent = 'Refreshing…';
+  try {
+    const [weather, alerts, lakes, gas, ski, trails, kp, streamflow, solarWind, mdot] = await Promise.all([
+      fetchAllWeather(),
+      fetchAlerts(),
+      fetchAllLakes(),
+      fetchGasPrices(),
+      fetchSkiStatus(),
+      fetchTrailClosures(),
+      fetchKpIndex(),
+      fetchUSGSStreamflow(),
+      fetchSolarWind(),
+      fetchMdotEvents(),
+    ]);
+    const bridge  = await fetchBridge(weather.stations);
+    const traffic = deriveTraffic(weather);
+
+    lastKpData = kp;
+
+    // Update Aurora status bar using composite score
+    if (kp?.ok) {
+      const mqSt   = weather.stations.find(s => s.station === 'KSAW');
+      const chance = computeAuroraChance(kp.kp, solarWind?.bz ?? null, mqSt?.description || '');
+      const kpCls  = { high:'orange', med:'yellow', low:'muted' }[chance.cls] || '';
+      updateStatusBar('kp', `KP ${kp.kp.toFixed(1)} · ${chance.label}`, kpCls);
+    } else {
+      updateStatusBar('kp', 'Unavailable', '');
+    }
+
+    renderWeather(weather);
+    renderAlerts(alerts);
+    renderBridge(bridge);
+    renderLakes(lakes);
+    renderTraffic(traffic);
+    renderMdotEvents(mdot);
+    renderGasPrices(gas);
+    renderSkiStatus(ski);
+    renderTrails(trails);
+    renderTodayInUP(weather, kp, streamflow, solarWind);
+
+    document.getElementById('ts').textContent =
+      'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+  } catch(e) {
+    document.getElementById('ts').textContent = 'Error — retrying…';
+    console.error('fetchAll error:', e);
+  }
+}
+
+// ── Admin mode: show Edit button only when URL hash is #admin ──
+function initAdminMode() {
+  if (location.hash === '#admin' || location.search.includes('admin')) {
+    const btn = document.getElementById('today-edit-btn');
+    if (btn) btn.classList.add('admin-visible');
+  }
+}
+
+// ── Skeleton loaders — fill UI immediately so nothing looks broken while data loads ──
+function renderWeatherSkeleton() {
+  const CITIES = ['Sault Ste. Marie', 'Marquette', 'Houghton', 'St. Ignace'];
+  document.getElementById('wx-grid').innerHTML = CITIES.map(name => `
+    <div class="wx-card">
+      <div class="wx-city">${name}</div>
+      <div class="wx-icon">🌡️</div>
+      <div style="margin:0 auto 3px;"><div class="skeleton" style="width:60px;height:30px;margin:0 auto;"></div></div>
+      <div class="skeleton" style="width:80%;margin:4px auto 10px;height:11px;"></div>
+      <div class="wx-meta">
+        <div class="wx-lbl">Wind</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Gust</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Humid</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Vis</div><div class="skeleton" style="height:11px;"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderStatusBarSkeleton() {
+  ['bridge','roads','alerts','weather','kp','gas'].forEach(k => {
+    const el = document.getElementById('sbv-'+k);
+    if (el) { el.innerHTML = '<span class="skeleton" style="display:inline-block;width:60px;height:11px;vertical-align:middle;"></span>'; }
+  });
+}
+
+// ── Hero image rotation ──
+const HERO_SLIDES = [
+  { id: 'hero-slide-0', caption: 'Lake Superior — Michigan\'s Upper Peninsula' },
+  { id: 'hero-slide-1', caption: 'Fall Colors — UP Northwoods'                 },
+  { id: 'hero-slide-2', caption: 'Waterfall Country — Pictured Rocks region'   },
+  { id: 'hero-slide-3', caption: 'Winter in the UP — Pure Michigan'             },
+];
+let heroIdx = 0;
+function rotateHero() {
+  const slides  = document.querySelectorAll('.hero-slide');
+  const caption = document.getElementById('hero-caption');
+  slides[heroIdx].classList.remove('active');
+  heroIdx = (heroIdx + 1) % HERO_SLIDES.length;
+  slides[heroIdx].classList.add('active');
+  if (caption) caption.textContent = HERO_SLIDES[heroIdx].caption;
+}
+setInterval(rotateHero, 7000); // rotate every 7s, 1.8s crossfade
+
+// ── Init ──
+initAdminMode();
+renderWeatherSkeleton();
+renderStatusBarSkeleton();
+renderCameras();
+renderTodayInUP(null, null, null, null); // Show skeleton immediately
+setInterval(refreshCameraImages, 60*1000);
+// Marquette Ore Dock — auto-update shipping season status
+// Soo Locks navigation season runs roughly March 25 – January 15
+function updateOreDockSeason() {
+  const seasonEl = document.getElementById('oredock-season');
+  const badgeEl  = document.getElementById('oredock-season-badge');
+  if (!seasonEl) return;
+  const now = new Date();
+  const m = now.getMonth(); // 0-11
+  const d = now.getDate();
+  const open =
+    (m > 2 && m < 12) ||
+    (m === 2 && d >= 25) ||
+    (m === 0 && d <= 15);
+  if (open) {
+    seasonEl.textContent = 'Open';
+    seasonEl.style.color = 'var(--green)';
+    if (badgeEl) {
+      badgeEl.textContent = 'Season Open';
+      badgeEl.className = 'badge bg-green';
+    }
+  } else {
+    seasonEl.textContent = 'Closed (winter)';
+    seasonEl.style.color = 'var(--muted)';
+    if (badgeEl) {
+      badgeEl.textContent = 'Closed for Winter';
+      badgeEl.className = 'badge bg-muted';
+    }
+  }
+}
+updateOreDockSeason();
+
+fetchAll();
+setInterval(fetchAll, 5*60*1000);
+</script>
+<!-- AvantLink verification — DELETE after verify passes -->
+<script type="text/javascript" src="http://classic.avantlink.com/affiliate_app_confirm.php?mode=js&authResponse=1694c0d2a41f9e800554a9c3e009eb9c8ccef1f7"></script>
+
+</body>
+</html>

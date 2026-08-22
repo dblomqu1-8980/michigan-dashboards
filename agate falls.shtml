@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Agate Falls</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="SHORTCUT ICON" href="/waterfall.ico" />
+<script type="text/javascript" src="FancyZoom.js"></script>
+<script type="text/javascript" src="FancyZoomHTML.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="initializePage.js"></script>
+<script type="text/javascript" src="next.js"></script>
+<script type="text/javascript">(function(w){var dpr=((w.devicePixelRatio===undefined)?1:w.devicePixelRatio);if(!!w.navigator.standalone){var r=new XMLHttpRequest();r.open('GET','/retinaimages.php?devicePixelRatio='+dpr,false);r.send()}else{document.cookie='devicePixelRatio='+dpr+'; path=/'}})(window)</script>
+<noscript><style id="devicePixelRatio" media="only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2)">html{background-image:url("/retinaimages.php?devicePixelRatio=2")}</style></noscript>
+
+</head>
+<body onload="initializePage();" style="text-align:center">
+<div class="outer" style="min-width:700px">
+<div class="header"><a href="http://gowaterfalling.com">
+  <img class="logo" src="images/gw_headerlogo_01.gif" border="0" alt=""/></a>
+  <div class="navigation">
+     <div class="navitem" id="home"><a href="http://gowaterfalling.com">home</a></div>
+     <div class="navitem" id="maps"><a href="maps">maps</a></div>
+    <div class="navitem" id="flickr">
+<a href="http://www.flickr.com/search/?w=all&amp;q=gowaterfalling.com%2Fwaterfalls%2Fagate.shtml">       flickr</a></div>
+    <div class="navitem" id="mosaic"><a href="mosaic.shtml">mosaic</a></div>
+    <div class="navitem" id="cascade"><a href="photocascade.shtml">photo cascade</a></div>
+<div class="navitem" id="blank"></div>   <div class="navitem" id="mail"><a href="mailto:admin@gowaterfalling.com"><img src="images/gw_nav_mail.gif" alt=""/></a></div>
+   <div class="navitem" id="why"><a href="faq.shtml">?</a></div>
+</div>
+</div>
+
+<div class="previous">
+<a href="">
+<img src="images/previous.gif" alt="Previous" border="0" style="margin:0px;padding:0px" onclick="previousFall(); return false;"/></a>
+</div>
+<div class="next">
+<a href="">
+<img src="images/next.gif" alt="Next" border="0"  style="margin:0px;padding:0px" onclick="nextFall(); return false;"/>
+</a>
+</div>
+
+
+<div class="splash" style="clear:left">
+<div style="clear:left">
+<h2 class="name" align="center"> Agate Falls </h2>
+</div>
+<div class="splashfloat">
+<a href="images/full/mi/vagatefalls46.jpg">
+<img src="images/splash/mi/vagatefalls46.jpg" class="gallery" width="315" height="420" alt=""  /></a>
+<br/>June 2015
+</div>
+<div class="summary">
+<p>
+<b>State: </b> Michigan
+</p>
+<p>
+<b>Location:</b>  Ontanagon County, on  MI-28,
+east of Bruce Crossing.
+</p>
+<p>
+<b>Height:</b> 40
+</p>
+<p>
+<b>Crest:</b> 60
+</p>
+<p>
+<b>Water Source:</b> Middle Branch Ontonagon River 
+</p>
+<p>
+<b>Waypoint:</b> 46.48083N 89.09083W
+</p>
+<p>
+<b>Summary:</b> This is a impressive waterfall, and relatively
+easy to get to.  Stop by and see it on your way to or
+from <a href="bond.shtml">Bond Falls</a>  The official viewpoint
+is lacking, but great views are available if you clamber down into
+the gorge.
+</p>
+</div>
+<div style="clear:left">
+</div>
+</div>
+
+<div class="main">
+<p>
+Agate Falls is a 
+<a href="http://www.michigandnr.com/parksandtrails/Details.aspx?id=413&amp;type=SPRK">Michigan State Scenic Site</a>
+6.5 miles east of Bruce Crossing on MI-28.
+There is a roadside park (Joseph F. Oravec roadside park)
+just past the bridge over the Ontonagon River.  
+This is one of the largest and most impressive waterfalls in Michigan.
+Unfortunately the provided trails and overlooks are somewhat limited.
+With some effort you can scramble down to the river
+to get some very good views of the falls, which seems to be 
+popular with local fishermen,
+or scramble up the river banks to get to the old railroad
+bridge over the falls.  The bridge is now part of a snowmobile trail.
+</p>
+<p>
+I was hoping that after seeing the improvements done to
+<a href="bond.shtml">Bond Falls</a>, the access to Agate Falls 
+had also been improved, but no luck. 
+</p>
+
+<div style="vertical-align:top;margin:0px;padding:0px">
+<h3 style="margin-top:8px;padding-top:0px">
+<font size="-1">
+<a href="maps/scrollinglakesuperiormap.shtml?agate" class="map">[Lake Superior]</a>
+</font>
+Nearby Falls</h3>
+</div>
+<p>
+<a href="bond.shtml">Bond Falls</a> is just around the corner.  
+From Agate Falls, go east on MI-28 and take a right onto Agate road.
+<a href="okundekun.shtml">O Kun de Kun Falls</a> is 8 miles to the north.
+Go west on MI-28 and turn north on to US-45.
+</p>
+
+<h3>Photo Gallery</h3>
+<center>
+<table width="80%">
+<tr>
+<td align="center" width="40%"><a href="images/full/mi/agatefalls45.jpg">
+<img src="images/thumbs/mi/agatefalls45.jpg" class="gallery" width="300" height="197" alt=""  /></a><br/>June 2015</td>
+<td align="center" width="40%"><a href="images/full/mi/agatefalls47.jpg">
+<img src="images/thumbs/mi/agatefalls47.jpg" class="gallery" width="300" height="195" alt=""  /></a><br/>June 2015</td>
+</tr>
+<tr>
+<td align="center" width="40%"><a href="images/full/mi/vagatefalls42.jpg">
+<img src="images/thumbs/mi/vagatefalls42.jpg" class="gallery" width="225" height="300" alt=""  /></a><br/>June 2015</td>
+<td align="center" width="40%"><a href="images/full/mi/vagatefalls41.jpg">
+<img src="images/thumbs/mi/vagatefalls41.jpg" class="gallery" width="225" height="300" alt=""  /></a><br/>Side view, June 2015</td>
+</tr>
+<tr>
+<td align="center" width="40%"><a href="images/full/mi/agatefalls2.jpg">
+<img src="images/thumbs/mi/agatefalls2.jpg" class="gallery" width="300" height="225" alt=""  /></a><br/>August 2001</td>
+<td align="center" width="40%"><a href="images/full/mi/agatefalls3.jpg">
+<img src="images/thumbs/mi/agatefalls3.jpg" class="gallery" width="300" height="225" alt=""  /></a><br/>August 2001</td>
+</tr>
+<tr>
+<td align="center" width="40%"><a href="images/full/mi/vagatefalls11.jpg">
+<img src="images/thumbs/mi/vagatefalls11.jpg" class="gallery" width="225" height="300" alt=""  /></a><br/>View from overlook, September 2009</td>
+<td align="center" width="40%"><a href="images/full/mi/vagatefalls12.jpg">
+<img src="images/thumbs/mi/vagatefalls12.jpg" class="gallery" width="225" height="300" alt=""  /></a><br/>View from overlook, September 2009</td>
+</tr>
+</table>
+</center>
+
+<hr/>
+<p>
+This page has been accessed 
+186476  times. <br/>
+Last Modified: 
+Friday, 14-Apr-2017 19:45:30 MDT.<br/>  
+</p></div>
+<div style="text-align:center;height:40px;width:100%;position:relative;padding-bottom:8px;padding-top:8px" class="trailer">
+<div style="float:left;padding-left:8px">
+<a href=""><img src="images/previous.gif" border="0" alt="Previous" onclick="previousFall(); return false;"/>
+</a> 
+</div>
+<div style="float:right;padding-right:8px">
+<a href=""><img src="images/next.gif" border="0" alt="Next" onclick="nextFall(); return false;"/></a>
+</div>
+<a href="../index.shtml">
+<b>Waterfalls Page</b></a>
+</div>
+
+</div>
+</body>
+</html>

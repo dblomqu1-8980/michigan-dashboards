@@ -1,0 +1,48 @@
+# ─────────────────────────────────────────────────────────────
+#  906 Dashboard / Up North Dashboard
+# ─────────────────────────────────────────────────────────────
+
+# ── Secrets & credentials ──
+.env
+.env.*
+!.env.example
+credentials.json
+token.json
+*.pem
+*.key
+
+# Wrangler caches the Cloudflare account id/email here.
+.wrangler/
+tools/**/.wrangler/
+
+# ── Personal data ──
+# Real subscriber email addresses. Never commit.
+aurora-subscribers.csv
+*-subscribers.csv
+
+# ── Local tooling ──
+# Machine-specific Claude Code settings and preview config.
+.claude/settings.local.json
+.claude/launch.json
+
+# ── Scratch / regenerable ──
+# Per CLAUDE.md: everything in .tmp/ is disposable.
+.tmp/
+*.log
+node_modules/
+
+# ── Superseded manual backups ──
+# git replaces what this folder was doing. The files stay on disk;
+# they're just not tracked. Delete this line to start tracking them.
+backup/
+
+# ── macOS / editor noise ──
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

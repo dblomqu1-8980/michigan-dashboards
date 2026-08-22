@@ -1,0 +1,27 @@
+# 906 Travel Dashboard — domain canonicalization
+# blomblog.com (old) -> 906dashboard.com (new), preserving the full path.
+# Also forces https and non-www on the new domain.
+
+RewriteEngine On
+
+# Old domain -> new domain (301, keeps /waterfalls.html, /aurora.html, etc.)
+RewriteCond %{HTTP_HOST} ^(www\.)?blomblog\.com$ [NC]
+RewriteRule ^(.*)$ https://906dashboard.com/$1 [R=301,L]
+
+# www -> non-www on the new domain
+RewriteCond %{HTTP_HOST} ^www\.906dashboard\.com$ [NC]
+RewriteRule ^(.*)$ https://906dashboard.com/$1 [R=301,L]
+
+# Force https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://906dashboard.com/$1 [R=301,L]
+
+# Orphaned legacy pages — keep the files, keep them out of the index.
+# These are old saved copies (michigan.gov, Wikipedia) and a superseded
+# dashboard build. Nothing links to them; they only add duplicate content.
+# Remove this block if the pages are ever put back into use.
+<IfModule mod_headers.c>
+  <FilesMatch "^(agatefalls\.html|Agate_Falls_Scenic_Site\.html|up906_dashboard\.html|agate falls\.shtml)$">
+    Header set X-Robots-Tag "noindex, nofollow"
+  </FilesMatch>
+</IfModule>

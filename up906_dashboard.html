@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>906 Dashboard — Upper Peninsula</title>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #1a6fc4;
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+    /* ── Header ── */
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    .timestamp  { color: var(--muted); font-size: 12px; }
+    .refresh-btn { background: var(--surf2); border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Grid ── */
+    .main { padding: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 13px; }
+    .span2 { grid-column: span 2; }
+    .span3 { grid-column: span 3; }
+
+    /* ── Card ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .card-head { background: var(--surf2); padding: 9px 13px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .card-title { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .card-body  { padding: 13px; }
+
+    /* ── Badges ── */
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+    .bg-green  { background: rgba(34,197,94,.15);  color: var(--green);  }
+    .bg-yellow { background: rgba(234,179,8,.15);  color: var(--yellow); }
+    .bg-red    { background: rgba(239,68,68,.15);  color: var(--red);    }
+    .bg-blue   { background: rgba(59,130,246,.15); color: var(--blue);   }
+    .bg-muted  { background: rgba(125,137,150,.15);color: var(--muted);  }
+    .bg-orange { background: rgba(249,115,22,.15); color: var(--orange); }
+
+    /* ── Status dots ── */
+    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+    .dot-g { background:var(--green); }
+    .dot-y { background:var(--yellow); animation:pulse 1.5s infinite; }
+    .dot-r { background:var(--red);    animation:pulse 1s   infinite; }
+    .dot-m { background:var(--muted); }
+
+    /* ── Stat rows ── */
+    .stat { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+    .stat:last-child { border-bottom:none; }
+    .stat-lbl { color:var(--muted); font-size:12px; }
+    .stat-val { font-weight:600; font-size:13px; }
+
+    /* ── Weather grid ── */
+    .wx-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .wx-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+    .wx-city { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; }
+    .wx-icon { font-size:26px; margin-bottom:5px; }
+    .wx-temp { font-size:30px; font-weight:700; line-height:1; margin-bottom:3px; }
+    .wx-desc { font-size:11px; color:var(--muted); margin-bottom:8px; height:28px; }
+    .wx-meta { display:grid; grid-template-columns:1fr 1fr; gap:3px; font-size:11px; }
+    .wx-lbl  { color:var(--muted); }
+    .wx-val  { color:var(--text); font-weight:600; }
+
+    /* ── Alerts ── */
+    .alert-bar { background:rgba(234,179,8,.08); border:1px solid rgba(234,179,8,.25); border-radius:8px; padding:10px 13px; display:flex; gap:10px; align-items:flex-start; }
+    .alert-bar.sev-extreme,.alert-bar.sev-severe { background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.25); }
+    .alert-icon { font-size:17px; flex-shrink:0; margin-top:1px; }
+    .alert-text-area { flex:1; }
+    .alert-title { font-weight:700; font-size:13px; margin-bottom:3px; }
+    .alert-bar .alert-title { color:var(--yellow); }
+    .alert-bar.sev-extreme .alert-title,.alert-bar.sev-severe .alert-title { color:var(--red); }
+    .alert-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+    .no-alerts { color:var(--muted); font-size:13px; text-align:center; padding:16px 0; }
+
+    /* ── Bridge ── */
+    .bridge-center { text-align:center; padding:14px 0 10px; }
+    .bridge-glyph  { font-size:44px; display:block; margin-bottom:8px; }
+    .bridge-status { font-size:18px; font-weight:700; margin-bottom:4px; }
+    .bridge-detail { font-size:12px; color:var(--muted); margin-bottom:12px; }
+    .bridge-grid   { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .bridge-cell   { background:var(--surf2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+    .bcell-lbl     { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .bcell-val     { font-weight:700; font-size:14px; }
+    .bcell-sub     { font-size:11px; color:var(--muted); margin-top:2px; }
+
+    /* ── Border ── */
+    .border-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .border-lane { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+    .bl-name     { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .bl-wait     { font-size:28px; font-weight:700; margin-bottom:3px; }
+    .bl-unit     { font-size:11px; color:var(--muted); }
+    .bl-level    { font-size:11px; margin-top:5px; font-weight:600; }
+
+    /* ── Lakes ── */
+    .lake-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .lake-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+    .lake-name { font-size:12px; font-weight:700; margin-bottom:8px; }
+    .lake-stat { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .lake-stat span { color:var(--text); font-weight:600; }
+    .level-bar { height:4px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
+    .level-fill { height:100%; border-radius:2px; background:var(--blue); transition:width .4s; }
+
+    /* ── Traffic ── */
+    .route-item { padding:9px 0; border-bottom:1px solid var(--border); }
+    .route-item:last-child { border-bottom:none; }
+    .route-hdr  { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+    .route-name { font-weight:600; font-size:12px; }
+    .route-bar  { height:5px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:3px; }
+    .route-fill { height:100%; border-radius:3px; transition:width .4s; }
+    .route-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); }
+
+    /* ── Soo Locks (static) ── */
+    .lock-item { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+    .lock-item:last-child { border-bottom:none; }
+    .lock-ico  { width:34px; height:34px; background:var(--surf2); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .lock-info { flex:1; }
+    .lock-name { font-weight:600; font-size:13px; margin-bottom:2px; }
+    .lock-desc { font-size:11px; color:var(--muted); }
+    .lock-side { display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+
+    /* ── Loading / error states ── */
+    .skeleton { background:linear-gradient(90deg,var(--surf2) 25%,var(--border) 50%,var(--surf2) 75%); background-size:400% 100%; animation:shimmer 1.5s infinite; border-radius:4px; height:14px; }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .err-msg  { color:var(--red); font-size:11px; padding:6px 0; }
+    .src-note { font-size:10px; color:var(--muted); margin-top:8px; font-style:italic; }
+
+    footer { text-align:center; padding:12px; color:var(--muted); font-size:11px; border-top:1px solid var(--border); margin-top:4px; }
+
+    @media(max-width:1100px){
+      .main{grid-template-columns:1fr 1fr;}
+      .span2,.span3{grid-column:span 2;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:700px){
+      .main{grid-template-columns:1fr;}
+      .span2,.span3{grid-column:span 1;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">906</div>
+    <div>
+      <div class="logo-text">UP DASHBOARD</div>
+      <div class="logo-sub">Upper Peninsula Michigan</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="timestamp" id="ts">Loading…</div>
+    <button class="refresh-btn" onclick="fetchAll()">⟳ Refresh</button>
+  </div>
+</header>
+
+<!-- ═══ MAIN GRID ═══ -->
+<div class="main">
+
+  <!-- ── Active Alerts ── -->
+  <div class="card span3">
+    <div class="card-head">
+      <div class="card-title">⚠️ Active NWS Alerts</div>
+      <span class="badge bg-yellow" id="alert-badge">—</span>
+    </div>
+    <div class="card-body" id="alerts-body">
+      <div class="skeleton" style="width:100%;height:40px;"></div>
+    </div>
+  </div>
+
+  <!-- ── Weather ── -->
+  <div class="card span2">
+    <div class="card-head">
+      <div class="card-title">🌤️ UP Weather</div>
+      <span class="badge bg-blue" id="wx-badge">Loading</span>
+    </div>
+    <div class="card-body">
+      <div class="wx-grid" id="wx-grid">
+        <div class="wx-card"><div class="skeleton" style="width:80%;margin:auto;height:12px;"></div></div>
+        <div class="wx-card"><div class="skeleton" style="width:80%;margin:auto;height:12px;"></div></div>
+        <div class="wx-card"><div class="skeleton" style="width:80%;margin:auto;height:12px;"></div></div>
+        <div class="wx-card"><div class="skeleton" style="width:80%;margin:auto;height:12px;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Mackinac Bridge ── -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">🌉 Mackinac Bridge</div>
+      <span class="badge bg-muted" id="bridge-badge">—</span>
+    </div>
+    <div class="card-body" id="bridge-body">
+      <div class="skeleton" style="width:100%;height:120px;"></div>
+    </div>
+  </div>
+
+  <!-- ── Soo Locks (static — no public RT API) ── -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">⚓ Soo Locks</div>
+      <span class="badge bg-green">Season Open</span>
+    </div>
+    <div class="card-body">
+      <div class="lock-item">
+        <div class="lock-ico">🚢</div>
+        <div class="lock-info">
+          <div class="lock-name">Poe Lock</div>
+          <div class="lock-desc">1,200 ft · Accommodates full-size salties</div>
+          <div class="lock-desc" style="margin-top:3px;">Operational · Poe is the only one large enough for 1000-ft vessels</div>
+        </div>
+        <div class="lock-side"><span class="badge bg-green">Active</span></div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-ico">⛵</div>
+        <div class="lock-info">
+          <div class="lock-name">MacArthur Lock</div>
+          <div class="lock-desc">800 ft · Lakers &amp; smaller vessels</div>
+          <div class="lock-desc" style="margin-top:3px;">Operational</div>
+        </div>
+        <div class="lock-side"><span class="badge bg-green">Active</span></div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-ico">🔧</div>
+        <div class="lock-info">
+          <div class="lock-name">Davis &amp; Sabin Locks</div>
+          <div class="lock-desc">Historic — out of service</div>
+        </div>
+        <div class="lock-side"><span class="badge bg-muted">Closed</span></div>
+      </div>
+      <div class="src-note">Real-time vessel tracking requires AIS API (MarineTraffic). USACE lockage stats at lre.usace.army.mil.</div>
+    </div>
+  </div>
+
+  <!-- ── Soo Border ── -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">🇨🇦 Soo Border Crossing</div>
+      <span class="badge bg-muted" id="border-badge">—</span>
+    </div>
+    <div class="card-body" id="border-body">
+      <div class="skeleton" style="width:100%;height:100px;"></div>
+    </div>
+  </div>
+
+  <!-- ── Great Lakes ── -->
+  <div class="card span2">
+    <div class="card-head">
+      <div class="card-title">🌊 Great Lakes Water Levels</div>
+      <span class="badge bg-blue">NOAA CO-OPS</span>
+    </div>
+    <div class="card-body">
+      <div class="lake-grid" id="lakes-grid">
+        <div class="lake-card"><div class="skeleton" style="width:90%;height:60px;"></div></div>
+        <div class="lake-card"><div class="skeleton" style="width:90%;height:60px;"></div></div>
+        <div class="lake-card"><div class="skeleton" style="width:90%;height:60px;"></div></div>
+        <div class="lake-card"><div class="skeleton" style="width:90%;height:60px;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Road Conditions ── -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">🛣️ UP Road Conditions</div>
+      <span class="badge bg-muted" id="traffic-badge">—</span>
+    </div>
+    <div class="card-body" id="traffic-body">
+      <div class="skeleton" style="width:100%;height:140px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  906 Dashboard — Upper Peninsula Michigan &nbsp;·&nbsp;
+  NWS Marquette · NOAA CO-OPS · CBP AWT · Data refreshes every 5 min &nbsp;·&nbsp; ©2026
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ── Helpers ────────────────────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function fmt(v, suffix='', fallback='—'){ return v !== null && v !== undefined ? esc(v)+suffix : fallback; }
+function fmtTime(iso){
+  if(!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+}
+function fmtDate(iso){
+  if(!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' + fmtTime(iso);
+}
+
+// ── Weather icons ──────────────────────────────────────────────────────────
+function wxIcon(desc){
+  if(!desc) return '🌫️';
+  const d = desc.toLowerCase();
+  if(d.includes('thunder') || d.includes('storm')) return '⛈️';
+  if(d.includes('heavy snow') || d.includes('blizzard')) return '❄️';
+  if(d.includes('snow') || d.includes('flurries')) return '🌨️';
+  if(d.includes('freezing') || d.includes('sleet') || d.includes('ice')) return '🧊';
+  if(d.includes('rain') || d.includes('shower')) return '🌧️';
+  if(d.includes('drizzle') || d.includes('mist')) return '🌦️';
+  if(d.includes('fog') || d.includes('haze')) return '🌫️';
+  if(d.includes('windy') || d.includes('breezy') || d.includes('gust')) return '🌬️';
+  if(d.includes('overcast') || d.includes('cloudy')) return '☁️';
+  if(d.includes('mostly cloudy') || d.includes('partly cloudy')) return '⛅';
+  if(d.includes('clear') || d.includes('sunny') || d.includes('fair')) return '☀️';
+  return '🌡️';
+}
+
+// ── WEATHER ────────────────────────────────────────────────────────────────
+function renderWeather(data){
+  if(!data || !data.stations){
+    document.getElementById('wx-grid').innerHTML = '<div class="err-msg">Weather unavailable</div>';
+    return;
+  }
+  const stations = data.stations;
+  document.getElementById('wx-badge').textContent = `${stations.filter(s=>s.ok).length} Stations`;
+
+  // Show 4 key stations in the main grid (Sault, Marquette, Houghton, St. Ignace)
+  const primary = ['Sault Ste. Marie','Marquette','Houghton','St. Ignace / Bridge'];
+  const show = primary.map(name => stations.find(s => s.name === name)).filter(Boolean);
+
+  document.getElementById('wx-grid').innerHTML = show.map(s => {
+    if(!s.ok) return `<div class="wx-card"><div class="wx-city">${esc(s.name)}</div><div class="err-msg">${esc(s.error||'Unavailable')}</div></div>`;
+    const feels = s.feels_f !== null ? ` / ${s.feels_f}°` : '';
+    return `
+    <div class="wx-card">
+      <div class="wx-city">${esc(s.name)}</div>
+      <div class="wx-icon">${wxIcon(s.description)}</div>
+      <div class="wx-temp">${fmt(s.temp_f,'°')}</div>
+      <div class="wx-desc">${esc(s.description||'Unknown')}</div>
+      <div class="wx-meta">
+        <div class="wx-lbl">Wind</div><div class="wx-val">${fmt(s.wind_dir,'')} ${fmt(s.wind_mph,' mph')}</div>
+        <div class="wx-lbl">Gust</div><div class="wx-val">${fmt(s.wind_gust_mph,' mph')}</div>
+        <div class="wx-lbl">Humid</div><div class="wx-val">${fmt(s.humidity,'%')}</div>
+        <div class="wx-lbl">Vis</div><div class="wx-val">${fmt(s.visibility_mi,' mi')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ALERTS ─────────────────────────────────────────────────────────────────
+function severityIcon(sev){
+  if(!sev) return '⚠️';
+  const s = sev.toLowerCase();
+  if(s==='extreme')  return '🚨';
+  if(s==='severe')   return '❗';
+  if(s==='moderate') return '⚠️';
+  return '📢';
+}
+function renderAlerts(data){
+  const badge = document.getElementById('alert-badge');
+  const body  = document.getElementById('alerts-body');
+  if(!data || !data.alerts){
+    body.innerHTML = '<div class="err-msg">Alerts unavailable</div>';
+    return;
+  }
+  const alerts = data.alerts;
+  badge.textContent = alerts.length ? `${alerts.length} Active` : 'None';
+  badge.className = 'badge ' + (alerts.length ? 'bg-yellow' : 'bg-green');
+
+  if(!alerts.length){
+    body.innerHTML = '<div class="no-alerts">✅ No active NWS alerts for the Upper Peninsula</div>';
+    return;
+  }
+  body.innerHTML = alerts.map(a => {
+    const sevCls = (a.severity||'').toLowerCase();
+    return `
+    <div class="alert-bar sev-${sevCls}" style="margin-bottom:8px">
+      <div class="alert-icon">${severityIcon(a.severity)}</div>
+      <div class="alert-text-area">
+        <div class="alert-title">${esc(a.event)}${a.areas ? ' — '+esc(a.areas.substring(0,80)) : ''}</div>
+        <div class="alert-desc">${esc((a.headline||a.description||'').substring(0,200))}</div>
+      </div>
+      <span class="badge ${sevCls==='extreme'||sevCls==='severe' ? 'bg-red' : 'bg-yellow'}">${esc(a.severity||'')}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── BRIDGE ─────────────────────────────────────────────────────────────────
+function renderBridge(data){
+  const badge = document.getElementById('bridge-badge');
+  const body  = document.getElementById('bridge-body');
+  if(!data || !data.ok){
+    body.innerHTML = `<div class="err-msg">${esc(data?.error||'Bridge data unavailable')}</div>`;
+    return;
+  }
+
+  const lvl = data.level || 'clear';
+  const statusColor = {clear:'var(--green)', caution:'var(--yellow)', warning:'var(--orange)', danger:'var(--red)'}[lvl] || 'var(--muted)';
+  const glyph = {clear:'🌉', caution:'⚠️', warning:'🚧', danger:'🚫'}[lvl] || '🌉';
+  const badgeCls = {clear:'bg-green', caution:'bg-yellow', warning:'bg-orange', danger:'bg-red'}[lvl] || 'bg-muted';
+  const labelMap = {clear:'All Clear', caution:'Restrictions', warning:'Escort Required', danger:'BRIDGE CLOSED'};
+
+  badge.textContent = labelMap[lvl] || 'Unknown';
+  badge.className   = 'badge ' + badgeCls;
+
+  body.innerHTML = `
+    <div class="bridge-center">
+      <span class="bridge-glyph">${glyph}</span>
+      <div class="bridge-status" style="color:${statusColor}"><span class="dot ${lvl==='clear'?'dot-g':lvl==='danger'?'dot-r':'dot-y'}"></span>${esc(labelMap[lvl]||'Unknown')}</div>
+      <div class="bridge-detail">${esc(data.restriction_detail||'')}</div>
+    </div>
+    <div class="bridge-grid">
+      <div class="bridge-cell"><div class="bcell-lbl">Wind</div><div class="bcell-val">${fmt(data.wind_mph,' mph')} ${fmt(data.wind_dir)}</div><div class="bcell-sub">Gust ${fmt(data.wind_gust_mph,' mph')}</div></div>
+      <div class="bridge-cell"><div class="bcell-lbl">Deck Temp</div><div class="bcell-val">${fmt(data.temp_f,'°F')}</div><div class="bcell-sub">${data.temp_f!==null && data.temp_f<=28 ? '⚠️ Black ice risk':''}</div></div>
+      <div class="bridge-cell"><div class="bcell-lbl">Visibility</div><div class="bcell-val">${fmt(data.visibility_mi,' mi')}</div><div class="bcell-sub">&nbsp;</div></div>
+      <div class="bridge-cell"><div class="bcell-lbl">Station</div><div class="bcell-val" style="font-size:11px;font-weight:normal;color:var(--muted)">KPLN Pellston</div><div class="bcell-sub">${fmtTime(data.timestamp)}</div></div>
+    </div>`;
+}
+
+// ── BORDER ─────────────────────────────────────────────────────────────────
+function waitColor(min){
+  if(min===null||min===undefined||min==='N/A') return 'var(--muted)';
+  const m = parseInt(min)||0;
+  if(m<=10) return 'var(--green)';
+  if(m<=30) return 'var(--yellow)';
+  return 'var(--red)';
+}
+function waitLevel(min){
+  const m = parseInt(min)||0;
+  if(m<=10) return ['● Low','bg-green'];
+  if(m<=30) return ['● Moderate','bg-yellow'];
+  return ['● High','bg-red'];
+}
+function renderBorder(data){
+  const badge = document.getElementById('border-badge');
+  const body  = document.getElementById('border-body');
+
+  if(!data || !data.ok){
+    badge.textContent = 'Unavailable';
+    badge.className = 'badge bg-muted';
+    body.innerHTML = `
+      <div style="padding:10px 0; text-align:center; color:var(--muted); font-size:12px;">
+        <div style="font-size:20px;margin-bottom:8px;">🇨🇦</div>
+        Border wait data currently unavailable<br>
+        <a href="https://www.cbp.gov/travel/international-visitors/border-wait-times"
+           target="_blank" style="color:var(--blue);font-size:11px;margin-top:6px;display:inline-block;">
+           Check CBP.gov for current wait times ↗</a>
+      </div>`;
+    return;
+  }
+
+  badge.textContent = data.port_status || 'Open';
+  badge.className = 'badge ' + (data.port_status==='Open'?'bg-green':'bg-yellow');
+
+  const pv = data.pv_standard;
+  const [pvLbl, pvCls] = waitLevel(pv);
+  const cv = data.cv_standard;
+  const [cvLbl, cvCls] = waitLevel(cv);
+
+  body.innerHTML = `
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">
+      ${esc(data.port_name||'Sault Ste. Marie, MI')} · Canada→US (CBP inbound)
+    </div>
+    <div class="border-grid">
+      <div class="border-lane">
+        <div class="bl-name">🚗 Passenger Vehicle</div>
+        <div class="bl-wait" style="color:${waitColor(pv)}">${pv!==null&&pv!==undefined?pv:'—'}</div>
+        <div class="bl-unit">min wait</div>
+        <div class="bl-level" style="color:${waitColor(pv)}">${pvLbl}</div>
+      </div>
+      <div class="border-lane">
+        <div class="bl-name">✅ NEXUS/SENTRI</div>
+        <div class="bl-wait" style="color:${waitColor(data.pv_nexus)}">${data.pv_nexus!==null&&data.pv_nexus!==undefined?data.pv_nexus:'—'}</div>
+        <div class="bl-unit">min wait</div>
+        <div class="bl-level" style="color:${waitColor(data.pv_nexus)}">&nbsp;</div>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="stat"><span class="stat-lbl">Commercial (standard)</span><span class="stat-val">${cv!==null&&cv!==undefined?cv+' min':'—'}</span></div>
+      <div class="stat"><span class="stat-lbl">Commercial FAST lane</span><span class="stat-val">${data.cv_fast!==null&&data.cv_fast!==undefined?data.cv_fast+' min':'—'}</span></div>
+      <div class="stat"><span class="stat-lbl">Pedestrian</span><span class="stat-val">${data.pedestrian!==null&&data.pedestrian!==undefined?data.pedestrian+' min':'—'}</span></div>
+      <div class="stat" style="border:none"><span class="stat-lbl" style="font-size:10px">Updated ${fmtTime(data.updated)}</span><span></span></div>
+    </div>`;
+}
+
+// ── LAKES ──────────────────────────────────────────────────────────────────
+const LAKE_ICONS = {'Lake Superior':'🌊','Lake Michigan':'🌊','Lake Huron':'🌊','Lake Erie':'🌊'};
+function lakeBarPct(diff_in){
+  // Center 0 at 50%; ±6" maps to ±25% bar width
+  const pct = 50 + Math.max(-25, Math.min(25, (diff_in||0) * 4));
+  return Math.round(pct);
+}
+function renderLakes(data){
+  const grid = document.getElementById('lakes-grid');
+  if(!data || !data.lakes){ grid.innerHTML='<div class="err-msg">Lake data unavailable</div>'; return; }
+  const lakes = data.lakes;
+  grid.innerHTML = Object.values(lakes).map(l => {
+    if(l.level_error) return `<div class="lake-card"><div class="lake-name">${LAKE_ICONS[l.name]||'🌊'} ${esc(l.name)}</div><div class="err-msg">${esc(l.level_error)}</div></div>`;
+    const diff = l.diff_in;
+    const diffColor = diff===undefined||diff===null ? 'var(--muted)' : diff>0 ? 'var(--blue)' : diff<-3 ? 'var(--red)' : 'var(--muted)';
+    const barPct = lakeBarPct(diff);
+    return `
+    <div class="lake-card">
+      <div class="lake-name">${LAKE_ICONS[l.name]||'🌊'} ${esc(l.name)}</div>
+      <div class="lake-stat">Level <span>${fmt(l.level_ft,' ft IGLD')}</span></div>
+      <div class="lake-stat">vs. avg <span style="color:${diffColor}">${fmt(l.diff_label)}</span></div>
+      <div class="lake-stat" style="font-size:10px;color:var(--muted)">Buoys offline — ice season</div>
+      <div class="level-bar"><div class="level-fill" style="width:${barPct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ── TRAFFIC ────────────────────────────────────────────────────────────────
+function routeBarColor(color){ return {green:'var(--green)',yellow:'var(--yellow)',red:'var(--red)',muted:'var(--muted)'}[color]||'var(--muted)'; }
+function routeBarWidth(score){ return Math.max(5, Math.min(100, 100-score)); }
+function renderTraffic(data){
+  const badge = document.getElementById('traffic-badge');
+  const body  = document.getElementById('traffic-body');
+  if(!data){ body.innerHTML='<div class="err-msg">Traffic data unavailable</div>'; return; }
+
+  // MDOT 511 mode with incidents
+  if(data.source==='mdot511' && data.incidents){
+    const issues = data.incidents.filter(i=>i.description);
+    badge.textContent = issues.length ? `${issues.length} Incidents` : 'All Clear';
+    badge.className = 'badge ' + (issues.length ? 'bg-yellow' : 'bg-green');
+    if(!issues.length){
+      body.innerHTML='<div class="no-alerts" style="padding:16px 0;">✅ No reported incidents on UP roads</div>';
+      return;
+    }
+    body.innerHTML = issues.slice(0,6).map(i => `
+      <div class="route-item">
+        <div class="route-hdr">
+          <span class="route-name">${esc(i.route||'')} — ${esc(i.city||'')}</span>
+          <span class="badge ${i.severity==='Major'?'bg-red':'bg-yellow'}">${esc(i.severity||i.type||'Incident')}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">${esc((i.description||'').substring(0,120))}</div>
+      </div>`).join('');
+    return;
+  }
+
+  // Weather-inference mode with routes
+  if(data.routes){
+    const diff = data.routes.filter(r=>r.level==='difficult').length;
+    const caut = data.routes.filter(r=>r.level==='caution').length;
+    badge.textContent = diff ? `${diff} Difficult` : caut ? `${caut} Caution` : 'All Clear';
+    badge.className = 'badge ' + (diff ? 'bg-red' : caut ? 'bg-yellow' : 'bg-green');
+    body.innerHTML = data.routes.map(r => {
+      const barW = routeBarWidth(r.score||0);
+      const barC = routeBarColor(r.color);
+      const badgeC = {difficult:'bg-red',caution:'bg-yellow',clear:'bg-green',unknown:'bg-muted'}[r.level]||'bg-muted';
+      return `
+      <div class="route-item">
+        <div class="route-hdr">
+          <span class="route-name">${esc(r.name)}</span>
+          <span class="badge ${badgeC}">${esc(r.label)}</span>
+        </div>
+        <div class="route-bar"><div class="route-fill" style="width:${barW}%;background:${barC}"></div></div>
+        <div class="route-meta"><span>${esc(r.summary)}</span><span>Score ${r.score}</span></div>
+      </div>`;
+    }).join('') + (data.note ? `<div class="src-note">⚙ ${esc(data.note)}</div>` : '');
+    return;
+  }
+
+  body.innerHTML='<div class="err-msg">Traffic data format unrecognized</div>';
+}
+
+// ── MAIN FETCH ─────────────────────────────────────────────────────────────
+async function fetchAll(){
+  document.getElementById('ts').textContent = 'Refreshing…';
+  try {
+    const res  = await fetch('/api/all');
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    renderWeather(data.weather);
+    renderAlerts(data.alerts);
+    renderBridge(data.bridge);
+    renderBorder(data.border);
+    renderLakes(data.lakes);
+    renderTraffic(data.traffic);
+
+    const now = data.server_time ? new Date(data.server_time) : new Date();
+    document.getElementById('ts').textContent =
+      'Updated ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+  } catch(e) {
+    document.getElementById('ts').textContent = 'Error — retrying…';
+    console.error('fetchAll error:', e);
+  }
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+fetchAll();
+setInterval(fetchAll, 5 * 60 * 1000);  // refresh every 5 minutes
+</script>
+</body>
+</html>

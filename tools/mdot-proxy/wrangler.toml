@@ -1,0 +1,6 @@
+name = "up906-mdot-proxy"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Free tier: 100,000 requests/day is far more than this dashboard needs
+# (polls every 5 min from however many visitors you get).

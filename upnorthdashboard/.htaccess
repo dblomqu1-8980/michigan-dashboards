@@ -1,0 +1,13 @@
+# Up North Dashboard — domain canonicalization
+# Forces https and non-www on upnorthdashboard.com.
+
+RewriteEngine On
+
+# www -> non-www
+RewriteCond %{HTTP_HOST} ^www\.upnorthdashboard\.com$ [NC]
+RewriteRule ^(.*)$ https://upnorthdashboard.com/$1 [R=301,L]
+
+# Force https
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} upnorthdashboard\.com$ [NC]
+RewriteRule ^(.*)$ https://upnorthdashboard.com/$1 [R=301,L]

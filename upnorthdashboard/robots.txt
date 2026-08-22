@@ -1,0 +1,8 @@
+# robots.txt — upnorthdashboard.com
+# Updated: 2026-08
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://upnorthdashboard.com/sitemap.xml

@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Up North Dashboard | Northern Michigan at a Glance</title>
+
+  <!-- ═══ SEO ═══ -->
+  <meta
+    name="description"
+    content="Northern Michigan weather, road conditions, outdoor conditions, events, and local resources in one convenient dashboard."
+  >
+  <meta name="keywords" content="Up North Michigan, Northern Michigan, Traverse City weather, Petoskey, Gaylord, Alpena, Cadillac, Mackinaw City, Mackinac Bridge, M-119 Tunnel of Trees, fall color Michigan, northern Michigan road conditions, Lake Michigan beaches" />
+  <meta name="author" content="Up North Dashboard" />
+  <link rel="canonical" href="https://upnorthdashboard.com/">
+
+  <!-- Facebook, iMessage, LinkedIn and other social previews -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Up North Dashboard">
+  <meta property="og:title" content="Northern Michigan at a Glance">
+  <meta
+    property="og:description"
+    content="Weather, road conditions, outdoor conditions, events, and local resources for Northern Michigan."
+  >
+  <meta property="og:url" content="https://upnorthdashboard.com/">
+  <meta
+    property="og:image"
+    content="https://upnorthdashboard.com/Assets/social-preview.jpg"
+  >
+  <meta
+    property="og:image:secure_url"
+    content="https://upnorthdashboard.com/Assets/social-preview.jpg"
+  >
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta
+    property="og:image:alt"
+    content="Up North Dashboard for Northern Michigan"
+  >
+
+  <!-- X and other services that recognize Twitter Card metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Northern Michigan at a Glance">
+  <meta
+    name="twitter:description"
+    content="Weather, road conditions, outdoor conditions, events, and local resources for Northern Michigan."
+  >
+  <meta
+    name="twitter:image"
+    content="https://upnorthdashboard.com/Assets/social-preview.jpg"
+  >
+
+  <!-- ═══ SCHEMA.ORG ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Up North Dashboard",
+    "alternateName": "Northern Michigan Dashboard",
+    "url": "https://upnorthdashboard.com/",
+    "description": "Real-time Northern Lower Michigan travel dashboard with live weather, road conditions, Mackinac Bridge and ferry status, marine and beach conditions, trail closures, snow reports and fall-color progress."
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #2e9d63;   /* pine green — the Up North signature */
+      --accent2: #1a6fc4;   /* big-lake blue — links & secondary data */
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+      --maple:   #e0603a;   /* fall color accent */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+    /* ── Header ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover { color: var(--text); background: var(--surf2); }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    .timestamp  { color: var(--muted); font-size: 12px; }
+    .refresh-btn { background: var(--surf2); border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero { position: relative; min-height: 460px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #071a12; }
+    .hero-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.8s ease-in-out; will-change: opacity; }
+    .hero-slide.active { opacity: 1; }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(2,14,10,0.55) 0%, rgba(4,20,14,0.40) 45%, rgba(4,16,26,0.70) 100%);
+    }
+    .hero-credit { position: absolute; top: 12px; right: 18px; z-index: 3; font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; pointer-events: none; }
+    /* Treeline silhouette */
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%230d1117' d='M0,80 L20,60 L40,75 L60,45 L80,65 L100,30 L120,55 L140,40 L160,62 L180,25 L200,50 L220,35 L240,60 L260,20 L280,48 L300,35 L320,58 L340,15 L360,42 L380,30 L400,55 L420,22 L440,48 L460,38 L480,62 L500,18 L520,45 L540,32 L560,55 L580,20 L600,50 L620,38 L640,60 L660,25 L680,48 L700,35 L720,58 L740,22 L760,45 L780,32 L800,55 L820,18 L840,42 L860,30 L880,55 L900,22 L920,48 L940,38 L960,62 L980,18 L1000,45 L1020,32 L1040,58 L1060,20 L1080,50 L1100,35 L1120,60 L1140,25 L1160,48 L1180,35 L1200,55 L1220,15 L1240,42 L1260,30 L1280,58 L1300,22 L1320,48 L1340,38 L1360,62 L1380,18 L1400,45 L1420,32 L1440,55 L1440,120 L0,120 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+      background-size: cover;
+    }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 60px 24px 100px; max-width: 780px; }
+    .hero-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: rgba(110,220,160,0.9); font-weight: 600; margin-bottom: 16px; }
+    .hero-title { font-size: clamp(28px, 5vw, 52px); font-weight: 800; line-height: 1.1; color: #fff; margin-bottom: 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+    .hero-subtitle { font-size: clamp(14px, 2.5vw, 20px); color: rgba(190,235,215,0.9); margin-bottom: 10px; font-weight: 500; }
+    .hero-desc { font-size: 14px; color: rgba(170,210,195,0.78); max-width: 580px; margin: 0 auto 32px; line-height: 1.6; }
+    .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cta-primary { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; transition: background .15s, transform .1s; box-shadow: 0 4px 20px rgba(46,157,99,0.35); }
+    .cta-primary:hover { background: #38b374; transform: translateY(-1px); }
+    .cta-secondary { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); color: rgba(230,250,240,0.9); text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); transition: background .15s, transform .1s; }
+    .cta-secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+    /* ── Status Bar ── */
+    /* The six items need roughly 1240px to sit on one line. Below that they
+       wrap onto a second row rather than scrolling — a horizontal scroller
+       with no visible scrollbar just hides the tail end (Gas) off the edge. */
+    .status-bar { background: var(--surface); display: flex; flex-wrap: wrap; align-items: stretch; }
+    .sb-item {
+      display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);   /* separates wrapped rows, and closes the bar */
+      flex: 1 1 auto;
+      min-width: 0;                             /* an over-wide item truncates instead of overflowing */
+      cursor: default; transition: background .15s;
+    }
+    .sb-item:last-child { border-right: none; }
+    .sb-item:hover { background: var(--surf2); }
+    /* Once six across stops fitting, switch to an even grid so a wrapped row
+       never strands a single stretched item. The breakpoints are set so each
+       column stays wide enough for its longest value (the weather item, which
+       needs ~306px) — nothing truncates on the way down. */
+    @media(max-width:1250px){
+      .status-bar { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .sb-item { padding: 10px 14px; }
+    }
+    @media(max-width:940px){
+      .status-bar { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    /* On phones two columns are only ~180px wide, so drop the value onto its
+       own line under the label instead of ellipsing it down to nothing. */
+    @media(max-width:700px){
+      .sb-item { padding: 8px 11px; flex-wrap: wrap; gap: 2px 6px; }
+      .sb-val { width: 100%; }
+    }
+    .sb-icon { font-size: 16px; flex-shrink: 0; }
+    .sb-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; flex-shrink: 0; }
+    .sb-val { font-size: 12px; font-weight: 700; white-space: nowrap; color: var(--text); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    .sb-val.green { color: var(--green); } .sb-val.yellow { color: var(--yellow); }
+    .sb-val.red { color: var(--red); } .sb-val.blue { color: var(--blue); }
+    .sb-val.orange { color: var(--orange); } .sb-val.muted { color: var(--muted); }
+
+    /* ── Section common ── */
+    .section-wrap { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+    .section-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+    .section-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+
+    /* ── Today Up North ── */
+    .today-section {
+      padding: 44px 0 48px;
+      background: linear-gradient(135deg, rgba(46,157,99,0.07) 0%, rgba(13,60,96,0.11) 100%);
+      border-top: 3px solid;
+      border-image: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent)) 1;
+    }
+    .today-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 12px; }
+    .today-section .section-title { font-size: 26px; margin-bottom: 0; }
+    .today-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    /* Featured seasonal card (spans full width) */
+    .feature-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(8,30,24,0.95) 0%, rgba(8,28,52,0.95) 100%);
+      border: 1px solid rgba(90,200,150,0.28);
+      border-radius: 12px; padding: 20px 24px;
+      display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center;
+    }
+    .feature-card.autumn { background: linear-gradient(135deg, rgba(44,20,10,0.95) 0%, rgba(40,26,10,0.95) 100%); border-color: rgba(224,96,58,0.32); }
+    .feature-card.winter { background: linear-gradient(135deg, rgba(10,22,40,0.95) 0%, rgba(14,30,52,0.95) 100%); border-color: rgba(120,180,255,0.28); }
+    .feature-left { text-align: center; min-width: 150px; }
+    .feature-icon { font-size: 38px; display: block; margin-bottom: 8px; }
+    .feature-topic { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(170,210,195,0.7); margin-bottom: 6px; }
+    .feature-rating { font-size: 22px; font-weight: 800; line-height: 1.15; margin-bottom: 6px; }
+    .feature-rating.high { color: var(--green); }
+    .feature-rating.med  { color: var(--yellow); }
+    .feature-rating.low  { color: var(--muted); }
+    .feature-rating.warm { color: var(--orange); }
+    .feature-tip { font-size: 11px; color: rgba(170,205,195,0.7); line-height: 1.45; max-width: 150px; margin: 0 auto; }
+    .feature-more { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: #37d5b2; text-decoration: none; }
+    .feature-more:hover { text-decoration: underline; }
+    .feature-right { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .signal { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 14px; }
+    .signal-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(170,205,195,0.6); margin-bottom: 5px; }
+    .signal-val   { font-size: 14px; font-weight: 700; line-height: 1.3; }
+    .signal-val.sig-good { color: var(--green);  }
+    .signal-val.sig-warn { color: var(--yellow); }
+    .signal-val.sig-bad  { color: var(--red);    }
+    .signal-val.sig-neu  { color: var(--text);   }
+    .signal-src { font-size: 10px; color: rgba(120,160,140,0.55); margin-top: 6px; letter-spacing: .5px; }
+
+    .today-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 16px; transition: border-color .2s; }
+    .today-card:hover { border-color: var(--accent); }
+    .tc-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+    .tc-topic { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
+    .tc-status { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .tc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .tc-status.good  { color: var(--green); }
+    .tc-status.med   { color: var(--yellow); }
+    .tc-status.low   { color: var(--muted); }
+    .tc-status.high  { color: var(--orange); }
+    .sig-good { color: var(--green); } .sig-warn { color: var(--yellow); }
+    .sig-bad  { color: var(--red);   } .sig-neu  { color: var(--muted); }
+
+    .edit-btn { background: var(--surf2); border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap; flex-shrink: 0; display: none; }
+    .edit-btn.admin-visible { display: inline-block; }
+    .edit-btn:hover { color: var(--text); border-color: var(--accent); }
+    .edit-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 16px; display: none; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .edit-field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .edit-field input, .edit-field select, .edit-field textarea {
+      width: 100%; background: var(--surf2); border: 1px solid var(--border); color: var(--text);
+      padding: 7px 10px; border-radius: 6px; font-size: 13px; font-family: inherit;
+    }
+    .edit-field textarea { resize: vertical; min-height: 54px; }
+    .edit-field input:focus, .edit-field select:focus, .edit-field textarea:focus { outline: none; border-color: var(--accent); }
+    .edit-actions { grid-column: span 2; display: flex; gap: 8px; padding-top: 4px; }
+    .btn-save { background: var(--accent); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+    .btn-save:hover { background: #38b374; }
+    .btn-cancel { background: var(--surf2); color: var(--muted); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+
+    /* ── Dashboard Section ── */
+    .dashboard-section { padding: 0 0 20px; }
+    .dashboard-header { display: flex; align-items: center; justify-content: space-between; padding: 32px 0 20px; }
+    .live-badge-lg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--green); font-weight: 600; background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2); padding: 6px 14px; border-radius: 20px; }
+
+    /* ── Panels ── */
+    .panel-toggle { margin-bottom: 10px; }
+    .panel-hdr { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 600; font-size: 13px; user-select: none; transition: border-color .15s, background .15s; }
+    .panel-hdr:hover { border-color: var(--accent); background: var(--surf2); }
+    .panel-toggle.open .panel-hdr { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: var(--accent); }
+    .panel-chevron { color: var(--muted); font-size: 12px; transition: transform .25s; }
+    .panel-toggle.open .panel-chevron { transform: rotate(180deg); color: var(--accent); }
+    .panel-body { display: none; }
+    .panel-toggle.open .panel-body { display: block; }
+    .panel-inner-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 13px; background: var(--surface); border: 1px solid var(--accent); border-top: none; border-radius: 0 0 10px 10px; padding: 13px; }
+    .panel-inner-grid .span2 { grid-column: span 2; }
+    .panel-inner-grid .span3 { grid-column: span 3; }
+
+    /* ── Cards ── */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .card-head { background: var(--surf2); padding: 9px 13px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); gap: 8px; }
+    .card-title { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .card-body  { padding: 13px; }
+
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+    .bg-green  { background: rgba(34,197,94,.15);  color: var(--green);  }
+    .bg-yellow { background: rgba(234,179,8,.15);  color: var(--yellow); }
+    .bg-red    { background: rgba(239,68,68,.15);  color: var(--red);    }
+    .bg-blue   { background: rgba(59,130,246,.15); color: var(--blue);   }
+    .bg-muted  { background: rgba(125,137,150,.15);color: var(--muted);  }
+    .bg-orange { background: rgba(249,115,22,.15); color: var(--orange); }
+
+    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+    .dot-g { background:var(--green); }
+    .dot-y { background:var(--yellow); animation:pulse 1.5s infinite; }
+    .dot-r { background:var(--red);    animation:pulse 1s   infinite; }
+
+    .stat { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); gap:10px; }
+    .stat:last-child { border-bottom:none; }
+    .stat-lbl { color:var(--muted); font-size:12px; }
+    .stat-val { font-weight:600; font-size:13px; text-align:right; }
+
+    /* ── Weather cities ── */
+    .wx-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .wx-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+    .wx-city { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:7px; }
+    .wx-icon { font-size:26px; margin-bottom:5px; }
+    .wx-temp { font-size:30px; font-weight:700; line-height:1; margin-bottom:3px; }
+    .wx-desc { font-size:11px; color:var(--muted); margin-bottom:8px; min-height:28px; }
+    .wx-meta { display:grid; grid-template-columns:1fr 1fr; gap:3px; font-size:11px; text-align:left; }
+    .wx-lbl  { color:var(--muted); }
+    .wx-val  { color:var(--text); font-weight:600; text-align:right; }
+
+    /* ── Alerts ── */
+    .alert-bar { background:rgba(234,179,8,.08); border:1px solid rgba(234,179,8,.25); border-radius:8px; padding:10px 13px; display:flex; gap:10px; align-items:flex-start; margin-bottom:6px; }
+    .alert-bar.sev-extreme,.alert-bar.sev-severe { background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.25); }
+    .alert-bar.emerg { background:rgba(239,68,68,.12); border:2px solid rgba(239,68,68,.5); }
+    .alert-icon { font-size:17px; flex-shrink:0; margin-top:1px; }
+    .alert-text-area { flex:1; min-width:0; }
+    .alert-title { font-weight:700; font-size:13px; margin-bottom:3px; color:var(--yellow); }
+    .alert-bar.sev-extreme .alert-title,.alert-bar.sev-severe .alert-title,.alert-bar.emerg .alert-title { color:var(--red); }
+    .alert-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+    .no-alerts { color:var(--muted); font-size:13px; text-align:center; padding:12px 0; }
+    .alert-section-hdr { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:700; padding:4px 0 8px; }
+
+    /* ── Bridge ── */
+    .bridge-center { text-align:center; padding:14px 0 10px; }
+    .bridge-glyph  { font-size:44px; display:block; margin-bottom:8px; }
+    .bridge-status { font-size:17px; font-weight:700; margin-bottom:4px; }
+    .bridge-detail { font-size:12px; color:var(--muted); margin-bottom:12px; }
+    .bridge-grid   { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .bridge-cell   { background:var(--surf2); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+    .bcell-lbl     { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .bcell-val     { font-weight:700; font-size:14px; }
+    .bcell-sub     { font-size:11px; color:var(--muted); margin-top:2px; }
+
+    /* ── Ferries ── */
+    .ferry-list { display:flex; flex-direction:column; gap:8px; }
+    .ferry-item { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; text-decoration:none; color:var(--text); display:block; transition:border-color .15s, transform .15s; }
+    .ferry-item:hover { border-color:var(--accent); transform:translateX(2px); }
+    .ferry-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:4px; }
+    .ferry-name { font-size:13px; font-weight:700; }
+    .ferry-route { font-size:11px; color:var(--muted); line-height:1.4; }
+    .ferry-season { font-size:11px; color:var(--muted); margin-top:3px; }
+
+    /* ── Lakes / marine ── */
+    .lake-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .lake-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+    .lake-name { font-size:12px; font-weight:700; margin-bottom:8px; }
+    .lake-stat { font-size:11px; color:var(--muted); margin-bottom:3px; display:flex; justify-content:space-between; gap:8px; }
+    .lake-stat span { color:var(--text); font-weight:600; }
+    .level-bar { height:4px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
+    .level-fill { height:100%; border-radius:2px; background:var(--blue); transition:width .4s; }
+
+    /* ── Beaches ── */
+    .beach-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .beach-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:11px 13px; }
+    .beach-name { font-size:12px; font-weight:700; margin-bottom:2px; }
+    .beach-sub  { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
+    .beach-temp { font-size:26px; font-weight:800; line-height:1; }
+    .beach-temp small { font-size:12px; font-weight:600; color:var(--muted); }
+    .beach-verdict { font-size:12px; font-weight:700; margin:5px 0 6px; }
+    .beach-meta { font-size:11px; color:var(--muted); display:flex; justify-content:space-between; gap:8px; }
+    .beach-meta b { color:var(--text); }
+
+    /* ── Routes ── */
+    .route-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+    .route-item { padding:9px 0; border-bottom:1px solid var(--border); }
+    .route-item:last-child,.route-item:nth-last-child(2):nth-child(odd) { border-bottom:none; }
+    .route-hdr  { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:5px; }
+    .route-name { font-weight:600; font-size:12px; }
+    .route-bar  { height:5px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:3px; }
+    .route-fill { height:100%; border-radius:3px; transition:width .4s; }
+    .route-meta { display:flex; justify-content:space-between; gap:10px; font-size:11px; color:var(--muted); }
+    @media(max-width:700px){.route-grid{grid-template-columns:1fr;}}
+
+    /* ── Fall color ── */
+    .fall-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .fall-card { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:13px; }
+    .fall-region { font-size:12px; font-weight:700; margin-bottom:2px; }
+    .fall-places { font-size:10px; color:var(--muted); margin-bottom:10px; line-height:1.4; min-height:26px; }
+    .fall-pct { font-size:28px; font-weight:800; line-height:1; }
+    .fall-pct small { font-size:13px; color:var(--muted); font-weight:600; }
+    .fall-label { font-size:13px; font-weight:700; margin:4px 0 8px; }
+    .fall-bar { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin-bottom:8px; }
+    .fall-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#4ea564,#e0b23a,var(--maple)); transition:width .5s; }
+    .fall-note { font-size:11px; color:var(--muted); line-height:1.45; }
+
+    /* ── Snow / ski ── */
+    .snow-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+    .snow-tile { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:11px 13px; }
+    .snow-place { font-size:12px; font-weight:700; margin-bottom:7px; }
+    .snow-row { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); padding:3px 0; }
+    .snow-row b { color:var(--text); font-size:12px; }
+    .ski-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .ski-tile{background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+    .ski-name{font-size:13px;font-weight:700;margin-bottom:3px;}
+    .ski-loc{font-size:10px;color:var(--muted);font-weight:400;}
+    .ski-link{font-size:11px;color:var(--blue);text-decoration:none;}
+    .ski-link:hover{text-decoration:underline;}
+
+    /* ── Trails ── */
+    .trail-closure-list { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
+    .trail-closure-item { background:var(--surf2); border-radius:7px; border:1px solid var(--border); padding:9px 12px; display:flex; gap:10px; align-items:flex-start; }
+    .tcl-status { font-size:10px; font-weight:700; text-transform:uppercase; padding:2px 7px; border-radius:10px; white-space:nowrap; margin-top:1px; flex-shrink:0; }
+    .tcl-status.open     { background:rgba(34,197,94,.15);  color:var(--green);  }
+    .tcl-status.closed   { background:rgba(239,68,68,.15);  color:var(--red);    }
+    .tcl-status.rerouted { background:rgba(234,179,8,.15);  color:var(--yellow); }
+    .tcl-status.caution  { background:rgba(249,115,22,.15); color:var(--orange); }
+    .tcl-status.modified { background:rgba(59,130,246,.15); color:var(--blue);   }
+    .tcl-body    { flex:1; min-width:0; }
+    .tcl-name    { font-size:13px; font-weight:600; }
+    .tcl-county  { font-size:11px; color:var(--muted); margin-bottom:3px; }
+    .tcl-comment { font-size:12px; color:var(--text); line-height:1.4; }
+    .links-hdr  { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin:0 0 8px; padding-top:12px; border-top:1px solid var(--border); }
+    .links-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+    .link-card  { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px; text-decoration:none; color:var(--text); display:flex; flex-direction:column; gap:4px; transition:border-color .2s; }
+    .link-card:hover { border-color:var(--accent); }
+    .lc-icon  { font-size:20px; }
+    .lc-label { font-size:12px; font-weight:600; }
+    .lc-sub   { font-size:11px; color:var(--muted); line-height:1.35; }
+
+    /* ── Events ── */
+    .events-section { padding: 0 0 40px; border-top: 1px solid var(--border); padding-top: 40px; }
+    .weekend-range { font-size:13px; color:var(--muted); margin-bottom:18px; }
+    .event-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+    .event-item { background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; padding:11px 14px; }
+    .event-when { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--accent); font-weight:700; margin-bottom:3px; }
+    .event-name { font-size:14px; font-weight:700; margin-bottom:2px; }
+    .event-where { font-size:12px; color:var(--muted); }
+    .event-empty { color:var(--muted); font-size:13px; padding:10px 0 16px; }
+
+    /* ── Gas ── */
+    .gas-grid  { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .gas-item  { background:var(--surf2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+    .gas-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .gas-price { font-size:26px; font-weight:700; color:var(--green); line-height:1.1; }
+    .gas-unit  { font-size:11px; color:var(--muted); }
+    .gas-note  { font-size:11px; color:var(--muted); margin-top:10px; text-align:center; }
+    .gas-note a { color:var(--blue); text-decoration:none; }
+
+    /* ── Cameras ── */
+    .featured-cams-section { padding: 0 0 40px; }
+    .featured-cams-section .section-title { margin-bottom: 6px; }
+    .cam-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+    .featured-cam-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom: 14px; }
+    .cam-section-hdr { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-weight:700; padding:2px 0 8px; margin-top:14px; }
+    .cam-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+    .cam-tile { background:var(--surf2); border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; transition:border-color .15s; }
+    .cam-tile:hover { border-color:var(--accent); }
+    .cam-tile.featured { border-color: rgba(46,157,99,0.4); }
+    .cam-img-wrap { position:relative; aspect-ratio:3/2; background:#000; overflow:hidden; }
+    .cam-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+    .cam-featured-badge { position:absolute; top:6px; left:6px; background: var(--accent); color:#fff; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding: 2px 6px; border-radius:4px; }
+    .cam-label { padding:6px 8px; font-size:11px; color:var(--muted); line-height:1.3; }
+    .cam-label strong { color:var(--text); display:block; font-size:11px; }
+    .view-all-btn { width: 100%; background: var(--surf2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); padding: 10px; cursor: pointer; font-size: 12px; font-weight: 600; text-align: center; transition: color .15s, border-color .15s; margin-top: 8px; }
+    .view-all-btn:hover { color: var(--text); border-color: var(--accent); }
+    .all-cams-panel { display:none; }
+    .all-cams-panel.open { display:block; }
+
+    /* ── Trip cards ── */
+    .trip-section { padding: 0 0 40px; border-top: 1px solid var(--border); padding-top: 40px; }
+    .trip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .trip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 6px; transition: border-color .2s, transform .1s; }
+    .trip-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .trip-card-icon { font-size: 26px; margin-bottom: 4px; }
+    .trip-card-title { font-size: 14px; font-weight: 700; }
+    .trip-card-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .trip-card-link { font-size: 11px; color: var(--accent); margin-top: auto; padding-top: 8px; }
+
+    /* ── Misc ── */
+    .skeleton { background:linear-gradient(90deg,var(--surf2) 25%,var(--border) 50%,var(--surf2) 75%); background-size:400% 100%; animation:shimmer 1.5s infinite; border-radius:4px; height:14px; }
+    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+    .err-msg  { color:var(--red); font-size:11px; padding:6px 0; }
+    .src-note { font-size:10px; color:var(--muted); margin-top:8px; font-style:italic; line-height:1.5; }
+    .src-note a { color:var(--blue); text-decoration:none; }
+    footer { text-align:center; padding:20px; color:var(--muted); font-size:11px; border-top:1px solid var(--border); margin-top:20px; line-height:1.8; }
+    footer a { color:var(--muted); }
+
+    /* ── Responsive ── */
+    @media(max-width:1100px){
+      .panel-inner-grid{grid-template-columns:1fr 1fr;}
+      .panel-inner-grid .span2,.panel-inner-grid .span3{grid-column:span 2;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+      .featured-cam-grid,.cam-grid{grid-template-columns:repeat(2,1fr);}
+      .today-grid{grid-template-columns:repeat(2,1fr);}
+      .feature-right{grid-template-columns:repeat(2,1fr);}
+      .trip-grid{grid-template-columns:repeat(2,1fr);}
+      .beach-grid,.fall-grid,.snow-grid{grid-template-columns:repeat(2,1fr);}
+      /* Nine nav items plus the live badge stop fitting on one row well before
+         the phone breakpoint, so give the nav its own row from here down. */
+      header{flex-wrap:wrap;row-gap:6px;}
+      .hdr-nav{order:3;width:100%;flex-wrap:wrap;justify-content:center;gap:6px 4px;}
+      .hdr-nav a{white-space:nowrap;padding:7px 10px;}
+    }
+    @media(max-width:700px){
+      .panel-inner-grid{grid-template-columns:1fr;}
+      .panel-inner-grid .span2,.panel-inner-grid .span3{grid-column:span 1;}
+      .wx-grid{grid-template-columns:repeat(2,1fr);}
+      .featured-cam-grid,.cam-grid{grid-template-columns:repeat(2,1fr);}
+      .today-grid{grid-template-columns:1fr;}
+      .feature-card{grid-template-columns:1fr;}
+      .feature-right{grid-template-columns:repeat(2,1fr);}
+      .feature-left{min-width:unset;}
+      .feature-tip{max-width:none;}
+      .trip-grid{grid-template-columns:repeat(2,1fr);}
+      .edit-panel{grid-template-columns:1fr;}
+      .edit-actions{grid-column:span 1;}
+      .links-grid{grid-template-columns:repeat(2,1fr);}
+      .beach-grid,.fall-grid,.snow-grid,.ski-grid,.lake-grid{grid-template-columns:1fr;}
+      .hero-title{font-size:26px;}
+      header{flex-wrap:wrap;row-gap:6px;}
+      .hdr-nav{order:3;width:100%;flex-wrap:wrap;justify-content:center;gap:6px 4px;}
+      .hdr-nav a{white-space:nowrap;padding:7px 10px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a class="logo" href="/" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">🌲</div>
+    <div>
+      <div class="logo-text">UP NORTH DASHBOARD</div>
+      <div class="logo-sub">Northern Lower Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="#today">Today</a>
+    <a href="#conditions">Conditions</a>
+    <a href="#roads">Roads</a>
+    <a href="#bridge">Bridge &amp; Ferries</a>
+    <a href="#water">Beaches &amp; Water</a>
+    <a href="#trails">Trails &amp; Snow</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="#weekend">This Weekend</a>
+    <a href="#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="timestamp" id="ts">Loading…</div>
+    <button class="refresh-btn" onclick="fetchAll()">⟳ Refresh</button>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-slide active" id="hero-slide-0" style="background-image:url('https://images.unsplash.com/photo-1694759421163-f2fac730da5a?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-1" style="background-image:url('https://images.unsplash.com/photo-1546869357-184a730b0a31?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-2" style="background-image:url('https://images.unsplash.com/photo-1658550812668-0233e3a24a26?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-slide"        id="hero-slide-3" style="background-image:url('https://images.unsplash.com/photo-1571079526232-4359c36885b4?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-credit">Photography: Unsplash</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Northern Lower Michigan</div>
+    <h1 class="hero-title">Up North Dashboard —<br>What to Do, See &amp; Expect Today</h1>
+    <p class="hero-subtitle">Traverse City · Petoskey · Gaylord · Alpena · Cadillac · Mackinaw City</p>
+    <p class="hero-desc">Live weather, road and bridge conditions, ferry status, beach and marine reports, trail closures, snow and fall-color progress — everything you need before you head north.</p>
+    <div class="hero-ctas">
+      <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
+      <a href="#roads" class="cta-secondary">🛣️ Check Travel Conditions</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATUS BAR ═══ -->
+<div class="status-bar">
+  <div class="sb-item"><span class="sb-icon">🌉</span><span class="sb-label">Bridge</span><span class="sb-val" id="sbv-bridge">…</span></div>
+  <div class="sb-item"><span class="sb-icon">🛣️</span><span class="sb-label">Roads</span><span class="sb-val" id="sbv-roads">…</span></div>
+  <div class="sb-item"><span class="sb-icon">⚠️</span><span class="sb-label">Alerts</span><span class="sb-val" id="sbv-alerts">…</span></div>
+  <div class="sb-item"><span class="sb-icon">🌤️</span><span class="sb-label">Traverse City</span><span class="sb-val" id="sbv-weather">…</span></div>
+  <div class="sb-item"><span class="sb-icon">🌊</span><span class="sb-label">Water Temp</span><span class="sb-val" id="sbv-water">…</span></div>
+  <div class="sb-item"><span class="sb-icon">⛽</span><span class="sb-label">Gas (Midwest)</span><span class="sb-val" id="sbv-gas">…</span></div>
+</div>
+
+<!-- ═══ TODAY UP NORTH ═══ -->
+<section class="today-section" id="today">
+  <div class="section-wrap">
+    <div class="today-header">
+      <div>
+        <div class="section-eyebrow">Updated Live</div>
+        <h2 class="section-title">🌲 Today Up North</h2>
+      </div>
+      <button class="edit-btn" id="today-edit-btn" onclick="toggleTodayEdit()">✏️ Edit</button>
+    </div>
+    <div class="today-grid" id="today-grid"><!-- Populated by JS --></div>
+    <div class="edit-panel" id="today-edit-panel">
+      <div class="edit-field">
+        <label>Hiking &amp; Biking</label>
+        <select id="ef-trail-status">
+          <option value="excellent">Excellent</option>
+          <option value="good">Good</option>
+          <option value="muddy">Muddy / Wet</option>
+          <option value="snowy">Snowy / Icy</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Hiking &amp; Biking Note</label>
+        <input type="text" id="ef-trail-note" placeholder="e.g. VASA singletrack tacky and fast" />
+      </div>
+      <div class="edit-field">
+        <label>Boating &amp; Paddling</label>
+        <select id="ef-boat-status">
+          <option value="excellent">Calm — great day out</option>
+          <option value="good">Good</option>
+          <option value="choppy">Choppy — small craft caution</option>
+          <option value="rough">Rough — stay in</option>
+          <option value="closed">Off season</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Boating Note</label>
+        <input type="text" id="ef-boat-note" placeholder="e.g. West Bay glassy before noon" />
+      </div>
+      <div class="edit-field">
+        <label>Fishing Outlook</label>
+        <select id="ef-fish-status">
+          <option value="peak">🎣 PEAK — Hot bite</option>
+          <option value="improving">↑ Improving</option>
+          <option value="fair">Fair</option>
+          <option value="slow">Slow</option>
+          <option value="closed">Closed / Off Season</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label>Fishing Note</label>
+        <input type="text" id="ef-fish-note" placeholder="e.g. Salmon staging off Frankfort" />
+      </div>
+      <div class="edit-actions">
+        <button class="btn-save" onclick="saveTodayEdits()">💾 Save</button>
+        <button class="btn-cancel" onclick="toggleTodayEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURED CAMERAS ═══ -->
+<section class="featured-cams-section" id="cameras">
+  <div class="section-wrap">
+    <div class="section-eyebrow">Live Views</div>
+    <h2 class="section-title">📹 Northern Michigan Cameras</h2>
+    <p class="cam-subtitle">MDOT and Mackinac Bridge Authority cameras · auto-refreshes every 60 seconds</p>
+    <div class="featured-cam-grid" id="cam-featured"></div>
+    <button class="view-all-btn" id="cam-all-toggle" onclick="toggleAllCams()">▼ View All Cameras</button>
+    <div class="all-cams-panel" id="all-cams-panel">
+      <div class="cam-section-hdr">🍒 Traverse City &amp; Grand Traverse</div>
+      <div class="cam-grid" id="cam-tc"></div>
+      <div class="cam-section-hdr">🛣️ I-75 Corridor — Grayling to the Straits</div>
+      <div class="cam-grid" id="cam-i75"></div>
+      <div class="cam-section-hdr">🛻 US-131 &amp; Cadillac Corridor</div>
+      <div class="cam-grid" id="cam-131"></div>
+      <div class="cam-section-hdr">🌲 M-72 · M-32 &amp; the Sunrise Side</div>
+      <div class="cam-grid" id="cam-east"></div>
+      <div class="cam-section-hdr">🌊 Lakeshore — US-31 &amp; M-22</div>
+      <div class="cam-grid" id="cam-shore"></div>
+      <div class="cam-section-hdr">🌉 Mackinac Bridge — MBA Cameras</div>
+      <div class="cam-grid" id="cam-bridge"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LIVE CONDITIONS DASHBOARD ═══ -->
+<section class="dashboard-section" id="conditions">
+  <div class="section-wrap">
+
+    <div class="dashboard-header">
+      <div>
+        <div class="section-eyebrow">Live Data</div>
+        <h2 class="section-title" style="margin-bottom:0;">📊 Live Northern Michigan Conditions</h2>
+      </div>
+      <div class="live-badge-lg"><div class="live-dot"></div> Live · Refreshes every 5 min</div>
+    </div>
+
+    <!-- Always-visible: Alerts -->
+    <div style="margin-bottom:10px;">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">⚠️ Active Alerts</div>
+          <div style="display:flex;gap:6px;">
+            <span class="badge bg-red"    id="emerg-badge" style="display:none"></span>
+            <span class="badge bg-yellow" id="alert-badge">—</span>
+          </div>
+        </div>
+        <div class="card-body" id="alerts-body"></div>
+      </div>
+    </div>
+
+    <!-- Panel: City conditions -->
+    <div class="panel-toggle open" id="panel-wx">
+      <div class="panel-hdr" onclick="togglePanel('wx')">
+        <span>🌤️ City Conditions — Traverse City · Petoskey · Gaylord · Alpena · Cadillac · Mackinaw City</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🌤️ Up North Weather — Six Towns</div>
+              <span class="badge bg-blue" id="wx-badge">Loading</span>
+            </div>
+            <div class="card-body">
+              <div class="wx-grid" id="wx-grid"></div>
+              <div class="src-note">Airport observations from the National Weather Service (KTVC, KPLN, KGLR, KAPN, KCAD) · Mackinaw City from the NOAA CO-OPS station at the Straits (9075080). Petoskey's nearest official station is Pellston Regional, about 15 miles north.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Roads -->
+    <span id="roads"></span>
+    <div class="panel-toggle open" id="panel-roads">
+      <div class="panel-hdr" onclick="togglePanel('roads')">
+        <span>🛣️ Road Conditions — I-75 · US-131 · M-32 · M-72 · M-119 &amp; more</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🛣️ Route Risk Assessment</div>
+              <span class="badge bg-muted" id="traffic-badge">—</span>
+            </div>
+            <div class="card-body" id="traffic-body"></div>
+          </div>
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🚧 Live Incidents &amp; Construction</div>
+              <span class="badge bg-muted" id="mdot-badge">—</span>
+            </div>
+            <div class="card-body" id="mdot-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Bridge & Ferries -->
+    <span id="bridge"></span>
+    <div class="panel-toggle open" id="panel-bridge">
+      <div class="panel-hdr" onclick="togglePanel('bridge')">
+        <span>🌉 Mackinac Bridge &amp; Ferries</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">🌉 Mackinac Bridge</div>
+              <span class="badge bg-muted" id="bridge-badge">—</span>
+            </div>
+            <div class="card-body" id="bridge-body"></div>
+          </div>
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">⛴️ Island &amp; Passenger Ferries</div>
+              <span class="badge bg-muted" id="ferry-badge">—</span>
+            </div>
+            <div class="card-body" id="ferry-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Beaches & Water -->
+    <span id="water"></span>
+    <div class="panel-toggle open" id="panel-water">
+      <div class="panel-hdr" onclick="togglePanel('water')">
+        <span>🏖️ Beaches · 🌊 Lake Michigan &amp; Lake Huron Marine Conditions</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🏖️ Beach &amp; Swim Conditions</div>
+              <span class="badge bg-muted" id="beach-badge">—</span>
+            </div>
+            <div class="card-body" id="beach-body"></div>
+          </div>
+          <div class="card span2">
+            <div class="card-head">
+              <div class="card-title">🌊 Marine — Waves, Water Temp &amp; Lake Levels</div>
+              <span class="badge bg-blue">NOAA</span>
+            </div>
+            <div class="card-body">
+              <div class="lake-grid" id="lakes-grid"></div>
+              <div class="src-note">Lake levels: NOAA CO-OPS (IGLD 1985 datum) · Waves &amp; water temperature: NDBC buoys and CO-OPS shore stations. Long-term mean is the century-scale average for each lake.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">⛽ Gas Prices</div>
+              <span class="badge bg-muted" id="gas-badge">EIA Midwest</span>
+            </div>
+            <div class="card-body" id="gas-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Trails, forest roads & snow -->
+    <span id="trails"></span>
+    <div class="panel-toggle" id="panel-trails">
+      <div class="panel-hdr" onclick="togglePanel('trails')">
+        <span>🥾 Trails &amp; Forest Roads · ❄️ Snow, Ski &amp; Snowmobile</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">❄️ Snowfall &amp; Snow Depth</div>
+              <span class="badge bg-muted" id="snow-badge">—</span>
+            </div>
+            <div class="card-body" id="snow-body"></div>
+          </div>
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🥾 Trail &amp; Forest-Road Closures — Northern Lower Michigan</div>
+              <span class="badge bg-muted" id="trails-badge">DNR Live Notices</span>
+            </div>
+            <div class="card-body" id="trails-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /section-wrap -->
+</section>
+
+<!-- ═══ FALL COLOR ═══ -->
+<section class="dashboard-section" id="fallcolor-section">
+  <div class="section-wrap">
+    <span id="fallcolor"></span>
+    <div class="panel-toggle open" id="panel-fall">
+      <div class="panel-hdr" onclick="togglePanel('fall')">
+        <span>🍁 Fall Color Progress — Northern Lower Michigan</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🍁 Color Progress by Region</div>
+              <span class="badge bg-muted" id="fall-badge">—</span>
+            </div>
+            <div class="card-body" id="fall-body"></div>
+            <div style="padding:12px 16px 14px;border-top:1px solid var(--border);text-align:center;">
+              <a href="fall.html" style="color:var(--maple);font-weight:700;font-size:13px;">🍎 Full fall guide — scenic drives, cider mills, orchards &amp; U-pick →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THIS WEEKEND ═══ -->
+<section class="events-section" id="weekend">
+  <div class="section-wrap">
+    <div class="today-header">
+      <div>
+        <div class="section-eyebrow">Plan Your Days</div>
+        <h2 class="section-title" style="margin-bottom:4px;">📅 What's Happening This Weekend?</h2>
+        <div class="weekend-range" id="weekend-range">—</div>
+      </div>
+      <button class="edit-btn" id="events-edit-btn" onclick="toggleEventsEdit()">✏️ Edit Highlights</button>
+    </div>
+
+    <div class="event-list" id="event-list"></div>
+
+    <div class="edit-panel" id="events-edit-panel">
+      <div class="edit-field" style="grid-column:span 2;">
+        <label>Weekend highlights — one per line, format: <code>When | Event name | Where</code></label>
+        <textarea id="ef-events" style="min-height:150px" placeholder="Sat | National Cherry Festival Air Show | Open Space, Traverse City
+Sat–Sun | Alpenfest | Downtown Gaylord
+Sun | Farmers Market | Petoskey"></textarea>
+      </div>
+      <div class="edit-actions">
+        <button class="btn-save" onclick="saveEvents()">💾 Save</button>
+        <button class="btn-cancel" onclick="toggleEventsEdit()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="links-hdr">Regional Event Calendars</div>
+    <div class="links-grid">
+      <a href="https://www.traversecity.com/events/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🍒</div><div class="lc-label">Traverse City</div><div class="lc-sub">Traverse City Tourism calendar</div></a>
+      <a href="https://petoskeyarea.com/events/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">⛵</div><div class="lc-label">Petoskey Area</div><div class="lc-sub">Petoskey · Harbor Springs · Boyne</div></a>
+      <a href="https://www.gaylordmichigan.net/events/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏔️</div><div class="lc-label">Gaylord</div><div class="lc-sub">Alpine Village events</div></a>
+      <a href="https://www.visitalpena.com/events/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌅</div><div class="lc-label">Alpena</div><div class="lc-sub">Sunrise Side &amp; Thunder Bay</div></a>
+      <a href="https://www.cadillacmichigan.com/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌲</div><div class="lc-label">Cadillac</div><div class="lc-sub">Cadillac Area Visitors Bureau</div></a>
+      <a href="https://www.mackinawcity.com/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌉</div><div class="lc-label">Mackinaw City</div><div class="lc-sub">Straits area events</div></a>
+      <a href="https://www.mackinacisland.org/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏝️</div><div class="lc-label">Mackinac Island</div><div class="lc-sub">Island events &amp; lodging</div></a>
+      <a href="https://www.mynorth.com/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">📰</div><div class="lc-label">MyNorth</div><div class="lc-sub">Traverse Magazine — things to do</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRIP PLANNING ═══ -->
+<section class="trip-section" id="trip-planning">
+  <div class="section-wrap">
+    <div class="section-eyebrow">Explore Up North</div>
+    <h2 class="section-title">🗺️ Plan Your Northern Michigan Trip</h2>
+    <div class="trip-grid">
+      <a href="fall.html" class="trip-card" style="border-color:rgba(224,96,58,.38);">
+        <div class="trip-card-icon">🍁</div>
+        <div class="trip-card-title">Fall Colors, Cider Mills &amp; Orchards</div>
+        <div class="trip-card-sub">Live peak-color estimate, eight scenic color drives, and nine curated cider mills, orchards and fall farms paired to the routes they sit on.</div>
+        <div class="trip-card-link" style="color:var(--maple);">See the fall guide →</div>
+      </a>
+      <a href="https://www.nps.gov/slbe/index.htm" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🏜️</div>
+        <div class="trip-card-title">Sleeping Bear Dunes</div>
+        <div class="trip-card-sub">Pierce Stocking Scenic Drive, the Dune Climb, Empire Bluff and the Manitou Islands.</div>
+        <div class="trip-card-link">Plan a visit →</div>
+      </a>
+      <a href="https://www.mackinacisland.org/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🏝️</div>
+        <div class="trip-card-title">Mackinac Island</div>
+        <div class="trip-card-sub">No cars, 8 miles of shoreline road, the Grand Hotel and Fort Mackinac. Ferries from Mackinaw City and St. Ignace.</div>
+        <div class="trip-card-link">Ferries &amp; lodging →</div>
+      </a>
+      <a href="https://www.michigan.org/article/trip-idea/tunnel-trees-m-119" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🍁</div>
+        <div class="trip-card-title">M-119 Tunnel of Trees</div>
+        <div class="trip-card-sub">The 20-mile ribbon from Harbor Springs to Cross Village — narrow, no centerline, and unbeatable in October.</div>
+        <div class="trip-card-link">Drive the route →</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/places/state-parks" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🏕️</div>
+        <div class="trip-card-title">State Parks &amp; Campgrounds</div>
+        <div class="trip-card-sub">Traverse City, Hartwick Pines, Petoskey, Young, Wilderness and Ludington — reservations open 6 months out.</div>
+        <div class="trip-card-link">Find a site →</div>
+      </a>
+      <a href="https://www.fs.usda.gov/r09/huron-manistee" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">🌲</div>
+        <div class="trip-card-title">Huron-Manistee National Forests</div>
+        <div class="trip-card-sub">Nearly a million acres of forest roads, dispersed camping, canoe rivers and the North Country Trail.</div>
+        <div class="trip-card-link">Alerts &amp; maps →</div>
+      </a>
+      <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" class="trip-card" style="border-color:rgba(249,115,22,.35);">
+        <div class="trip-card-icon">🏡</div>
+        <div class="trip-card-title">Rent a Cottage Up North</div>
+        <div class="trip-card-sub">Lakefront cottages and cabins around Torch Lake, Grand Traverse Bay, Higgins Lake and the Sunrise Side.</div>
+        <div class="trip-card-link" style="color:var(--orange);">Browse rentals on VRBO →</div>
+      </a>
+      <a href="https://906dashboard.com/" target="_blank" rel="noopener" class="trip-card" style="border-color:rgba(26,111,196,.35);">
+        <div class="trip-card-icon">🌉</div>
+        <div class="trip-card-title">Heading Over the Bridge?</div>
+        <div class="trip-card-sub">Our sister site covers the Upper Peninsula — waterfalls, Pictured Rocks, the Keweenaw and northern-lights forecasts.</div>
+        <div class="trip-card-link" style="color:var(--accent2);">Visit 906 Dashboard →</div>
+      </a>
+      <a href="https://www.weather.gov/apx/" target="_blank" rel="noopener" class="trip-card">
+        <div class="trip-card-icon">📡</div>
+        <div class="trip-card-title">NWS Gaylord Forecast Office</div>
+        <div class="trip-card-sub">The forecast office for most of Northern Lower Michigan — discussions, radar and lakeshore forecasts.</div>
+        <div class="trip-card-link">Full forecast →</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Up North Dashboard — Northern Lower Michigan &nbsp;·&nbsp;
+  NWS · NOAA CO-OPS · NOAA NDBC · Open-Meteo · MDOT MiDrive · Mackinac Bridge Authority · EIA · MI DNR<br>
+  Data refreshes every 5 minutes, cameras every 60 seconds &nbsp;·&nbsp;
+  <a href="privacy.html">Privacy &amp; Disclosure</a> &nbsp;·&nbsp;
+  <a href="https://906dashboard.com/">906 Dashboard (Upper Peninsula)</a> &nbsp;·&nbsp; ©2026
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+//  Up North Dashboard — Northern Lower Michigan
+//  Sibling of 906dashboard.com. Same architecture: every panel fetches a public
+//  government feed directly from the browser, except the two that block
+//  cross-origin requests (MDOT MiDrive and NDBC), which go through the shared
+//  Cloudflare Worker in tools/mdot-proxy/.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// The Worker is shared with 906dashboard.com. It takes ?region=nlp to return
+// Northern Lower Peninsula data instead of the UP set. If the deployed Worker
+// predates that change it will answer with UP data; the client detects that by
+// checking the echoed `region` field and says so rather than showing UP
+// incidents on a Northern Michigan page. See tools/mdot-proxy/README.md.
+const PROXY_URL    = 'https://up906-mdot-proxy.blomblog.workers.dev';
+const PROXY_REGION = 'nlp';
+
+// ── NWS airport stations ──
+// KPLN (Pellston Regional) is the closest official station to both Petoskey and
+// Mackinaw City. Mackinaw City itself is covered separately by the NOAA CO-OPS
+// station at the Straits, which reports air temp, wind and water temp.
+const NWS_STATIONS = [
+  {name:"Traverse City",   station:"KTVC"},
+  {name:"Petoskey",        station:"KPLN", sub:"Pellston Regional"},
+  {name:"Gaylord",         station:"KGLR"},
+  {name:"Alpena",          station:"KAPN"},
+  {name:"Cadillac",        station:"KCAD"},
+  {name:"Charlevoix",      station:"KCVX"},
+  {name:"Houghton Lake",   station:"KHTL"},
+  {name:"Manistee",        station:"KMBL"},
+];
+
+// NOAA CO-OPS station at Mackinaw City — gives a genuine Straits reading
+// (air temp, wind, water temp) instead of borrowing Pellston's.
+const MACKINAW_COOPS = '9075080';
+
+// The six towns shown as city cards, in display order.
+const CITY_CARDS = [
+  {label:'Traverse City', source:'nws',   station:'KTVC'},
+  {label:'Petoskey',      source:'nws',   station:'KPLN', note:'Pellston'},
+  {label:'Gaylord',       source:'nws',   station:'KGLR'},
+  {label:'Alpena',        source:'nws',   station:'KAPN'},
+  {label:'Cadillac',      source:'nws',   station:'KCAD'},
+  {label:'Mackinaw City', source:'coops'},
+];
+
+// ── NWS alert zones ──
+// Public forecast zones covering the Northern Lower Peninsula, verified against
+// api.weather.gov/zones?area=MI. MIZ016–MIZ041 run Emmet down to Gladwin;
+// MIZ098 is Beaver Island and MIZ099 is Charlevoix (they sit outside the run).
+const NLP_ZONES = new Set([
+  'MIZ016','MIZ017','MIZ018','MIZ020','MIZ021','MIZ022','MIZ023','MIZ024',
+  'MIZ025','MIZ026','MIZ027','MIZ028','MIZ029','MIZ030','MIZ031','MIZ032',
+  'MIZ033','MIZ034','MIZ035','MIZ036','MIZ037','MIZ038','MIZ039','MIZ040',
+  'MIZ041','MIZ098','MIZ099',
+]);
+
+// Nearshore + open-water marine zones for the northern Lake Michigan and
+// northern Lake Huron waters this region touches. These carry Small Craft
+// Advisories, Gale Warnings and Beach Hazards Statements.
+const NLP_MARINE_ZONES = new Set([
+  'LMZ323','LMZ341','LMZ342','LMZ344','LMZ345','LMZ346','LMZ362','LMZ364','LMZ366',
+  'LHZ345','LHZ347','LHZ348','LHZ349','LHZ361','LHZ362','LHZ363',
+]);
+
+// Statewide emergency messages surface regardless of zone.
+const EMERGENCY_TYPES = new Set([
+  'Child Abduction Emergency','Blue Alert','Civil Danger Warning',
+  'Civil Emergency Message','Law Enforcement Warning','Evacuation Immediate',
+  'Local Area Emergency','Shelter In Place Warning','Radiological Hazard Warning',
+  'Hazardous Materials Warning',
+]);
+
+// Alert events that specifically concern swimmers and beachgoers.
+const BEACH_ALERT_EVENTS = new Set([
+  'Beach Hazards Statement','High Surf Advisory','High Surf Warning',
+  'Rip Current Statement','Low Water Advisory',
+]);
+
+// ── Counties ──
+// Used to filter the DNR trail feed and the MDOT incident feed down to the
+// Northern Lower Peninsula. The DNR feed is queried with a bounding box, which
+// unavoidably clips a few Upper Peninsula and mid-Michigan counties, so the
+// county name is the authoritative filter.
+const NLP_COUNTIES = new Set([
+  'Emmet','Cheboygan','Presque Isle','Charlevoix','Antrim','Otsego','Montmorency',
+  'Alpena','Leelanau','Benzie','Grand Traverse','Kalkaska','Crawford','Oscoda',
+  'Alcona','Manistee','Wexford','Missaukee','Roscommon','Ogemaw','Iosco',
+  'Mason','Lake','Osceola','Clare','Gladwin',
+]);
+
+// ── Great Lakes water levels (NOAA CO-OPS, IGLD 1985) ──
+// Lakes Michigan and Huron are hydrologically one lake at the same elevation;
+// they are listed separately because visitors think of them separately, and
+// each gauge is genuinely on that shoreline.
+const LAKE_CONFIG = [
+  {name:'Lake Michigan — Ludington', coops:'9087023', mean_ft:577.5, buoy:'45024',
+   blurb:'West-side shoreline · Ludington to Manistee'},
+  {name:'Lake Michigan — Straits',   coops:'9075080', mean_ft:577.5, buoy:'45175',
+   blurb:'Mackinaw City · Straits of Mackinac'},
+  {name:'Lake Huron — Alpena',       coops:'9075065', mean_ft:577.5, buoy:'45212',
+   blurb:'Thunder Bay · Sunrise Side'},
+  {name:'Lake Huron — De Tour',      coops:'9075099', mean_ft:577.5, buoy:null,
+   blurb:'North end · De Tour Passage'},
+];
+
+// ── Beaches ──
+// Each beach reads its water temperature from the nearest station that actually
+// reports one. 'coops' stations are read directly from NOAA; 'buoy' stations
+// come through the Worker because NDBC blocks cross-origin browser requests.
+const BEACHES = [
+  {name:'Mackinaw City',      sub:'Straits of Mackinac',    src:'coops', id:'9075080'},
+  {name:'Alpena',             sub:'Thunder Bay · Lake Huron',src:'coops', id:'9075065'},
+  {name:'Petoskey',           sub:'Little Traverse Bay',    src:'buoy',  id:'45022'},
+  {name:'Sleeping Bear',      sub:'Empire · Glen Arbor',    src:'buoy',  id:'45183'},
+  {name:'Ludington–Manistee', sub:'Lake Michigan shoreline',src:'buoy',  id:'45024'},
+  {name:'Northern Lake Michigan', sub:'Offshore · Beaver Island', src:'buoy', id:'45002'},
+];
+
+// ── Routes ──
+// Ambient risk is inferred from the NWS observations at the stations that
+// bracket each route. This is a weather signal, not a live pavement report —
+// live incidents come from MDOT in the panel below it.
+const NLP_ROUTES = [
+  {route:'I-75',    name:'I-75 — Grayling to the Mackinac Bridge', stations:['KGLR','KPLN']},
+  {route:'I-75-S',  name:'I-75 — West Branch to Grayling',         stations:['KHTL','KGLR']},
+  {route:'US-131',  name:'US-131 — Cadillac to Petoskey',          stations:['KCAD','KPLN']},
+  {route:'M-32',    name:'M-32 — Gaylord to Alpena',               stations:['KGLR','KAPN']},
+  {route:'M-72',    name:'M-72 — Traverse City to Grayling',       stations:['KTVC','KGLR']},
+  {route:'M-119',   name:'M-119 — Tunnel of Trees (Harbor Springs–Cross Village)', stations:['KPLN']},
+  {route:'US-31',   name:'US-31 — Traverse City to Charlevoix',    stations:['KTVC','KCVX']},
+  {route:'US-23',   name:'US-23 — Sunrise Coast (Alpena to Mackinaw City)', stations:['KAPN','KPLN']},
+  {route:'M-22',    name:'M-22 — Leelanau Scenic Loop',            stations:['KTVC','KMBL']},
+  {route:'US-127',  name:'US-127 — Clare to Grayling',             stations:['KHTL','KGLR']},
+];
+
+// ── Open-Meteo sample points ──
+// Free, no key, CORS-enabled. Supplies the 14-day overnight-low history that
+// drives the fall-color model, recent rainfall for trail conditions, and recent
+// and forecast snowfall for the winter panel.
+const CLIMATE_POINTS = [
+  {key:'north',   label:'Straits & Far North', places:'Mackinaw City · Cheboygan · Petoskey', lat:45.65, lon:-84.75,
+   colorStart:252, colorPeak:274, colorEnd:290},
+  {key:'central', label:'Grand Traverse & Gaylord', places:'Traverse City · Gaylord · Alpena', lat:44.90, lon:-85.10,
+   colorStart:257, colorPeak:279, colorEnd:295},
+  {key:'south',   label:'Southern Up North', places:'Cadillac · Houghton Lake · Manistee', lat:44.25, lon:-85.40,
+   colorStart:262, colorPeak:284, colorEnd:300},
+];
+
+// ── Cameras ──
+// MDOT serves two camera families: RWIS stills on mdotjboss.state.mi.us and
+// traffic-cam stills on micamerasimages.net. The micamerasimages "/thumbs/…flv.jpg"
+// paths in MDOT's own listing 301-redirect to the flat "/<name>.jpg" form used here.
+const MC = n => `https://micamerasimages.net/${n}.jpg`;
+const RW = n => `https://mdotjboss.state.mi.us/docs/drive/camfiles/rwis/${n}.jpg`;
+
+const CAMS_TC = [
+  {label:'TC Bayfront',        sub:'US-31 @ Grandview Pkwy',      url:MC('stoc_cam_073')},
+  {label:'US-31 @ 3 Mile',     sub:'Traverse City east side',     url:MC('stoc_cam_074')},
+  {label:'US-31 @ S Airport',  sub:'Traverse City',               url:MC('stoc_cam_070')},
+  {label:'US-31 @ 14th St',    sub:'Traverse City',               url:MC('stoc_cam_071')},
+  {label:'US-31 @ M-72 N Jct', sub:'Traverse City',               url:MC('stoc_cam_075')},
+  {label:'M-72 @ Williamsburg',sub:'Grand Traverse County',       url:RW(718)},
+  {label:'US-31 @ Beitner',    sub:'Grand Traverse County',       url:RW(2643)},
+  {label:'M-22 @ M-72 E Jct',  sub:'Leelanau County',             url:MC('stoc_cam_072')},
+];
+
+const CAMS_I75 = [
+  {label:'I-75 @ Mackinaw Hwy',  sub:'Exit 337 · Cheboygan County', url:RW(724)},
+  {label:'I-75 @ Levering Rd',   sub:'Emmet/Cheboygan line',        url:RW(2337)},
+  {label:'I-75 @ Afton Rd',      sub:'C-58 · Cheboygan County',     url:RW(725)},
+  {label:'I-75 @ M-32',          sub:'Gaylord',                     url:MC('internet_cam_025')},
+  {label:'I-75 @ MM 287',        sub:'Otsego County',               url:MC('internet_cam_024')},
+  {label:'I-75 @ Marlette Rd',   sub:'Exit 270 · Otsego County',    url:RW(720)},
+  {label:'I-75 @ Grayling',      sub:'Rest area · Crawford County', url:RW(721)},
+  {label:'I-75 @ 5 Mile',        sub:'Crawford County',             url:MC('internet_cam_019')},
+  {label:'I-75 @ Maple',         sub:'Roscommon County',            url:MC('internet_cam_020')},
+  {label:'I-75 @ Cook Rd',       sub:'Ogemaw County',               url:MC('internet_cam_021')},
+];
+
+const CAMS_131 = [
+  {label:'US-131 @ M-55',        sub:'Exit 180 · Cadillac',         url:RW(715)},
+  {label:'US-131 @ County Line', sub:'Wexford County',              url:RW(727)},
+  {label:'US-131 @ M-72 S Jct',  sub:'Kalkaska',                    url:RW(732)},
+  {label:'US-131 @ M-32 N Jct',  sub:'Mancelona · Antrim County',   url:RW(731)},
+  {label:'US-131 @ Bear River',  sub:'Charlevoix County',           url:RW(2342)},
+  {label:'US-131 @ Charlevoix Ave', sub:'Petoskey',                 url:RW(2641)},
+  {label:'M-55 @ M-37',          sub:'Wexford County',              url:RW(728)},
+  {label:'M-37 @ 10½ Road',      sub:'Wexford County',              url:RW(2339)},
+  {label:'US-131 @ US-10',       sub:'Exit 153 · Osceola County',   url:RW(717)},
+  {label:'US-127 @ M-55',        sub:'Exit 194 · Roscommon County', url:RW(722)},
+];
+
+const CAMS_EAST = [
+  {label:'M-72 @ Coleman Rd',    sub:'Leelanau County',             url:RW(726)},
+  {label:'M-72 @ Sunset Trail',  sub:'Kalkaska County',             url:RW(2341)},
+  {label:'M-72 @ River Downs',   sub:'Grayling · Crawford County',  url:RW(2637)},
+  {label:'M-72 @ Deeter Rd',     sub:'Oscoda County',               url:RW(2761)},
+  {label:'M-72 @ M-65 N Jct',    sub:'Alcona County',               url:RW(735)},
+  {label:'M-32 @ M-65 E Jct',    sub:'Alpena County',               url:RW(733)},
+  {label:'M-32 @ CR 491',        sub:'Montmorency County',          url:RW(2760)},
+  {label:'M-68 @ M-33',          sub:'Presque Isle County',         url:RW(2759)},
+  {label:'US-23 @ E 638 Hwy',    sub:'Presque Isle County',         url:RW(734)},
+  {label:'M-65 @ River Rd',      sub:'Iosco County',                url:RW(736)},
+  {label:'M-33 @ CR 486',        sub:'Oscoda County',               url:RW(2343)},
+];
+
+const CAMS_SHORE = [
+  {label:'US-31 @ M-88',         sub:'Antrim County',               url:RW(730)},
+  {label:'US-31 @ Burgess Rd',   sub:'Charlevoix County',           url:RW(719)},
+  {label:'US-31 @ M-115',        sub:'Benzie County',               url:RW(714)},
+  {label:'US-31 @ 28th St',      sub:'Manistee',                    url:RW(729)},
+  {label:'US-31 @ Ames-Dexter',  sub:'Grand Traverse County',       url:RW(2642)},
+  {label:'M-22 @ N Eagle Hwy',   sub:'Leelanau County',             url:RW(2758)},
+  {label:'US-10 @ Stiles Rd',    sub:'Mason County',                url:RW(716)},
+];
+
+const CAMS_BRIDGE = [
+  {label:'Admin Building',  sub:'St. Ignace looking south', url:'https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image1_medium.jpg'},
+  {label:'St. Ignace Dock', sub:'Looking south',            url:'https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image2_large.jpg'},
+  {label:'Bridge View Park',sub:'St. Ignace',               url:'https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image3_medium.jpg'},
+  {label:'Mackinaw City',   sub:'Looking north',            url:'https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image4_medium.jpg'},
+  {label:'US-2 / I-75',     sub:'St. Ignace interchange',   url:'https://www.mackinacbridge.org/wp-content/camimages/MacBridge_image5_large.jpg'},
+];
+
+const ALL_CAM_GROUPS = [
+  ['cam-tc', CAMS_TC], ['cam-i75', CAMS_I75], ['cam-131', CAMS_131],
+  ['cam-east', CAMS_EAST], ['cam-shore', CAMS_SHORE], ['cam-bridge', CAMS_BRIDGE],
+];
+const CAM_TOTAL = ALL_CAM_GROUPS.reduce((n,[,g]) => n + g.length, 0);
+
+const FEATURED_CAMS = [
+  {label:'Traverse City Bayfront', sub:'US-31 @ Grandview Pkwy',       url:MC('stoc_cam_073')},
+  {label:'Mackinac Bridge',        sub:'Bridge View Park, St. Ignace', url:CAMS_BRIDGE[2].url},
+  {label:'I-75 at Gaylord',        sub:'I-75 @ M-32',                  url:MC('internet_cam_025')},
+  {label:'US-131 at Cadillac',     sub:'US-131 @ M-55, Exit 180',      url:RW(715)},
+];
+
+// ── Ferry operators ──
+// Sailing seasons are the operators' published typical seasons, used to decide
+// whether to show a service as running today. Departure times change week to
+// week, so the card always sends people to the operator for the live schedule.
+const FERRIES = [
+  {name:"Shepler's Ferry", route:'Mackinaw City &amp; St. Ignace → Mackinac Island',
+   url:'https://www.sheplersferry.com/', start:[4,25], end:[10,31],
+   season:'Late April – late October (hydro-jet service, 16 min crossing)'},
+  {name:'Mackinac Island Ferry Co.', route:'Mackinaw City &amp; St. Ignace → Mackinac Island',
+   url:'https://www.mackinacferry.com/', start:[4,25], end:[10,31],
+   season:'Late April – late October (formerly Star Line)'},
+  {name:'Beaver Island Boat Co.', route:'Charlevoix → Beaver Island',
+   url:'https://www.bibco.com/', start:[4,15], end:[12,15],
+   season:'Mid-April – mid-December · 2¼ hour crossing, vehicles carried'},
+  {name:'Manitou Island Transit', route:'Leland → South &amp; North Manitou Island',
+   url:'https://www.manitoutransit.com/', start:[5,20], end:[10,5],
+   season:'Late May – early October · Sleeping Bear Dunes National Lakeshore'},
+  {name:'Plaunt Transportation', route:'Cheboygan → Bois Blanc Island',
+   url:'https://plaunttransportation.com/', start:[4,1], end:[12,31],
+   season:'Year-round when ice allows · vehicles carried'},
+];
+
+// ── Ski areas ──
+// Northern Michigan resorts publish snow reports on their own sites in wildly
+// different formats and only during the season. Rather than scrape six layouts
+// that cannot be tested in summer, these are curated links to the official
+// report for each hill; the live snow numbers on this page come from NWS
+// station snow depth and Open-Meteo snowfall totals instead.
+const SKI_AREAS = [
+  {name:'Boyne Mountain',   loc:'Boyne Falls',      url:'https://www.boynemountain.com/'},
+  {name:'The Highlands',    loc:'Harbor Springs',   url:'https://www.highlandsharborsprings.com/'},
+  {name:"Nub's Nob",        loc:'Harbor Springs',   url:'https://www.nubsnob.com/'},
+  {name:'Crystal Mountain', loc:'Thompsonville',    url:'https://www.crystalmountain.com/ski/cams-conditions/mountain-report'},
+  {name:'Shanty Creek',     loc:'Bellaire',         url:'https://www.shantycreek.com/'},
+  {name:'Caberfae Peaks',   loc:'Cadillac',         url:'https://caberfaepeaks.com/snow-report/'},
+  {name:'Treetops Resort',  loc:'Gaylord',          url:'https://www.treetops.com/'},
+  {name:'Hanson Hills',     loc:'Grayling',         url:'https://hansonhills.org/'},
+];
+
+// ── Utilities ──
+const cToF     = c => c!=null ? Math.round(c*9/5+32)        : null;
+const mpsToMph = v => v!=null ? Math.round(v*2.23694)       : null;
+const mToMi    = v => v!=null ? Math.round(v/1609.34*10)/10 : null;
+const mmToIn   = v => v!=null ? Math.round(v/25.4*10)/10    : null;
+
+function compass(deg) {
+  if (deg==null) return null;
+  const d=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return d[Math.round(deg/22.5)%16];
+}
+function gv(obj,...keys){ for(const k of keys){ if(obj==null||typeof obj!=='object')return null; obj=obj[k]; } return obj??null; }
+function esc(s){ return String(s??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function fmt(v,sfx='',fb='—'){ return v!=null ? esc(v)+sfx : fb; }
+function fmtTime(iso){ if(!iso)return '—'; const d=new Date(iso); if(isNaN(d))return '—';
+  return d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'}); }
+function fmtDate(d){ return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function dayOfYear(d=new Date()){
+  const start=new Date(d.getFullYear(),0,0);
+  return Math.floor((d-start)/86400000);
+}
+function doyToDate(doy,year=new Date().getFullYear()){
+  const d=new Date(year,0,1); d.setDate(doy); return d;
+}
+function clamp(v,lo,hi){ return Math.min(hi,Math.max(lo,v)); }
+
+// Is today inside a [month,day] → [month,day] window? Handles windows that
+// wrap the new year (used for the year-round ferry).
+function inSeason(start,end,now=new Date()){
+  const y=now.getFullYear();
+  const s=new Date(y,start[0]-1,start[1]);
+  const e=new Date(y,end[0]-1,end[1],23,59,59);
+  return s<=e ? (now>=s&&now<=e) : (now>=s||now<=e);
+}
+
+function togglePanel(id) {
+  const el = document.getElementById('panel-'+id);
+  if (el) el.classList.toggle('open');
+}
+
+function toggleAllCams() {
+  const panel = document.getElementById('all-cams-panel');
+  const btn   = document.getElementById('cam-all-toggle');
+  panel.classList.toggle('open');
+  btn.textContent = panel.classList.contains('open')
+    ? '▲ Hide All Cameras'
+    : `▼ View All Cameras (${CAM_TOTAL} total)`;
+}
+
+function updateStatusBar(key, text, level) {
+  const el = document.getElementById('sbv-' + key);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'sb-val ' + (level || '');
+}
+
+function wxIcon(desc){
+  if(!desc)return '🌫️';
+  const d=desc.toLowerCase();
+  if(d.includes('thunder')||d.includes('storm'))return '⛈️';
+  if(d.includes('heavy snow')||d.includes('blizzard'))return '❄️';
+  if(d.includes('snow')||d.includes('flurries'))return '🌨️';
+  if(d.includes('freezing')||d.includes('sleet')||d.includes('ice'))return '🧊';
+  if(d.includes('rain')||d.includes('shower'))return '🌧️';
+  if(d.includes('drizzle')||d.includes('mist'))return '🌦️';
+  if(d.includes('fog')||d.includes('haze'))return '🌫️';
+  if(d.includes('windy')||d.includes('breezy')||d.includes('gust'))return '🌬️';
+  if(d.includes('mostly cloudy')||d.includes('partly cloudy'))return '⛅';
+  if(d.includes('overcast')||d.includes('cloudy'))return '☁️';
+  if(d.includes('clear')||d.includes('sunny')||d.includes('fair'))return '☀️';
+  return '🌡️';
+}
+</script>
+
+<script>
+// ═══════════════════════════ DATA FETCHERS ═══════════════════════════
+
+// ── NWS station observations ──
+async function fetchNWSStation(stationId, retry = true) {
+  const r = await fetch(`https://api.weather.gov/stations/${stationId}/observations/latest`,
+    {headers:{Accept:'application/geo+json'}});
+  if(!r.ok) {
+    // api.weather.gov intermittently 404s a single station's "latest" observation
+    // between ob cycles even when the station is healthy — one retry clears most.
+    if (retry) {
+      await new Promise(res => setTimeout(res, 1500));
+      return fetchNWSStation(stationId, false);
+    }
+    throw new Error(`NWS ${stationId} HTTP ${r.status}`);
+  }
+  return (await r.json()).properties||{};
+}
+
+async function fetchAllWeather() {
+  const results = await Promise.all(NWS_STATIONS.map(async s => {
+    try {
+      const p  = await fetchNWSStation(s.station);
+      const w  = gv(p,'windSpeed','value'), g = gv(p,'windGust','value');
+      const wc = gv(p,'windChill','value'), hi = gv(p,'heatIndex','value');
+      return {
+        name:s.name, station:s.station, sub:s.sub,
+        temp_f:        cToF(gv(p,'temperature','value')),
+        feels_f:       cToF(wc!=null?wc:hi),
+        dewpoint_f:    cToF(gv(p,'dewpoint','value')),
+        humidity:      Math.round(gv(p,'relativeHumidity','value')||0),
+        wind_mph:      mpsToMph(w),
+        wind_gust_mph: mpsToMph(g),
+        wind_dir:      compass(gv(p,'windDirection','value')),
+        visibility_mi: mToMi(gv(p,'visibility','value')),
+        description:   p.textDescription||'Unknown',
+        snow_depth_in: mmToIn(gv(p,'snowDepth','value')),
+        precip_1h_in:  mmToIn(gv(p,'precipitationLastHour','value')),
+        precip_3h_in:  mmToIn(gv(p,'precipitationLast3Hours','value')),
+        precip_6h_in:  mmToIn(gv(p,'precipitationLast6Hours','value')),
+        timestamp:     p.timestamp,
+        ok:true,
+      };
+    } catch(e){ return {name:s.name, station:s.station, sub:s.sub, ok:false, error:e.message}; }
+  }));
+  return {stations:results, updated:new Date().toISOString()};
+}
+
+// ── NOAA CO-OPS helper ──
+// One tiny request per product. CO-OPS sends CORS headers, so this runs
+// straight from the browser with no proxy.
+async function coops(station, product, extra='') {
+  const url = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter'
+    + `?station=${station}&product=${product}&units=english&time_zone=lst_ldt`
+    + `&format=json&date=latest&application=upnorthdashboard${extra}`;
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(`CO-OPS HTTP ${r.status}`);
+  const d = await r.json();
+  if (d.error) throw new Error(d.error.message || 'CO-OPS error');
+  const row = (d.data||[]).at(-1);
+  if (!row) throw new Error('no data');
+  return row;
+}
+
+// Mackinaw City conditions straight from the Straits gauge.
+async function fetchMackinawCity() {
+  const out = {ok:false, name:'Mackinaw City'};
+  const jobs = await Promise.allSettled([
+    coops(MACKINAW_COOPS,'air_temperature'),
+    coops(MACKINAW_COOPS,'wind'),
+    coops(MACKINAW_COOPS,'water_temperature'),
+  ]);
+  const [air, wind, water] = jobs;
+  if (air.status === 'fulfilled')  { out.temp_f = Math.round(parseFloat(air.value.v)); out.timestamp = air.value.t; out.ok = true; }
+  if (wind.status === 'fulfilled') {
+    out.wind_mph      = Math.round(parseFloat(wind.value.s));
+    out.wind_gust_mph = wind.value.g!=null ? Math.round(parseFloat(wind.value.g)) : null;
+    out.wind_dir      = wind.value.dr || compass(parseFloat(wind.value.d));
+    out.ok = true;
+  }
+  if (water.status === 'fulfilled') { out.water_temp_f = Math.round(parseFloat(water.value.v)*10)/10; out.ok = true; }
+  if (!out.ok) out.error = 'Straits gauge unavailable';
+  return out;
+}
+
+// ── NWS alerts ──
+// Michigan-wide pull, split into land alerts for our zones, marine alerts for
+// the northern Lake Michigan / Lake Huron zones, and statewide emergencies.
+async function fetchAlerts() {
+  try {
+    const [land, marine] = await Promise.all([
+      fetch('https://api.weather.gov/alerts/active?area=MI', {headers:{Accept:'application/geo+json'}}),
+      // Marine alerts live in their own zone namespace. `region` must be
+      // upper-case here — api.weather.gov 400s on a lower-case value.
+      fetch('https://api.weather.gov/alerts/active?region=GL', {headers:{Accept:'application/geo+json'}}),
+    ]);
+    if(!land.ok) throw new Error(`HTTP ${land.status}`);
+    const features = ((await land.json()).features)||[];
+    const marineFeatures = marine.ok ? (((await marine.json()).features)||[]) : [];
+
+    const nlpAlerts=[], marineAlerts=[], emergencyAlerts=[], beachAlerts=[];
+    const seen = new Set();
+
+    const toObj = f => {
+      const p = f.properties||{};
+      return {
+        id: p.id, event: p.event||'',
+        headline: p.headline,
+        description: (p.description||'').slice(0,600),
+        severity: p.severity, urgency: p.urgency,
+        areas: p.areaDesc, effective: p.effective, expires: p.expires,
+        zones: new Set((p.affectedZones||[]).map(z=>z.split('/').pop())),
+      };
+    };
+
+    for (const f of features) {
+      const o = toObj(f);
+      if (seen.has(o.id)) continue;
+      if (EMERGENCY_TYPES.has(o.event)) { seen.add(o.id); emergencyAlerts.push(o); continue; }
+      if ([...o.zones].some(z=>NLP_ZONES.has(z))) {
+        seen.add(o.id); nlpAlerts.push(o);
+        if (BEACH_ALERT_EVENTS.has(o.event)) beachAlerts.push(o);
+      }
+    }
+    for (const f of marineFeatures) {
+      const o = toObj(f);
+      if (seen.has(o.id)) continue;
+      if ([...o.zones].some(z=>NLP_MARINE_ZONES.has(z))) {
+        seen.add(o.id); marineAlerts.push(o);
+        if (BEACH_ALERT_EVENTS.has(o.event)) beachAlerts.push(o);
+      }
+    }
+    return {nlpAlerts, marineAlerts, emergencyAlerts, beachAlerts, updated:new Date().toISOString()};
+  } catch(e){
+    return {nlpAlerts:[], marineAlerts:[], emergencyAlerts:[], beachAlerts:[], error:e.message, updated:new Date().toISOString()};
+  }
+}
+
+// ── Open-Meteo climate history + short forecast ──
+// Gives 14 days of daily min/max, rainfall and snowfall plus a 3-day forecast
+// for each sample point. Used by the fall-color model, the snow panel and the
+// trail-condition inference. Free and key-less.
+async function fetchClimate() {
+  const points = await Promise.all(CLIMATE_POINTS.map(async pt => {
+    try {
+      const url = 'https://api.open-meteo.com/v1/forecast'
+        + `?latitude=${pt.lat}&longitude=${pt.lon}`
+        + '&daily=temperature_2m_min,temperature_2m_max,precipitation_sum,snowfall_sum'
+        + '&past_days=14&forecast_days=4&temperature_unit=fahrenheit'
+        + '&precipitation_unit=inch&timezone=America%2FDetroit';
+      const r = await fetch(url);
+      if(!r.ok) throw new Error(`HTTP ${r.status}`);
+      const d = await r.json();
+      const daily = d.daily||{};
+      const dates = daily.time||[];
+      const todayISO = new Date().toLocaleDateString('en-CA',{timeZone:'America/Detroit'});
+      const todayIdx = Math.max(dates.indexOf(todayISO), 0);
+
+      const past = i => Math.max(0, todayIdx - i);
+      const sum = (arr, from, to) => arr.slice(from, to).reduce((a,b)=>a+(b||0),0);
+
+      const mins = daily.temperature_2m_min||[];
+      const coldNights = mins.slice(past(14), todayIdx+1).filter(v => v!=null && v<=45).length;
+      const frostNights= mins.slice(past(14), todayIdx+1).filter(v => v!=null && v<=32).length;
+
+      return {
+        ...pt, ok:true,
+        coldNights, frostNights,
+        rain_3d:  Math.round(sum(daily.precipitation_sum||[], past(2), todayIdx+1)*100)/100,
+        rain_7d:  Math.round(sum(daily.precipitation_sum||[], past(6), todayIdx+1)*100)/100,
+        snow_1d:  Math.round((daily.snowfall_sum?.[todayIdx]||0)*10)/10,
+        snow_7d:  Math.round(sum(daily.snowfall_sum||[], past(6), todayIdx+1)*10)/10,
+        snow_fcst:Math.round(sum(daily.snowfall_sum||[], todayIdx+1, todayIdx+4)*10)/10,
+        min_today: mins[todayIdx] ?? null,
+        max_today: (daily.temperature_2m_max||[])[todayIdx] ?? null,
+      };
+    } catch(e){ return {...pt, ok:false, error:e.message}; }
+  }));
+  const byKey = {};
+  for (const p of points) byKey[p.key] = p;
+  return {ok: points.some(p=>p.ok), points, byKey};
+}
+
+// ── Shared Cloudflare Worker (MDOT MiDrive + NDBC buoys) ──
+async function fetchProxy(path) {
+  if(!PROXY_URL) return {ok:false, error:'Proxy not configured'};
+  try{
+    const r = await fetch(`${PROXY_URL}${path}${path.includes('?')?'&':'?'}region=${PROXY_REGION}`);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    if(!d.ok) throw new Error(d.error||'Proxy error');
+    // A Worker that predates the region parameter answers with UP data and no
+    // `region` field. Flag it rather than presenting UP data as Up North data.
+    if (d.region !== PROXY_REGION) d.regionMismatch = true;
+    return d;
+  }catch(e){
+    return {ok:false, error:e.message};
+  }
+}
+const fetchMdotEvents = () => fetchProxy('/events');
+const fetchBuoys      = () => fetchProxy('/buoys');
+
+// ── Great Lakes levels + buoy conditions ──
+async function fetchLakes(buoyData) {
+  const lakes = [];
+  await Promise.all(LAKE_CONFIG.map(async (cfg, i) => {
+    const entry = {name:cfg.name, blurb:cfg.blurb, order:i};
+    try {
+      const row = await coops(cfg.coops,'water_level','&datum=IGLD');
+      const level_ft = parseFloat(row.v);
+      const diff_in  = Math.round((level_ft - cfg.mean_ft)*12*10)/10;
+      Object.assign(entry, {
+        level_ft: Math.round(level_ft*100)/100,
+        diff_in, diff_label: diff_in>=0 ? `+${diff_in}″` : `${diff_in}″`,
+        level_time: row.t,
+      });
+    } catch(e){ entry.level_error = e.message; }
+
+    try {
+      const row = await coops(cfg.coops,'water_temperature');
+      entry.water_temp_f = Math.round(parseFloat(row.v)*10)/10;
+      entry.water_src = 'CO-OPS shore gauge';
+    } catch(e){ /* many gauges do not carry a water-temp sensor */ }
+
+    const b = cfg.buoy && buoyData?.ok ? buoyData.buoys?.[cfg.buoy] : null;
+    if (b?.ok) {
+      entry.wave_height_ft = b.wave_height_ft;
+      entry.buoy_name = b.stationName;
+      entry.buoy_time = b.time;
+      if (entry.water_temp_f == null && b.water_temp_f != null) {
+        entry.water_temp_f = b.water_temp_f;
+        entry.water_src = `NDBC buoy ${b.station}`;
+      }
+    } else if (cfg.buoy) {
+      entry.buoy_error = buoyData?.regionMismatch
+        ? 'Buoy feed pending proxy update'
+        : (b?.error || buoyData?.error || 'Buoy data unavailable');
+    }
+    lakes.push(entry);
+  }));
+  lakes.sort((a,b)=>a.order-b.order);
+  return {lakes, updated:new Date().toISOString()};
+}
+
+// ── Beaches ──
+function buildBeaches(buoyData, lakeData, weather, beachAlerts) {
+  const coopsTemps = {};
+  for (const l of (lakeData?.lakes||[])) {
+    const cfg = LAKE_CONFIG.find(c=>c.name===l.name);
+    if (cfg && l.water_temp_f != null) coopsTemps[cfg.coops] = l.water_temp_f;
+  }
+  const airMax = Math.max(...(weather?.stations||[]).filter(s=>s.ok&&s.temp_f!=null).map(s=>s.temp_f), -99);
+
+  return BEACHES.map(b => {
+    let temp = null, wave = null, src = '', when = null, err = null;
+    if (b.src === 'coops') {
+      temp = coopsTemps[b.id] ?? null;
+      src  = `NOAA gauge ${b.id}`;
+      if (temp == null) err = 'Gauge temperature unavailable';
+    } else {
+      const buoy = buoyData?.ok ? buoyData.buoys?.[b.id] : null;
+      if (buoy?.ok) {
+        temp = buoy.water_temp_f; wave = buoy.wave_height_ft;
+        src = `NDBC ${b.id}`; when = buoy.time;
+      } else {
+        err = buoyData?.regionMismatch ? 'Pending proxy update'
+            : (buoy?.error || buoyData?.error || 'Buoy offline');
+      }
+    }
+    // Swim verdict is driven by water temperature — the number that actually
+    // decides whether a Great Lakes swim is pleasant or dangerous.
+    let verdict = 'No reading', vcls = 'sig-neu';
+    if (temp != null) {
+      if      (temp >= 72) { verdict = 'Warm — swim away';        vcls='sig-good'; }
+      else if (temp >= 66) { verdict = 'Comfortable';             vcls='sig-good'; }
+      else if (temp >= 60) { verdict = 'Brisk — fine for a dip';  vcls='sig-warn'; }
+      else if (temp >= 55) { verdict = 'Cold — short swims only'; vcls='sig-warn'; }
+      else                 { verdict = 'Very cold — cold-shock risk'; vcls='sig-bad'; }
+    }
+    if (wave != null && wave >= 3) { verdict = 'Rough surf — stay out'; vcls = 'sig-bad'; }
+    return {...b, temp, wave, src, when, err, verdict, vcls, airMax:airMax>-99?airMax:null,
+            hazard: beachAlerts?.length ? beachAlerts[0].event : null};
+  });
+}
+
+// ── Mackinac Bridge ──
+// The Bridge Authority publishes its restriction status as a WordPress page;
+// the same parse the 906 dashboard uses.
+async function fetchBridge(stations){
+  const kpln = stations.find(s=>s.station==='KPLN');
+  let mbaStatus=null, mbaWindRange=null;
+  try {
+    const res = await fetch('https://www.mackinacbridge.org/wp-json/wp/v2/pages?slug=conditions&per_page=1');
+    const data = await res.json();
+    if(data && data[0]){
+      const raw = (data[0].content?.rendered||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+      const sm  = raw.match(/Status:\s*(.+?)(?:\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),)/i);
+      if(sm) mbaStatus = sm[1].trim();
+      const wm = raw.match(/\((\d+)\s*[-–]\s*(\d+)\s*mph\)/);
+      if(wm) mbaWindRange = `${wm[1]}–${wm[2]} mph`;
+    }
+  } catch(e){ console.warn('MBA status fetch failed:', e.message); }
+
+  let restr='none', detail='No restrictions — all traffic normal', level='clear';
+  if(mbaStatus){
+    const s = mbaStatus.toLowerCase();
+    if     (s.includes('closed'))                                [restr,detail,level]=['closed',     'Bridge closed — all traffic',                      'danger' ];
+    else if(s.includes('escort'))                                [restr,detail,level]=['escort',     'High-profile vehicles: mandatory escort',           'warning'];
+    else if(s.includes('center')||s.includes('restriction'))     [restr,detail,level]=['center_lane','High-profile vehicles: center lanes only',          'caution'];
+    else if(s.includes('warning')||s.includes('watch')||s.includes('advisory')) [restr,detail,level]=['warning','High wind advisory — reduce speed, use outer lanes','caution'];
+  }
+  return {ok:true, mba_status:mbaStatus||'Unknown', mba_wind_range:mbaWindRange,
+    wind_mph:kpln?.wind_mph, wind_gust_mph:kpln?.wind_gust_mph,
+    wind_dir:kpln?.wind_dir, temp_f:kpln?.temp_f, visibility_mi:kpln?.visibility_mi,
+    restriction:restr, restriction_detail:detail, level, timestamp:kpln?.timestamp};
+}
+
+// ── Ferries ──
+function buildFerries() {
+  const now = new Date();
+  return FERRIES.map(f => {
+    const running = inSeason(f.start, f.end, now);
+    return {...f, running,
+      status: running ? 'Sailing' : 'Off season',
+      cls:    running ? 'bg-green' : 'bg-muted'};
+  });
+}
+
+// ── Road risk from weather ──
+function roadRisk(obs){
+  let score=0;
+  const temp=obs.temp_f, wind=obs.wind_mph||0, gust=obs.wind_gust_mph||wind;
+  const vis=obs.visibility_mi, snow_d=obs.snow_depth_in||0;
+  const precip=obs.precip_1h_in||0, desc=(obs.description||'').toLowerCase();
+  if(temp!=null&&temp<=32)score+=20; if(temp!=null&&temp<=20)score+=10;
+  if(precip>0&&temp!=null&&temp<=32)score+=20;
+  if(desc.includes('snow')||desc.includes('blizzard'))score+=20;
+  if(desc.includes('heavy snow'))score+=10;
+  if(desc.includes('freezing')||desc.includes('sleet')||desc.includes('ice'))score+=25;
+  if(desc.includes('thunder')||desc.includes('storm'))score+=10;
+  if(wind>=30)score+=10; if(gust>=40)score+=10;
+  if(vis!=null){if(vis<=0.25)score+=30;else if(vis<=1)score+=20;else if(vis<=3)score+=10;}
+  if(snow_d>=12)score+=15;else if(snow_d>=6)score+=8;
+  score=Math.min(score,100);
+  if(score>=60)return{score,level:'difficult',label:'Difficult',color:'red',summary:'Severe — 4WD/chains recommended'};
+  if(score>=35)return{score,level:'caution',label:'Caution',color:'yellow',summary:'Winter conditions — reduce speed'};
+  return{score,level:'clear',label:'Clear',color:'green',summary:'Normal driving conditions'};
+}
+
+function deriveRoutes(weatherData){
+  const stObs={};
+  for(const s of weatherData.stations||[]) if(s.ok) stObs[s.station]=s;
+  const routes = NLP_ROUTES.map(rt=>{
+    const scores=[], summaries=[];
+    for(const sid of rt.stations){ if(stObs[sid]){ const r=roadRisk(stObs[sid]); scores.push(r.score); summaries.push(r.summary); } }
+    let risk;
+    if(scores.length){
+      const avg = scores.reduce((a,b)=>a+b,0)/scores.length;
+      if(avg>=60)      risk={score:avg,level:'difficult',label:'Difficult',color:'red',   summary:summaries[0]||'Severe conditions'};
+      else if(avg>=35) risk={score:avg,level:'caution',  label:'Caution',  color:'yellow',summary:summaries[0]||'Winter conditions'};
+      else             risk={score:avg,level:'clear',    label:'Clear',    color:'green', summary:'Normal conditions'};
+    } else risk={score:0,level:'unknown',label:'Unknown',color:'muted',summary:'No data'};
+    return {route:rt.route, name:rt.name, ...risk};
+  });
+  return {ok:true, routes,
+    note:'Ambient route risk inferred from NWS observations at the stations bracketing each route — not a live pavement report. Live closures appear under Incidents & Construction below. M-119 is narrow, has no centerline and is not plowed to highway standards in winter.'};
+}
+
+// ── Gas prices (EIA weekly Midwest average) ──
+const EIA_API_KEY = 'DkeNs7cg9SK8h76jPAqwOD7GWppNdKWddnR4b6rg'; // free personal key, shared with 906dashboard
+
+async function fetchGasPrices(){
+  try{
+    // EPMR is Regular gasoline, EPD2D is diesel. Facet-filtering by product
+    // matters: PADD 2 publishes ~10 product/grade rows a week and a plain
+    // "latest 10 rows" grab regularly misses Regular entirely.
+    const url = `https://api.eia.gov/v2/petroleum/pri/gnd/data/?api_key=${EIA_API_KEY}&frequency=weekly`
+      + '&data%5B0%5D=value&facets%5Bduoarea%5D%5B%5D=R20'
+      + '&facets%5Bproduct%5D%5B%5D=EPMR&facets%5Bproduct%5D%5B%5D=EPD2D'
+      + '&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&offset=0&length=10';
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    if(d.error) throw new Error(d.error?.message||'EIA API error');
+    const rows = d.response?.data||[];
+    const pick = prod => { const r = rows.find(r=>r.product===prod); return r?.value!=null?parseFloat(r.value):null; };
+    const regular = pick('EPMR'), diesel = pick('EPD2D');
+    if(regular==null && diesel==null) throw new Error('No rows returned');
+    return {ok:true, regular, diesel, period:rows[0]?.period||null};
+  }catch(e){ return {ok:false, error:e.message}; }
+}
+
+// ── DNR trail closures ──
+// Same ArcGIS layer the UP dashboard uses, queried with a Northern Lower
+// Peninsula bounding box. The box clips a few neighbouring counties, so results
+// are filtered again by county name.
+async function fetchTrailClosures(){
+  try{
+    const yr = new Date().getFullYear();
+    const bbox = encodeURIComponent('{"xmin":-87.0,"ymin":43.6,"xmax":-82.8,"ymax":46.15,"spatialReference":{"wkid":4326}}');
+    const url = 'https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/DNR_trails_temporarily_closed/FeatureServer/0/query'
+      + `?where=Year%3D${yr}&outFields=Comments%2CCounty%2CSnowmobile_Name%2CBike_Name%2CHiking_Name%2CEditDate`
+      + `&geometry=${bbox}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=json`;
+    const res = await fetch(url);
+    const d = await res.json();
+    const seen = new Set(); const closures = [];
+    const month = new Date().getMonth();          // 0 = January
+    const isSnowSeason = month>=11 || month<=2;   // December–March
+
+    for (const f of (d.features||[])) {
+      const a = f.attributes;
+      const county = (a.County||'').trim();
+      if (!NLP_COUNTIES.has(county)) continue;    // bounding box overshoots — county is authoritative
+
+      const comment = (a.Comments||'').trim();
+      const edit    = a.EditDate ? new Date(a.EditDate) : null;
+      const ageDays = edit ? (Date.now()-edit.getTime())/864e5 : null;
+      const snowOnly = !!a.Snowmobile_Name && !a.Bike_Name && !a.Hiking_Name;
+      // Hide stale snowmobile-only notices outside snow season.
+      if (!isSnowSeason && snowOnly && ageDays!==null && ageDays>60) continue;
+
+      const raw = a.Snowmobile_Name || a.Bike_Name || a.Hiking_Name || '';
+      let trail = raw;
+      if (/^\d+$/.test(raw)) {
+        const m = comment.match(/Snowmobile Trail\s+([A-Z]{0,2}\s*\d+)/i) || comment.match(/\b(Trail\s+\d+)\b/i);
+        trail = m ? m[1].trim() : 'Trail #' + parseInt(raw,10);
+      }
+      const kind = a.Snowmobile_Name ? 'Snowmobile' : a.Bike_Name ? 'Bike' : a.Hiking_Name ? 'Hiking' : 'Trail';
+      const key = trail + '|' + county + '|' + comment.slice(0,40);
+      if (seen.has(key)) continue; seen.add(key);
+
+      const lower = comment.toLowerCase();
+      let status='modified';
+      if      (lower.match(/:\s*open/))       status='open';
+      else if (lower.includes('reroute'))     status='rerouted';
+      else if (lower.includes('closed')||lower.includes('closing')) status='closed';
+      else if (lower.includes('ungroomed')||lower.includes('caution')) status='caution';
+      else if (lower.includes('open'))        status='open';
+      closures.push({trail, kind, county, comment:comment.slice(0,220), status, edit});
+    }
+    closures.sort((x,y)=>(y.edit?.getTime()||0)-(x.edit?.getTime()||0));
+    return {ok:true, closures};
+  }catch(e){ return {ok:false, error:e.message}; }
+}
+
+// ── Fall color model ──
+// There is no live foliage feed for Michigan, so this is an explicit model, not
+// an observation: a date-driven progression curve per latitude band, shifted by
+// how many cold nights the band has actually had in the past two weeks. Cold
+// nights are the strongest weather trigger for anthocyanin development, so a
+// cold snap pulls peak earlier and a warm stretch pushes it later.
+function fallColorForRegion(pt, climate) {
+  const doy = dayOfYear();
+  const c   = climate?.byKey?.[pt.key];
+  const coldNights  = c?.ok ? c.coldNights  : null;
+  const frostNights = c?.ok ? c.frostNights : null;
+
+  // Shift on how ANOMALOUS the cold-night count is for the date, not the raw
+  // count. Trailing-14-day cold nights saturate at 14 of 14 by late October in
+  // every autumn, so keying off the raw number slid the estimated peak earlier
+  // every day as the season ran on — roughly five days of drift across Sept and
+  // Oct on nothing but the calendar. Comparing to normal holds the window steady
+  // unless the weather genuinely is running warm or cold.
+  // Kept identical to the model on fall.html so the two panels never disagree.
+  let shift = 0, anomaly = null;
+  if (coldNights != null) {
+    anomaly = coldNights - clamp((doy - 228) * 0.20, 0, 14);
+    const frostPull = (frostNights || 0) * 0.4 * clamp((285 - doy) / 40, 0, 1);
+    shift = -clamp(anomaly * 0.8 + frostPull, -4, 7);
+  }
+  const start = pt.colorStart + shift;
+  const peak  = pt.colorPeak  + shift;
+  const end   = pt.colorEnd   + shift;
+
+  let pct, status, cls;
+  if (doy < start - 25) {
+    pct = 0;   status = 'Full green canopy'; cls = 'low';
+  } else if (doy < start) {
+    pct = Math.round(clamp((doy-(start-25))/25*8, 0, 8));
+    status = 'Green — first hints coming'; cls = 'low';
+  } else if (doy <= peak) {
+    // Eased rather than linear: real foliage creeps for weeks, then turns fast.
+    // A straight line read "more than half turned" a full ten days before peak.
+    const t = clamp((doy-start)/(peak-start), 0, 1);
+    pct = Math.round(clamp(8 + Math.pow(t, 1.6) * 92, 8, 100));
+    status = pct >= 85 ? 'Near peak' : pct >= 55 ? 'Approaching peak' : 'Early color'; cls = pct >= 55 ? 'med' : 'low';
+  } else if (doy <= peak + 6) {
+    pct = 100; status = 'PEAK COLOR'; cls = 'warm';
+  } else if (doy <= end) {
+    pct = Math.round(clamp(100 - (doy-(peak+6))/(end-(peak+6))*60, 40, 100));
+    status = 'Past peak — dropping'; cls = 'med';
+  } else {
+    pct = 0; status = 'Bare — season over'; cls = 'low';
+  }
+
+  const peakDate = doyToDate(Math.round(peak));
+  const windowA  = doyToDate(Math.round(peak) - 4);
+  const windowB  = doyToDate(Math.round(peak) + 6);
+
+  let note;
+  if (coldNights == null) note = 'Overnight-low history unavailable — date-based estimate only.';
+  else if (doy > end)     note = 'Leaves are down for the year across this band.';
+  else {
+    const norm = anomaly == null ? ''
+      : anomaly >=  1.5 ? ' — colder than normal for the date, pulling peak earlier'
+      : anomaly <= -1.5 ? ' — warmer than normal for the date, pushing peak later'
+      : ' — about normal for the date';
+    note = `${coldNights} night${coldNights===1?'':'s'} at or below 45°F in the past two weeks`
+         + (frostNights ? ` (${frostNights} at or below freezing)` : '')
+         + norm
+         + `. Estimated peak window ${fmtDate(windowA)} – ${fmtDate(windowB)}.`;
+  }
+
+  return {...pt, pct, status, cls, peakDate, windowA, windowB, coldNights, frostNights, note};
+}
+</script>
+
+<script>
+// ═══════════════════════════ RENDERERS ═══════════════════════════
+
+// ── City conditions ──
+function renderWeather(weather, mackinaw){
+  const grid = document.getElementById('wx-grid');
+  if(!weather?.stations){ grid.innerHTML='<div class="err-msg">Weather unavailable</div>'; return; }
+
+  const tvc = weather.stations.find(s=>s.station==='KTVC');
+  if (tvc?.ok && tvc.temp_f != null) updateStatusBar('weather', `${tvc.temp_f}°F · ${tvc.description}`, '');
+
+  const cards = CITY_CARDS.map(c => {
+    if (c.source === 'coops') {
+      const m = mackinaw;
+      if (!m?.ok) return {label:c.label, ok:false, error:m?.error||'Unavailable'};
+      return {label:c.label, ok:true, temp_f:m.temp_f, description:'Straits gauge',
+        wind_mph:m.wind_mph, wind_gust_mph:m.wind_gust_mph, wind_dir:m.wind_dir,
+        water_temp_f:m.water_temp_f, note:'NOAA Straits', timestamp:m.timestamp};
+    }
+    const s = weather.stations.find(x=>x.station===c.station);
+    if (!s?.ok) return {label:c.label, ok:false, error:s?.error||'Unavailable'};
+    return {...s, label:c.label, note:c.note};
+  });
+
+  const live = cards.filter(c=>c.ok).length;
+  document.getElementById('wx-badge').textContent = `${live} of ${cards.length} reporting`;
+  document.getElementById('wx-badge').className = 'badge ' + (live===cards.length?'bg-green':live?'bg-yellow':'bg-red');
+
+  grid.innerHTML = cards.map(s=>{
+    if(!s.ok) return `<div class="wx-card"><div class="wx-city">${esc(s.label)}</div><div class="wx-icon">🌡️</div><div class="err-msg">${esc(s.error)}</div></div>`;
+    return `<div class="wx-card">
+      <div class="wx-city">${esc(s.label)}${s.note?` <span style="opacity:.6">· ${esc(s.note)}</span>`:''}</div>
+      <div class="wx-icon">${wxIcon(s.description)}</div>
+      <div class="wx-temp">${fmt(s.temp_f,'°')}</div>
+      <div class="wx-desc">${esc(s.description||'Unknown')}</div>
+      <div class="wx-meta">
+        <div class="wx-lbl">Wind</div><div class="wx-val">${fmt(s.wind_dir,'')} ${fmt(s.wind_mph,' mph')}</div>
+        <div class="wx-lbl">Gust</div><div class="wx-val">${fmt(s.wind_gust_mph,' mph')}</div>
+        ${s.water_temp_f!=null
+          ? `<div class="wx-lbl">Water</div><div class="wx-val">${s.water_temp_f}°F</div>`
+          : `<div class="wx-lbl">Humidity</div><div class="wx-val">${fmt(s.humidity,'%')}</div>`}
+        <div class="wx-lbl">Visibility</div><div class="wx-val">${fmt(s.visibility_mi,' mi')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Alerts ──
+function alertIcon(ev,sev){
+  if(ev==='Child Abduction Emergency'||ev==='Evacuation Immediate')return '🚨';
+  if(ev==='Blue Alert')return '🔵';
+  if(ev==='Civil Emergency Message'||ev==='Civil Danger Warning')return '⚠️';
+  if(ev==='Law Enforcement Warning')return '👮';
+  if(BEACH_ALERT_EVENTS.has(ev))return '🏖️';
+  if((ev||'').includes('Small Craft')||(ev||'').includes('Gale'))return '⛵';
+  const s=(sev||'').toLowerCase();
+  if(s==='extreme')return '🚨'; if(s==='severe')return '❗'; if(s==='moderate')return '⚠️';
+  return '📢';
+}
+
+function alertRow(a, cls){
+  const sc=(a.severity||'').toLowerCase();
+  return `<div class="alert-bar ${cls||('sev-'+sc)}">
+    <div class="alert-icon">${alertIcon(a.event,a.severity)}</div>
+    <div class="alert-text-area">
+      <div class="alert-title">${esc(a.event)}${a.areas?' — '+esc(a.areas.substring(0,90)):''}</div>
+      <div class="alert-desc">${esc((a.headline||a.description||'').substring(0,220))}</div>
+    </div>
+    <span class="badge ${sc==='extreme'||sc==='severe'?'bg-red':'bg-yellow'}">${esc(a.severity||'')}</span>
+  </div>`;
+}
+
+function renderAlerts(data){
+  const badge=document.getElementById('alert-badge');
+  const emergBadge=document.getElementById('emerg-badge');
+  const body=document.getElementById('alerts-body');
+  const land=data?.nlpAlerts||[], marine=data?.marineAlerts||[], emerg=data?.emergencyAlerts||[];
+  const total=land.length+marine.length+emerg.length;
+
+  if (emerg.length)      updateStatusBar('alerts', `🚨 ${emerg.length} Emergency`, 'red');
+  else if (land.length)  updateStatusBar('alerts', `${land.length} Active`, 'yellow');
+  else if (marine.length)updateStatusBar('alerts', `${marine.length} Marine`, 'yellow');
+  else                   updateStatusBar('alerts', 'None', 'green');
+
+  if(emerg.length){ emergBadge.textContent=`🚨 ${emerg.length} Emergency`; emergBadge.style.display=''; }
+  else { emergBadge.style.display='none'; }
+  badge.textContent = total ? `${land.length+marine.length} Up North Alerts` : 'No Active Alerts';
+  badge.className = 'badge ' + (land.length+marine.length ? 'bg-yellow' : 'bg-green');
+
+  if(!total){
+    body.innerHTML = data?.error
+      ? `<div class="err-msg">Alert feed unavailable: ${esc(data.error)}</div>`
+      : '<div class="no-alerts">✅ No active alerts for Northern Lower Michigan</div>';
+    return;
+  }
+
+  let html='';
+  if(emerg.length){
+    html += `<div class="alert-section-hdr" style="color:var(--red);">⚠️ Michigan Emergency Alerts</div>`;
+    html += emerg.map(a=>alertRow(a,'emerg')).join('');
+  }
+  if(land.length){
+    html += `<div class="alert-section-hdr"${emerg.length?' style="margin-top:10px;"':''}>🌨️ Land Alerts — Northern Lower Michigan</div>`;
+    html += land.map(a=>alertRow(a)).join('');
+  }
+  if(marine.length){
+    html += `<div class="alert-section-hdr" style="margin-top:10px;">⛵ Marine Alerts — Northern Lake Michigan &amp; Lake Huron</div>`;
+    html += marine.map(a=>alertRow(a)).join('');
+  }
+  body.innerHTML = html;
+}
+
+// ── Routes ──
+function renderRoutes(data){
+  const badge=document.getElementById('traffic-badge'), body=document.getElementById('traffic-body');
+  if(!data?.routes){ body.innerHTML='<div class="err-msg">Road data unavailable</div>'; return; }
+  const diff=data.routes.filter(r=>r.level==='difficult').length;
+  const caut=data.routes.filter(r=>r.level==='caution').length;
+  updateStatusBar('roads', diff?`${diff} Routes Difficult`:caut?`${caut} Routes Caution`:'All Clear', diff?'red':caut?'yellow':'green');
+  badge.textContent = diff?`${diff} Difficult`:caut?`${caut} Caution`:'All Clear';
+  badge.className='badge '+(diff?'bg-red':caut?'bg-yellow':'bg-green');
+  const clr={red:'var(--red)',yellow:'var(--yellow)',green:'var(--green)',muted:'var(--muted)'};
+  body.innerHTML = '<div class="route-grid">' + data.routes.map(r=>{
+    const bw = Math.min(Math.round(r.score||0),100);
+    const bc = {difficult:'bg-red',caution:'bg-yellow',clear:'bg-green',unknown:'bg-muted'}[r.level]||'bg-muted';
+    return `<div class="route-item">
+      <div class="route-hdr"><span class="route-name">${esc(r.name)}</span><span class="badge ${bc}">${esc(r.label)}</span></div>
+      <div class="route-bar"><div class="route-fill" style="width:${bw}%;background:${clr[r.color]||'var(--muted)'}"></div></div>
+      <div class="route-meta"><span>${esc(r.summary)}</span><span>Score ${Math.round(r.score||0)}</span></div>
+    </div>`;
+  }).join('') + '</div>' + (data.note?`<div class="src-note">⚙ ${esc(data.note)}</div>`:'');
+}
+
+// ── MDOT incidents & construction ──
+function renderMdotEvents(data){
+  const badge=document.getElementById('mdot-badge'), body=document.getElementById('mdot-body');
+  if(!data?.ok || data.regionMismatch){
+    badge.textContent = data?.regionMismatch ? 'Proxy update needed' : 'Unavailable';
+    badge.className = 'badge bg-muted';
+    body.innerHTML = data?.regionMismatch
+      ? '<div class="src-note">⚙ The shared MDOT proxy is still serving the Upper Peninsula county set. Redeploy tools/mdot-proxy/ (it now accepts <code>?region=nlp</code>) to turn on live Northern Lower Michigan incidents and construction. In the meantime, use <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener">MDOT Mi Drive</a>.</div>'
+      : `<div class="err-msg">${esc(data?.error||'Unavailable')}</div>
+         <div class="src-note">Try <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener">MDOT Mi Drive</a> directly.</div>`;
+    return;
+  }
+  const incidents = data.incidents||[], construction = data.construction||[];
+  const total = incidents.length + construction.length;
+  badge.textContent = total ? `${total} Active` : 'All Clear';
+  badge.className = 'badge ' + (incidents.length ? 'bg-red' : construction.length ? 'bg-yellow' : 'bg-green');
+
+  const incidentHtml = incidents.map(i=>`
+    <div class="route-item">
+      <div class="route-hdr"><span class="route-name">🚨 ${esc(i.route||'Incident')}</span><span class="badge bg-red">${esc(i.county||'')}</span></div>
+      <div class="route-meta"><span>${esc(i.location||'')}</span></div>
+      ${i.message?`<div class="route-meta"><span>${esc(i.message)}</span></div>`:''}
+      <div class="route-meta"><span>${esc(i.lanesEffected||'')}</span><span>${esc(i.reported||'')}</span></div>
+    </div>`).join('');
+
+  // MDOT routinely lists 50+ concurrent projects across these 26 counties.
+  // Show the first slice and point to Mi Drive for the rest rather than
+  // burying the incidents under a wall of lane closures.
+  const CONSTRUCTION_LIMIT = 24;
+  const shown = construction.slice(0, CONSTRUCTION_LIMIT);
+  const hidden = construction.length - shown.length;
+
+  const constructionHtml = shown.map(c=>{
+    const desc  = c.description || c.message || `${c.route||'Construction'} — see MDOT for details`;
+    const dates = [c.startDate, c.endDate].filter(Boolean).join(' – ');
+    return `<div class="route-item">
+      <div class="route-hdr"><span class="route-name">🚧 ${esc(c.route||'Construction')}</span><span class="badge bg-yellow">${esc(c.county||'')}</span></div>
+      <div class="route-meta"><span>${esc(desc)}</span></div>
+      ${dates?`<div class="route-meta"><span>${esc(dates)}</span></div>`:''}
+    </div>`;
+  }).join('');
+
+  body.innerHTML = (incidentHtml+constructionHtml)
+    ? `<div class="route-grid">${incidentHtml}${constructionHtml}</div>`
+    : '<div class="src-note">✅ No active Northern Lower Michigan incidents or construction reported</div>';
+  body.innerHTML += `<div class="src-note">⚙ MDOT Mi Drive (via proxy) · ${incidents.length} incident${incidents.length===1?'':'s'} and ${construction.length} construction project${construction.length===1?'':'s'} across the 26 Up North counties${hidden>0?`, ${hidden} more not shown`:''} · Updated ${fmtTime(data.updated)} · <a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener">Full map →</a></div>`;
+}
+
+// ── Bridge ──
+function renderBridge(data){
+  const badge=document.getElementById('bridge-badge'), body=document.getElementById('bridge-body');
+  if(!data?.ok){ body.innerHTML=`<div class="err-msg">${esc(data?.error||'Bridge data unavailable')}</div>`; return; }
+  const lvl = data.level||'clear';
+  const statusColor = {clear:'var(--green)',caution:'var(--yellow)',warning:'var(--orange)',danger:'var(--red)'}[lvl]||'var(--muted)';
+  const glyph = {clear:'🌉',caution:'⚠️',warning:'🚧',danger:'🚫'}[lvl]||'🌉';
+  const badgeCls = {clear:'bg-green',caution:'bg-yellow',warning:'bg-orange',danger:'bg-red'}[lvl]||'bg-muted';
+  const labelMap = {clear:'All Clear',caution:'Restrictions',warning:'Escort Required',danger:'BRIDGE CLOSED'};
+  badge.textContent = labelMap[lvl]||'Unknown'; badge.className='badge '+badgeCls;
+  updateStatusBar('bridge', `${glyph} ${labelMap[lvl]||'Unknown'}`, {clear:'green',caution:'yellow',warning:'yellow',danger:'red'}[lvl]||'');
+
+  const mbaLine = data.mba_status
+    ? `${esc(data.mba_status)}${data.mba_wind_range?' ('+esc(data.mba_wind_range)+')':''}`
+    : esc(labelMap[lvl]||'Unknown');
+  body.innerHTML = `<div class="bridge-center">
+    <span class="bridge-glyph">${glyph}</span>
+    <div class="bridge-status" style="color:${statusColor}"><span class="dot ${lvl==='clear'?'dot-g':lvl==='danger'?'dot-r':'dot-y'}"></span>${mbaLine}</div>
+    <div class="bridge-detail">${esc(data.restriction_detail||'')}</div>
+  </div>
+  <div class="bridge-grid">
+    <div class="bridge-cell"><div class="bcell-lbl">Wind (Pellston)</div><div class="bcell-val">${fmt(data.wind_mph,' mph')} ${fmt(data.wind_dir,'','')}</div><div class="bcell-sub">Gust ${fmt(data.wind_gust_mph,' mph')}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Deck Temp</div><div class="bcell-val">${fmt(data.temp_f,'°F')}</div><div class="bcell-sub">${data.temp_f!=null&&data.temp_f<=28?'⚠️ Black ice risk':''}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Visibility</div><div class="bcell-val">${fmt(data.visibility_mi,' mi')}</div></div>
+    <div class="bridge-cell"><div class="bcell-lbl">Source</div><div class="bcell-val" style="font-size:11px;font-weight:normal;color:var(--muted)">Bridge Authority</div><div class="bcell-sub">${fmtTime(data.timestamp)}</div></div>
+  </div>
+  <div class="src-note">Official restriction status from the <a href="https://www.mackinacbridge.org/fares-traffic/conditions/" target="_blank" rel="noopener">Mackinac Bridge Authority</a>. About 4.46 million vehicles crossed in 2025. Wind and deck temperature are the Pellston observation, the nearest official station.</div>`;
+}
+
+// ── Ferries ──
+function renderFerries(ferries){
+  const badge=document.getElementById('ferry-badge'), body=document.getElementById('ferry-body');
+  const running = ferries.filter(f=>f.running).length;
+  badge.textContent = running ? `${running} sailing` : 'Winter — most closed';
+  badge.className = 'badge ' + (running ? 'bg-green' : 'bg-muted');
+  body.innerHTML = `<div class="ferry-list">` + ferries.map(f=>`
+    <a class="ferry-item" href="${esc(f.url)}" target="_blank" rel="noopener">
+      <div class="ferry-top">
+        <span class="ferry-name">⛴️ ${f.name}</span>
+        <span class="badge ${f.cls}">${f.status}</span>
+      </div>
+      <div class="ferry-route">${f.route}</div>
+      <div class="ferry-season">${esc(f.season)}</div>
+    </a>`).join('') + `</div>
+    <div class="src-note">Season windows are each operator's typical published season, used to show whether service is running today. Departure times change week to week — always confirm today's schedule with the operator before you drive up.</div>`;
+}
+
+// ── Lakes / marine ──
+function renderLakes(data){
+  const grid = document.getElementById('lakes-grid');
+  if(!data?.lakes?.length){ grid.innerHTML='<div class="err-msg">Lake data unavailable</div>'; return; }
+  grid.innerHTML = data.lakes.map(l=>{
+    const hasLevel = l.level_ft!=null;
+    const diff = l.diff_in||0;
+    const barPct = hasLevel ? clamp(50+(diff*3),5,95) : 50;
+    const barColor = diff>3?'var(--green)':diff<-3?'var(--red)':'var(--blue)';
+    return `<div class="lake-card">
+      <div class="lake-name">${esc(l.name)}</div>
+      <div class="lake-stat" style="margin-bottom:6px;"><span style="color:var(--muted);font-weight:400">${esc(l.blurb||'')}</span></div>
+      ${hasLevel?`
+      <div class="lake-stat">Level <span>${l.level_ft} ft IGLD</span></div>
+      <div class="lake-stat">vs long-term mean <span style="color:${diff>=0?'var(--green)':'var(--red)'};">${esc(l.diff_label)}</span></div>
+      <div class="level-bar"><div class="level-fill" style="width:${barPct}%;background:${barColor}"></div></div>`
+      :`<div class="err-msg">${esc(l.level_error||'Level unavailable')}</div>`}
+      ${l.water_temp_f!=null?`<div class="lake-stat" style="margin-top:8px;">Water temp <span>${l.water_temp_f}°F</span></div>`:''}
+      ${l.wave_height_ft!=null?`<div class="lake-stat">Wave height <span>${l.wave_height_ft} ft</span></div>`:''}
+      ${l.buoy_name?`<div class="src-note" style="margin-top:6px;">Buoy: ${esc(l.buoy_name)} · ${fmtTime(l.buoy_time)}</div>`
+        :l.buoy_error?`<div class="src-note" style="margin-top:6px;">${esc(l.buoy_error)}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── Beaches ──
+function renderBeaches(beaches, beachAlerts){
+  const badge=document.getElementById('beach-badge'), body=document.getElementById('beach-body');
+  const withTemp = beaches.filter(b=>b.temp!=null);
+  const warmest  = withTemp.length ? Math.max(...withTemp.map(b=>b.temp)) : null;
+
+  if (beachAlerts?.length) { badge.textContent = `⚠️ ${beachAlerts.length} beach hazard`; badge.className='badge bg-red'; }
+  else if (withTemp.length){ badge.textContent = `${withTemp.length} of ${beaches.length} reporting`; badge.className='badge bg-blue'; }
+  else                     { badge.textContent = 'No readings'; badge.className='badge bg-muted'; }
+
+  if (warmest != null) updateStatusBar('water', `${warmest}°F warmest`, warmest>=70?'green':warmest>=60?'blue':'muted');
+
+  const hazardHtml = (beachAlerts||[]).length
+    ? (beachAlerts.map(a=>`
+        <div class="alert-bar sev-${(a.severity||'').toLowerCase()}" style="margin-bottom:10px;">
+          <div class="alert-icon">🏖️</div>
+          <div class="alert-text-area">
+            <div class="alert-title">${esc(a.event)}${a.areas?' — '+esc(a.areas.substring(0,90)):''}</div>
+            <div class="alert-desc">${esc((a.headline||a.description||'').substring(0,220))}</div>
+          </div>
+        </div>`).join(''))
+    : '';
+
+  body.innerHTML = hazardHtml + `<div class="beach-grid">` + beaches.map(b=>`
+    <div class="beach-card">
+      <div class="beach-name">${esc(b.name)}</div>
+      <div class="beach-sub">${esc(b.sub)}</div>
+      ${b.temp!=null
+        ? `<div class="beach-temp">${b.temp}<small>°F water</small></div>`
+        : `<div class="beach-temp" style="font-size:15px;color:var(--muted)">No reading</div>`}
+      <div class="beach-verdict ${b.vcls}">${esc(b.verdict)}</div>
+      <div class="beach-meta">
+        <span>Waves <b>${b.wave!=null?b.wave+' ft':'—'}</b></span>
+        <span>${esc(b.src||'')}</span>
+      </div>
+      ${b.err?`<div class="src-note" style="margin-top:5px;">${esc(b.err)}</div>`:''}
+    </div>`).join('') + `</div>
+    <div class="src-note">Water temperature is the single best predictor of a comfortable Great Lakes swim — Lake Michigan can sit 20°F below the air temperature well into July, and an offshore wind can drop a beach 15°F overnight. Readings come from NOAA shore gauges and NDBC buoys near each shoreline, not from the swim area itself. Beach closures for bacteria are posted separately by county health departments — check <a href="https://www.egle.state.mi.us/beach/" target="_blank" rel="noopener">Michigan BeachGuard</a> before swimming.</div>
+    <div class="links-hdr">Beach Cameras &amp; Lakeshore</div>
+    <div class="links-grid">
+      <a href="https://petoskeyarea.com/winter-fun/webcams/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">📹</div><div class="lc-label">Petoskey Area Cams</div><div class="lc-sub">Little Traverse Bay &amp; downtown</div></a>
+      <a href="https://www.nps.gov/slbe/planyourvisit/conditions.htm" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏜️</div><div class="lc-label">Sleeping Bear Conditions</div><div class="lc-sub">National Lakeshore · NPS</div></a>
+      <a href="https://www.egle.state.mi.us/beach/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚩</div><div class="lc-label">Michigan BeachGuard</div><div class="lc-sub">Water-quality closures by county</div></a>
+      <a href="https://www.weather.gov/apx/beachhazards" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌊</div><div class="lc-label">NWS Beach Hazards</div><div class="lc-sub">Rip currents &amp; swim risk</div></a>
+      <a href="https://www.glerl.noaa.gov/data/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🔬</div><div class="lc-label">NOAA GLERL</div><div class="lc-sub">Great Lakes research data</div></a>
+      <a href="#cameras" class="link-card"><div class="lc-icon">🎥</div><div class="lc-label">Traffic Cameras</div><div class="lc-sub">Bayfront &amp; lakeshore road cams</div></a>
+    </div>`;
+}
+
+// ── Gas ──
+function renderGasPrices(data){
+  const badge=document.getElementById('gas-badge'), body=document.getElementById('gas-body');
+  if(!data?.ok){ body.innerHTML=`<div class="err-msg">${esc(data?.error||'Unavailable')}</div>`; return; }
+  const p = v => v!=null ? '$'+v.toFixed(2) : '—';
+  const period = data.period ? new Date(data.period+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+  badge.textContent = period ? 'Wk of '+period : 'Midwest Avg';
+  badge.className = 'badge bg-blue';
+  if (data.regular != null) updateStatusBar('gas', `$${data.regular.toFixed(2)}/gal`, 'blue');
+  body.innerHTML = `<div class="gas-grid">
+    <div class="gas-item"><div class="gas-label">Regular</div><div class="gas-price">${p(data.regular)}</div><div class="gas-unit">/gal</div></div>
+    <div class="gas-item"><div class="gas-label">Diesel</div><div class="gas-price" style="color:var(--blue)">${p(data.diesel)}</div><div class="gas-unit">/gal</div></div>
+  </div>
+  <div class="gas-note">EIA Midwest weekly average &nbsp;·&nbsp; <a href="https://www.gasbuddy.com/gasprices/michigan/traverse-city" target="_blank" rel="noopener">Local prices →</a></div>`;
+}
+
+// ── Snow ──
+function renderSnow(climate, weather){
+  const badge=document.getElementById('snow-badge'), body=document.getElementById('snow-body');
+  const depthBy = {};
+  for (const s of (weather?.stations||[])) if (s.ok && s.snow_depth_in!=null) depthBy[s.station]=s.snow_depth_in;
+  const depthFor = {north:depthBy.KPLN, central:depthBy.KGLR ?? depthBy.KTVC, south:depthBy.KCAD ?? depthBy.KHTL};
+
+  const pts = (climate?.points||[]);
+  const total7 = pts.reduce((a,p)=>a+(p.ok?p.snow_7d:0),0);
+  const fcst   = pts.reduce((a,p)=>Math.max(a,p.ok?p.snow_fcst:0),0);
+  if (total7 >= 1)      { badge.textContent = `${Math.round(total7*10)/10}″ past week`; badge.className='badge bg-blue'; }
+  else if (fcst >= 1)   { badge.textContent = `${fcst}″ in forecast`; badge.className='badge bg-blue'; }
+  else                  { badge.textContent = 'No snow reported'; badge.className='badge bg-muted'; }
+
+  const tiles = pts.map(p=>{
+    const depth = depthFor[p.key];
+    if(!p.ok) return `<div class="snow-tile"><div class="snow-place">${esc(p.label)}</div><div class="err-msg">${esc(p.error||'Unavailable')}</div></div>`;
+    return `<div class="snow-tile">
+      <div class="snow-place">❄️ ${esc(p.label)}</div>
+      <div class="snow-row"><span>New snow, 24h</span><b>${p.snow_1d}″</b></div>
+      <div class="snow-row"><span>Past 7 days</span><b>${p.snow_7d}″</b></div>
+      <div class="snow-row"><span>Next 3 days</span><b>${p.snow_fcst}″</b></div>
+      <div class="snow-row"><span>Snow on ground</span><b>${depth!=null?depth+'″':'—'}</b></div>
+    </div>`;
+  }).join('');
+
+  body.innerHTML = `<div class="snow-grid">${tiles}</div>
+    <div class="src-note">Snowfall totals and the three-day outlook come from Open-Meteo's northern Michigan grid; snow on the ground is the reported depth at the nearest NWS station (Pellston, Gaylord and Cadillac). Lake-effect bands off Lake Michigan can drop several inches on Gaylord or Boyne while Traverse City stays dry, so treat the regional numbers as a guide and check the hill directly.</div>
+    <div class="links-hdr">Ski Areas — Official Snow Reports</div>
+    <div class="ski-grid">` + SKI_AREAS.map(s=>`
+      <div class="ski-tile">
+        <div class="ski-name">⛷️ ${esc(s.name)} <span class="ski-loc">${esc(s.loc)}</span></div>
+        <a class="ski-link" href="${esc(s.url)}" target="_blank" rel="noopener">Official conditions →</a>
+      </div>`).join('') + `</div>`;
+}
+
+// ── Trails & forest roads ──
+function renderTrails(data){
+  const badge=document.getElementById('trails-badge'), body=document.getElementById('trails-body');
+  const linksHtml = `<div class="links-hdr">Trail, ORV &amp; Forest-Road Resources</div>
+  <div class="links-grid">
+    <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🛷</div><div class="lc-label">Snowmobile Trail Reports</div><div class="lc-sub">Grooming &amp; conditions · MI DNR</div></a>
+    <a href="https://www.michigan.gov/dnr/things-to-do/orv-trails" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🛻</div><div class="lc-label">ORV Trails &amp; Routes</div><div class="lc-sub">Open/closed status · MI DNR</div></a>
+    <a href="https://www.fs.usda.gov/r09/huron-manistee/alerts" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌲</div><div class="lc-label">Huron-Manistee Alerts</div><div class="lc-sub">Forest-road &amp; area closures · USFS</div></a>
+    <a href="https://www.michigan.gov/dnr/places/state-trails" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🗺️</div><div class="lc-label">DNR Trail Maps</div><div class="lc-sub">Hiking, biking, ORV, snowmobile</div></a>
+    <a href="https://www.trailforks.com/region/northern-lower-michigan/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚵</div><div class="lc-label">Trailforks</div><div class="lc-sub">VASA, Glacial Hills, Big M</div></a>
+    <a href="https://www.alltrails.com/us/michigan/traverse-city" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🥾</div><div class="lc-label">AllTrails</div><div class="lc-sub">Hiking around Traverse City</div></a>
+    <a href="https://www.nps.gov/slbe/planyourvisit/conditions.htm" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏜️</div><div class="lc-label">Sleeping Bear</div><div class="lc-sub">Park conditions &amp; closures</div></a>
+    <a href="https://northcountrytrail.org/trail/michigan-lower-peninsula/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🧭</div><div class="lc-label">North Country Trail</div><div class="lc-sub">Lower Peninsula section</div></a>
+  </div>`;
+
+  if(!data?.ok){
+    badge.textContent='Unavailable'; badge.className='badge bg-muted';
+    body.innerHTML = `<div class="err-msg">${esc(data?.error||'DNR feed unavailable')}</div>` + linksHtml;
+    return;
+  }
+  const {closures} = data;
+  badge.textContent = closures.length ? `${closures.length} DNR notices` : 'No active notices';
+  badge.className = 'badge ' + (closures.some(c=>c.status==='closed')?'bg-red':closures.length?'bg-yellow':'bg-green');
+  const sLabel = {open:'Open',closed:'Closed',rerouted:'Rerouted',caution:'Caution',modified:'Updated'};
+
+  const cHtml = closures.length
+    ? `<div class="trail-closure-list">` + closures.map(c=>`
+        <div class="trail-closure-item">
+          <div class="tcl-status ${c.status}">${sLabel[c.status]||'Notice'}</div>
+          <div class="tcl-body">
+            <div class="tcl-name">${esc(c.kind)} · ${esc(c.trail)}</div>
+            <div class="tcl-county">${esc(c.county)} County · MI DNR${c.edit?` · Updated ${c.edit.toLocaleDateString([],{month:'short',day:'numeric'})}`:''}</div>
+            <div class="tcl-comment">${esc(c.comment)}</div>
+          </div>
+        </div>`).join('') + `</div>`
+    : `<div style="color:var(--muted);font-size:13px;margin-bottom:14px;">✅ No active DNR trail-closure notices for Northern Lower Michigan counties in ${new Date().getFullYear()}.</div>`;
+
+  body.innerHTML = cHtml
+    + `<div class="src-note">Live from the Michigan DNR's temporary trail-closure layer, filtered to the 26 Northern Lower Peninsula counties. National forest roads in the Huron-Manistee are managed separately by the Forest Service — check their alerts page below, especially during spring breakup and fire season.</div>`
+    + linksHtml;
+}
+
+// ── Fall color ──
+function renderFallColor(regions){
+  const badge=document.getElementById('fall-badge'), body=document.getElementById('fall-body');
+  const best = regions.reduce((a,b)=> b.pct>a.pct ? b : a, regions[0]);
+  const anyColor = regions.some(r=>r.pct>=15);
+  badge.textContent = anyColor ? `${best.label} ${best.pct}%` : 'Green canopy';
+  badge.className = 'badge ' + (best.pct>=85?'bg-orange':best.pct>=40?'bg-yellow':'bg-green');
+
+  body.innerHTML = `<div class="fall-grid">` + regions.map(r=>`
+    <div class="fall-card">
+      <div class="fall-region">🍁 ${esc(r.label)}</div>
+      <div class="fall-places">${esc(r.places)}</div>
+      <div class="fall-pct">${r.pct}<small>% color</small></div>
+      <div class="fall-label" style="color:${r.cls==='warm'?'var(--maple)':r.cls==='med'?'var(--yellow)':'var(--muted)'}">${esc(r.status)}</div>
+      <div class="fall-bar"><div class="fall-fill" style="width:${r.pct}%"></div></div>
+      <div class="fall-note">${esc(r.note)}</div>
+    </div>`).join('') + `</div>
+    <div class="src-note">⚙ <b>This is a model, not a field survey.</b> Michigan has no live foliage feed, so each band's progress is estimated from a typical progression curve for its latitude, shifted by whether its nights at or below 45°F are running above or below normal <i>for the date</i> (Open-Meteo history). Elevation, species mix and drought all move real color days either way — the higher ground around Gaylord and the hardwoods along M-119 usually turn first. Ground-truth it with the sources below before planning a drive.</div>
+    <div class="links-hdr">Fall Color Sources</div>
+    <div class="links-grid">
+      <a href="https://www.michigan.gov/dnr/places/state-forests" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🍂</div><div class="lc-label">Michigan DNR Fall Color</div><div class="lc-sub">Official weekly color map</div></a>
+      <a href="https://www.michigan.org/fall-color-map" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🗺️</div><div class="lc-label">Pure Michigan Color Map</div><div class="lc-sub">Statewide progression</div></a>
+      <a href="https://www.michigan.org/article/trip-idea/tunnel-trees-m-119" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚗</div><div class="lc-label">M-119 Tunnel of Trees</div><div class="lc-sub">The signature color drive</div></a>
+      <a href="https://www.michigan.gov/recsearch/parks/hartwick" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌲</div><div class="lc-label">Hartwick Pines</div><div class="lc-sub">Old-growth pines near Grayling</div></a>
+    </div>`;
+}
+</script>
+
+<script>
+// ═══════════════════════ TODAY UP NORTH ═══════════════════════
+
+const TODAY_STORAGE_KEY  = 'upnorth-today-prefs';
+const EVENTS_STORAGE_KEY = 'upnorth-weekend-events';
+
+let lastAutoValues = {};   // what the model inferred, for pre-filling the edit panel
+let lastContext    = {};   // last fetched data, so a saved edit can re-render immediately
+
+function loadTodayPrefs() {
+  try { return JSON.parse(localStorage.getItem(TODAY_STORAGE_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+
+function saveTodayEdits() {
+  const prefs = {
+    trail_status: document.getElementById('ef-trail-status').value,
+    trail_note:   document.getElementById('ef-trail-note').value,
+    boat_status:  document.getElementById('ef-boat-status').value,
+    boat_note:    document.getElementById('ef-boat-note').value,
+    fish_status:  document.getElementById('ef-fish-status').value,
+    fish_note:    document.getElementById('ef-fish-note').value,
+  };
+  localStorage.setItem(TODAY_STORAGE_KEY, JSON.stringify(prefs));
+  toggleTodayEdit();
+  renderTodayUpNorth(lastContext);
+}
+
+function toggleTodayEdit() {
+  const panel = document.getElementById('today-edit-panel');
+  const btn   = document.getElementById('today-edit-btn');
+  const isOpen = panel.style.display === 'grid';
+  if (!isOpen) {
+    const p = loadTodayPrefs(), av = lastAutoValues;
+    document.getElementById('ef-trail-status').value = p.trail_status || av.trail_status || 'good';
+    document.getElementById('ef-boat-status').value  = p.boat_status  || av.boat_status  || 'good';
+    document.getElementById('ef-fish-status').value  = p.fish_status  || av.fish_status  || 'fair';
+    const tn=document.getElementById('ef-trail-note'), bn=document.getElementById('ef-boat-note'), fn=document.getElementById('ef-fish-note');
+    tn.value = p.trail_note || ''; bn.value = p.boat_note || ''; fn.value = p.fish_note || '';
+    tn.placeholder = av.trail_note || 'e.g. VASA singletrack tacky and fast';
+    bn.placeholder = av.boat_note  || 'e.g. West Bay glassy before noon';
+    fn.placeholder = av.fish_note  || 'e.g. Salmon staging off Frankfort';
+  }
+  panel.style.display = isOpen ? 'none' : 'grid';
+  btn.textContent = isOpen ? '✏️ Edit' : '✕ Close';
+}
+
+// Which of the three signature seasons gets the full-width featured card.
+function currentSeason(now = new Date()) {
+  const doy = dayOfYear(now);
+  if (doy >= 253 && doy <= 314) return 'fall';    // Sep 10 – Nov 10
+  if (doy >= 335 || doy <= 79)  return 'snow';    // Dec 1  – Mar 20
+  return 'water';                                  // the rest of the year
+}
+
+function featureCardHtml(ctx) {
+  const season = currentSeason();
+  const s = x => esc(x??'—');
+
+  if (season === 'fall') {
+    const regions = ctx.fallRegions || [];
+    const best = regions.length ? regions.reduce((a,b)=>b.pct>a.pct?b:a) : null;
+    const cls  = best ? (best.pct>=95?'warm':best.pct>=55?'med':'low') : 'low';
+    return `<div class="feature-card autumn">
+      <div class="feature-left">
+        <span class="feature-icon">🍁</span>
+        <div class="feature-topic">Fall Color Right Now</div>
+        <div class="feature-rating ${cls}">${best?s(best.status):'Loading…'}</div>
+        <div class="feature-tip">${best?`Best color: ${s(best.label)}`:'Estimating color progress…'}</div>
+        <a class="feature-more" href="#fallcolor">Full color forecast →</a>
+      </div>
+      <div class="feature-right">
+        ${regions.map(r=>`
+        <div class="signal">
+          <div class="signal-label">${s(r.label)}</div>
+          <div class="signal-val ${r.pct>=95?'sig-warn':r.pct>=55?'sig-warn':'sig-neu'}">${r.pct}% · ${s(r.status)}</div>
+          <div class="signal-src">Peak ~${r.peakDate?fmtDate(r.peakDate):'—'}</div>
+        </div>`).join('')}
+        <div class="signal">
+          <div class="signal-label">Signature Drive</div>
+          <div class="signal-val sig-neu">M-119 Tunnel of Trees</div>
+          <div class="signal-src">Harbor Springs → Cross Village</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if (season === 'snow') {
+    const pts = (ctx.climate?.points||[]).filter(p=>p.ok);
+    const new24 = pts.length ? Math.max(...pts.map(p=>p.snow_1d)) : null;
+    const wk    = pts.length ? Math.max(...pts.map(p=>p.snow_7d)) : null;
+    const fc    = pts.length ? Math.max(...pts.map(p=>p.snow_fcst)) : null;
+    const depths = (ctx.weather?.stations||[]).filter(s=>s.ok&&s.snow_depth_in!=null).map(s=>s.snow_depth_in);
+    const depth = depths.length ? Math.max(...depths) : null;
+    let label='Loading…', cls='low', tip='Checking northern Michigan snow…';
+    if (new24 != null) {
+      if      (new24 >= 6) { label='POWDER DAY';      cls='high'; tip='Lake effect is delivering — get to the hill early'; }
+      else if (new24 >= 2) { label='Fresh Snow';      cls='high'; tip='New snow on the trails and hills'; }
+      else if ((depth??0) >= 6 || (wk??0) >= 4) { label='Good Base'; cls='med'; tip='Groomers and trails should be riding well'; }
+      else if ((depth??0) >= 1) { label='Thin Cover'; cls='med'; tip='Snow on the ground but watch for bare spots'; }
+      else                 { label='No Snow Cover';  cls='low'; tip='Bare ground across most of the region'; }
+    }
+    return `<div class="feature-card winter">
+      <div class="feature-left">
+        <span class="feature-icon">❄️</span>
+        <div class="feature-topic">Snow Report</div>
+        <div class="feature-rating ${cls}">${label}</div>
+        <div class="feature-tip">${s(tip)}</div>
+        <a class="feature-more" href="#trails">Snow, ski &amp; snowmobile →</a>
+      </div>
+      <div class="feature-right">
+        <div class="signal"><div class="signal-label">New Snow · 24h</div><div class="signal-val ${new24>=2?'sig-good':'sig-neu'}">${new24!=null?new24+'″':'—'}</div><div class="signal-src">Open-Meteo · regional max</div></div>
+        <div class="signal"><div class="signal-label">Past 7 Days</div><div class="signal-val sig-neu">${wk!=null?wk+'″':'—'}</div><div class="signal-src">Open-Meteo</div></div>
+        <div class="signal"><div class="signal-label">Snow on Ground</div><div class="signal-val ${depth>=6?'sig-good':'sig-neu'}">${depth!=null?depth+'″':'—'}</div><div class="signal-src">NWS station depth</div></div>
+        <div class="signal"><div class="signal-label">Next 3 Days</div><div class="signal-val ${fc>=3?'sig-good':'sig-neu'}">${fc!=null?fc+'″':'—'}</div><div class="signal-src">Forecast</div></div>
+      </div>
+    </div>`;
+  }
+
+  // Default: beaches & water
+  const beaches = ctx.beaches || [];
+  const withTemp = beaches.filter(b=>b.temp!=null);
+  const warmest = withTemp.length ? withTemp.reduce((a,b)=>b.temp>a.temp?b:a) : null;
+  const waves = beaches.filter(b=>b.wave!=null).map(b=>b.wave);
+  const maxWave = waves.length ? Math.max(...waves) : null;
+  const airs = (ctx.weather?.stations||[]).filter(s=>s.ok&&s.temp_f!=null).map(s=>s.temp_f);
+  const airMax = airs.length ? Math.max(...airs) : null;
+  const hazard = ctx.alerts?.beachAlerts?.[0] || null;
+
+  let label='Loading…', cls='low', tip='Checking Great Lakes water temperatures…';
+  if (warmest) {
+    if      (hazard)            { label='BEACH HAZARD'; cls='low';  tip='NWS has posted a swim hazard — read the alert before you go in'; }
+    else if (warmest.temp>=72)  { label='GREAT BEACH DAY'; cls='high'; tip='Water is genuinely warm for the Great Lakes'; }
+    else if (warmest.temp>=66)  { label='Good Swimming';   cls='high'; tip='Comfortable in the bays and shallow shorelines'; }
+    else if (warmest.temp>=60)  { label='Brisk but Fine';  cls='med';  tip='Bays warm faster than the open lake — try Little Traverse'; }
+    else                        { label='Cold Water';      cls='low';  tip='Wade, don’t swim — cold shock is the real Great Lakes risk'; }
+  }
+  return `<div class="feature-card">
+    <div class="feature-left">
+      <span class="feature-icon">🏖️</span>
+      <div class="feature-topic">Beaches &amp; Water Today</div>
+      <div class="feature-rating ${cls}">${label}</div>
+      <div class="feature-tip">${s(tip)}</div>
+      <a class="feature-more" href="#water">Beach &amp; marine conditions →</a>
+    </div>
+    <div class="feature-right">
+      <div class="signal"><div class="signal-label">Warmest Water</div><div class="signal-val ${warmest&&warmest.temp>=66?'sig-good':'sig-neu'}">${warmest?warmest.temp+'°F':'—'}</div><div class="signal-src">${warmest?s(warmest.name):'NOAA'}</div></div>
+      <div class="signal"><div class="signal-label">Air Temp · High Now</div><div class="signal-val sig-neu">${airMax!=null?airMax+'°F':'—'}</div><div class="signal-src">NWS · warmest town</div></div>
+      <div class="signal"><div class="signal-label">Waves</div><div class="signal-val ${maxWave>=3?'sig-warn':'sig-good'}">${maxWave!=null?maxWave+' ft':'—'}</div><div class="signal-src">NDBC buoys</div></div>
+      <div class="signal"><div class="signal-label">Swim Hazards</div><div class="signal-val ${hazard?'sig-bad':'sig-good'}">${hazard?s(hazard.event):'None posted'}</div><div class="signal-src">NWS · live</div></div>
+    </div>
+  </div>`;
+}
+
+function renderTodayUpNorth(ctx) {
+  lastContext = ctx || {};
+  const prefs = loadTodayPrefs();
+  const month = new Date().getMonth();
+  const weather = ctx.weather, climate = ctx.climate;
+
+  // ── Hiking & biking: manual override, else weather + recent rainfall ──
+  let trStatus = prefs.trail_status || 'good';
+  let trNote   = prefs.trail_note   || '';
+  if (!prefs.trail_status && weather) {
+    const tvc = weather.stations.find(s=>s.station==='KTVC');
+    const rain3 = climate?.byKey?.central?.ok ? climate.byKey.central.rain_3d : null;
+    if (tvc?.ok) {
+      const d = (tvc.description||'').toLowerCase();
+      const recentRain = (rain3!=null && rain3 > 0.3) || (tvc.precip_6h_in||0) > 0.15;
+      if      (d.includes('snow')||d.includes('blizzard')||(tvc.snow_depth_in>2)) trStatus='snowy';
+      else if (d.includes('freezing')||d.includes('sleet')||d.includes('ice'))    trStatus='snowy';
+      else if (d.includes('rain')||d.includes('shower')||recentRain)              trStatus='muddy';
+      else if (tvc.temp_f > 55) trStatus='excellent';
+      else if (tvc.temp_f > 38) trStatus='good';
+      if (!trNote) {
+        const rainHint = recentRain && rain3!=null ? ` · ${rain3.toFixed(2)}″ rain in 3 days` : '';
+        trNote = `Traverse City ${tvc.temp_f!=null?tvc.temp_f+'°F':''} — ${tvc.description}${rainHint}`;
+      }
+    }
+  }
+  if (!trNote) trNote = 'Check local conditions before heading out';
+  const trLabels = {excellent:'Excellent', good:'Good', muddy:'Muddy / Wet', snowy:'Snowy / Icy', poor:'Poor'};
+  const trCls    = {excellent:'good', good:'good', muddy:'med', snowy:'med', poor:'low'};
+
+  // ── Boating & paddling: manual override, else waves + wind + marine alerts ──
+  let boStatus = prefs.boat_status || 'good';
+  let boNote   = prefs.boat_note   || '';
+  if (!prefs.boat_status) {
+    const waves = (ctx.beaches||[]).filter(b=>b.wave!=null).map(b=>b.wave);
+    const maxWave = waves.length ? Math.max(...waves) : null;
+    const gusts = (weather?.stations||[]).filter(s=>s.ok&&s.wind_gust_mph!=null).map(s=>s.wind_gust_mph);
+    const maxGust = gusts.length ? Math.max(...gusts) : null;
+    const marineAlerts = ctx.alerts?.marineAlerts||[];
+    const iceMonths = month===0||month===1||month===11;
+    if (iceMonths)                                   boStatus='closed';
+    else if (marineAlerts.some(a=>/gale|storm/i.test(a.event))) boStatus='rough';
+    else if (maxWave!=null && maxWave>=4)            boStatus='rough';
+    else if ((maxWave!=null && maxWave>=2) || marineAlerts.length || (maxGust!=null && maxGust>=25)) boStatus='choppy';
+    else if (maxWave!=null && maxWave<=1 && (maxGust==null||maxGust<15)) boStatus='excellent';
+    if (!boNote) {
+      const bits = [];
+      if (maxWave!=null) bits.push(`waves to ${maxWave} ft`);
+      if (maxGust!=null) bits.push(`gusts to ${maxGust} mph`);
+      if (marineAlerts.length) bits.push(`${marineAlerts.length} marine advisor${marineAlerts.length===1?'y':'ies'}`);
+      boNote = iceMonths ? 'Most marinas and launches are out for the winter'
+             : bits.length ? bits.join(' · ') : 'No marine advisories posted';
+    }
+  }
+  const boLabels = {excellent:'Calm — great day out', good:'Good', choppy:'Choppy — small craft caution', rough:'Rough — stay in', closed:'Off season'};
+  const boCls    = {excellent:'good', good:'good', choppy:'med', rough:'low', closed:'low'};
+
+  // ── Fishing: manual, with a seasonal default ──
+  const fiStatus = prefs.fish_status || (month>=3 && month<=9 ? 'fair' : 'slow');
+  const fiLabels = {peak:'PEAK — Hot bite', improving:'↑ Improving', fair:'Fair', slow:'Slow', closed:'Closed / Off Season'};
+  const fiCls    = {peak:'high', improving:'good', fair:'med', slow:'low', closed:'low'};
+  const fiNote   = prefs.fish_note || (month>=3 && month<=9
+    ? 'Check DNR regulations — seasons differ by species and water'
+    : 'Ice fishing on inland lakes when cover allows — check the ice yourself');
+
+  lastAutoValues = {
+    trail_status: trStatus, trail_note: trNote,
+    boat_status:  boStatus, boat_note:  boNote,
+    fish_status:  fiStatus, fish_note:  fiNote,
+  };
+
+  document.getElementById('today-grid').innerHTML = featureCardHtml(ctx) + `
+    <div class="today-card">
+      <span class="tc-icon">🥾</span>
+      <div class="tc-topic">Hiking &amp; Biking</div>
+      <div class="tc-status ${trCls[trStatus]||'low'}">${trLabels[trStatus]||trStatus}</div>
+      <div class="tc-desc">${esc(trNote)}</div>
+    </div>
+    <div class="today-card">
+      <span class="tc-icon">🛶</span>
+      <div class="tc-topic">Boating &amp; Paddling</div>
+      <div class="tc-status ${boCls[boStatus]||'low'}">${boLabels[boStatus]||boStatus}</div>
+      <div class="tc-desc">${esc(boNote)}</div>
+    </div>
+    <div class="today-card">
+      <span class="tc-icon">🎣</span>
+      <div class="tc-topic">Fishing Outlook</div>
+      <div class="tc-status ${fiCls[fiStatus]||'low'}">${fiLabels[fiStatus]||fiStatus}</div>
+      <div class="tc-desc">${esc(fiNote)}</div>
+    </div>`;
+}
+
+// ═══════════════════════ THIS WEEKEND ═══════════════════════
+
+// The upcoming Friday–Sunday. On Saturday and Sunday that is the weekend you
+// are already in, not the next one.
+function weekendDates(now = new Date()) {
+  const day = now.getDay(); // 0 Sun … 6 Sat
+  const fri = new Date(now);
+  if (day === 0)      fri.setDate(now.getDate() - 2);      // Sunday: this weekend started Friday
+  else if (day === 6) fri.setDate(now.getDate() - 1);      // Saturday: likewise
+  else                fri.setDate(now.getDate() + (5 - day));
+  const sun = new Date(fri); sun.setDate(fri.getDate() + 2);
+  return {fri, sun};
+}
+
+function loadEvents() {
+  try { return JSON.parse(localStorage.getItem(EVENTS_STORAGE_KEY)) || []; }
+  catch(e) { return []; }
+}
+
+function saveEvents() {
+  const lines = document.getElementById('ef-events').value.split('\n')
+    .map(l=>l.trim()).filter(Boolean)
+    .map(l=>{
+      const [when, name, where] = l.split('|').map(x=>(x||'').trim());
+      return {when: when||'This weekend', name: name||when, where: where||''};
+    })
+    .filter(e=>e.name);
+  localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(lines));
+  toggleEventsEdit();
+  renderEvents();
+}
+
+function toggleEventsEdit() {
+  const panel = document.getElementById('events-edit-panel');
+  const btn   = document.getElementById('events-edit-btn');
+  const isOpen = panel.style.display === 'grid';
+  if (!isOpen) {
+    document.getElementById('ef-events').value =
+      loadEvents().map(e=>[e.when, e.name, e.where].join(' | ')).join('\n');
+  }
+  panel.style.display = isOpen ? 'none' : 'grid';
+  btn.textContent = isOpen ? '✏️ Edit Highlights' : '✕ Close';
+}
+
+function renderEvents() {
+  const {fri, sun} = weekendDates();
+  document.getElementById('weekend-range').textContent =
+    `${fri.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'})} – ${sun.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'})}`;
+
+  const events = loadEvents();
+  const list = document.getElementById('event-list');
+  list.innerHTML = events.length
+    ? events.map(e=>`
+      <div class="event-item">
+        <div class="event-when">${esc(e.when)}</div>
+        <div class="event-name">${esc(e.name)}</div>
+        ${e.where?`<div class="event-where">📍 ${esc(e.where)}</div>`:''}
+      </div>`).join('')
+    : `<div class="event-empty">No hand-picked highlights for this weekend yet — the regional calendars below are the live source. Northern Michigan's big ones run on a predictable rhythm: the National Cherry Festival in Traverse City in early July, Alpenfest in Gaylord in July, Alpena's Thunder Bay events through the summer, and color-tour weekends across the region through October.</div>`;
+}
+
+// ═══════════════════════ CAMERAS ═══════════════════════
+
+function camTile(cam, ts, isFeatured) {
+  return `<div class="cam-tile${isFeatured?' featured':''}" onclick="window.open('${esc(cam.url)}','_blank')">
+    <div class="cam-img-wrap">
+      ${isFeatured?'<div class="cam-featured-badge">LIVE</div>':''}
+      <img class="cam-img" data-src="${esc(cam.url)}" src="${esc(cam.url)}?t=${ts}" alt="${esc(cam.label)}"
+           onerror="this.style.opacity='.25'" loading="lazy">
+    </div>
+    <div class="cam-label"><strong>${esc(cam.label)}</strong>${esc(cam.sub)}</div>
+  </div>`;
+}
+
+function renderCameras(){
+  const ts = Date.now();
+  document.getElementById('cam-featured').innerHTML = FEATURED_CAMS.map(c=>camTile(c, ts, true)).join('');
+  for (const [id, group] of ALL_CAM_GROUPS) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = group.map(c=>camTile(c, ts, false)).join('');
+  }
+  document.getElementById('cam-all-toggle').textContent = `▼ View All Cameras (${CAM_TOTAL} total)`;
+}
+
+function refreshCameraImages(){
+  const ts = Date.now();
+  document.querySelectorAll('.cam-img').forEach(img => {
+    const base = img.dataset.src;
+    if (base) img.src = base + '?t=' + ts;
+  });
+}
+
+// ═══════════════════════ MAIN LOOP ═══════════════════════
+
+async function fetchAll(){
+  document.getElementById('ts').textContent = 'Refreshing…';
+  try {
+    const [weather, mackinaw, alerts, climate, gas, trails, buoys, mdot] = await Promise.all([
+      fetchAllWeather(),
+      fetchMackinawCity(),
+      fetchAlerts(),
+      fetchClimate(),
+      fetchGasPrices(),
+      fetchTrailClosures(),
+      fetchBuoys(),
+      fetchMdotEvents(),
+    ]);
+    const lakes   = await fetchLakes(buoys);
+    const bridge  = await fetchBridge(weather.stations);
+    const routes  = deriveRoutes(weather);
+    const beaches = buildBeaches(buoys, lakes, weather, alerts.beachAlerts);
+    const ferries = buildFerries();
+    const fallRegions = CLIMATE_POINTS.map(pt => fallColorForRegion(pt, climate));
+
+    renderWeather(weather, mackinaw);
+    renderAlerts(alerts);
+    renderRoutes(routes);
+    renderMdotEvents(mdot);
+    renderBridge(bridge);
+    renderFerries(ferries);
+    renderLakes(lakes);
+    renderBeaches(beaches, alerts.beachAlerts);
+    renderGasPrices(gas);
+    renderSnow(climate, weather);
+    renderTrails(trails);
+    renderFallColor(fallRegions);
+    renderTodayUpNorth({weather, mackinaw, alerts, climate, beaches, lakes, fallRegions, routes});
+
+    document.getElementById('ts').textContent =
+      'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+  } catch(e) {
+    document.getElementById('ts').textContent = 'Error — retrying…';
+    console.error('fetchAll error:', e);
+  }
+}
+
+// ── Admin mode: the Edit buttons only appear with #admin in the URL ──
+function initAdminMode() {
+  if (location.hash === '#admin' || location.search.includes('admin')) {
+    document.querySelectorAll('.edit-btn').forEach(b => b.classList.add('admin-visible'));
+  }
+}
+
+// ── Skeletons so nothing looks broken while the first fetch runs ──
+function renderWeatherSkeleton() {
+  document.getElementById('wx-grid').innerHTML = CITY_CARDS.map(c => `
+    <div class="wx-card">
+      <div class="wx-city">${esc(c.label)}</div>
+      <div class="wx-icon">🌡️</div>
+      <div style="margin:0 auto 3px;"><div class="skeleton" style="width:60px;height:30px;margin:0 auto;"></div></div>
+      <div class="skeleton" style="width:80%;margin:4px auto 10px;height:11px;"></div>
+      <div class="wx-meta">
+        <div class="wx-lbl">Wind</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Gust</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Humidity</div><div class="skeleton" style="height:11px;"></div>
+        <div class="wx-lbl">Visibility</div><div class="skeleton" style="height:11px;"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderStatusBarSkeleton() {
+  ['bridge','roads','alerts','weather','water','gas'].forEach(k => {
+    const el = document.getElementById('sbv-'+k);
+    if (el) el.innerHTML = '<span class="skeleton" style="display:inline-block;width:60px;height:11px;vertical-align:middle;"></span>';
+  });
+}
+
+// ── Hero rotation ──
+let heroIdx = 0;
+function rotateHero() {
+  const slides = document.querySelectorAll('.hero-slide');
+  if (!slides.length) return;
+  slides[heroIdx].classList.remove('active');
+  heroIdx = (heroIdx + 1) % slides.length;
+  slides[heroIdx].classList.add('active');
+}
+setInterval(rotateHero, 7000);
+
+// ── Init ──
+initAdminMode();
+renderWeatherSkeleton();
+renderStatusBarSkeleton();
+renderCameras();
+renderEvents();
+renderTodayUpNorth({});          // paint the shell immediately
+renderFerries(buildFerries());   // ferry seasons are pure date maths — no fetch needed
+
+// Open the fall-color panel by default only when there is color to talk about.
+(function initFallPanel(){
+  const doy = dayOfYear();
+  if (doy < 240 || doy > 320) document.getElementById('panel-fall').classList.remove('open');
+})();
+
+setInterval(refreshCameraImages, 60*1000);
+fetchAll();
+setInterval(fetchAll, 5*60*1000);
+</script>
+
+</body>
+</html>
