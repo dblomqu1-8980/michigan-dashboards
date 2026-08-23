@@ -476,6 +476,16 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(runAlerts(env));
+    // Log the summary rather than discarding it. The cron is the only path
+    // that sends unattended, so without this a real alert going out with a
+    // missing postal line — or a region silently failing its cloud lookups —
+    // would leave no trace anywhere. Visible via `wrangler tail` and in the
+    // Workers dashboard logs.
+    ctx.waitUntil(
+      runAlerts(env).then(summary => {
+        console.log('aurora-alerts cron', JSON.stringify(summary));
+        if (summary.warning) console.warn('aurora-alerts:', summary.warning);
+      })
+    );
   },
 };

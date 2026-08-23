@@ -164,4 +164,9 @@ unsubscribes after this date exist only in the database.
 
   CAN-SPAM accepts a street address, a USPS-registered PO Box, or a private
   mailbox at a commercial mail receiving agency. It does not have to be a home
-  address, and for a public alert list it probably shouldn't be.
+  address, and for a public alert list it probably shouldn't be. An email
+  address does not satisfy the requirement.
+
+  **Status: deliberately unset as of 2026-08-23.** The only subscribers are the
+  owner's own addresses, so there is no practical exposure yet. Set it before
+  the list grows beyond that. Every cron run logs the warning meanwhile.

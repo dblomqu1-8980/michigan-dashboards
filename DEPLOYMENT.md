@@ -361,11 +361,20 @@ cloud. 18-hour per-region cooldown.
 2. Verify `alerts.906dashboard.com` and `alerts.upnorthdashboard.com` in
    Resend, adding its records at IONOS. **Subdomains, not the root domains** —
    see the README for why this protects the existing IONOS mail.
-3. Add a physical postal address to the email footer for CAN-SPAM.
+3. **Deferred by decision (2026-08-23): the CAN-SPAM postal address.**
+   `POSTAL_ADDRESS` is unset, so alert and confirmation footers omit the line.
+   The system runs fine without it and the current three subscribers are all
+   the owner's own addresses, so real-world exposure is nil — but it should be
+   set before the list grows beyond that. Needs a street address, a
+   USPS-registered PO Box, or a commercial mail receiving agency box; an email
+   address does not satisfy the requirement. Set it in
+   `tools/aurora-alerts/wrangler.toml` under `[vars]` and redeploy. Every cron
+   run logs a warning while it is unset.
 
-Everything else is deployed and verified: validation, honeypot, double opt-in,
-unsubscribe, admin auth, the NOAA fetch, the cloud gate and the subscriber
-query all confirmed working against live data.
+Everything else is deployed, verified end to end and **sending live**:
+validation, honeypot, double opt-in, unsubscribe, admin auth, the NOAA fetch,
+the cloud gate, the subscriber query, and real delivery through Resend from
+both verified domains. Steps 1 and 2 above are complete.
 
 ### Deploying Worker changes
 
