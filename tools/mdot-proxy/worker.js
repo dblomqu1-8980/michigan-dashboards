@@ -82,6 +82,13 @@ function corsHeaders(origin) {
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json; charset=utf-8',
+    // Access-Control-Allow-Origin above is per-requester, and successful
+    // responses carry Cache-Control: public. Without Vary, a shared cache is
+    // free to replay one site's allow-origin header to the other, and the
+    // browser rejects the response. Observed for real: a response cached for
+    // http://localhost:8902 during testing was later served to
+    // https://upnorthdashboard.com, which failed CORS until the entry expired.
+    'Vary': 'Origin',
   };
 }
 
