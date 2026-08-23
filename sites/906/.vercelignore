@@ -1,0 +1,4 @@
+# Apache config, kept in the repo for the IONOS host during the transition.
+# Vercel ignores it as config but WILL serve it as a static file, which
+# publishes the internal rewrite rules. Exclude it from the deployment.
+.htaccess
