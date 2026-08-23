@@ -2170,28 +2170,19 @@ function renderMdotEvents(data){
   body.innerHTML += `<div class="src-note">⚙ MDOT MiDrive (via proxy) · Updated ${fmtTime(data.updated)}</div>`;
 }
 
-const EIA_API_KEY = 'DkeNs7cg9SK8h76jPAqwOD7GWppNdKWddnR4b6rg'; // personal free key, registered 2026-07-10
-
+// Gas prices come through the Worker, not straight from EIA. EIA requires an
+// API key, and a key used from client-side JS is published to anyone who views
+// source — this key was in fact live in this file. The Worker holds it as a
+// secret and the product-facet query lives there now; see
+// tools/mdot-proxy/worker.js.
 async function fetchGasPrices(){
+  if(!MDOT_PROXY_URL) return {ok:false, error:'Proxy not configured yet'};
   try{
-    // NOTE: EPM0 is EIA's "All Grades" product code, not Regular — EPMR is Regular.
-    // Filtering by facets[product][] directly (rather than just sorting by period
-    // and grabbing N rows) matters: PADD 2 has ~10 product/grade combos per week,
-    // so a plain length=10 grab often missed the Regular row entirely once
-    // premium/midgrade rows crowded it out — confirmed live against the API.
-    const url=`https://api.eia.gov/v2/petroleum/pri/gnd/data/?api_key=${EIA_API_KEY}&frequency=weekly`
-      +'&data%5B0%5D=value&facets%5Bduoarea%5D%5B%5D=R20'
-      +'&facets%5Bproduct%5D%5B%5D=EPMR&facets%5Bproduct%5D%5B%5D=EPD2D'
-      +'&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&offset=0&length=10';
-    const res=await fetch(url);
+    const res=await fetch(`${MDOT_PROXY_URL}/gas`);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const d=await res.json();
-    if(d.error) throw new Error(d.error?.message||'EIA API error');
-    const rows=d.response?.data||[];
-    const pick=prod=>{ const r=rows.find(r=>r.product===prod); return r?.value!=null?parseFloat(r.value):null; };
-    const regular=pick('EPMR'), diesel=pick('EPD2D');
-    if(regular==null && diesel==null) throw new Error('No rows returned');
-    return{ok:true,regular,diesel,period:rows[0]?.period||null};
+    if(!d.ok) throw new Error(d.error||'EIA unavailable');
+    return{ok:true,regular:d.regular,diesel:d.diesel,period:d.period||null};
   }catch(e){return{ok:false,error:e.message};}
 }
 

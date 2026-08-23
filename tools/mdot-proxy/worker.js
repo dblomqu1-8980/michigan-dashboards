@@ -8,6 +8,7 @@
  *   /buoys             → one buoy per Great Lake       (default, unchanged)
  *   /buoys?region=nlp  → the northern Lake Michigan / Lake Huron buoy set,
  *                        keyed by station id
+ *   /gas               → EIA weekly Midwest (PADD 2) regular & diesel average
  *
  * Every response echoes `region` so a client can tell whether it is talking to
  * a Worker that understands the parameter.
@@ -25,6 +26,12 @@
  * contexts, so this Worker also proxies live wave-height/water-temp data
  * for one representative buoy per Great Lake.
  *
+ * /gas exists for a different reason: EIA's API is CORS-friendly, but it
+ * requires an API key, and a key used from client-side JS is published in the
+ * page source to anyone who views it. Proxying the call keeps the key
+ * server-side. It is stored as a Worker secret (`wrangler secret put
+ * EIA_API_KEY`), never in wrangler.toml or the repo.
+ *
  * This Worker fetches everything server-side (no CORS applies
  * server-to-server), and re-serves it with CORS headers so the dashboard's
  * client-side JS can read it directly.
@@ -33,6 +40,7 @@
  * Endpoints once deployed:
  *   https://<your-subdomain>.workers.dev/events  (MDOT incidents/construction)
  *   https://<your-subdomain>.workers.dev/buoys   (NDBC wave height/water temp)
+ *   https://<your-subdomain>.workers.dev/gas     (EIA Midwest fuel averages)
  */
 
 const UP_COUNTIES = new Set([
@@ -233,6 +241,53 @@ async function buildBuoyPayload(region) {
   return { ok: true, region, lakes: Object.fromEntries(entries), updated: new Date().toISOString() };
 }
 
+// ── EIA weekly fuel prices (Midwest / PADD 2) ──
+// Both dashboards previously called EIA directly with the key inlined in their
+// JS, which published it in page source. The query is unchanged; it just runs
+// here now, with the key read from a Worker secret.
+//
+// EPMR is Regular gasoline, EPD2D is diesel. Facet-filtering by product
+// matters: PADD 2 publishes ~10 product/grade rows a week, so a plain
+// "latest 10 rows" grab regularly misses Regular entirely.
+const GAS_CACHE_TTL_SECONDS = 3600; // EIA publishes weekly; hourly is plenty
+
+async function buildGasPayload(region, env) {
+  const key = env && env.EIA_API_KEY;
+  if (!key) {
+    return { ok: false, region, error: 'EIA_API_KEY secret not configured on the Worker' };
+  }
+  try {
+    const url = 'https://api.eia.gov/v2/petroleum/pri/gnd/data/'
+      + `?api_key=${encodeURIComponent(key)}&frequency=weekly`
+      + '&data%5B0%5D=value&facets%5Bduoarea%5D%5B%5D=R20'
+      + '&facets%5Bproduct%5D%5B%5D=EPMR&facets%5Bproduct%5D%5B%5D=EPD2D'
+      + '&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&offset=0&length=10';
+    const r = await fetch(url, {
+      headers: { 'User-Agent': 'up906dashboard-proxy/1.0 (+https://906dashboard.com)' },
+    });
+    if (!r.ok) throw new Error(`EIA HTTP ${r.status}`);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error?.message || 'EIA API error');
+    const rows = d.response?.data || [];
+    const pick = prod => {
+      const row = rows.find(x => x.product === prod);
+      return row?.value != null ? parseFloat(row.value) : null;
+    };
+    const regular = pick('EPMR'), diesel = pick('EPD2D');
+    if (regular == null && diesel == null) throw new Error('No rows returned');
+    return {
+      ok: true, region, regular, diesel,
+      period: rows[0]?.period || null,
+      updated: new Date().toISOString(),
+    };
+  } catch (e) {
+    // Never let the upstream error text through verbatim — an EIA auth failure
+    // can echo the key back in its message.
+    const msg = /api_key|api key/i.test(e.message) ? 'EIA request rejected' : e.message;
+    return { ok: false, region, error: msg };
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -242,8 +297,9 @@ export default {
       return new Response(null, { headers: corsHeaders(origin) });
     }
 
-    if (url.pathname !== '/events' && url.pathname !== '/buoys') {
-      return new Response(JSON.stringify({ ok: false, error: 'Not found. Use /events or /buoys' }), {
+    const ROUTES = new Set(['/events', '/buoys', '/gas']);
+    if (!ROUTES.has(url.pathname)) {
+      return new Response(JSON.stringify({ ok: false, error: 'Not found. Use /events, /buoys or /gas' }), {
         status: 404,
         headers: corsHeaders(origin),
       });
@@ -260,10 +316,17 @@ export default {
     const region = parseRegion(url);
 
     try {
-      const payload = url.pathname === '/buoys'
-        ? await buildBuoyPayload(region)
-        : await buildPayload(region);
-      const ttl = url.pathname === '/buoys' ? BUOY_CACHE_TTL_SECONDS : CACHE_TTL_SECONDS;
+      let payload, ttl;
+      if (url.pathname === '/buoys') {
+        payload = await buildBuoyPayload(region);
+        ttl = BUOY_CACHE_TTL_SECONDS;
+      } else if (url.pathname === '/gas') {
+        payload = await buildGasPayload(region, env);
+        ttl = GAS_CACHE_TTL_SECONDS;
+      } else {
+        payload = await buildPayload(region);
+        ttl = CACHE_TTL_SECONDS;
+      }
       const body = JSON.stringify(payload);
       const response = new Response(body, {
         headers: { ...corsHeaders(origin), 'Cache-Control': `public, max-age=${ttl}` },
