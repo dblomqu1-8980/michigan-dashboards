@@ -49,22 +49,32 @@ npx wrangler secret put RESEND_API_KEY
 
 ### 2. Verify the sending domains in Resend
 
-Add **`alerts.906dashboard.com`** and **`alerts.upnorthdashboard.com`** —
-subdomains, deliberately.
+Add **`906dashboard.com`** and **`upnorthdashboard.com`** — the root domains.
 
-Verifying the root domains would put Resend's SPF alongside the existing
-`v=spf1 include:_spf-us.ionos.com ~all` and its DKIM alongside IONOS's
-`s1`/`s2` keys. Getting that merge wrong breaks mail delivery for the whole
-domain. A subdomain is a separate namespace: its records cannot affect the root
-domain's IONOS mail, and reputation damage from a bad alert send stays
-contained.
+This is safe alongside the live IONOS mail, which is worth spelling out because
+it looks like it shouldn't be. Resend does not ask you to modify any root mail
+record. It asks for:
 
-Resend will show the exact records — add them at IONOS under the subdomain.
-Leave every existing root-level `MX`, `TXT`, `_dmarc` and `_domainkey` record
-alone.
+| Record | Name | Why it's safe |
+|---|---|---|
+| `MX` | `send.<domain>` | a **subdomain** MX for bounce feedback — the root MX is untouched |
+| `TXT` | `send.<domain>` | SPF scoped to that same subdomain, so the root SPF is untouched |
+| `TXT` | `resend._domainkey.<domain>` | a uniquely-named DKIM selector that cannot collide with IONOS's `s1-ionos._domainkey` / `s2-ionos._domainkey` |
 
-Change the `SENDER_UP` / `SENDER_NLP` vars in `wrangler.toml` if you use
-different addresses.
+A domain may only carry one root SPF record, and merging Resend into IONOS's
+`v=spf1 include:_spf-us.ionos.com ~all` would be the dangerous move. Resend
+avoids that entirely by scoping to `send.` — so nothing about inbound mail,
+root SPF, DKIM or DMARC changes.
+
+Add those three records per domain at IONOS. Verification usually completes
+within about 15 minutes.
+
+**Do not touch:** root `MX`, root `TXT` SPF, `_dmarc`, `s1-ionos._domainkey`,
+`s2-ionos._domainkey`, `autodiscover`, or `NS`.
+
+Senders are `aurora@906dashboard.com` and `aurora@upnorthdashboard.com`, which
+are real IONOS mailboxes — so replies to an alert reach a human instead of
+bouncing. Change them in `wrangler.toml` if that ever moves.
 
 ### 3. Deploy
 
@@ -90,6 +100,16 @@ curl "...&forceKp=7&ignoreCooldown=1"
 ```
 
 The response is a per-region summary showing which gate stopped it.
+
+To prove the Resend side without mailing the list, send one alert-shaped
+message to a single address:
+
+```bash
+curl "https://aurora-alerts.blomblog.workers.dev/test-send?key=$ADMIN_KEY&to=you@example.com&region=up"
+```
+
+Read the failure mode: HTTP **401** means the API key is wrong; **403** means
+the key is fine but that sending domain is not verified yet.
 
 ## Database
 

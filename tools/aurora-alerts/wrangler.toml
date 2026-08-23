@@ -20,7 +20,14 @@ database_id = "2298fb19-130d-49cf-aaa3-f0e338ef657d"
 crons = ["0 22 * * *", "0 1 * * *"]
 
 [vars]
-# Overridable without a code change if deliverability ever needs a different
-# sender. Must be a domain verified in Resend.
-SENDER_UP  = "UP Aurora Alerts <aurora@alerts.906dashboard.com>"
-SENDER_NLP = "Up North Aurora Alerts <aurora@alerts.upnorthdashboard.com>"
+# Root-domain senders, matching the real IONOS mailboxes that exist at these
+# addresses — so a reply to an alert lands somewhere a human reads rather than
+# bouncing off a no-reply subdomain.
+#
+# Safe alongside the existing IONOS mail because Resend does not touch the root
+# domain's mail records: it scopes its SPF and bounce MX to send.<domain> and
+# uses a resend._domainkey DKIM selector, which cannot collide with IONOS's
+# s1-ionos._domainkey / s2-ionos._domainkey. The root MX, root SPF and DMARC
+# records stay exactly as they are.
+SENDER_UP  = "UP Aurora Alerts <aurora@906dashboard.com>"
+SENDER_NLP = "Up North Aurora Alerts <aurora@upnorthdashboard.com>"

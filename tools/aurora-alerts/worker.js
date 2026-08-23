@@ -420,6 +420,33 @@ export default {
       return json({ok:true, counts: rows.results || [], recentAlerts: last.results || []}, origin);
     }
 
+    // Send one real alert-shaped email to a single address. Exists so the
+    // Resend key and domain verification can be proven end to end without
+    // mailing the actual list. Admin key required.
+    if (url.pathname === '/test-send') {
+      const key = url.searchParams.get('key') || '';
+      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return json({ok:false, error:'Not authorised'}, origin, 401);
+      const to     = (url.searchParams.get('to') || '').trim().toLowerCase();
+      const rkey   = url.searchParams.get('region') || 'up';
+      const region = REGIONS[rkey];
+      if (!EMAIL_RE.test(to)) return json({ok:false, error:'Pass ?to=<email>'}, origin, 400);
+      if (!region)            return json({ok:false, error:'Unknown region'}, origin, 400);
+      const base  = env.PUBLIC_BASE_URL || 'https://aurora-alerts.blomblog.workers.dev';
+      const unsub = `${base}/unsubscribe?t=TEST-TOKEN-NOT-REAL`;
+      try {
+        const res = await sendResend(env, {
+          from: env[region.senderVar],
+          to: [to],
+          subject: `[test] Aurora alert preview — ${region.short}`,
+          html: alertEmail(region, 7, 'G3', {name:'Test Spot', pct:12}, unsub),
+          headers: {'List-Unsubscribe': `<${unsub}>`},
+        });
+        return json({ok:true, sentFrom: env[region.senderVar], to, id: res.id}, origin);
+      } catch (e) {
+        return json({ok:false, error:e.message, sentFrom: env[region.senderVar]}, origin, 502);
+      }
+    }
+
     // Manual dry-run of the cron, for testing. Requires the admin secret so a
     // stranger can't trigger a real send.
     if (url.pathname === '/run-alerts') {
