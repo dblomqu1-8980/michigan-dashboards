@@ -72,6 +72,16 @@
     .hdr-nav    { display: flex; gap: 4px; }
     .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
     .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+
+    /* The Hunting link made this an 11-item nav, which overflows a 1280px
+       header by a few pixels. Left alone, flexbox resolves that by shrinking
+       the logo and the links until "UP NORTH DASHBOARD" and half the labels
+       break mid-phrase. Pin the wordmark, keep labels whole, and let the row
+       wrap rather than squeeze. The mobile rules below still override this. */
+    .logo { flex-shrink: 0; }
+    .logo-text, .logo-sub { white-space: nowrap; }
+    .hdr-nav { flex-wrap: wrap; justify-content: flex-end; }
+    .hdr-nav a { white-space: nowrap; padding: 4px 8px; }
     .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
     .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
