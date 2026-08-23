@@ -42,7 +42,9 @@ Change **only** the `A` record (and add the `www` CNAME) at IONOS. Leave `NS`,
 - [x] Verified both sites serve correctly from their new roots
 - [x] Vercel projects created, Git-linked, deploying from `main`
 - [x] Deployments verified over HTTP (see below)
-- [ ] DNS cutover — **the only step left**
+- [x] DNS cutover complete for all three domains (2026-08-23)
+
+**Migration complete.** Both sites serve from Vercel; email is unaffected.
 
 Live now:
 
@@ -232,6 +234,50 @@ and rollback is just a DNS change. Do not delete anything on IONOS until the
 Vercel deployments have been live and correct for at least a week.
 
 ---
+
+## Final state (2026-08-23)
+
+| Host | Behaviour |
+|---|---|
+| `906dashboard.com` | serves from Vercel, apex is primary, 200 direct |
+| `www.906dashboard.com` | 308 → apex |
+| `upnorthdashboard.com` | serves from Vercel, apex is primary |
+| `www.upnorthdashboard.com` | 308 → apex |
+| `blomblog.com` | 308 → `906dashboard.com`, path preserved |
+| `www.blomblog.com` | 308 → `906dashboard.com` |
+
+All redirects are **308 permanent**. Vercel's dropdown defaults to 307
+(temporary), which does not consolidate ranking signals — check this if a
+domain is ever re-added.
+
+Every hostname's direction lives in the **Vercel Domains tab**, not in
+`vercel.json`. See the note below on why.
+
+Verified: every page 200s on both sites; `CLAUDE.md`, `SKILL.md`,
+`DEPLOYMENT.md`, `workflows`, `.htaccess` and `vercel.json` all 404 on both;
+`noindex` holds on the three legacy Agate Falls pages; MX, SPF, DKIM (s1/s2),
+DMARC and autodiscover are unchanged on all three domains.
+
+## Host redirects belong in the Domains tab, never in vercel.json
+
+`906dashboard.com` went down during cutover because Vercel's Domains tab had
+the apex redirecting to `www` while `vercel.json` redirected `www` back to the
+apex. Only non-root paths looped — `vercel.json`'s `/:path*` does not match the
+bare root — so the homepage still resolved and the outage looked partial.
+
+Vercel's Domains tab requires an explicit direction per hostname, so a host
+rule in `vercel.json` can only agree redundantly or conflict catastrophically.
+The `www` rules were removed. The one surviving host rule is
+`blomblog.com` → `906dashboard.com`, which cannot loop because
+`906dashboard.com` never redirects back.
+
+## Cleanup, once things have been stable a week
+
+- Delete `sites/906/.htaccess` and `sites/upnorth/.htaccess` — inert on Vercel,
+  and already excluded from deployment via `.vercelignore`
+- Raise the IONOS TTLs back to 3600 if they were lowered
+- Decommission the IONOS web hosting (keep the DNS zone and mailboxes)
+- `archive/` can stay in the repo; it is outside both site roots
 
 ## Why `cleanUrls` is off
 
