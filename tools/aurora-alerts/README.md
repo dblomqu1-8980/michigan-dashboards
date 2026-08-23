@@ -105,21 +105,19 @@ npx wrangler d1 execute aurora-alerts --remote \
 
 Schema is in `schema.sql`; re-running it is safe (`IF NOT EXISTS` throughout).
 
-### Importing the old FormSubmit list
+### The old FormSubmit list — imported 2026-08-23
 
-`aurora-subscribers.csv` at the repo root holds the three addresses collected
-through FormSubmit. They opted in to UP aurora alerts specifically, so
-importing them as `active` for region `up` is defensible — but it is your list
-and your call:
+The three addresses from `aurora-subscribers.csv` are in, as `region=up`,
+`status=active`, each with a unique unsubscribe token. Their original
+`first_submitted` dates were carried into `confirmed_at` rather than backdated
+to the import date, so the consent record stays truthful.
 
-```bash
-npx wrangler d1 execute aurora-alerts --remote --command \
-  "INSERT OR IGNORE INTO subscribers (email, region, status, token, created_at, confirmed_at)
-   VALUES ('someone@example.com','up','active',lower(hex(randomblob(24))),datetime('now'),datetime('now'));"
-```
+All three are the owner's own addresses, so they double as the end-to-end test
+list for the first real send.
 
-The safer alternative is to email them once asking them to re-subscribe
-through the new form, which gets you a clean double-opt-in record.
+**D1 is now the source of truth.** `aurora-subscribers.csv` is a historical
+snapshot only — it is gitignored, and nothing reads it any more. Signups and
+unsubscribes after this date exist only in the database.
 
 ## Compliance notes
 
