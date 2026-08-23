@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO ═══ -->
+  <title>Northern Michigan Hunting 2026 — Legal Hours, Open Seasons &amp; County Rules | Up North Dashboard</title>
+  <meta name="description" content="Live legal hunting hours, open seasons, weather and county-level 2026 rules for 26 Northern Lower Michigan counties — antlerless limits, the Lower Peninsula baiting ban, bovine TB surveillance counties, HAP walk-in land, Huron-Manistee alerts and harvest reporting." />
+  <meta name="keywords" content="Northern Michigan hunting, Up North deer season 2026, Michigan hunting hours, Lower Peninsula baiting ban, antlerless license limits Michigan, bovine TB testing Michigan, HAP hunting access program, Pigeon River elk, Huron-Manistee National Forest, Michigan turkey season, Michigan waterfowl middle zone" />
+  <meta name="author" content="Up North Dashboard" />
+  <link rel="canonical" href="https://upnorthdashboard.com/hunting.html" />
+
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:title" content="Northern Michigan Hunting — Legal Hours, Open Seasons &amp; County Rules" />
+  <meta property="og:description" content="Pick your county and get legal hunting hours, what's in season today, live weather and access conditions, and the 2026 rules that actually apply where you're standing." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://upnorthdashboard.com/hunting.html" />
+  <meta property="og:site_name" content="Up North Dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ═══ SCHEMA.ORG STRUCTURED DATA ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"What are legal hunting hours in Northern Michigan?","acceptedAnswer":{"@type":"Answer","text":"For deer, bear, fall turkey, furbearers and most small game, legal hunting hours run from one-half hour before sunrise to one-half hour after sunset. Woodcock hours are sunrise to sunset. Regular waterfowl hours are one-half hour before sunrise to sunset, and early teal hours are sunrise to sunset. All of the northern Lower Peninsula is on Eastern Time."}},
+      {"@type":"Question","name":"Can you bait deer in the Lower Peninsula?","acceptedAnswer":{"@type":"Answer","text":"No. Baiting and feeding deer are banned across the entire Lower Peninsula, on both public and private land. The only exception is for hunters with qualifying disabilities during the Liberty and Independence hunts, who may bait under specific limits."}},
+      {"@type":"Question","name":"What changed for Lower Peninsula deer hunting in 2026?","acceptedAnswer":{"@type":"Answer","text":"The limited firearms deer zone was eliminated, so all legal firearms may be used across the Lower Peninsula beginning Sept. 12, 2026. The Late Antlerless Firearm season now opens the Monday after the December Firearm season and runs through Jan. 1. The Extended Late Antlerless and January Archery seasons were eliminated, ending all deer hunting after Jan. 1. Universal antlerless license use limits are now set by county."}},
+      {"@type":"Question","name":"Which Northern Michigan counties are bovine TB surveillance priorities in 2026?","acceptedAnswer":{"@type":"Answer","text":"For 2026 the DNR's focused bovine TB surveillance covers Alcona, Alpena, Charlevoix, Cheboygan, Crawford, Iosco, Montmorency, Ogemaw, Oscoda, Otsego, Presque Isle and Roscommon counties. Testing deer from these counties is critical to the state's surveillance goals."}}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #2e9d63;   /* pine green — the Up North signature */
+      --accent2: #1a6fc4;   /* big-lake blue */
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+      --blaze:   #ff7a1a;   /* hunter orange — this page's accent */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header (matches main site) ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 330px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(14,12,4,0.55) 0%, rgba(8,14,12,0.86) 100%),
+        url('https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat,
+        #101408;
+      padding: 56px 20px;
+    }
+    .hero-content { text-align: center; max-width: 840px; position: relative; z-index: 2; }
+    .hero-eyebrow { font-size: 12px; color: #ffc39e; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+    .hero-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 16px; color: #dfe0cf; max-width: 690px; margin: 0 auto 22px; line-height: 1.55; }
+    .hero-meta { display: inline-flex; gap: 18px; font-size: 12px; color: #dfe0cf; opacity: 0.9; }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+    /* ── Section wrap ── */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+    .section-eyebrow { font-size: 11px; color: var(--blaze); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-weight: 700; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .section-lead  { color: var(--muted); font-size: 14px; margin-bottom: 20px; max-width: 780px; }
+
+    /* ── County picker ── */
+    .picker {
+      background: linear-gradient(135deg, var(--surf2), var(--surface));
+      border: 1px solid var(--border); border-left: 4px solid var(--blaze);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .picker-lbl { font-size: 10px; color: var(--blaze); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 5px; }
+    .picker select {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; font-size: 15px; font-weight: 700;
+      font-family: inherit; min-width: 250px; cursor: pointer;
+    }
+    .picker select:focus { outline: 2px solid var(--blaze); outline-offset: 1px; }
+    .picker-note { font-size: 12px; color: var(--muted); flex: 1; min-width: 240px; line-height: 1.5; }
+    .picker-note b { color: #b8c4d0; }
+
+    /* ── Model / caution notes ── */
+    .model-note {
+      background: rgba(255,122,26,0.07);
+      border: 1px solid rgba(255,122,26,0.24);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 12.5px; color: #d8c8b8; margin-bottom: 22px; line-height: 1.6;
+    }
+    .model-note b { color: var(--blaze); }
+    .model-note a { color: var(--blaze); font-weight: 600; }
+    .model-note a:hover { text-decoration: underline; }
+    .model-note.warn { background: rgba(234,179,8,.06); border-color: rgba(234,179,8,.28); }
+    .model-note.warn b { color: var(--yellow); }
+    .model-note.warn a { color: var(--yellow); }
+
+    /* ── Legal light hero card ── */
+    .light-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 22px 24px; margin-bottom: 14px;
+      display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px;
+    }
+    .light-main { border-right: 1px solid var(--border); padding-right: 24px; }
+    .light-status { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 6px; }
+    .light-status.open   { color: var(--green); }
+    .light-status.closed { color: var(--red); }
+    .light-status.soon   { color: var(--yellow); }
+    .light-count { font-size: 34px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+    .light-sub { font-size: 13px; color: var(--muted); }
+    .light-times { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .lt-item { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; }
+    .lt-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 3px; }
+    .lt-val { font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .lt-note { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+
+    /* ── Hours-by-species table ── */
+    .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .hours-tbl { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 12.5px; margin-top: 4px; }
+    .hours-tbl th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+    .hours-tbl td { padding: 7px 8px; border-bottom: 1px solid rgba(42,52,65,.5); vertical-align: top; }
+    .hours-tbl tr:last-child td { border-bottom: none; }
+    .hours-tbl .hr-time { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+    .hours-tbl .hr-rule { color: var(--muted); font-size: 11.5px; }
+
+    /* ── Conditions grid ── */
+    .cond-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .cond-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 14px 16px; }
+    .cond-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+    .cond-val { font-size: 21px; font-weight: 800; line-height: 1.15; font-variant-numeric: tabular-nums; }
+    .cond-sub { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+    .cond-card.good .cond-val { color: var(--green); }
+    .cond-card.warn .cond-val { color: var(--yellow); }
+    .cond-card.bad  .cond-val { color: var(--red); }
+
+    /* ── Alerts ── */
+    .alert-strip { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
+    .alert-item {
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3);
+      border-left: 4px solid var(--red); border-radius: 9px; padding: 11px 15px;
+    }
+    .alert-item.moderate { background: rgba(234,179,8,.07); border-color: rgba(234,179,8,.3); border-left-color: var(--yellow); }
+    .alert-hd { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .alert-bd { font-size: 12px; color: #b8c4d0; line-height: 1.5; }
+
+    /* ── Season chips ── */
+    .season-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+    .sn-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 13px 15px; display: flex; gap: 11px; align-items: flex-start; }
+    .sn-card.open  { border-left: 3px solid var(--green); }
+    .sn-card.soon  { border-left: 3px solid var(--yellow); }
+    .sn-card.shut  { border-left: 3px solid var(--border); opacity: .72; }
+    .sn-icon { font-size: 21px; line-height: 1.1; flex-shrink: 0; }
+    .sn-name { font-size: 13.5px; font-weight: 700; line-height: 1.25; }
+    .sn-dates { font-size: 11.5px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .sn-hours { font-size: 11.5px; color: #b8c4d0; margin-top: 4px; }
+    .sn-note { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+    .sn-tag { font-size: 9px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 2px 7px; border-radius: 9px; margin-left: 6px; vertical-align: 2px; white-space: nowrap; }
+    .sn-tag.open { background: rgba(34,197,94,.12); color: var(--green); border: 1px solid rgba(34,197,94,.35); }
+    .sn-tag.soon { background: rgba(234,179,8,.1);  color: var(--yellow); border: 1px solid rgba(234,179,8,.32); }
+    .sn-tag.shut { background: var(--surf2); color: var(--muted); border: 1px solid var(--border); }
+
+    /* ── Rules panel ── */
+    .rules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .rule-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .rule-lbl { font-size: 10px; color: var(--blaze); text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; margin-bottom: 5px; }
+    .rule-val { font-size: 14px; font-weight: 700; margin-bottom: 4px; line-height: 1.35; }
+    .rule-txt { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    .rule-txt a { color: var(--blaze); font-weight: 600; }
+    .rule-txt a:hover { text-decoration: underline; }
+    .rule-card.flag { border-color: rgba(234,179,8,.4); background: rgba(234,179,8,.05); }
+    .rule-card.flag .rule-lbl { color: var(--yellow); }
+
+    /* ── Generic panel / link cards ── */
+    .plan-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px; margin-top: 30px; }
+    .affiliate-disclosure { font-size: 11px; color: var(--muted); background: rgba(46,157,99,0.08); border: 1px solid rgba(46,157,99,0.22); padding: 8px 12px; border-radius: 8px; margin-bottom: 18px; }
+    .links-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .links-grid.three { grid-template-columns: repeat(3, 1fr); }
+    .link-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color .15s, transform .15s; display: block; }
+    .link-card:hover { border-color: var(--blaze); transform: translateY(-2px); }
+    .lc-icon  { font-size: 22px; margin-bottom: 7px; }
+    .lc-label { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .lc-sub   { font-size: 11px; color: var(--muted); line-height: 1.45; }
+    .link-card.primary { background: rgba(255,122,26,.09); border-color: rgba(255,122,26,.4); }
+
+    /* ── Road / access list ── */
+    .road-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+    .road-item { background: var(--surf2); border: 1px solid var(--border); border-radius: 9px; padding: 11px 14px; }
+    .road-item.inc { border-left: 3px solid var(--red); }
+    .road-item.con { border-left: 3px solid var(--yellow); }
+    .road-hd { font-size: 12.5px; font-weight: 700; display: flex; justify-content: space-between; gap: 10px; margin-bottom: 3px; }
+    .road-bd { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+    .road-empty { background: var(--surf2); border: 1px solid var(--border); border-radius: 9px; padding: 14px 16px; font-size: 12.5px; color: var(--muted); margin-bottom: 16px; }
+
+    /* ── After the shot ── */
+    .shot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .shot-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 15px 17px; display: flex; flex-direction: column; transition: border-color .15s; }
+    .shot-card:hover { border-color: var(--blaze); }
+    .shot-num { font-size: 10px; font-weight: 800; color: var(--blaze); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+    .shot-name { font-size: 14.5px; font-weight: 700; margin-bottom: 4px; }
+    .shot-desc { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 11px; flex: 1; }
+    .shot-links { display: flex; gap: 7px; flex-wrap: wrap; }
+    .shot-links a { font-size: 11px; font-weight: 700; background: var(--surface); border: 1px solid var(--border); padding: 5px 11px; border-radius: 14px; transition: border-color .15s; }
+    .shot-links a:hover { border-color: var(--blaze); }
+    .shot-links a.hot { background: var(--blaze); border-color: var(--blaze); color: #fff; }
+    .shot-links a.hot:hover { filter: brightness(1.12); }
+
+
+    /* ── Where to stay ── */
+    .stay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .stay-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+    .stay-town { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .stay-for  { font-size: 11px; color: var(--blaze); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 700; }
+    .stay-why  { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.55; }
+    .stay-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .stay-links a { font-size: 11px; font-weight: 700; background: var(--surface); border: 1px solid var(--border); padding: 5px 11px; border-radius: 14px; transition: border-color .15s; }
+    .stay-links a:hover { border-color: var(--blaze); }
+
+    /* ── FAQ ── */
+    .faq-section { margin-top: 30px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+    .faq-q { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .faq-a { font-size: 13px; color: #b8c4d0; line-height: 1.6; }
+    .faq-a a { color: var(--blaze); font-weight: 600; }
+    .faq-a a:hover { text-decoration: underline; }
+
+    /* ── Verified stamp ── */
+    .verified {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; color: var(--muted);
+      background: var(--surf2); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 14px; margin-bottom: 16px;
+    }
+    .verified b { color: #b8c4d0; }
+
+    /* ── Footer ── */
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 30px 20px 24px; margin-top: 40px; text-align: center; color: var(--muted); font-size: 12px; }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+
+    .skel { color: var(--muted); font-style: italic; }
+
+    /* ── Responsive ── */
+    @media(max-width: 1100px) {
+      .cond-grid  { grid-template-columns: repeat(2, 1fr); }
+      .links-grid { grid-template-columns: repeat(2, 1fr); }
+      .links-grid.three { grid-template-columns: repeat(2, 1fr); }
+      .season-grid, .rules-grid, .shot-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 900px) {
+      .light-card { grid-template-columns: 1fr; }
+      .light-main { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 18px; }
+      .hero-title { font-size: 29px; }
+    }
+    @media(max-width: 640px) {
+      .cond-grid, .links-grid, .links-grid.three, .season-grid, .rules-grid,
+      .shot-grid, .road-list, .stay-grid, .light-times { grid-template-columns: 1fr; }
+      .hero-title { font-size: 24px; }
+      header { flex-wrap: wrap; row-gap: 6px; }
+      .hdr-nav { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; gap: 6px 4px; }
+      .hdr-nav a { white-space: nowrap; padding: 7px 10px; }
+      .hero-meta { flex-direction: column; gap: 6px; }
+      .plan-section { padding: 18px; }
+      .picker select { width: 100%; min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a class="logo" href="/" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">🌲</div>
+    <div>
+      <div class="logo-text">UP NORTH DASHBOARD</div>
+      <div class="logo-sub">Northern Lower Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="/#today">Today</a>
+    <a href="/#conditions">Conditions</a>
+    <a href="/#roads">Roads</a>
+    <a href="/#bridge">Bridge &amp; Ferries</a>
+    <a href="/#water">Beaches &amp; Water</a>
+    <a href="/#trails">Trails &amp; Snow</a>
+    <a href="hunting.html" class="active">Hunting</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="/#weekend">This Weekend</a>
+    <a href="/#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Northern Michigan Hunting · Live Legal Hours &amp; County Rules</div>
+    <h1 class="hero-title">Up North Hunting Dashboard</h1>
+    <p class="hero-subtitle">Pick your county and get the things you actually check before you walk in: legal shooting light down to the minute for the species you're after, what's open today, the weather and access conditions in front of you, and the 2026 rules that apply where you're standing — including the ones that changed this year.</p>
+    <div class="hero-meta">
+      <span>🎯 26 Northern Counties</span>
+      <span>🕕 Species-Specific Legal Hours</span>
+      <span>🚜 HAP &amp; Public Land Access</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ═══ COUNTY PICKER ═══ -->
+  <div class="picker">
+    <div>
+      <div class="picker-lbl">Your County</div>
+      <select id="county-select" aria-label="Select your Northern Michigan county"></select>
+    </div>
+    <div class="picker-note" id="picker-note">
+      Everything below re-computes for the county you pick — legal hours, weather, road incidents, antlerless
+      limits and disease-testing priority. Your choice is saved on this device.
+    </div>
+  </div>
+
+  <!-- ═══ 1. HUNTING TODAY ═══ -->
+  <div class="section-eyebrow">Hunting Today</div>
+  <h2 class="section-title" id="today-title">Legal light &amp; conditions</h2>
+  <p class="section-lead" id="today-lead">Loading live conditions…</p>
+
+  <div id="alert-strip" class="alert-strip"></div>
+
+  <div class="light-card">
+    <div class="light-main">
+      <div class="light-status" id="light-status">Checking legal hours…</div>
+      <div class="light-count" id="light-count">—</div>
+      <div class="light-sub" id="light-sub">Pulling today's sunrise and sunset for your county from Open-Meteo.</div>
+    </div>
+    <div class="light-times">
+      <div class="lt-item">
+        <div class="lt-lbl">Opens (general)</div>
+        <div class="lt-val" id="lt-open">—</div>
+        <div class="lt-note">½ hr before sunrise</div>
+      </div>
+      <div class="lt-item">
+        <div class="lt-lbl">Closes (general)</div>
+        <div class="lt-val" id="lt-close">—</div>
+        <div class="lt-note">½ hr after sunset</div>
+      </div>
+      <div class="lt-item">
+        <div class="lt-lbl">Sunrise</div>
+        <div class="lt-val" id="lt-sunrise">—</div>
+        <div class="lt-note" id="lt-tz">—</div>
+      </div>
+      <div class="lt-item">
+        <div class="lt-lbl">Sunset</div>
+        <div class="lt-val" id="lt-sunset">—</div>
+        <div class="lt-note" id="lt-date">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="model-note">
+    <b>These times are computed, not copied from the DNR table.</b> We take today's actual sunrise and sunset
+    at your county's coordinates and apply the DNR's species-specific offset — which is why woodcock, waterfowl
+    and deer show three different closing times below. The DNR's printed Zone A table plus the zone-offset map
+    is the legal authority, and a computed minute can differ from a printed one. If you are hunting the edge of
+    legal light, use the table in your digest.
+    <a href="https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer" target="_blank" rel="noopener">DNR deer hours table →</a>
+  </div>
+
+  <!-- hours by species -->
+  <div class="plan-section" style="margin-top:0;padding:20px 24px;">
+    <div class="section-eyebrow">Legal Hours by Species</div>
+    <h3 class="section-title" style="font-size:18px;margin-bottom:12px;">Not every season closes at the same minute</h3>
+    <div class="tbl-wrap">
+      <table class="hours-tbl" id="hours-tbl"><tbody><tr><td class="skel">Loading…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- conditions -->
+  <div style="margin-top:26px;">
+    <div class="section-eyebrow">Field Conditions</div>
+    <h3 class="section-title" style="font-size:18px;margin-bottom:14px;">What it's doing out there right now</h3>
+    <div class="cond-grid" id="cond-grid"></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px;">
+      Weather and air quality: Open-Meteo · Watches and warnings: National Weather Service
+    </div>
+  </div>
+
+  <!-- ═══ SEASONS ═══ -->
+  <div style="margin-top:32px;">
+    <div class="section-eyebrow">Open Seasons</div>
+    <h2 class="section-title">What's in season Up North right now</h2>
+    <p class="section-lead">2026–27 dates as published in the DNR's hunting season calendar. Bear, elk, turkey and waterfowl are unit- or zone-specific — the dates shown are the ones that apply to the northern Lower Peninsula.</p>
+    <div class="season-grid" id="season-grid"></div>
+  </div>
+
+  <!-- ═══ 2. RULES FOR THIS LOCATION ═══ -->
+  <div class="plan-section" id="rules">
+    <div class="section-eyebrow">Rules Affecting This Location</div>
+    <h2 class="section-title" id="rules-title">The 2026 rules where you're hunting</h2>
+    <p class="section-lead">This is a summary, not the digest. It covers the handful of rules that actually change from county to county, and every one of them links to the DNR page it came from.</p>
+    <div class="verified">📋 <b>Verified against DNR sources on Aug 23, 2026</b> · Rules change; re-check before opening day</div>
+
+    <div class="model-note warn">
+      <b>2026 changed real things in the Lower Peninsula.</b> The limited firearms deer zone was eliminated —
+      all legal firearms are usable statewide as of Sept. 12, 2026. The Late Antlerless Firearm season now opens
+      the Monday after December Firearm and runs to Jan. 1, the Extended Late Antlerless and January Archery
+      seasons were eliminated entirely, and universal antlerless license use limits are now set county by county.
+      Bigger changes land in 2027, including a three-point antler point restriction on the single deer license.
+      <a href="https://www.michigan.gov/dnr/about/newsroom/releases/2026/05/15/nrc-approves-deer-regulation-changes-for-2026-and-2027" target="_blank" rel="noopener">Read the NRC decision →</a>
+    </div>
+
+    <div class="rules-grid" id="rules-grid"></div>
+  </div>
+
+  <!-- ═══ 3. ACCESS & ROADS ═══ -->
+  <div class="plan-section" id="access">
+    <div class="section-eyebrow">Access &amp; Road Conditions</div>
+    <h2 class="section-title">Getting in — and back out</h2>
+    <p class="section-lead">The DNR maps roughly 13,494 miles of state forest road statewide. Up North the bigger access question is usually private ground: this is a mixed-ownership landscape where the Hunting Access Program and the national forest are what stand between you and a no-trespassing sign.</p>
+
+    <h3 style="font-size:15px;font-weight:700;margin:6px 0 10px;" id="road-hd">Live MDOT incidents &amp; construction — your county</h3>
+    <div id="road-body"><div class="road-empty skel">Loading MDOT MiDrive…</div></div>
+
+    <div class="links-grid">
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/where/hap" target="_blank" rel="noopener" class="link-card primary">
+        <div class="lc-icon">🚜</div><div class="lc-label">HAP — Hunting Access Program</div><div class="lc-sub">Private land enrolled for public hunting access. The single biggest access lever in the northern Lower.</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/ORV-Riding/state-forest-roads" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🛻</div><div class="lc-label">State Forest Road Maps</div><div class="lc-sub">Which forest roads are open, closed or seasonally restricted to ORVs — by county</div>
+      </a>
+      <a href="https://www.fs.usda.gov/r09/huron-manistee/alerts" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🌲</div><div class="lc-label">Huron-Manistee NF Alerts</div><div class="lc-sub">Closures and notices across both halves of the forest</div>
+      </a>
+      <a href="https://www.fs.usda.gov/r09/huron-manistee" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🗺️</div><div class="lc-label">Huron-Manistee Maps</div><div class="lc-sub">Motor vehicle use maps — the ones that determine legal access</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/where" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">📍</div><div class="lc-label">Where to Hunt</div><div class="lc-sub">The DNR's public-land finder and hunting area layers</div>
+      </a>
+      <a href="https://www2.dnr.state.mi.us/publications/pdfs/huntingwildlifehabitat/SWGAs/Gems_Grouse_Information_460006_7.pdf" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🐦</div><div class="lc-label">GEMS — Grouse Enhanced Management Sites</div><div class="lc-sub">Intensively managed, gated walk-in grouse coverts, several in the northern Lower</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/places/state-forests" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">⛺</div><div class="lc-label">State Forest Campgrounds</div><div class="lc-sub">Rustic camps near the coverts — many stay open through firearm season</div>
+      </a>
+      <a href="/#cameras" class="link-card">
+        <div class="lc-icon">📷</div><div class="lc-label">Traffic Cameras</div><div class="lc-sub">Look at the road before you drive it — live on the main dashboard</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ 4. SEASON SO FAR ═══ -->
+  <div class="plan-section" id="season-so-far">
+    <div class="section-eyebrow">Season So Far</div>
+    <h2 class="section-title">Harvest and wildlife numbers</h2>
+    <p class="section-lead">Michigan's mandatory harvest reporting gives a near-real-time picture of the deer season, and the DNR's grouse and woodcock cooperator survey gives something even better for small game: county-level flushes per hour, reported by hunters, updated as the season runs.</p>
+
+    <div class="model-note">
+      <b>We link to the DNR's own numbers rather than republishing them.</b> Reported harvest totals are
+      preliminary — they are what hunters have entered so far, not the DNR's final harvest estimate, and they
+      lag the actual kill by up to 72 hours because that's the reporting window. We are not scraping eLicense
+      pages to build our own tallies. If the DNR makes a supported feed available, we'll ask first and wire it
+      in properly.
+    </div>
+
+    <div class="links-grid three">
+      <a href="https://midnr.maps.arcgis.com/apps/dashboards/327e902be6784f3186eb80f8d4b77a8e" target="_blank" rel="noopener" class="link-card primary">
+        <div class="lc-icon">🐦</div><div class="lc-label">Grouse &amp; Woodcock Flush Dashboard</div><div class="lc-sub">The DNR's live cooperator dashboard — county-level flushes per hour. Submit your own hunt while you're there.</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/small-game/become-a-ruffed-grouse-and-american-woodcock-cooperator" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">📝</div><div class="lc-label">Become a Cooperator</div><div class="lc-sub">Michigan hunters have reported grouse and woodcock flushes to the DNR since the 1950s</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/harvest-reporting" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">📊</div><div class="lc-label">Deer Harvest Reporting</div><div class="lc-sub">How the system works, and where the reported totals are published</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/deer" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🦌</div><div class="lc-label">DNR Deer Hub</div><div class="lc-sub">Season previews, harvest reports and the interactive DMU map</div>
+      </a>
+      <a href="https://www2.dnr.state.mi.us/ORS/Home" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">👁️</div><div class="lc-label">Eyes in the Field</div><div class="lc-sub">Report sick or dead wildlife — the DNR's observation reporting system</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/managing-resources/laws/regulations/elk" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🦌</div><div class="lc-label">Elk Digest &amp; EMU Map</div><div class="lc-sub">Michigan's elk herd lives here — Pigeon River Country and the surrounding EMUs</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ 5. AFTER THE SHOT ═══ -->
+  <div class="plan-section" id="after-the-shot">
+    <div class="section-eyebrow">After the Shot</div>
+    <h2 class="section-title">You're down a deer. Now what?</h2>
+    <p class="section-lead">The part almost nobody puts on a dashboard, in the order you actually need it — and the clock on step two is 72 hours or the moment you hand the deer to anyone else, whichever comes first.</p>
+    <div class="shot-grid" id="shot-grid"></div>
+
+    <div class="model-note warn" style="margin-top:18px;margin-bottom:0;">
+      <b>Emergency and enforcement.</b> For a life-threatening emergency in the field, call <b>911</b>. To report
+      poaching or a violation in progress, call the DNR's Report All Poaching line at <b>800-292-7800</b>,
+      staffed 24 hours; reports can be anonymous.
+      <a href="https://www.michigan.gov/dnr/managing-resources/laws/rap" target="_blank" rel="noopener">RAP details →</a>
+    </div>
+  </div>
+
+  <!-- ═══ DEER CAMP TRAVEL ═══ -->
+  <div class="plan-section">
+    <div class="section-eyebrow">Deer Camp</div>
+    <h2 class="section-title">Getting to camp, and staying near the ground</h2>
+    <p class="section-lead">November 15 is the busiest travel day of Northern Michigan's year, and I-75 north of Bay City is where it shows. If camp is not already yours, book early and widen the radius before you widen the budget.</p>
+
+    <div class="affiliate-disclosure">
+      <strong>Disclosure:</strong> VRBO links below are affiliate links — Up North Dashboard may earn a
+      commission on bookings at no extra cost to you.
+    </div>
+
+    <div class="stay-grid">
+      <div class="stay-card">
+        <div class="stay-town">Gaylord / Grayling</div>
+        <div class="stay-for">For: I-75 corridor · Pigeon River · Au Sable</div>
+        <div class="stay-why">The center of northern Lower deer camp country and the easiest place to restock. Otsego and Crawford are both 2026 bovine TB surveillance counties, so plan on a check station stop.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Gaylord+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+      <div class="stay-card">
+        <div class="stay-town">Traverse City / Kalkaska</div>
+        <div class="stay-for">For: Northwest counties · Pere Marquette</div>
+        <div class="stay-why">Traverse City has real capacity and real restaurants; Kalkaska puts you into state forest an hour sooner. Northwest counties carry a three-license antlerless use limit — the tightest in the region.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Traverse+City+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+      <div class="stay-card">
+        <div class="stay-town">Atlanta / Alpena</div>
+        <div class="stay-for">For: Northeast counties · TB core area</div>
+        <div class="stay-why">Montmorency, Alpena, Alcona, Oscoda and Presque Isle carry a ten-license antlerless use limit — the most liberal in the state — and they are the heart of the bovine TB core area, so testing matters here more than anywhere else.</div>
+        <div class="stay-links">
+          <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" style="border-color:rgba(249,115,22,.45);">🏡 Cabins on VRBO →</a>
+          <a href="https://www.booking.com/searchresults.html?ss=Alpena+Michigan" target="_blank" rel="nofollow noopener">Booking.com →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="faq-section">
+    <div class="section-eyebrow">Frequently Asked</div>
+    <h2 class="section-title">Northern Michigan Hunting FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">What are legal hunting hours in Northern Michigan?</div>
+      <div class="faq-a">For deer, bear, fall turkey, furbearers and most small game: one-half hour before sunrise to one-half hour after sunset. Woodcock is different — sunrise to sunset. Regular waterfowl is different again — one-half hour before sunrise to <em>sunset</em>, with no evening half hour. Early teal is sunrise to sunset. The whole northern Lower Peninsula is on Eastern Time, so the DNR's printed Zone A table applies directly, with the zone-offset adjustment for your longitude. The card at the top of this page computes all of it for whichever county you pick.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I bait deer in the northern Lower Peninsula?</div>
+      <div class="faq-a">No. Baiting and feeding are banned across the entire Lower Peninsula, public and private land alike. The only exception is for hunters who meet the disability qualifications during the Liberty and Independence hunts. Food plots are a different thing and remain legal on private land — naturally occurring foods, standing agricultural crops and food placed through normal agricultural practices are not considered bait. Scent-based attractants are allowed if they are made inaccessible to deer, and cervid urine lures are restricted to certified CWD-tested products.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How many antlerless licenses can I use in my county?</div>
+      <div class="faq-a">Use limits are now set county by county in the Lower Peninsula. Across the northern Lower: three in Antrim, Benzie, Charlevoix, Cheboygan, Crawford, Emmet, Grand Traverse, Kalkaska, Lake, Leelanau, Otsego, Roscommon and Wexford; four in Clare and Gladwin; five in Iosco, Manistee, Mason, Missaukee, Ogemaw and Osceola; and ten in Alcona, Alpena, Montmorency, Oscoda and Presque Isle. The DNR now reviews and publishes these limits annually, so treat any number you remember from last year as suspect. Pick your county above and this page shows yours.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I have to report my deer, and how long do I have?</div>
+      <div class="faq-a">Yes, reporting is mandatory for every successful deer hunter. You have 72 hours from harvest, or until you transfer possession — hand it to a processor, a taxidermist or a buddy — whichever comes first. Report through <a href="https://www.mdnr-elicense.com/harvestreport" target="_blank" rel="noopener">the eLicense harvest report page</a> or the Michigan DNR Hunt Fish app, and keep the confirmation number: that number is your proof, and a conservation officer can verify it in the field. Failing to report is a civil infraction carrying a fine of up to $150. You also cannot submit a head for CWD or TB testing until the harvest is reported.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Which counties are disease-testing priorities in 2026?</div>
+      <div class="faq-a">Bovine TB focused surveillance for 2026 covers twelve counties, and most of them are up here: Alcona, Alpena, Charlevoix, Cheboygan, Crawford, Iosco, Montmorency, Ogemaw, Oscoda, Otsego, Presque Isle and Roscommon. If you hunt one of those, submitting a head genuinely matters to the state's surveillance goals. Focused CWD surveillance for 2026 is further south — Ionia, Kent, Mecosta, Montcalm and Newaygo — though CWD has been confirmed in free-ranging deer in Gladwin and Ogemaw counties. Outside a focus county you can still get a deer tested with a free lymph node submission kit.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What is changing in 2027?</div>
+      <div class="faq-a">Lower Peninsula only, and it's substantial. Starting with the 2027 seasons a single deer license will be valid for one deer with at least three antler points on one side, or for one antlerless deer. A combo license will allow one antlered and one antlerless deer, or two antlerless. Existing DMU-specific antler point restrictions stay in place on top of that. The commission also approved an "earn a second buck" pilot in southern Zone 3, where a hunter must take an antlerless deer before becoming eligible for a second buck under a four-point restriction. Upper Peninsula regulations are unchanged in 2027.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Where can I hunt if I don't have private land?</div>
+      <div class="faq-a">Up North is a mixed-ownership landscape, so access takes more planning than it does in the UP. Your three levers are state forest land, the Huron-Manistee National Forest, and the Hunting Access Program — private land whose owners are paid to open it to public hunting. Start with HAP if you're hunting the agricultural fringe, the national forest motor vehicle use maps if you're on federal ground, and the state forest road maps everywhere for what you can legally drive.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do you predict the rut?</div>
+      <div class="faq-a">No, and we're not going to. Moon illumination is shown on this page because hunters want to see it, not because it's a movement predictor — the research on lunar phase and deer movement doesn't support the claim. What does move deer is the calendar, cold fronts and pressure, and you can read all three off the conditions panel above without anyone selling you a score.</div>
+    </div>
+  </div>
+
+  <!-- ═══ CROSS-LINK ═══ -->
+  <div style="margin-top:30px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Heading north for the season?</div>
+    <a href="/#conditions" style="color:var(--accent);font-weight:700;font-size:15px;">→ Check live roads, weather and cameras on the dashboard</a>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;">Hunting over the Bridge? <a href="https://906dashboard.com/hunting.html" target="_blank" rel="noopener" style="color:var(--blaze);font-weight:600;">UP hunting dashboard →</a></div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  Up North Dashboard · Northern Lower Michigan · <a href="/">Main Dashboard</a> · <a href="fall.html">Fall Colors</a> · <a href="aurora.html">Aurora</a> · <a href="https://906dashboard.com/hunting.html">UP Hunting</a> · <a href="privacy.html">Privacy &amp; Disclosure</a><br>
+  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Season dates and regulations verified against Michigan DNR sources on Aug 23, 2026 · Legal hours computed from Open-Meteo sunrise/sunset — the DNR's printed hours table is the legal authority · This page is a summary, not the digest · ©2026</span>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  UP NORTH HUNTING DASHBOARD
+//
+//  Same engine as the 906 Dashboard hunting page, configured for the
+//  northern Lower Peninsula: different counties, different DMU and
+//  antlerless rules, a Lower-Peninsula baiting ban instead of the UP's
+//  legal baiting, the Middle waterfowl zone instead of the North, and
+//  the twelve bovine TB focused-surveillance counties that sit up here.
+//
+//  Regulation data was read off the DNR's own pages on 2026-08-23 and
+//  carries a VERIFIED date because it needs an annual review.
+// ═══════════════════════════════════════════════════════════════
+
+const MDOT_PROXY_URL = 'https://up906-mdot-proxy.blomblog.workers.dev';
+const MDOT_REGION    = 'nlp';
+const STORAGE_KEY    = 'upnorth-hunt-county';
+
+// ═══ COUNTIES ═══
+// antlerless = 2026 universal antlerless license USE LIMIT for the county.
+// tb = 2026 focused bovine TB surveillance county.
+// cwd = CWD confirmed in free-ranging deer.
+const COUNTIES = [
+  { name:'Alcona',         seat:'Harrisville',    lat:44.657, lon:-83.295, antlerless:10, tb:true },
+  { name:'Alpena',         seat:'Alpena',         lat:45.062, lon:-83.433, antlerless:10, tb:true },
+  { name:'Antrim',         seat:'Bellaire',       lat:44.981, lon:-85.209, antlerless:3 },
+  { name:'Benzie',         seat:'Beulah',         lat:44.631, lon:-86.093, antlerless:3 },
+  { name:'Charlevoix',     seat:'Charlevoix',     lat:45.318, lon:-85.259, antlerless:3, tb:true, islands:true },
+  { name:'Cheboygan',      seat:'Cheboygan',      lat:45.647, lon:-84.474, antlerless:3, tb:true },
+  { name:'Clare',          seat:'Harrison',       lat:44.017, lon:-84.802, antlerless:4 },
+  { name:'Crawford',       seat:'Grayling',       lat:44.661, lon:-84.715, antlerless:3, tb:true },
+  { name:'Emmet',          seat:'Petoskey',       lat:45.373, lon:-84.955, antlerless:3, islands:true },
+  { name:'Gladwin',        seat:'Gladwin',        lat:43.981, lon:-84.487, antlerless:4, cwd:true },
+  { name:'Grand Traverse', seat:'Traverse City',  lat:44.763, lon:-85.620, antlerless:3 },
+  { name:'Iosco',          seat:'Tawas City',     lat:44.269, lon:-83.515, antlerless:5, tb:true },
+  { name:'Kalkaska',       seat:'Kalkaska',       lat:44.733, lon:-85.176, antlerless:3 },
+  { name:'Lake',           seat:'Baldwin',        lat:43.899, lon:-85.851, antlerless:3 },
+  { name:'Leelanau',       seat:'Leland',         lat:45.023, lon:-85.759, antlerless:3, islands:true },
+  { name:'Manistee',       seat:'Manistee',       lat:44.245, lon:-86.324, antlerless:5 },
+  { name:'Mason',          seat:'Ludington',      lat:43.955, lon:-86.452, antlerless:5 },
+  { name:'Missaukee',      seat:'Lake City',      lat:44.334, lon:-85.212, antlerless:5 },
+  { name:'Montmorency',    seat:'Atlanta',        lat:45.005, lon:-84.140, antlerless:10, tb:true },
+  { name:'Ogemaw',         seat:'West Branch',    lat:44.276, lon:-84.238, antlerless:5, tb:true, cwd:true },
+  { name:'Oscoda',         seat:'Mio',            lat:44.657, lon:-84.133, antlerless:10, tb:true },
+  { name:'Osceola',        seat:'Reed City',      lat:43.874, lon:-85.510, antlerless:5 },
+  { name:'Otsego',         seat:'Gaylord',        lat:45.027, lon:-84.675, antlerless:3, tb:true },
+  { name:'Presque Isle',   seat:'Rogers City',    lat:45.421, lon:-83.818, antlerless:10, tb:true },
+  { name:'Roscommon',      seat:'Roscommon',      lat:44.498, lon:-84.594, antlerless:3, tb:true },
+  { name:'Wexford',        seat:'Cadillac',       lat:44.252, lon:-85.401, antlerless:3 },
+];
+
+// ═══ LEGAL HOURS RULES ═══
+// Offsets in minutes relative to sunrise / sunset, each sourced from its own
+// 2026 DNR digest. They are genuinely not all the same.
+const HOURS = {
+  general:  { open:-30, close:+30, label:'½ hr before sunrise → ½ hr after sunset',
+              src:'https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer' },
+  woodcock: { open:0,   close:0,   label:'Sunrise → sunset',
+              src:'https://www.michigan.gov/dnr/managing-resources/laws/regulations/small-game' },
+  waterfowl:{ open:-30, close:0,   label:'½ hr before sunrise → sunset',
+              src:'https://www.michigan.gov/dnr/managing-resources/laws/regulations/waterfowl' },
+  teal:     { open:0,   close:0,   label:'Sunrise → sunset (early teal only)',
+              src:'https://www.michigan.gov/dnr/managing-resources/laws/regulations/waterfowl' },
+  furbearer:{ open:-30, close:+30, label:'½ hr before sunrise → ½ hr after sunset, plus regulated night hunting',
+              src:'https://www.michigan.gov/dnr/managing-resources/laws/regulations/fur-harvester' },
+};
+
+// ═══ 2026–27 SEASONS — NORTHERN LOWER PENINSULA ═══
+const DEER_SRC = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer';
+const SG_SRC   = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/small-game';
+const WF_SRC   = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/waterfowl';
+const BEAR_SRC = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/bear';
+const TURK_SRC = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/fall-turkey';
+const ELK_SRC  = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/elk';
+const FUR_SRC  = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/fur-harvester';
+const CAL_SRC  = 'https://www.michigan.gov/dnr/things-to-do/hunting/hunting-season-calendar';
+
+const SEASONS = [
+  { name:'Archery deer', icon:'🏹', hours:'general', src:DEER_SRC,
+    ranges:[['2026-10-01','2026-11-14'],['2026-12-01','2027-01-01']],
+    note:'Crossbows are legal throughout both archery segments in the Lower Peninsula.' },
+  { name:'Liberty Hunt', icon:'🎗️', hours:'general', src:DEER_SRC,
+    ranges:[['2026-09-12','2026-09-13']],
+    note:'Youth and hunters with qualifying disabilities. Antler point restrictions do not apply.' },
+  { name:'Early antlerless firearm', icon:'🎯', hours:'general', src:DEER_SRC,
+    ranges:[['2026-09-12','2026-09-13']],
+    note:'Moved onto the Liberty Hunt weekend for 2026.' },
+  { name:'Independence Hunt', icon:'♿', hours:'general', src:DEER_SRC,
+    ranges:[['2026-10-15','2026-10-18']],
+    note:'Hunters with qualifying disabilities. One deer, antlered or antlerless. Baiting is permitted for qualifying hunters Oct. 10–18.' },
+  { name:'Regular firearm deer', icon:'🦌', hours:'general', src:DEER_SRC,
+    ranges:[['2026-11-15','2026-11-30']],
+    note:'The limited firearms deer zone was eliminated — all legal firearms may be used across the Lower Peninsula as of Sept. 12, 2026.' },
+  { name:'December firearm (LP DMUs)', icon:'💨', hours:'general', src:DEER_SRC,
+    ranges:[['2026-12-04','2026-12-06']],
+    note:'Lower Peninsula DMUs. Runs the same three days as the UP muzzleloader season.' },
+  { name:'Late antlerless firearm', icon:'🎯', hours:'general', src:DEER_SRC,
+    ranges:[['2026-12-07','2027-01-01']],
+    note:'New for 2026 — opens the Monday after December Firearm. Open across the Lower Peninsula except DMU 245 (South Fox Island) and DMU 145 (North Manitou Island). DMU 115 (Beaver and Garden islands) is now open for both early and late antlerless.' },
+  { name:'Bear', icon:'🐻', hours:'general', src:BEAR_SRC,
+    ranges:[['2026-09-12','2026-09-22'],['2026-10-02','2026-10-08']],
+    note:'Northern Lower BMUs — Baldwin, Gladwin and Red Oak — all run Sept. 12–22 and Oct. 2–8. Licensed by quota drawing.' },
+  { name:'Elk', icon:'🫎', hours:'general', src:ELK_SRC,
+    ranges:[['2026-09-23','2026-10-04'],['2026-12-01','2026-12-15']],
+    note:'Michigan\'s elk herd lives here. EMU X hunt period 1 runs Sept. 23 – Oct. 4; EMUs H, I and X run Dec. 1–15. Drawing only.' },
+  { name:'Ruffed grouse', icon:'🐦', hours:'general', src:SG_SRC,
+    ranges:[['2026-09-15','2026-11-14'],['2026-12-01','2027-01-01']],
+    note:'Bag limit 5 daily, 10 in possession in Zone 2.' },
+  { name:'American woodcock', icon:'🪶', hours:'woodcock', src:SG_SRC,
+    ranges:[['2026-09-15','2026-10-29']],
+    note:'Sunrise to sunset — not the general hours. Free woodcock stamp and a current HIP endorsement required. Bag limit 3 daily.' },
+  { name:'Fall turkey', icon:'🦃', hours:'general', src:TURK_SRC,
+    ranges:[['2026-09-15','2026-11-14']],
+    note:'TMU I and TMU M. Check the TMU map for the unit covering your ground.' },
+  { name:'Ring-necked pheasant (Zone 2)', icon:'🐓', hours:'general', src:SG_SRC,
+    ranges:[['2026-10-20','2026-11-14']],
+    note:'Zone 2 pheasant units. Bag limit 2 daily.' },
+  { name:'Fox &amp; gray squirrel', icon:'🐿️', hours:'general', src:SG_SRC,
+    ranges:[['2026-09-15','2027-03-31']],
+    note:'Black-phase gray squirrels included. Bag limit 5 daily.' },
+  { name:'Cottontail rabbit &amp; snowshoe hare', icon:'🐇', hours:'general', src:SG_SRC,
+    ranges:[['2026-09-15','2027-03-31']],
+    note:'Bag limit 5 daily, 10 in possession combined.' },
+  { name:'Duck, coot &amp; merganser (Middle Zone)', icon:'🦆', hours:'waterfowl', src:WF_SRC,
+    ranges:[['2026-10-03','2026-11-29'],['2026-12-12','2026-12-13']],
+    note:'The northern Lower Peninsula sits in the waterfowl Middle Zone — the North Zone is the UP. Federal duck stamp and HIP endorsement required.' },
+  { name:'Dark &amp; light goose (Middle Zone)', icon:'🪿', hours:'waterfowl', src:WF_SRC,
+    ranges:[['2026-09-01','2026-09-30'],['2026-10-03','2026-12-18']],
+    note:'Middle Zone dates. Bag limits differ between dark and light geese.' },
+  { name:'Early teal', icon:'🦆', hours:'teal', src:WF_SRC,
+    ranges:[['2026-09-01','2026-09-09']],
+    note:'Blue-winged and green-winged teal only, and hours are sunrise to sunset rather than the regular waterfowl hours.' },
+  { name:"Rails, gallinule &amp; Wilson's snipe", icon:'🐦‍⬛', hours:'waterfowl', src:WF_SRC,
+    ranges:[['2026-09-01','2026-11-09']],
+    note:'Statewide season. HIP endorsement required.' },
+  { name:'Coyote', icon:'🐺', hours:'furbearer', src:FUR_SRC,
+    ranges:[['2026-10-15','2027-03-01']],
+    note:'Night hunting is legal under the furbearer nighttime rules. A separate management season runs Mar. 2 – Oct. 14.' },
+  { name:'Crow', icon:'🐦‍⬛', hours:'general', src:SG_SRC,
+    ranges:[['2026-08-01','2026-09-30'],['2027-02-01','2027-03-31']],
+    note:'No bag limit.' },
+];
+
+// ═══ REGULATION SUMMARY — COUNTY BY COUNTY ═══
+function rulesFor(county) {
+  const lim = county.antlerless;
+  return [
+    { lbl:'Deer Management Unit', val:'County-based in the Lower Peninsula',
+      txt:'Lower Peninsula DMUs largely follow county lines, with island and game-area exceptions. Find the unit and its antler point restriction for your ground on the '
+        + '<a href="https://www.michigan.gov/dnr/things-to-do/hunting/deer" target="_blank" rel="noopener">DNR interactive DMU map</a>.'
+        + (county.islands ? ' ' + county.name + ' County includes Lake Michigan islands with their own DMUs and their own rules — check before you cross the water.' : '') },
+
+    { lbl:'Baiting', val:'Banned — entire Lower Peninsula', flag:true,
+      txt:'Baiting and feeding deer are prohibited across the whole Lower Peninsula, public and private land alike. The only exception is for hunters meeting the disability qualifications during the Liberty and Independence hunts. Food plots on private land remain legal and are not considered bait. '
+        + '<a href="' + DEER_SRC + '" target="_blank" rel="noopener">Baiting rules →</a>' },
+
+    { lbl:'Antlerless availability', val:lim + ' universal antlerless license' + (lim === 1 ? '' : 's'), flag:(lim >= 10),
+      txt:'The 2026 use limit in ' + county.name + ' County is ' + lim + '. Use limits cap how many universal antlerless licenses one hunter may use inside the county, they are now set county by county in the Lower Peninsula, and the DNR reviews and republishes them every year — so a number you remember from last season is not reliable. '
+        + '<a href="' + DEER_SRC + '" target="_blank" rel="noopener">Use limit map →</a>' },
+
+    { lbl:'Antler point restrictions', val:'Vary by DMU and license',
+      txt:'APRs depend on your DMU and on which tag you are using; the restricted kill tag on a combo license carries a four-point APR. Youth 16 and under, mentored hunters and apprentice licensees are exempt in all units and all seasons. <b>For 2027</b>, a single deer license will require three antler points on one side — or one antlerless deer — across the whole Lower Peninsula. '
+        + '<a href="' + DEER_SRC + '" target="_blank" rel="noopener">APR chart →</a>' },
+
+    { lbl:'Bag limit — antlered', val:'Two statewide',
+      txt:'Michigan’s statewide limit is two antlered deer. From 2027 a combo license will allow one antlered and one antlerless deer, or two antlerless — and a Zone 3 pilot will require an antlerless deer before a second buck.' },
+
+    { lbl:'Weapons', val:'All legal firearms', flag:true,
+      txt:'The limited firearms deer zone has been eliminated. Beginning Sept. 12, 2026, hunters can use all legal firearms across the Lower Peninsula — the shotgun-only restriction that shaped southern Michigan hunting for decades is gone. Crossbows are legal throughout both archery segments in the LP.' },
+
+    { lbl:'Harvest reporting', val:'Mandatory — 72 hours', flag:true,
+      txt:'Report within 72 hours of harvest, or before you transfer possession to anyone (processor, taxidermist, friend), whichever comes first. Keep the confirmation number as proof. Failing to report is a civil infraction with a fine up to $150, and you cannot submit a head for disease testing until the harvest is reported. '
+        + '<a href="https://www.mdnr-elicense.com/harvestreport" target="_blank" rel="noopener">Report a harvest →</a>' },
+
+    county.tb
+      ? { lbl:'Disease testing priority', val:'Bovine TB focus county — 2026', flag:true,
+          txt:county.name + ' County is one of twelve counties in the DNR’s 2026 focused bovine TB surveillance area. Deer from these counties are the ones the state most needs tested — bovine TB has been found in Michigan deer every year since 1994, and fewer than 40% of infected deer show lesions a hunter would notice. Drop the head at a check station or drop box. '
+            + (county.cwd ? 'CWD has also been confirmed in free-ranging deer in this county. ' : '')
+            + '<a href="https://www.michigan.gov/dnr/things-to-do/hunting/deer/deer-stations-disease-sample" target="_blank" rel="noopener">Find a drop box →</a>' }
+      : county.cwd
+      ? { lbl:'Disease testing priority', val:'CWD confirmed in this county', flag:true,
+          txt:'Free-ranging deer in ' + county.name + ' County have tested positive for chronic wasting disease. The county is not in a 2026 focused surveillance area, but free lymph node submission kits are available so you can have your deer tested anyway, and CWD-symptomatic deer are accepted statewide year-round. '
+            + '<a href="https://www.michigan.gov/dnr/managing-resources/wildlife/wildlife-disease/disease-monitoring/cwd/cwd-testing" target="_blank" rel="noopener">CWD testing →</a>' }
+      : { lbl:'Disease testing priority', val:'Not a 2026 focus county',
+          txt:'The DNR’s 2026 focused CWD surveillance is in Ionia, Kent, Mecosta, Montcalm and Newaygo counties, and focused bovine TB surveillance covers twelve northeastern-Lower counties — ' + county.name + ' is in neither. Deer heads are still accepted statewide for TB testing, CWD-symptomatic deer statewide year-round, and free lymph node kits are available for any non-focus county. '
+            + '<a href="https://www.michigan.gov/dnr/managing-resources/wildlife/wildlife-disease/disease-monitoring/cwd/cwd-testing" target="_blank" rel="noopener">Get your deer tested →</a>' },
+
+    { lbl:'Land access', val:'Mixed ownership — plan it',
+      txt:'Up North is not the UP: private ground dominates in much of the region and there is no Commercial Forest Act equivalent giving you automatic foot access. The Hunting Access Program pays private landowners to open ground to public hunting, and it is the fastest way to find legal walk-in land near agriculture. '
+        + '<a href="https://www.michigan.gov/dnr/things-to-do/hunting/where/hap" target="_blank" rel="noopener">Explore HAP →</a>' },
+
+    { lbl:'Full regulations', val:'Read the digest',
+      txt:'This page is a summary of the rules that vary by location. It is not a substitute for the 2026 digest, and the digest is what a conservation officer is working from. '
+        + '<a href="' + DEER_SRC + '" target="_blank" rel="noopener">Deer digest</a> · '
+        + '<a href="' + SG_SRC + '" target="_blank" rel="noopener">Small game</a> · '
+        + '<a href="' + WF_SRC + '" target="_blank" rel="noopener">Waterfowl</a> · '
+        + '<a href="' + CAL_SRC + '" target="_blank" rel="noopener">Season calendar</a>' },
+  ];
+}
+
+// ═══ AFTER THE SHOT ═══
+const AFTER_SHOT = [
+  { n:'Step 1', name:'Validate your tag', desc:'Attach the paper kill tag, or complete your eHarvest tag validation in the Hunt Fish app. If the head and body are separated, the paper tag stays with the head.',
+    links:[['https://www.michigan.gov/dnr/things-to-do/hunting/huntfishmi','Hunt Fish app',false]] },
+  { n:'Step 2', name:'Report the harvest', desc:'Mandatory within 72 hours, or before you hand the deer to anyone else — whichever is sooner. You need the license number off the kill tag. Keep the confirmation number.',
+    links:[['https://www.mdnr-elicense.com/harvestreport','Report now →',true],['https://www.michigan.gov/dnr/things-to-do/hunting/harvest-reporting','How it works',false]] },
+  { n:'Step 3', name:'Find a check station or drop box', desc:'Head drop-off locations and hours for bovine TB and CWD testing. In the twelve TB focus counties this is the step that actually matters to the state. You must report your harvest first.',
+    links:[['https://www.michigan.gov/dnr/things-to-do/hunting/deer/deer-stations-disease-sample','Stations & drop boxes →',true]] },
+  { n:'Step 4', name:'Get your deer tested', desc:'Outside the focused-surveillance counties you can still have a deer tested using a free lymph node submission kit. Deer with CWD-like symptoms are accepted statewide, year-round.',
+    links:[['https://www.michigan.gov/dnr/managing-resources/wildlife/wildlife-disease/disease-monitoring/bovine-tuberculosis','Bovine TB',false],['https://www.michigan.gov/dnr/managing-resources/wildlife/wildlife-disease/disease-monitoring/cwd/cwd-testing','CWD testing',false]] },
+  { n:'Step 5', name:'Check your lab results', desc:'Results post to the DNR disease lab portal. Look them up by license number — no phone call needed.',
+    links:[['https://mdnr-elicense.com/diseaselab','Look up results →',true]] },
+  { n:'Step 6', name:'Find a processor', desc:'A licensed processor is required if you intend to donate. The Michigan Sportsmen Against Hunger map is the working directory of participating processors.',
+    links:[['https://sportsmenagainsthunger.org/processors/processor-map/','Processor map →',true]] },
+  { n:'Step 7', name:'Donate a deer', desc:'Hunters Feeding Michigan connects donors, processors and charities. The DNR estimates each donated deer provides about 160 meals. Deer must be whole, tagged, harvest-reported and field-dressed.',
+    links:[['https://www.michigan.gov/dnr/about/get-involved/hunters-feeding-michigan','Hunters Feeding Michigan →',true]] },
+  { n:'Step 8', name:'Tracking help &amp; taxidermy', desc:'A leashed dog may be used to recover a downed or mortally wounded deer. If you are transferring the deer to a taxidermist, you must report the harvest first and pass along the confirmation number.',
+    links:[['https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer','Tracking rules',false]] },
+  { n:'Anytime', name:'Report poaching (RAP)', desc:'The Report All Poaching line is staffed 24 hours a day: 800-292-7800. Text and online reporting are also available, and reports can be anonymous.',
+    links:[['https://www.michigan.gov/dnr/managing-resources/laws/rap','RAP line →',true]] },
+];
+
+// ═══ HELPERS ═══
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad2 = n => String(n).padStart(2,'0');
+
+function parseLocalISO(iso, offsetSeconds) {
+  // Open-Meteo returns wall-clock strings with no offset ("2026-08-23T06:52").
+  // Read them as UTC then back out the location's offset to get the true instant.
+  if (!iso) return null;
+  const ms = Date.parse(iso.length === 16 ? iso + ':00Z' : iso + 'Z');
+  if (Number.isNaN(ms)) return null;
+  return new Date(ms - offsetSeconds * 1000);
+}
+function fmtClock(d, tz) {
+  if (!d) return '—';
+  try { return d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZone: tz }); }
+  catch(e) { return d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' }); }
+}
+function fmtDay(d, tz) {
+  if (!d) return '—';
+  try { return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', timeZone: tz }); }
+  catch(e) { return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }); }
+}
+function fmtRange(a, b) {
+  // Show the year only when it is not the current one — an out-year range like
+  // "Feb 1 - Mar 31" is ambiguous on a page whose whole job is telling you when
+  // a season is open.
+  const o = { month:'short', day:'numeric', timeZone:'UTC' };
+  const A = new Date(a + 'T12:00:00Z'), B = new Date(b + 'T12:00:00Z');
+  const thisYear = new Date().getFullYear();
+  const ay = A.getUTCFullYear(), by = B.getUTCFullYear();
+  const at = A.toLocaleDateString('en-US', o) + (ay !== by && ay !== thisYear ? ', ' + ay : '');
+  const bt = B.toLocaleDateString('en-US', o) + (by !== thisYear ? ', ' + by : '');
+  return at + ' \u2013 ' + bt;
+}
+function durHuman(ms) {
+  if (ms < 0) ms = 0;
+  const m = Math.round(ms / 60000), h = Math.floor(m / 60), r = m % 60;
+  if (h >= 24) { const d = Math.floor(h/24); return d + (d===1?' day ':' days ') + (h%24) + 'h'; }
+  return h > 0 ? h + 'h ' + pad2(r) + 'm' : r + ' min';
+}
+function todayISOIn(tz) {
+  try { return new Date().toLocaleDateString('en-CA', { timeZone: tz }); }
+  catch(e) { return new Date().toLocaleDateString('en-CA'); }
+}
+function compass(deg) {
+  if (deg == null) return '';
+  const pts = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return pts[Math.round(deg / 22.5) % 16];
+}
+function isOpenOn(ranges, iso) { return ranges.some(([a,b]) => iso >= a && iso <= b); }
+function nextOpening(ranges, iso) {
+  const future = ranges.map(r => r[0]).filter(a => a > iso).sort();
+  return future[0] || null;
+}
+function closesOn(ranges, iso) {
+  const r = ranges.find(([a,b]) => iso >= a && iso <= b);
+  return r ? r[1] : null;
+}
+function daysBetweenISO(a, b) {
+  return Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
+}
+
+// Moon illumination — a standard synodic approximation, accurate to about a day.
+// Shown as information. It is not a movement prediction and we do not treat it as one.
+function moonInfo(date) {
+  const SYN = 29.530588853;
+  const knownNew = Date.UTC(2000, 0, 6, 18, 14);
+  let age = ((date.getTime() - knownNew) / 86400000) % SYN;
+  if (age < 0) age += SYN;
+  const illum = (1 - Math.cos(2 * Math.PI * (age / SYN))) / 2;
+  const names = [
+    [1.85,'New moon','🌑'], [5.54,'Waxing crescent','🌒'], [9.23,'First quarter','🌓'],
+    [12.91,'Waxing gibbous','🌔'], [16.61,'Full moon','🌕'], [20.30,'Waning gibbous','🌖'],
+    [23.99,'Last quarter','🌗'], [27.68,'Waning crescent','🌘'], [30.00,'New moon','🌑'],
+  ];
+  const hit = names.find(n => age < n[0]) || names[names.length-1];
+  return { age, illum, name: hit[1], icon: hit[2] };
+}
+
+// ═══ FEEDS ═══
+async function fetchWeather(c) {
+  const url = 'https://api.open-meteo.com/v1/forecast'
+    + '?latitude=' + c.lat + '&longitude=' + c.lon
+    + '&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,'
+    + 'wind_speed_10m,wind_direction_10m,wind_gusts_10m,pressure_msl,snow_depth'
+    + '&hourly=pressure_msl'
+    + '&daily=sunrise,sunset,snowfall_sum,precipitation_sum,temperature_2m_max,temperature_2m_min'
+    + '&past_days=1&forecast_days=3'
+    + '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto';
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('Open-Meteo HTTP ' + r.status);
+  return r.json();
+}
+async function fetchAir(c) {
+  const url = 'https://air-quality-api.open-meteo.com/v1/air-quality'
+    + '?latitude=' + c.lat + '&longitude=' + c.lon + '&current=us_aqi,pm2_5&timezone=auto';
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('AQ HTTP ' + r.status);
+  return r.json();
+}
+async function fetchAlerts(c) {
+  const r = await fetch('https://api.weather.gov/alerts/active?point=' + c.lat + ',' + c.lon,
+    { headers: { 'Accept': 'application/geo+json' } });
+  if (!r.ok) throw new Error('NWS HTTP ' + r.status);
+  return r.json();
+}
+async function fetchRoads() {
+  const r = await fetch(MDOT_PROXY_URL + '/events?region=' + MDOT_REGION);
+  if (!r.ok) throw new Error('MDOT HTTP ' + r.status);
+  return r.json();
+}
+
+// ═══ RENDER: legal light ═══
+function renderLight(c, wx) {
+  const off = wx.utc_offset_seconds || 0;
+  const tz  = wx.timezone || 'America/Detroit';
+  const days = wx.daily || {};
+  const dates = days.time || [];
+  const todayISO = todayISOIn(tz);
+  let idx = dates.indexOf(todayISO);
+  if (idx < 0) idx = Math.min(1, dates.length - 1);
+
+  const sunrise = parseLocalISO((days.sunrise || [])[idx], off);
+  const sunset  = parseLocalISO((days.sunset  || [])[idx], off);
+  const nextSunrise = parseLocalISO((days.sunrise || [])[idx + 1], off);
+
+  const g = HOURS.general;
+  const openAt  = sunrise ? new Date(sunrise.getTime() + g.open  * 60000) : null;
+  const closeAt = sunset  ? new Date(sunset.getTime()  + g.close * 60000) : null;
+  const nextOpenAt = nextSunrise ? new Date(nextSunrise.getTime() + g.open * 60000) : null;
+
+  document.getElementById('lt-open').textContent    = fmtClock(openAt, tz);
+  document.getElementById('lt-close').textContent   = fmtClock(closeAt, tz);
+  document.getElementById('lt-sunrise').textContent = fmtClock(sunrise, tz);
+  document.getElementById('lt-sunset').textContent  = fmtClock(sunset, tz);
+  document.getElementById('lt-date').textContent    = fmtDay(sunrise || new Date(), tz);
+  document.getElementById('lt-tz').textContent      = 'Eastern Time · ' + c.seat;
+
+  const now = new Date();
+  const st = document.getElementById('light-status');
+  const ct = document.getElementById('light-count');
+  const sb = document.getElementById('light-sub');
+
+  if (!openAt || !closeAt) {
+    st.className = 'light-status'; st.textContent = 'Hours unavailable';
+    ct.textContent = '—';
+    sb.textContent = 'Sunrise and sunset did not come back from Open-Meteo. Use the hours table in your digest.';
+  } else if (now < openAt) {
+    st.className = 'light-status soon'; st.textContent = 'Legal light not open yet';
+    ct.textContent = durHuman(openAt - now);
+    sb.textContent = 'until shooting light opens at ' + fmtClock(openAt, tz) + ' in ' + c.name + ' County (general hours).';
+  } else if (now <= closeAt) {
+    const left = closeAt - now;
+    st.className = 'light-status open';
+    st.textContent = left < 45 * 60000 ? 'Last light — under 45 minutes' : 'Legal light is open';
+    ct.textContent = durHuman(left);
+    sb.textContent = 'of legal shooting light left. General hours close at ' + fmtClock(closeAt, tz) + '.';
+  } else {
+    st.className = 'light-status closed'; st.textContent = 'Legal light closed';
+    ct.textContent = nextOpenAt ? durHuman(nextOpenAt - now) : '—';
+    sb.textContent = nextOpenAt
+      ? 'until it opens again at ' + fmtClock(nextOpenAt, tz) + '. Firearms unloaded and arrows quivered while afield outside legal hours.'
+      : 'Closed for the day. Firearms unloaded and arrows quivered while afield outside legal hours.';
+  }
+
+  return { tz, off, idx, sunrise, sunset, todayISO };
+}
+
+// ═══ RENDER: hours by species ═══
+function renderHoursTable(ctx) {
+  const { tz, sunrise, sunset, todayISO } = ctx;
+  const openSeasonRules = new Set(
+    SEASONS.filter(s => isOpenOn(s.ranges, todayISO)).map(s => s.hours)
+  );
+  const rows = Object.entries(HOURS).map(([key, rule]) => {
+    const o = sunrise ? new Date(sunrise.getTime() + rule.open  * 60000) : null;
+    const c = sunset  ? new Date(sunset.getTime()  + rule.close * 60000) : null;
+    const who = {
+      general:  'Deer · bear · elk · fall turkey · grouse · squirrel · rabbit &amp; hare · pheasant · crow',
+      woodcock: 'American woodcock',
+      waterfowl:'Ducks · geese · coot · mergansers · rails &amp; snipe',
+      teal:     'Early teal season only',
+      furbearer:'Coyote · fox · raccoon · bobcat and other furbearers',
+    }[key];
+    return { key, rule, o, c, who, live: openSeasonRules.has(key) };
+  });
+  rows.sort((a,b) => (b.live - a.live));
+
+  document.getElementById('hours-tbl').innerHTML =
+    '<thead><tr><th>Species group</th><th>Opens</th><th>Closes</th><th>DNR rule</th></tr></thead><tbody>'
+    + rows.map(r => `
+      <tr${r.live ? '' : ' style="opacity:.6"'}>
+        <td>${r.who}${r.live ? ' <span class="sn-tag open">In season</span>' : ''}</td>
+        <td class="hr-time">${fmtClock(r.o, tz)}</td>
+        <td class="hr-time">${fmtClock(r.c, tz)}</td>
+        <td class="hr-rule">${esc(r.rule.label)} · <a href="${r.rule.src}" target="_blank" rel="noopener" style="color:var(--blaze);">source</a></td>
+      </tr>`).join('')
+    + '</tbody>';
+}
+
+// ═══ RENDER: conditions ═══
+function renderConditions(c, wx, air, ctx) {
+  const cur = wx.current || {};
+  const units = wx.current_units || {};
+  const daily = wx.daily || {};
+  const idx = ctx.idx;
+  const cards = [];
+
+  const t = cur.temperature_2m, feels = cur.apparent_temperature;
+  cards.push({
+    lbl:'🌡️ Temperature', val: t != null ? Math.round(t) + '°F' : '—',
+    sub: (feels != null ? 'Feels like ' + Math.round(feels) + '°F' : '')
+       + (daily.temperature_2m_min && daily.temperature_2m_min[idx] != null
+          ? ' · Today ' + Math.round(daily.temperature_2m_min[idx]) + '° to ' + Math.round(daily.temperature_2m_max[idx]) + '°' : ''),
+    cls: feels != null && feels <= 10 ? 'bad' : feels != null && feels <= 25 ? 'warn' : '',
+  });
+
+  const ws = cur.wind_speed_10m, wg = cur.wind_gusts_10m;
+  cards.push({
+    lbl:'💨 Wind', val: ws != null ? Math.round(ws) + ' mph ' + compass(cur.wind_direction_10m) : '—',
+    sub: (wg != null ? 'Gusting ' + Math.round(wg) + ' mph' : '')
+       + (ws != null && ws < 6 ? ' · Still — scent carries straight' : ''),
+    cls: wg != null && wg >= 30 ? 'bad' : wg != null && wg >= 20 ? 'warn' : '',
+  });
+
+  const precip = cur.precipitation;
+  const psum = daily.precipitation_sum ? daily.precipitation_sum[idx] : null;
+  cards.push({
+    lbl:'🌧️ Precipitation', val: precip != null ? (precip > 0 ? precip.toFixed(2) + '"/hr' : 'None') : '—',
+    sub: (psum != null ? psum.toFixed(2) + '" expected today' : '')
+       + ' · <a href="https://radar.weather.gov/station/KAPX/standard" target="_blank" rel="noopener" style="color:var(--blaze);">Radar →</a>',
+    cls: precip > 0.1 ? 'warn' : '', html: true,
+  });
+
+  let snowIn = null;
+  if (cur.snow_depth != null) {
+    const u = (units.snow_depth || '').toLowerCase();
+    snowIn = u.indexOf('ft') === 0 ? cur.snow_depth * 12 : cur.snow_depth * 39.3701;
+  }
+  const newSnow = daily.snowfall_sum ? daily.snowfall_sum[idx] : null;
+  cards.push({
+    lbl:'❄️ Snow', val: snowIn != null ? (snowIn < 0.5 ? 'Bare ground' : snowIn.toFixed(1) + '"') : '—',
+    sub: (snowIn != null && snowIn >= 0.5 ? 'On the ground' : 'No measurable pack')
+       + (newSnow ? ' · ' + newSnow.toFixed(1) + '" new today' : ''),
+    cls: snowIn != null && snowIn >= 12 ? 'warn' : '',
+  });
+
+  let trend = null, delta = null;
+  const hp = (wx.hourly && wx.hourly.pressure_msl) || [];
+  const ht = (wx.hourly && wx.hourly.time) || [];
+  if (hp.length && ht.length) {
+    const nowLocal = new Date(Date.now() + (wx.utc_offset_seconds || 0) * 1000).toISOString().slice(0, 13);
+    let i = ht.findIndex(s => s.slice(0, 13) === nowLocal);
+    if (i < 0) i = ht.length - 1;
+    const j = Math.max(0, i - 3);
+    if (hp[i] != null && hp[j] != null) {
+      delta = hp[i] - hp[j];
+      trend = delta <= -1.0 ? 'Falling' : delta >= 1.0 ? 'Rising' : 'Steady';
+    }
+  }
+  const inHg = cur.pressure_msl != null ? (cur.pressure_msl * 0.02953).toFixed(2) : null;
+  cards.push({
+    lbl:'📉 Barometer', val: trend ? trend : (inHg ? inHg + '"' : '—'),
+    sub: (inHg ? inHg + ' inHg' : '')
+       + (delta != null ? ' · ' + (delta > 0 ? '+' : '') + delta.toFixed(1) + ' hPa over 3 hrs' : '')
+       + (trend === 'Falling' ? ' — front moving in' : ''),
+    cls: trend === 'Falling' ? 'warn' : '',
+  });
+
+  const aqi = air && air.current ? air.current.us_aqi : null;
+  const pm  = air && air.current ? air.current.pm2_5 : null;
+  const aqiLabel = aqi == null ? '—'
+    : aqi <= 50 ? 'Good' : aqi <= 100 ? 'Moderate' : aqi <= 150 ? 'Unhealthy (sensitive)'
+    : aqi <= 200 ? 'Unhealthy' : 'Very unhealthy';
+  cards.push({
+    lbl:'🌫️ Air quality', val: aqi != null ? aqi + ' AQI' : '—',
+    sub: aqiLabel + (pm != null ? ' · PM2.5 ' + pm.toFixed(1) : '')
+       + (aqi != null && aqi > 100 ? ' · Wildfire smoke can push this fast — <a href="https://www.michigan.gov/egle/about/organization/air-quality" target="_blank" rel="noopener" style="color:var(--blaze);">MiAir →</a>' : ''),
+    cls: aqi == null ? '' : aqi > 150 ? 'bad' : aqi > 100 ? 'warn' : 'good', html: true,
+  });
+
+  const moon = moonInfo(new Date());
+  cards.push({
+    lbl:'🌙 Moon', val: Math.round(moon.illum * 100) + '%',
+    sub: moon.icon + ' ' + moon.name + ' · illumination only, not a movement forecast',
+  });
+
+  const rh = cur.relative_humidity_2m;
+  cards.push({
+    lbl:'💧 Humidity', val: rh != null ? Math.round(rh) + '%' : '—',
+    sub: rh != null && rh >= 90 ? 'Saturated — fog and wet gear likely' : 'Scenting conditions',
+  });
+
+  document.getElementById('cond-grid').innerHTML = cards.map(c2 => `
+    <div class="cond-card ${c2.cls || ''}">
+      <div class="cond-lbl">${c2.lbl}</div>
+      <div class="cond-val">${esc(c2.val)}</div>
+      <div class="cond-sub">${c2.html ? c2.sub : esc(c2.sub)}</div>
+    </div>`).join('');
+}
+
+// ═══ RENDER: NWS alerts ═══
+function renderAlerts(data) {
+  const box = document.getElementById('alert-strip');
+  const feats = (data && data.features) || [];
+  if (!feats.length) { box.innerHTML = ''; return; }
+  box.innerHTML = feats.slice(0, 4).map(f => {
+    const p = f.properties || {};
+    const sev = (p.severity || '').toLowerCase();
+    const cls = (sev === 'severe' || sev === 'extreme') ? '' : 'moderate';
+    const head = p.headline || p.event || 'Weather alert';
+    const body = (p.description || '').split('\n').filter(Boolean).slice(0, 2).join(' ').slice(0, 320);
+    return `<div class="alert-item ${cls}">
+      <div class="alert-hd">⚠️ ${esc(head)}</div>
+      <div class="alert-bd">${esc(body)}${body.length >= 320 ? '…' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ RENDER: seasons ═══
+function renderSeasons(todayISO) {
+  const enriched = SEASONS.map(s => {
+    const open = isOpenOn(s.ranges, todayISO);
+    const next = open ? null : nextOpening(s.ranges, todayISO);
+    return { ...s, open, next, days: next ? daysBetweenISO(todayISO, next) : null };
+  });
+  enriched.sort((a, b) => {
+    if (a.open !== b.open) return b.open - a.open;
+    if (a.next && b.next) return a.next < b.next ? -1 : 1;
+    if (a.next) return -1;
+    if (b.next) return 1;
+    return 0;
+  });
+
+  document.getElementById('season-grid').innerHTML = enriched.map(s => {
+    const soon = !s.open && s.days != null && s.days <= 30;
+    const cls  = s.open ? 'open' : soon ? 'soon' : 'shut';
+    const tag  = s.open ? '<span class="sn-tag open">Open now</span>'
+               : soon   ? '<span class="sn-tag soon">' + s.days + ' day' + (s.days === 1 ? '' : 's') + '</span>'
+               : '<span class="sn-tag shut">Closed</span>';
+    return `
+      <div class="sn-card ${cls}">
+        <div class="sn-icon">${s.icon}</div>
+        <div>
+          <div class="sn-name">${s.name}${tag}</div>
+          <div class="sn-dates">${s.ranges.map(r => fmtRange(r[0], r[1])).join(' · ')}</div>
+          <div class="sn-hours">Hours: ${esc(HOURS[s.hours].label)}</div>
+          ${s.note ? `<div class="sn-note">${s.note}</div>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ═══ RENDER: rules ═══
+function renderRules(county) {
+  document.getElementById('rules-title').textContent = 'The 2026 rules in ' + county.name + ' County';
+  document.getElementById('rules-grid').innerHTML = rulesFor(county).map(r => `
+    <div class="rule-card ${r.flag ? 'flag' : ''}">
+      <div class="rule-lbl">${esc(r.lbl)}</div>
+      <div class="rule-val">${esc(r.val)}</div>
+      <div class="rule-txt">${r.txt}</div>
+    </div>`).join('');
+}
+
+// ═══ RENDER: roads ═══
+function renderRoads(county, data) {
+  const hd = document.getElementById('road-hd');
+  const body = document.getElementById('road-body');
+  hd.textContent = 'Live MDOT incidents & construction — ' + county.name + ' County';
+
+  if (!data || !data.ok) {
+    body.innerHTML = '<div class="road-empty">MDOT MiDrive did not respond. '
+      + '<a href="https://mdotjboss.state.mi.us/MiDrive/map" target="_blank" rel="noopener" style="color:var(--blaze);font-weight:600;">Check MiDrive directly →</a></div>';
+    return;
+  }
+  const inc = (data.incidents || []).filter(r => r.county === county.name);
+  const con = (data.construction || []).filter(r => r.county === county.name);
+  if (!inc.length && !con.length) {
+    body.innerHTML = '<div class="road-empty">✅ No MDOT incidents or construction reported on state trunklines in '
+      + esc(county.name) + ' County. Note that MDOT covers I-, US- and M-routes only — county roads, seasonal roads and forest two-tracks are not in this feed.</div>';
+    return;
+  }
+  const pick = (o, keys) => { for (const k of keys) if (o[k] != null && o[k] !== '') return o[k]; return null; };
+  const html = inc.map(i => `
+    <div class="road-item inc">
+      <div class="road-hd"><span>🚨 ${esc(i.route || 'Incident')}</span><span style="color:var(--muted);font-weight:400;">${esc(i.county || '')}</span></div>
+      <div class="road-bd">${esc(i.location || '')}${i.message ? ' — ' + esc(i.message) : ''}</div>
+    </div>`).join('')
+  + con.map(c => `
+    <div class="road-item con">
+      <div class="road-hd"><span>🚧 ${esc(c.route || 'Construction')}</span><span style="color:var(--muted);font-weight:400;">${esc(c.county || '')}</span></div>
+      <div class="road-bd">${esc(pick(c, ['description','message','details','summary']) || 'See MDOT for details')}</div>
+    </div>`).join('');
+  body.innerHTML = '<div class="road-list">' + html + '</div>'
+    + '<div style="font-size:11px;color:var(--muted);margin-bottom:16px;">⚙ MDOT MiDrive via proxy · State trunklines only — forest roads and county roads are not covered here.</div>';
+}
+
+// ═══ RENDER: after the shot ═══
+function renderAfterShot() {
+  document.getElementById('shot-grid').innerHTML = AFTER_SHOT.map(s => `
+    <div class="shot-card">
+      <div class="shot-num">${s.n}</div>
+      <div class="shot-name">${s.name}</div>
+      <div class="shot-desc">${s.desc}</div>
+      <div class="shot-links">${s.links.map(l => `<a href="${l[0]}" target="_blank" rel="noopener"${l[2] ? ' class="hot"' : ''}>${esc(l[1])}</a>`).join('')}</div>
+    </div>`).join('');
+}
+
+// ═══ ORCHESTRATION ═══
+let countdownTimer = null;
+
+async function loadCounty(county) {
+  document.getElementById('today-title').textContent = 'Legal light & conditions — ' + county.name + ' County';
+  document.getElementById('today-lead').textContent =
+    'Computed for ' + county.seat + ', ' + county.name + ' County. Loading live feeds…';
+
+  renderRules(county);
+
+  let ctx = null;
+  try {
+    const wx = await fetchWeather(county);
+    ctx = renderLight(county, wx);
+    renderHoursTable(ctx);
+    renderSeasons(ctx.todayISO);
+    document.getElementById('today-lead').textContent =
+      'Computed for ' + county.seat + ', ' + county.name + ' County. Sunrise and sunset are today’s actual times at these coordinates.';
+
+    if (countdownTimer) clearInterval(countdownTimer);
+    countdownTimer = setInterval(() => { try { renderLight(county, wx); } catch(e) {} }, 30000);
+
+    let air = null;
+    try { air = await fetchAir(county); } catch(e) { /* AQI is optional */ }
+    renderConditions(county, wx, air, ctx);
+  } catch (e) {
+    document.getElementById('today-lead').textContent =
+      'Live weather did not load (' + e.message + '). Season dates and rules below are unaffected.';
+    document.getElementById('light-status').textContent = 'Hours unavailable';
+    document.getElementById('light-sub').textContent =
+      'Open-Meteo did not respond. Use the printed hours table in your DNR digest.';
+    renderSeasons(new Date().toLocaleDateString('en-CA'));
+    document.getElementById('hours-tbl').innerHTML =
+      '<tbody><tr><td class="skel">Sunrise/sunset unavailable — see the hours table in your digest.</td></tr></tbody>';
+  }
+
+  try { renderAlerts(await fetchAlerts(county)); }
+  catch(e) { document.getElementById('alert-strip').innerHTML = ''; }
+
+  try { renderRoads(county, await fetchRoads()); }
+  catch(e) { renderRoads(county, null); }
+}
+
+(function init() {
+  renderAfterShot();
+
+  const sel = document.getElementById('county-select');
+  sel.innerHTML = COUNTIES.map(c =>
+    `<option value="${esc(c.name)}">${esc(c.name)} County — ${esc(c.seat)}</option>`
+  ).join('');
+
+  let saved = null;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+  const start = COUNTIES.find(c => c.name === saved) || COUNTIES.find(c => c.name === 'Otsego');
+  sel.value = start.name;
+
+  sel.addEventListener('change', () => {
+    const c = COUNTIES.find(x => x.name === sel.value);
+    if (!c) return;
+    try { localStorage.setItem(STORAGE_KEY, c.name); } catch(e) {}
+    loadCounty(c);
+  });
+
+  loadCounty(start);
+})();
+</script>
+
+</body>
+</html>
