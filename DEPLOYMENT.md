@@ -40,41 +40,47 @@ Change **only** the `A` record (and add the `www` CNAME) at IONOS. Leave `NS`,
 - [x] Repo restructured into site roots
 - [x] `vercel.json` written for both sites
 - [x] Verified both sites serve correctly from their new roots
-- [ ] **Blocked:** Vercel projects — needs GitHub authorization, see below
-- [ ] DNS cutover
+- [x] Vercel projects created, Git-linked, deploying from `main`
+- [x] Deployments verified over HTTP (see below)
+- [ ] DNS cutover — **the only step left**
+
+Live now:
+
+| Project | Root Directory | URL |
+|---|---|---|
+| `906dashboard` | `sites/906` | https://906dashboard.vercel.app |
+| `upnorthdashboard` | `sites/upnorth` | https://upnorthdashboard.vercel.app |
+
+Every push to `main` redeploys both automatically.
 
 ---
 
-## Blocked step: let Vercel see the repository
+## Verified on the deployments
 
-Creating the projects failed twice, identically. Vercel accepted the request,
-then rolled it back with `404 Project not found` when it tried to verify the
-link to `dblomqu1-8980/michigan-dashboards`.
+Checked over HTTP against both `*.vercel.app` URLs:
 
-Cause: **the repo is private and the Vercel GitHub App does not have access to
-it.** Vercel cannot enumerate a private repo it was never granted, so the link
-fails and the project is discarded. Nothing is half-created — the team has zero
-projects.
+- every page and asset serves `200`, including all waterfall photos
+- `CLAUDE.md`, `SKILL.md`, `reference.md`, `DEPLOYMENT.md`, `workflows`,
+  `archive/`, `tools/` and `vercel.json` all `404` — the site roots hold
+- `.html` URLs serve directly with no redirect, confirming `cleanUrls` is off
+- all three legacy Agate Falls pages carry `X-Robots-Tag: noindex, nofollow`
+- security headers present on every response
+- both fall pages render fully and the live colour model returns real
+  Open-Meteo data with no console errors
 
-This needs a human at a browser; it is an OAuth grant and cannot be scripted.
+Two defects were found this way and fixed in `68885e5`:
 
-1. https://vercel.com/new → **Import Git Repository**
-2. If `michigan-dashboards` is not listed, click **Adjust GitHub App
-   Permissions** → grant access to `dblomqu1-8980/michigan-dashboards`
-   (either "All repositories" or add this one to the selected list)
-3. Import it **twice**, once per project:
+1. **`.htaccess` was publicly readable** on both sites. Vercel serves it as an
+   ordinary static file, publishing the internal rewrite rules. Now excluded
+   via `.vercelignore` in each site root.
+2. **`agate falls.shtml` had no `noindex`.** A literal space in a `vercel.json`
+   header `source` does not match the encoded request path. Replaced with
+   `/(.*\.shtml)`.
 
-   | Project Name | Root Directory | Framework Preset |
-   |---|---|---|
-   | `906dashboard` | `sites/906` | Other |
-   | `upnorthdashboard` | `sites/upnorth` | Other |
-
-   Leave Build Command, Output Directory and Install Command **empty**. These
-   are plain static sites with no build step and no `package.json`.
-
-After that, every push to `main` deploys both automatically.
-
----
+The host-conditional redirects in `vercel.json` (blomblog → 906, www → apex)
+**cannot be tested until DNS points at Vercel**, since those hosts have to
+reach the project for the rule to fire. Verify them right after cutover using
+the commands below.
 
 ## DNS cutover
 
