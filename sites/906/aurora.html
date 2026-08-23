@@ -483,17 +483,17 @@
     <div class="signup">
       <h2 style="margin-bottom:6px">🔔 Get UP Aurora Alerts</h2>
       <p style="color:var(--muted);max-width:520px;margin:0 auto 16px">One email when a G2+ storm is forecast for the UP — plus the weekly 906 conditions roundup. No spam, no daily noise.</p>
-      <!-- FormSubmit: signups arrive at Dan's Gmail via the alias below (hides the address from scrapers). -->
-      <form action="https://formsubmit.co/abe781ecbf48dc63b30a2bc333b368a2" method="POST" id="signup-form">
-        <input type="hidden" name="_subject" value="New 906 Aurora Alerts signup">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://906dashboard.com/aurora.html?subscribed=1">
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-        <input type="email" name="email" placeholder="you@example.com" required aria-label="Email address">
-        <button type="submit">Notify Me</button>
+      <!-- Posts to the aurora-alerts Worker, which stores the address in D1 and
+           sends a confirmation link. Nothing is mailable until that link is
+           clicked, and every alert carries a one-click unsubscribe.
+           See tools/aurora-alerts/. -->
+      <form id="signup-form" novalidate>
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="email" id="signup-email" placeholder="you@example.com" required aria-label="Email address">
+        <button type="submit" id="signup-btn">Notify Me</button>
       </form>
-      <div class="fine" id="signup-fine">Free · Unsubscribe anytime</div>
+      <div class="fine" id="signup-fine">Free · One-click unsubscribe · Only when it&rsquo;s actually worth going outside</div>
+      <div class="fine" id="signup-msg" style="margin-top:8px;min-height:1.2em"></div>
     </div>
   </div>
 </section>
@@ -819,16 +819,63 @@
     img.src = "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg?t=" + Date.now();
   }
 
-  // ---------- signup thank-you ----------
-  function signupThanks(){
-    if(new URLSearchParams(location.search).get("subscribed") === "1"){
-      var form = el("signup-form");
-      if(form){
-        form.outerHTML = '<p style="font-size:16px;font-weight:700;color:var(--teal)">✅ You\'re on the list! Watch your inbox for the next big storm.</p>';
-        var fine = el("signup-fine");
-        if(fine) fine.textContent = "Tip: add us to your contacts so alerts don't land in spam.";
+
+  // ---------- alert signup ----------
+  // Region is fixed per site: this page only ever subscribes Upper Peninsula readers.
+  var ALERTS_ENDPOINT = "https://aurora-alerts.blomblog.workers.dev/subscribe";
+  var ALERTS_REGION   = "up";
+
+  function wireSignup(){
+    var form = el("signup-form");
+    if(!form) return;
+    form.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      var input = el("signup-email");
+      var btn   = el("signup-btn");
+      var msg   = el("signup-msg");
+      var email = (input.value || "").trim();
+
+      if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)){
+        msg.style.color = "var(--yellow)";
+        msg.textContent = "That email address doesn't look right.";
+        return;
       }
-    }
+
+      btn.disabled = true;
+      var original = btn.textContent;
+      btn.textContent = "Sending…";
+      msg.style.color = "var(--muted)";
+      msg.textContent = "";
+
+      fetch(ALERTS_ENDPOINT, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          email: email,
+          region: ALERTS_REGION,
+          website: form.website.value  // honeypot
+        })
+      })
+      .then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+      .then(function(d){
+        if(d && d.ok){
+          msg.style.color = "var(--teal)";
+          msg.textContent = d.message || "Check your inbox for a confirmation link.";
+          input.value = "";
+        } else {
+          msg.style.color = "var(--yellow)";
+          msg.textContent = (d && d.error) || "Couldn't sign you up just now. Try again shortly.";
+        }
+      })
+      .catch(function(){
+        msg.style.color = "var(--yellow)";
+        msg.textContent = "Couldn't reach the alert service. Try again shortly.";
+      })
+      .finally(function(){
+        btn.disabled = false;
+        btn.textContent = original;
+      });
+    });
   }
 
   // ---------- boot ----------
@@ -845,7 +892,7 @@
   }
 
   function boot(){
-    signupThanks();
+    wireSignup();
     moonPhase();
     refresh();
   }

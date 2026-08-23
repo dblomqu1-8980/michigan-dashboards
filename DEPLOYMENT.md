@@ -340,6 +340,33 @@ as compromised. Get a new one at https://www.eia.gov/opendata/register.php
 and run the command above. It is a free key with no billing attached, so the
 exposure is rate-limit abuse rather than cost, but rotating is a two-minute job.
 
+## Aurora alerts (second Worker)
+
+`tools/aurora-alerts/` — signup storage and the conditional alert sender at
+`https://aurora-alerts.blomblog.workers.dev`, backed by a D1 database and two
+daily cron triggers. Full detail in that folder's README.
+
+Kept separate from `up906-mdot-proxy` deliberately: the proxy is public,
+read-only and load-bearing for both dashboards' live data; this one holds
+subscriber PII and an email key.
+
+**Sends only when both gates open for a subscriber's own region** — forecast Kp
+above that region's threshold (5 for the UP, 6 for Up North, matching each
+site's own aurora page) *and* at least one of its five viewing spots under 60%
+cloud. 18-hour per-region cooldown.
+
+**Outstanding before it can send:**
+
+1. `npx wrangler secret put RESEND_API_KEY` in `tools/aurora-alerts/`
+2. Verify `alerts.906dashboard.com` and `alerts.upnorthdashboard.com` in
+   Resend, adding its records at IONOS. **Subdomains, not the root domains** —
+   see the README for why this protects the existing IONOS mail.
+3. Add a physical postal address to the email footer for CAN-SPAM.
+
+Everything else is deployed and verified: validation, honeypot, double opt-in,
+unsubscribe, admin auth, the NOAA fetch, the cloud gate and the subscriber
+query all confirmed working against live data.
+
 ### Deploying Worker changes
 
 ```bash

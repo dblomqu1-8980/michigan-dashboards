@@ -1,0 +1,26 @@
+name = "aurora-alerts"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Deliberately a separate Worker from up906-mdot-proxy. That one is a public
+# read-only CORS proxy both dashboards depend on for live data; this one holds
+# subscriber PII, an email-sending key, and a cron trigger. Keeping them apart
+# means a bad deploy here cannot take the dashboards' data feeds down.
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aurora-alerts"
+database_id = "2298fb19-130d-49cf-aaa3-f0e338ef657d"
+
+# Two evening passes, 6 PM and 9 PM Eastern Daylight Time. The 18-hour
+# cooldown in the code means the first favourable pass wins and the second is
+# a no-op, so this is "check twice, send at most once a night".
+# Cron is always UTC; these drift an hour in winter, which is acceptable.
+[triggers]
+crons = ["0 22 * * *", "0 1 * * *"]
+
+[vars]
+# Overridable without a code change if deliverability ever needs a different
+# sender. Must be a domain verified in Resend.
+SENDER_UP  = "UP Aurora Alerts <aurora@alerts.906dashboard.com>"
+SENDER_NLP = "Up North Aurora Alerts <aurora@alerts.upnorthdashboard.com>"
