@@ -84,42 +84,124 @@ the commands below.
 
 ## DNS cutover
 
-Do one site first, confirm it, then the other. Lower TTL to 300s a day ahead if
-IONOS allows it, so a rollback is fast.
+Full record-level audit taken 2026-08-22. All three domains sit on IONOS
+nameservers (`ui-dns.*`) and share one host, `74.208.236.156`.
 
-In each Vercel project → **Settings → Domains**, add:
+### Two traps in the current records
 
-**`906dashboard`**
-- `906dashboard.com` — primary
-- `www.906dashboard.com` — set to **Redirect to `906dashboard.com`, 301**
-- `blomblog.com` — set to **Redirect to `906dashboard.com`, 301**
-- `www.blomblog.com` — set to **Redirect to `906dashboard.com`, 301**
+**1. Every domain has an AAAA (IPv6) record — on both apex and www.**
 
-**`upnorthdashboard`**
-- `upnorthdashboard.com` — primary
-- `www.upnorthdashboard.com` — set to **Redirect to `upnorthdashboard.com`, 301**
+```
+@    AAAA  2607:f1c0:100f:f000::28b
+www  AAAA  2607:f1c0:100f:f000::28b
+```
 
-Then at **IONOS**, for each domain, change only:
+Change only the A record and IPv6-capable visitors keep resolving to IONOS.
+The result is a split brain: some people see Vercel, some see the old host,
+and it looks intermittent rather than broken. **The AAAA records must be
+deleted.** Vercel's apex is served by an A record only.
 
-| Record | Name | Value |
+**2. `www` is currently an A record, not a CNAME.**
+
+So `www` is a delete-then-create, not an edit: remove the `A` and `AAAA`,
+then add a `CNAME`.
+
+### Records that must survive untouched
+
+These carry live email and verification. Do not edit or delete any of them:
+
+| Record | Value | Purpose |
 |---|---|---|
-| `A` | `@` | `76.76.21.21` |
-| `CNAME` | `www` | *copy the exact target Vercel shows in the Domains tab* |
+| `MX @` | `mx00.ionos.com`, `mx01.ionos.com` (both pri 10) | email delivery |
+| `TXT @` | `v=spf1 include:_spf-us.ionos.com ~all` | SPF |
+| `CNAME _dmarc` | `dmarc.ionos.com` | DMARC (`p=none`) |
+| `CNAME autodiscover` | `adsredir.ionos.info` | Outlook autoconfig |
+| `TXT @` | `google-site-verification=...` | Search Console |
+| `NS` | `ns*.ui-dns.*` | **do not move nameservers** |
 
-Do not hardcode a `www` CNAME target from documentation. Vercel now issues
-account- and region-specific targets (`cname.vercel-dns.com` and
-`cname.vercel-dns-0.com` both appear in their docs). The value shown in your
-own Domains tab is the authoritative one; a wrong target is an outage.
+`blomblog.com` additionally has `mail` → `ghs.google.com` and `ftp` →
+`216.250.120.227`. Leave both alone.
+
+There are no CAA records on any of the three, so nothing blocks Vercel from
+issuing certificates.
+
+### Step 0 — the day before: lower TTL
+
+Every record is currently at **TTL 3600** (1 hour), which means a mistake takes
+an hour to undo. In IONOS, edit the apex `A` and `www` records and set TTL to
+**300**. Wait an hour for the old TTL to expire, then do the cutover. Restore
+TTL to 3600 a few days after everything is confirmed.
+
+### Step 1 — add the domains in Vercel first
+
+Do this **before** touching IONOS, so Vercel is ready to issue the certificate
+the moment DNS resolves.
+
+**Project `906dashboard`** → Settings → Domains → Add:
+- `906dashboard.com` — leave as primary
+- `www.906dashboard.com` — choose **Redirect to `906dashboard.com`**, 301
+- `blomblog.com` — choose **Redirect to `906dashboard.com`**, 301
+- `www.blomblog.com` — choose **Redirect to `906dashboard.com`**, 301
+
+**Project `upnorthdashboard`** → Settings → Domains → Add:
+- `upnorthdashboard.com` — primary
+- `www.upnorthdashboard.com` — **Redirect to `upnorthdashboard.com`**, 301
+
+Vercel will show each domain as misconfigured and display the exact records it
+wants. **Copy the `www` CNAME target from that screen.** Vercel issues
+account- and region-specific targets, and their own docs show two different
+values (`cname.vercel-dns.com` and `cname.vercel-dns-0.com`). The Domains tab
+is authoritative; a guessed target is an outage.
+
+### Step 2 — change the records at IONOS
+
+Menu → **Domains & SSL** → click the domain → **DNS** tab.
+
+Do one domain at a time, in this order: `upnorthdashboard.com` first (smallest
+site, proves the process), then `906dashboard.com`, then `blomblog.com`.
+
+For each domain:
+
+| Action | Type | Name | Value |
+|---|---|---|---|
+| **DELETE** | `AAAA` | `@` | `2607:f1c0:100f:f000::28b` |
+| **DELETE** | `AAAA` | `www` | `2607:f1c0:100f:f000::28b` |
+| **DELETE** | `A` | `www` | `74.208.236.156` |
+| **EDIT** | `A` | `@` | `74.208.236.156` → **`76.76.21.21`** |
+| **ADD** | `CNAME` | `www` | *the target Vercel shows* |
+
+Use `76.76.21.21` only if that is what Vercel's Domains tab shows for the apex;
+it is the long-standing value, but trust the panel over this file.
+
+**Likely snag:** if the domain is bound to an IONOS hosting package or website,
+IONOS greys out the `A` record and shows something like "managed by your
+hosting". You have to disconnect the site from the hosting package first —
+Domains & SSL → the domain → **Destination** → change to **External / point to
+an IP address**. Only then does the A record become editable.
 
 ### Verify after cutover
 
 ```bash
+# 1. IPv4 and IPv6 must BOTH point at Vercel (or IPv6 must not resolve at all)
+for d in 906dashboard.com upnorthdashboard.com blomblog.com; do
+  echo "$d  A=$(dig +short A $d | tr '\n' ' ') AAAA=$(dig +short AAAA $d | tr '\n' ' ')"
+done
+
+# 2. Pages and redirects
 for u in https://906dashboard.com/ https://906dashboard.com/fall.html \
          https://www.906dashboard.com/ http://blomblog.com/waterfalls.html \
          https://upnorthdashboard.com/ https://upnorthdashboard.com/fall.html; do
   echo "$(curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}' -L "$u")  $u"
 done
+
+# 3. Email records must be unchanged
+for d in 906dashboard.com upnorthdashboard.com blomblog.com; do
+  echo "$d MX=$(dig +short MX $d | tr '\n' ' ') SPF=$(dig +short TXT $d | grep spf1)"
+done
 ```
+
+The AAAA check in step 1 is the one people skip. If it still returns
+`2607:f1c0:...` you are half-migrated and some visitors are on the old host.
 
 Expected: `200` on the four real pages; `blomblog.com/waterfalls.html` and the
 `www` hosts land on their apex equivalents with the path preserved.
@@ -130,7 +212,24 @@ Confirm the legacy pages still carry `noindex`:
 curl -sI https://906dashboard.com/agatefalls.html | grep -i x-robots-tag
 ```
 
-Confirm email still flows — send a test to an address on each domain.
+Confirm email still flows — send a test to an address on each domain, and
+reply to it, so both inbound and outbound are proven.
+
+### Rollback
+
+If anything is wrong, put the records back:
+
+| Type | Name | Value |
+|---|---|---|
+| `A` | `@` | `74.208.236.156` |
+| `AAAA` | `@` | `2607:f1c0:100f:f000::28b` |
+| `A` | `www` | `74.208.236.156` |
+| `AAAA` | `www` | `2607:f1c0:100f:f000::28b` |
+
+…and delete the `www` CNAME. With TTL at 300 this takes effect in ~5 minutes.
+The IONOS host is untouched throughout the migration, so it is still serving
+and rollback is just a DNS change. Do not delete anything on IONOS until the
+Vercel deployments have been live and correct for at least a week.
 
 ---
 
