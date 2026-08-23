@@ -1,9 +1,0 @@
-# robots.txt — 906dashboard.com
-# Updated: 2026-06
-
-User-agent: *
-Allow: /
-Disallow: /backup/
-
-# Sitemap location
-Sitemap: https://906dashboard.com/sitemap.xml

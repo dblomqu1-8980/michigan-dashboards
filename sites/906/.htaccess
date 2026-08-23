@@ -16,6 +16,16 @@ RewriteRule ^(.*)$ https://906dashboard.com/$1 [R=301,L]
 RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://906dashboard.com/$1 [R=301,L]
 
+# Internal docs must never be served publicly.
+# These were reachable in production (CLAUDE.md, SKILL.md, reference.md and the
+# `workflows` archive all returned 200 on 906dashboard.com). mod_rewrite is used
+# rather than <FilesMatch>/Require so the rule behaves the same on Apache 2.2
+# and 2.4, and returns 404 rather than 403 so it doesn't confirm the file exists.
+RewriteRule \.(md|markdown)$ - [R=404,L]
+RewriteRule ^workflows$      - [R=404,L]
+RewriteRule ^\.env          - [R=404,L]
+RewriteRule ^(tools|backup)/ - [R=404,L]
+
 # Orphaned legacy pages — keep the files, keep them out of the index.
 # These are old saved copies (michigan.gov, Wikipedia) and a superseded
 # dashboard build. Nothing links to them; they only add duplicate content.
