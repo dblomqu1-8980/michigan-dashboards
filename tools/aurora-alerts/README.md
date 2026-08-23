@@ -148,6 +148,20 @@ unsubscribes after this date exist only in the database.
   `List-Unsubscribe-Post` headers. Mail providers weight these heavily; without
   them a list like this lands in Promotions or worse.
 - **Physical postal address.** CAN-SPAM requires one in commercial email, and
-  these sites carry affiliate links. Add yours to the footer in
-  `alertEmail()` before sending at any volume — it is the one compliance gap
-  left, and it needs an address only you can supply.
+  these sites carry affiliate links. Set it as a var — it appears in both the
+  confirmation and alert footers:
+
+  ```toml
+  [vars]
+  POSTAL_ADDRESS = "Your Name, 123 Example St, Town, MI 49855"
+  ```
+
+  Then `npx wrangler deploy`.
+
+  If it is unset the footer omits the line rather than printing a placeholder,
+  because a wrong address is worse than a missing one — and `/run-alerts`
+  returns a `warning` field so the gap is visible rather than silent.
+
+  CAN-SPAM accepts a street address, a USPS-registered PO Box, or a private
+  mailbox at a commercial mail receiving agency. It does not have to be a home
+  address, and for a public alert list it probably shouldn't be.

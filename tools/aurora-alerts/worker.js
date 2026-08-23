@@ -225,15 +225,25 @@ function shell(inner) {
   </div></div>`;
 }
 
-function confirmEmail(region, confirmUrl) {
+function confirmEmail(region, confirmUrl, env) {
   return shell(`
     <h1 style="font-size:21px;margin:0 0 12px">Confirm your ${esc(region.short)} aurora alerts</h1>
     <p style="color:#93a4c3;margin:0 0 18px">One click and you're on the list. We'll email you only when the northern lights are actually likely to be visible over ${esc(region.label)} — never on a schedule.</p>
     <p style="margin:0 0 22px"><a href="${confirmUrl}" style="display:inline-block;background:#37d5b2;color:#08101f;font-weight:800;padding:12px 22px;border-radius:10px;text-decoration:none">Confirm my subscription</a></p>
-    <p style="color:#5f7196;font-size:13px;margin:0">If you didn't sign up, just ignore this — nothing happens without that click, and we won't email you again.</p>`);
+    <p style="color:#5f7196;font-size:13px;margin:0">If you didn't sign up, just ignore this — nothing happens without that click, and we won't email you again.${postalLine(env)}</p>`);
 }
 
-function alertEmail(region, kp, scale, spot, unsubUrl) {
+// CAN-SPAM requires a valid physical postal address in commercial email, and
+// these sites carry affiliate links. Held in a var rather than hardcoded so it
+// can be corrected without a code change. If it is unset the footer omits the
+// line rather than printing a placeholder — a wrong address is worse than a
+// missing one, and runAlerts() surfaces the gap in its summary.
+function postalLine(env) {
+  const addr = (env && env.POSTAL_ADDRESS || '').trim();
+  return addr ? `<br>${esc(addr)}` : '';
+}
+
+function alertEmail(region, kp, scale, spot, unsubUrl, env) {
   const scaleTxt = scale ? ` (${esc(scale)})` : '';
   return shell(`
     <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#37d5b2;font-weight:700;margin-bottom:10px">Aurora Alert · ${esc(region.short)}</div>
@@ -248,7 +258,7 @@ function alertEmail(region, kp, scale, spot, unsubUrl) {
     <p style="color:#93a4c3;font-size:14px;margin:0 0 18px">Face north over open water, give your eyes 20–30 minutes to adjust, and be patient — the aurora arrives in waves 20–40 minutes apart.</p>
     <hr style="border:none;border-top:1px solid #24345a;margin:20px 0">
     <p style="color:#5f7196;font-size:12px;margin:0">You're getting this because you signed up for aurora alerts at ${esc(region.site)}.<br>
-    <a href="${unsubUrl}" style="color:#5f7196">Unsubscribe</a> — one click, no questions.</p>`);
+    <a href="${unsubUrl}" style="color:#5f7196">Unsubscribe</a> — one click, no questions.${postalLine(env)}</p>`);
 }
 
 // ── routes ──
@@ -291,7 +301,7 @@ async function handleSubscribe(request, env, origin) {
       from: env[r.senderVar],
       to: [email],
       subject: `Confirm your ${r.short} aurora alerts`,
-      html: confirmEmail(r, confirmUrl),
+      html: confirmEmail(r, confirmUrl, env),
     });
   } catch (e) {
     return json({ok:false, error:'Could not send the confirmation email. Try again shortly.', detail:e.message}, origin, 502);
@@ -335,6 +345,9 @@ async function handleUnsubscribe(url, env) {
 // admin key, and the send still requires real active subscribers.
 async function runAlerts(env, opts = {}) {
   const summary = {ran: nowISO(), regions: {}, forced: !!opts.forceKp};
+  if (!(env.POSTAL_ADDRESS || '').trim()) {
+    summary.warning = 'POSTAL_ADDRESS is unset — alerts are going out without the CAN-SPAM postal line';
+  }
 
   let forecast;
   try { forecast = await tonightPeakKp(); }
@@ -371,7 +384,7 @@ async function runAlerts(env, opts = {}) {
         from: env[region.senderVar],
         to: [sub.email],
         subject: `Aurora alert: tonight looks good over ${region.label}`,
-        html: alertEmail(region, effectiveKp, forecast.scale, spot, unsub),
+        html: alertEmail(region, effectiveKp, forecast.scale, spot, unsub, env),
         // One-click unsubscribe. Mail providers weight this heavily, and
         // without it a list like this lands in Promotions or worse.
         headers: {
@@ -438,7 +451,7 @@ export default {
           from: env[region.senderVar],
           to: [to],
           subject: `[test] Aurora alert preview — ${region.short}`,
-          html: alertEmail(region, 7, 'G3', {name:'Test Spot', pct:12}, unsub),
+          html: alertEmail(region, 7, 'G3', {name:'Test Spot', pct:12}, unsub, env),
           headers: {'List-Unsubscribe': `<${unsub}>`},
         });
         return json({ok:true, sentFrom: env[region.senderVar], to, id: res.id}, origin);
