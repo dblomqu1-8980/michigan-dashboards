@@ -303,10 +303,55 @@ Once DNS is fully cut over and verified, both `.htaccess` files can be deleted.
 
 ---
 
-## Known follow-up
+## The Cloudflare Worker
 
-`EIA_API_KEY` is hardcoded in both `index.html` files. It must ship in
-client-side JS for the gas-price panel, so it is already public in page source —
-committing it exposes nothing new, but **keep this repository private**. The
-real fix is to proxy the EIA call through the existing Cloudflare Worker in
-`tools/mdot-proxy/`, the way MDOT already is, which removes it from the browser.
+`tools/mdot-proxy/` — one Worker serving both sites at
+`https://up906-mdot-proxy.blomblog.workers.dev`:
+
+| Endpoint | Purpose |
+|---|---|
+| `/events` | MDOT incidents & construction (no CORS header upstream) |
+| `/buoys` | NDBC wave height / water temp (no CORS in most browsers) |
+| `/gas` | EIA weekly Midwest fuel averages (**needs an API key**) |
+
+`?region=nlp` switches any endpoint to the Northern Lower Peninsula set;
+default is `up`.
+
+`/events` and `/buoys` exist because those upstreams lack CORS headers.
+`/gas` exists for a different reason: EIA is CORS-friendly but key-gated, and
+a key used from client-side JS is published in page source. It now lives as a
+Worker secret.
+
+### Rotating the EIA key
+
+The key is a Worker secret, so rotating it needs no site deploy:
+
+```bash
+cd tools/mdot-proxy
+npx wrangler secret put EIA_API_KEY   # paste the new key when prompted
+npx wrangler deploy                   # only if worker.js also changed
+```
+
+Never put it in `wrangler.toml` — that file is committed.
+
+**The current key should be rotated.** It was live in both `index.html` files
+for weeks and remains in this repository's git history, so it must be treated
+as compromised. Get a new one at https://www.eia.gov/opendata/register.php
+and run the command above. It is a free key with no billing attached, so the
+exposure is rate-limit abuse rather than cost, but rotating is a two-minute job.
+
+### Deploying Worker changes
+
+```bash
+cd tools/mdot-proxy
+npx wrangler deploy
+```
+
+Verify afterwards:
+
+```bash
+for p in /events /buoys /gas; do
+  echo "$(curl -s -o /dev/null -w '%{http_code}' https://up906-mdot-proxy.blomblog.workers.dev$p)  $p"
+done
+```
+
