@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>906 Travel Dashboard — Live Upper Peninsula Michigan Conditions, Cameras & Trip Planning</title>
+  <title>906 Travel Dashboard — Live Lake Superior &amp; Upper Peninsula Michigan Conditions</title>
 
   <!-- ═══ SEO ═══ -->
-  <meta name="description" content="Real-time Upper Peninsula Michigan dashboard — live weather, road conditions, Mackinac Bridge status, Soo Locks & Ore Dock vessels, lake levels, ski reports, aurora forecasts, and 200+ UP waterfalls. Your one-stop UP travel planner." />
-  <meta name="keywords" content="Upper Peninsula Michigan, UP travel, UP weather, Mackinac Bridge, Soo Locks, UP cameras, UP waterfalls, Pictured Rocks, aurora Michigan, UP road conditions, 906" />
+  <meta name="description" content="Live Lake Superior conditions — water temperature, wave height and lake levels — plus Upper Peninsula weather, road conditions, Mackinac Bridge status, Soo Locks & Ore Dock vessels, lake levels, ski reports, aurora forecasts, and 200+ UP waterfalls. Your one-stop UP travel planner." />
+  <meta name="keywords" content="Lake Superior conditions, Lake Superior water temperature, Lake Superior wave height, Lake Superior lake level, Upper Peninsula Michigan, UP travel, UP weather, Mackinac Bridge, Soo Locks, UP cameras, UP waterfalls, Pictured Rocks, aurora Michigan, UP road conditions, 906" />
   <meta name="author" content="906 Travel Dashboard" />
   <link rel="canonical" href="https://906dashboard.com/" />
 
@@ -73,6 +73,16 @@
     .hdr-nav    { display: flex; gap: 4px; }
     .hdr-nav a  { color: var(--muted); text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
     .hdr-nav a:hover { color: var(--text); background: var(--surf2); }
+
+    /* The Lake Superior link makes this an 11-item nav, which overflows a
+       1280px header by a few pixels. Left alone, flexbox resolves that by
+       shrinking the logo and links until the wordmark and half the labels
+       break mid-phrase. Pin the wordmark, keep labels whole, and let the row
+       wrap rather than squeeze. The mobile rules below still override this. */
+    .logo { flex-shrink: 0; }
+    .logo-text, .logo-sub { white-space: nowrap; }
+    .hdr-nav { flex-wrap: wrap; justify-content: flex-end; }
+    .hdr-nav a { white-space: nowrap; padding: 4px 8px; }
     .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
     .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
     .timestamp  { color: var(--muted); font-size: 12px; }
@@ -538,6 +548,12 @@
     .lake-name { font-size:12px; font-weight:700; margin-bottom:8px; }
     .lake-stat { font-size:11px; color:var(--muted); margin-bottom:3px; }
     .lake-stat span { color:var(--text); font-weight:600; }
+
+    /* ── Lake Superior explainer copy ── */
+    .water-copy h3 { font-size:13px; font-weight:700; color:var(--text); margin:13px 0 5px; }
+    .water-copy h3:first-child { margin-top:0; }
+    .water-copy p  { font-size:12px; color:var(--muted); line-height:1.65; margin:0 0 6px; }
+    .water-copy p:last-of-type { margin-bottom:0; }
     .level-bar { height:4px; background:var(--border); border-radius:2px; margin-top:8px; overflow:hidden; }
     .level-fill { height:100%; border-radius:2px; background:var(--blue); transition:width .4s; }
 
@@ -739,6 +755,7 @@
     <a href="#today">Today</a>
     <a href="#trip-planning">Plan a Trip</a>
     <a href="#conditions">Conditions</a>
+    <a href="#water">Lake Superior</a>
     <a href="#oredock">Ore Dock</a>
     <a href="waterfalls.html">Waterfalls</a>
     <a href="trails.html">Trails</a>
@@ -977,7 +994,7 @@
     <!-- Panel: Infrastructure -->
     <div class="panel-toggle" id="panel-infra">
       <div class="panel-hdr" onclick="togglePanel('infra')">
-        <span>⚓ Soo Locks · 🌊 Great Lakes · ⛽ Gas Prices</span>
+        <span>⚓ Soo Locks · ⛽ Gas Prices</span>
         <span class="panel-chevron">▼</span>
       </div>
       <div class="panel-body">
@@ -1001,15 +1018,6 @@
               <div class="src-note" style="margin-top:8px;">Live AIS map: MarineTraffic — click any vessel for details &nbsp;·&nbsp; Lock status: lre.usace.army.mil &nbsp;·&nbsp; 🇨🇦 <a href="https://www.cbp.gov/travel/international-travelers/wait-times" target="_blank" style="color:var(--blue)">Soo border wait times →</a></div>
             </div>
           </div>
-          <div class="card span2">
-            <div class="card-head">
-              <div class="card-title">🌊 Great Lakes Water Levels</div>
-              <span class="badge bg-blue">NOAA CO-OPS</span>
-            </div>
-            <div class="card-body">
-              <div class="lake-grid" id="lakes-grid"></div>
-            </div>
-          </div>
           <div class="card">
             <div class="card-head">
               <div class="card-title">⛽ Gas Prices</div>
@@ -1017,6 +1025,57 @@
             </div>
             <div class="card-body" id="gas-body"></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel: Lake Superior — water levels, temps and waves.
+         The live cards are client-rendered, so the surrounding copy is static
+         on purpose: it is the only Lake Superior text a crawler sees before
+         JavaScript runs. -->
+    <span id="water"></span>
+    <div class="panel-toggle open" id="panel-water">
+      <div class="panel-hdr" onclick="togglePanel('water')">
+        <span>🌊 Lake Superior Conditions · Water Temperature, Waves &amp; Lake Levels</span>
+        <span class="panel-chevron">▼</span>
+      </div>
+      <div class="panel-body">
+        <div class="panel-inner-grid">
+
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🌊 Lake Superior &amp; Great Lakes — Level, Wave Height &amp; Water Temp</div>
+              <span class="badge bg-blue">NOAA CO-OPS</span>
+            </div>
+            <div class="card-body">
+              <div class="lake-grid" id="lakes-grid"></div>
+              <div class="src-note">Lake levels: NOAA CO-OPS (IGLD 1985 datum) · Waves &amp; water temperature: NDBC buoys and CO-OPS shore stations. Long-term mean is the century-scale average for each lake.</div>
+            </div>
+          </div>
+
+          <div class="card span3">
+            <div class="card-head">
+              <div class="card-title">🧊 Understanding Lake Superior Conditions</div>
+              <span class="badge bg-muted">Reference</span>
+            </div>
+            <div class="card-body water-copy">
+
+              <h3>How cold is Lake Superior right now?</h3>
+              <p>Lake Superior is the deepest and coldest of the Great Lakes, and it warms slowly. Open water often sits in the 40s and low 50s°F even at the height of summer, while shallow, sheltered bays — Munising Bay, Au Train Bay and Keweenaw Bay among them — can climb into the 60s after a run of warm, calm days. The water temperature on the cards above is read from the nearest NOAA buoy or shore gauge, so treat it as the temperature of the open lake near that point rather than the temperature at any one beach.</p>
+
+              <h3>When is it warm enough to swim?</h3>
+              <p>Cold water shock is the real hazard on Lake Superior, not depth or distance. Sudden immersion below roughly 60°F triggers an involuntary gasp and rapid breathing that can overwhelm a strong swimmer inside the first minute. Air temperature is a poor guide — an 80°F afternoon on a Marquette beach can sit over water in the low 50s. Check the reading, wade in slowly, and stay within your depth.</p>
+
+              <h3>Waves, wind and the autumn gales</h3>
+              <p>Superior’s fetch, the open distance wind can travel across it, is long enough that a steady blow builds waves quickly, and the lake is roughest from September through November when autumn gales cross it. The wave height above is measured offshore at the buoy; the nearshore break and rip currents along beaches like McCarty’s Cove, Grand Marais and Whitefish Point can be very different, and the National Weather Service issues beach hazard statements separately.</p>
+
+              <h3>What the lake level figure means</h3>
+              <p>Level is reported in feet above the IGLD 1985 datum, the standard reference surface for the Great Lakes. Lake Superior’s long-term mean is 600.7 ft, so the “vs long-term mean” figure shows how the lake compares with its century-scale average — a practical signal for how wide the beaches are running, how much water is under a boat launch, and how much shoreline you will actually find when you get there.</p>
+
+              <div class="src-note">Conditions change fast on Lake Superior. Check the National Weather Service marine forecast for Michigan waters before heading out on the water, and county health department postings for beach water quality.</div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
