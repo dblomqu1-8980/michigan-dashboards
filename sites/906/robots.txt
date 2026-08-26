@@ -4,11 +4,5 @@
 User-agent: *
 Allow: /
 
-# Archived legacy copies. They stay reachable for old inbound links but carry
-# X-Robots-Tag: noindex via vercel.json, so this is belt-and-braces.
-Disallow: /agatefalls.html
-Disallow: /Agate_Falls_Scenic_Site.html
-Disallow: /agate%20falls.shtml
-
 # Sitemap location
 Sitemap: https://906dashboard.com/sitemap.xml

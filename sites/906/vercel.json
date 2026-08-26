@@ -12,36 +12,29 @@
       ],
       "destination": "https://906dashboard.com/:path*",
       "permanent": true
-    }
-  ],
-  "headers": [
+    },
     {
       "source": "/agatefalls.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
+      "destination": "/waterfalls.html",
+      "permanent": true
     },
     {
       "source": "/Agate_Falls_Scenic_Site.html",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
+      "destination": "/waterfalls.html",
+      "permanent": true
     },
     {
-      "source": "/(.*\\.shtml)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
+      "source": "/agate%20falls.shtml",
+      "destination": "/waterfalls.html",
+      "permanent": true
     },
+    {
+      "source": "/agate falls.shtml",
+      "destination": "/waterfalls.html",
+      "permanent": true
+    }
+  ],
+  "headers": [
     {
       "source": "/(.*)",
       "headers": [
