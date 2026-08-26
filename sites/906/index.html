@@ -1264,11 +1264,10 @@
 
 <!-- ═══ JAVASCRIPT ═══ -->
 <script>
-// TODO: paste your Cloudflare Worker URL here after deploying tools/mdot-proxy/
-// (see tools/mdot-proxy/README.md). Until this is set, the Roads panel falls
-// back to weather-inferred risk only — MDOT's own API blocks direct browser
-// calls from this domain (no CORS header on their end), so a small proxy is
-// required to surface their real incident/construction data.
+// MDOT's own API blocks direct browser calls from this domain (no CORS header
+// on their end), so their real incident and construction data comes through a
+// small Cloudflare Worker proxy — see tools/mdot-proxy/README.md. If this is
+// ever unset, the Roads panel falls back to weather-inferred risk only.
 const MDOT_PROXY_URL = 'https://up906-mdot-proxy.blomblog.workers.dev';
 
 const NWS_STATIONS = [
