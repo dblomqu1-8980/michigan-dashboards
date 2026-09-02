@@ -2133,13 +2133,13 @@ function renderBeaches(beaches, beachAlerts){
       </div>
       ${b.err?`<div class="src-note" style="margin-top:5px;">${esc(b.err)}</div>`:''}
     </div>`).join('') + `</div>
-    <div class="src-note">Water temperature is the single best predictor of a comfortable Great Lakes swim — Lake Michigan can sit 20°F below the air temperature well into July, and an offshore wind can drop a beach 15°F overnight. Readings come from NOAA shore gauges and NDBC buoys near each shoreline, not from the swim area itself. Beach closures for bacteria are posted separately by county health departments — check <a href="https://www.egle.state.mi.us/beach/" target="_blank" rel="noopener">Michigan BeachGuard</a> before swimming.</div>
+    <div class="src-note">Water temperature is the single best predictor of a comfortable Great Lakes swim — Lake Michigan can sit 20°F below the air temperature well into July, and an offshore wind can drop a beach 15°F overnight. Readings come from NOAA shore gauges and NDBC buoys near each shoreline, not from the swim area itself. Beach closures for bacteria are posted separately by county health departments — check <a href="https://mienviro.michigan.gov/nsite/beach/map" target="_blank" rel="noopener">Michigan BeachGuard</a> before swimming.</div>
     <div class="links-hdr">Beach Cameras &amp; Lakeshore</div>
     <div class="links-grid">
       <a href="https://petoskeyarea.com/winter-fun/webcams/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">📹</div><div class="lc-label">Petoskey Area Cams</div><div class="lc-sub">Little Traverse Bay &amp; downtown</div></a>
       <a href="https://www.nps.gov/slbe/planyourvisit/conditions.htm" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏜️</div><div class="lc-label">Sleeping Bear Conditions</div><div class="lc-sub">National Lakeshore · NPS</div></a>
-      <a href="https://www.egle.state.mi.us/beach/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚩</div><div class="lc-label">Michigan BeachGuard</div><div class="lc-sub">Water-quality closures by county</div></a>
-      <a href="https://www.weather.gov/apx/beachhazards" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌊</div><div class="lc-label">NWS Beach Hazards</div><div class="lc-sub">Rip currents &amp; swim risk</div></a>
+      <a href="https://mienviro.michigan.gov/nsite/beach/map" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚩</div><div class="lc-label">Michigan BeachGuard</div><div class="lc-sub">Water-quality closures by county</div></a>
+      <a href="https://www.weather.gov/apx/beach" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌊</div><div class="lc-label">NWS Beach &amp; Surf</div><div class="lc-sub">Rip currents &amp; swim risk</div></a>
       <a href="https://www.glerl.noaa.gov/data/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🔬</div><div class="lc-label">NOAA GLERL</div><div class="lc-sub">Great Lakes research data</div></a>
       <a href="#cameras" class="link-card"><div class="lc-icon">🎥</div><div class="lc-label">Traffic Cameras</div><div class="lc-sub">Bayfront &amp; lakeshore road cams</div></a>
     </div>`;
@@ -2203,13 +2203,13 @@ function renderTrails(data){
   const linksHtml = `<div class="links-hdr">Trail, ORV &amp; Forest-Road Resources</div>
   <div class="links-grid">
     <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🛷</div><div class="lc-label">Snowmobile Trail Reports</div><div class="lc-sub">Grooming &amp; conditions · MI DNR</div></a>
-    <a href="https://www.michigan.gov/dnr/things-to-do/orv-trails" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🛻</div><div class="lc-label">ORV Trails &amp; Routes</div><div class="lc-sub">Open/closed status · MI DNR</div></a>
+    <a href="https://www.michigan.gov/dnr/things-to-do/orv-riding/where" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🛻</div><div class="lc-label">ORV Trails &amp; Routes</div><div class="lc-sub">Where to ride · MI DNR</div></a>
     <a href="https://www.fs.usda.gov/r09/huron-manistee/alerts" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🌲</div><div class="lc-label">Huron-Manistee Alerts</div><div class="lc-sub">Forest-road &amp; area closures · USFS</div></a>
     <a href="https://www.michigan.gov/dnr/places/state-trails" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🗺️</div><div class="lc-label">DNR Trail Maps</div><div class="lc-sub">Hiking, biking, ORV, snowmobile</div></a>
     <a href="https://www.trailforks.com/region/northern-lower-michigan/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🚵</div><div class="lc-label">Trailforks</div><div class="lc-sub">VASA, Glacial Hills, Big M</div></a>
     <a href="https://www.alltrails.com/us/michigan/traverse-city" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🥾</div><div class="lc-label">AllTrails</div><div class="lc-sub">Hiking around Traverse City</div></a>
     <a href="https://www.nps.gov/slbe/planyourvisit/conditions.htm" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🏜️</div><div class="lc-label">Sleeping Bear</div><div class="lc-sub">Park conditions &amp; closures</div></a>
-    <a href="https://northcountrytrail.org/trail/michigan-lower-peninsula/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🧭</div><div class="lc-label">North Country Trail</div><div class="lc-sub">Lower Peninsula section</div></a>
+    <a href="https://northcountrytrail.org/the-trail/michigan/" target="_blank" rel="noopener" class="link-card"><div class="lc-icon">🧭</div><div class="lc-label">North Country Trail</div><div class="lc-sub">Michigan · Lower Peninsula section</div></a>
   </div>`;
 
   if(!data?.ok){
