@@ -1,1 +1,821 @@
-LOADING_FROM_FILE
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO ═══ -->
+  <title>Upper Peninsula Waterfalls Guide — Live Conditions, Maps & Visiting Tips | 906 Travel</title>
+  <meta name="description" content="The 12 best Upper Peninsula waterfalls — from Tahquamenon to Bond Falls — with live regional weather, hiking difficulty, drive times, best season to visit, and directions. Updated daily." />
+  <meta name="keywords" content="UP waterfalls, Upper Peninsula waterfalls, Michigan waterfalls, Tahquamenon Falls, Bond Falls, Munising waterfalls, Pictured Rocks waterfalls, Porcupine Mountains waterfalls, Black River waterfalls" />
+  <meta name="author" content="906 Travel Dashboard" />
+  <link rel="canonical" href="https://906dashboard.com/waterfalls.html" />
+
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:title" content="12 Best Upper Peninsula Waterfalls — Live Conditions & Visiting Guide" />
+  <meta property="og:description" content="Live weather, drive times, and visiting tips for the UP's most spectacular waterfalls — Tahquamenon, Bond, Munising, and more." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://906dashboard.com/waterfalls.html" />
+  <meta property="og:image" content="https://906dashboard.com/og-banner.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Discover Michigan's Upper Peninsula — 906 Dashboard" />
+  <meta name="twitter:image" content="https://906dashboard.com/og-banner.jpg" />
+  <meta property="og:site_name" content="906 Travel Dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ═══ SCHEMA.ORG STRUCTURED DATA ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Best Upper Peninsula Waterfalls",
+    "description": "A curated guide to 12 of the most spectacular waterfalls in Michigan's Upper Peninsula.",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"item":{"@type":"TouristAttraction","name":"Upper Tahquamenon Falls","description":"50-foot drop, 200-foot wide — one of the largest waterfalls east of the Mississippi.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Paradise"}}},
+      {"@type":"ListItem","position":2,"item":{"@type":"TouristAttraction","name":"Lower Tahquamenon Falls","description":"A series of five cascades around an island in Tahquamenon River.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Paradise"}}},
+      {"@type":"ListItem","position":3,"item":{"@type":"TouristAttraction","name":"Bond Falls","description":"A 50-foot wide, 40-foot tall cascade on the Middle Branch Ontonagon River.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Paulding"}}},
+      {"@type":"ListItem","position":4,"item":{"@type":"TouristAttraction","name":"Munising Falls","description":"50-foot waterfall in Pictured Rocks National Lakeshore with a paved walking path.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Munising"}}},
+      {"@type":"ListItem","position":5,"item":{"@type":"TouristAttraction","name":"Wagner Falls","description":"A picturesque 20-foot cascade near Munising, easily accessible from a short trail.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Munising"}}},
+      {"@type":"ListItem","position":6,"item":{"@type":"TouristAttraction","name":"Miners Falls","description":"50-foot drop in Pictured Rocks National Lakeshore, reached by a 1.2-mile round-trip hike.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Munising"}}},
+      {"@type":"ListItem","position":7,"item":{"@type":"TouristAttraction","name":"Sable Falls","description":"75-foot cascade in Pictured Rocks near Grand Marais, accessed via 168 steps.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Grand Marais"}}},
+      {"@type":"ListItem","position":8,"item":{"@type":"TouristAttraction","name":"Canyon Falls","description":"Called the 'Grand Canyon of the UP' — a 15-foot drop into a dramatic gorge.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"L'Anse"}}},
+      {"@type":"ListItem","position":9,"item":{"@type":"TouristAttraction","name":"Agate Falls","description":"39-foot waterfall on the Middle Branch Ontonagon River in a scenic site.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Trout Creek"}}},
+      {"@type":"ListItem","position":10,"item":{"@type":"TouristAttraction","name":"Manabezho Falls","description":"25-foot wide cascade in Porcupine Mountains Wilderness State Park.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Ontonagon"}}},
+      {"@type":"ListItem","position":11,"item":{"@type":"TouristAttraction","name":"Rainbow Falls","description":"45-foot waterfall — the largest of five along the Black River Scenic Byway.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Bessemer"}}},
+      {"@type":"ListItem","position":12,"item":{"@type":"TouristAttraction","name":"Laughing Whitefish Falls","description":"100-foot tiered waterfall reached by a 1-mile round-trip hike near Sundell.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Sundell"}}}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #1a6fc4;
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header (matches main site) ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+
+    /* The Lake Superior link makes this an 11-item nav, which overflows a
+       1280px header by a few pixels. Left alone, flexbox resolves that by
+       shrinking the logo and links until the wordmark and half the labels
+       break mid-phrase. Pin the wordmark, keep labels whole, and let the row
+       wrap rather than squeeze. The mobile rules below still override this. */
+    .logo { flex-shrink: 0; }
+    .logo-text, .logo-sub { white-space: nowrap; }
+    .hdr-nav { flex-wrap: wrap; justify-content: flex-end; }
+    .hdr-nav a { white-space: nowrap; padding: 4px 8px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 360px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(2,8,20,0.55) 0%, rgba(4,13,26,0.75) 100%),
+        url('https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat,
+        #040d1a;
+      padding: 60px 20px;
+    }
+    .hero-content { text-align: center; max-width: 820px; position: relative; z-index: 2; }
+    .hero-eyebrow { font-size: 12px; color: #9ec5ff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+    .hero-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 16px; color: #c7d4e0; max-width: 640px; margin: 0 auto 22px; line-height: 1.55; }
+    .hero-meta { display: inline-flex; gap: 18px; font-size: 12px; color: #c7d4e0; opacity: 0.9; }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+    /* ── Section wrap ── */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px; }
+    .section-eyebrow { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-weight: 700; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .section-lead  { color: var(--muted); font-size: 14px; margin-bottom: 22px; max-width: 720px; }
+
+    /* ── Best-Right-Now banner ── */
+    .season-banner {
+      background: linear-gradient(135deg, var(--surf2), var(--surface));
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 18px 22px;
+      display: flex; gap: 18px; align-items: center;
+      margin-bottom: 24px;
+    }
+    .season-icon { font-size: 32px; flex-shrink: 0; }
+    .season-body { flex: 1; }
+    .season-lbl  { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 4px; }
+    .season-headline { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+    .season-detail   { font-size: 13px; color: var(--muted); }
+
+    /* ── Filter chips ── */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .filter-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .filter-lbl   { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-right: 4px; font-weight: 700; }
+    .chip {
+      background: var(--surf2); border: 1px solid var(--border);
+      color: var(--muted); font-size: 11px; padding: 5px 11px;
+      border-radius: 20px; cursor: pointer; font-weight: 600;
+      transition: all .15s;
+    }
+    .chip:hover { color: var(--text); border-color: var(--accent); }
+    .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .filter-divider { width: 1px; height: 22px; background: var(--border); margin: 0 6px; }
+
+    /* ── Waterfall grid ── */
+    .wf-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .wf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+    }
+    .wf-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .wf-img {
+      width: 100%; aspect-ratio: 16/10;
+      background: #0a0e14 center/cover no-repeat;
+      position: relative;
+    }
+    .wf-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(13,17,23,0.55) 100%);
+    }
+    .wf-difficulty {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      padding: 4px 9px;
+      border-radius: 16px;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      z-index: 2;
+    }
+    .wf-difficulty.easy     { color: var(--green); border-color: rgba(34,197,94,.4); }
+    .wf-difficulty.moderate { color: var(--yellow); border-color: rgba(234,179,8,.4); }
+    .wf-difficulty.hard     { color: var(--orange); border-color: rgba(249,115,22,.4); }
+    .wf-driveup {
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(26,111,196,0.9);
+      color: #fff; font-size: 9px; font-weight: 800;
+      padding: 4px 8px; border-radius: 14px;
+      text-transform: uppercase; letter-spacing: 1px;
+      z-index: 2;
+    }
+    .wf-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+    .wf-name { font-size: 17px; font-weight: 700; margin-bottom: 2px; line-height: 1.2; }
+    .wf-loc { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .wf-desc { font-size: 13px; color: #b8c4d0; line-height: 1.55; margin-bottom: 14px; flex: 1; }
+    .wf-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin-bottom: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .wf-stat { font-size: 11px; }
+    .wf-stat-lbl { color: var(--muted); }
+    .wf-stat-val { color: var(--text); font-weight: 600; }
+    .wf-footer { display: flex; gap: 8px; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); }
+    .wf-weather {
+      background: var(--surf2);
+      padding: 5px 10px;
+      border-radius: 14px;
+      font-size: 11px;
+      color: var(--muted);
+      display: inline-flex; align-items: center; gap: 5px;
+      flex: 1;
+    }
+    .wf-weather b { color: var(--text); font-weight: 600; }
+    .wf-map-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: filter .15s;
+    }
+    .wf-map-btn:hover { filter: brightness(1.15); }
+
+    /* ── Plan Your Visit / Affiliate ── */
+    .plan-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-top: 32px;
+    }
+    .affiliate-disclosure {
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(26,111,196,0.08);
+      border: 1px solid rgba(26,111,196,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .gear-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .gear-card {
+      background: var(--surf2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: border-color .15s, transform .15s;
+      display: flex; flex-direction: column;
+    }
+    .gear-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .gear-icon { font-size: 28px; margin-bottom: 10px; }
+    .gear-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .gear-why  { font-size: 12px; color: var(--muted); margin-bottom: 12px; flex: 1; }
+    .gear-link {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .gear-link:hover { filter: brightness(1.15); }
+
+    /* ── FAQ (SEO gold) ── */
+    .faq-section { margin-top: 32px; }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+    .faq-q { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .faq-a { font-size: 13px; color: #b8c4d0; line-height: 1.6; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 30px 20px 24px;
+      margin-top: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media(max-width: 1000px) {
+      .wf-grid  { grid-template-columns: repeat(2, 1fr); }
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-title { font-size: 30px; }
+    }
+    @media(max-width: 640px) {
+      .wf-grid  { grid-template-columns: 1fr; }
+      .gear-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 24px; }
+      header { flex-wrap: wrap; row-gap: 6px; }
+      .hdr-nav { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; gap: 6px 4px; }
+      .hdr-nav a { white-space: nowrap; padding: 7px 10px; }
+      .hero-meta  { flex-direction: column; gap: 6px; }
+    }
+  </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/ga4.js"></script>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <a href="/" class="logo" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">906</div>
+    <div>
+      <div class="logo-text">UP DASHBOARD</div>
+      <div class="logo-sub">Upper Peninsula Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="/#today">Today</a>
+    <a href="/#trip-planning">Plan a Trip</a>
+    <a href="/#conditions">Conditions</a>
+    <a href="/#water">Lake Superior</a>
+    <a href="/#oredock">Ore Dock</a>
+    <a href="waterfalls.html" class="active">Waterfalls</a>
+    <a href="trails.html">Trails</a>
+    <a href="hunting.html">Hunting</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="/#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">UP TRAVEL GUIDE · UPDATED DAILY</div>
+    <h1 class="hero-title">12 Best Upper Peninsula Waterfalls</h1>
+    <p class="hero-subtitle">From the thundering Tahquamenon to the hidden cascades of the Porcupine Mountains — a complete guide with live regional weather, difficulty ratings, and visiting tips.</p>
+    <div class="hero-meta">
+      <span>📍 12 Falls</span>
+      <span>🗺️ 6 Regions</span>
+      <span>🌤️ Live Conditions</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ═══ SEASONAL BANNER ═══ -->
+  <div class="season-banner" id="season-banner">
+    <div class="season-icon" id="season-icon">🌊</div>
+    <div class="season-body">
+      <div class="season-lbl">Best Conditions Right Now</div>
+      <div class="season-headline" id="season-headline">Loading current season recommendations…</div>
+      <div class="season-detail"  id="season-detail">Live weather is loading from the regional NWS stations.</div>
+    </div>
+  </div>
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="section-eyebrow">Why the UP?</div>
+  <h2 class="section-title">200+ waterfalls. 12 you cannot miss.</h2>
+  <p class="section-lead">Michigan's Upper Peninsula has more waterfalls than the rest of the Midwest combined — over 200 documented falls scattered across six counties. This guide focuses on the 12 best, balancing drive-up convenience, dramatic scenery, and seasonal beauty. Live weather pulls from the nearest NWS station so you know what to expect when you arrive.</p>
+
+  <!-- ═══ FILTER BAR ═══ -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-lbl">Region</span>
+      <button class="chip active" data-filter="region" data-val="all">All</button>
+      <button class="chip" data-filter="region" data-val="east">Eastern UP</button>
+      <button class="chip" data-filter="region" data-val="central">Central UP</button>
+      <button class="chip" data-filter="region" data-val="west">Western UP</button>
+    </div>
+    <div class="filter-divider"></div>
+    <div class="filter-group">
+      <span class="filter-lbl">Difficulty</span>
+      <button class="chip active" data-filter="diff" data-val="all">All</button>
+      <button class="chip" data-filter="diff" data-val="driveup">Drive-up</button>
+      <button class="chip" data-filter="diff" data-val="easy">Easy walk</button>
+      <button class="chip" data-filter="diff" data-val="moderate">Moderate</button>
+      <button class="chip" data-filter="diff" data-val="hard">Hard</button>
+    </div>
+  </div>
+
+  <!-- ═══ WATERFALL GRID ═══ -->
+  <div class="wf-grid" id="wf-grid"></div>
+
+  <!-- ═══ PLAN YOUR VISIT / AFFILIATE ═══ -->
+  <div class="plan-section">
+    <div class="section-eyebrow">Plan Your Visit</div>
+    <h2 class="section-title">Gear that makes UP waterfall trips better</h2>
+    <p class="section-lead">Built up after years of UP adventures. These are the items I'd actually bring — bug spray in June isn't optional, and a Michigan Recreation Passport pays for itself by the second state park.</p>
+
+    <div class="affiliate-disclosure">
+      <strong>Disclosure:</strong> As an Amazon Associate, 906 Travel Dashboard earns from qualifying purchases.
+      Links open on Amazon at no extra cost to you.
+    </div>
+
+    <div class="gear-grid">
+      <div class="gear-card">
+        <div class="gear-icon">📖</div>
+        <div class="gear-name">UP Waterfall Guidebook</div>
+        <div class="gear-why">Scott Niswander's complete trail guide — maps and directions for 500+ UP waterfalls. Worth the cost on day one.</div>
+        <a class="gear-link" href="https://www.amazon.com/dp/B0CN3XZZ9L?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">🥾</div>
+        <div class="gear-name">Waterproof Hiking Boots</div>
+        <div class="gear-why">Most UP trails are wet and root-laced. The Merrell Moab 3 Mid WP is the workhorse — waterproof boots are the difference between a great day and a miserable one.</div>
+        <a class="gear-link" href="https://www.amazon.com/dp/B0C64B38Z8?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">🦟</div>
+        <div class="gear-name">Permethrin + Picaridin Combo</div>
+        <div class="gear-why">UP mosquitoes and black flies are no joke May–August. Treat clothes with Sawyer permethrin, skin with 20% picaridin.</div>
+        <a class="gear-link" href="https://www.amazon.com/dp/B0F29L8XXJ?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">Permethrin →</a>
+        &nbsp; <a class="gear-link" href="https://www.amazon.com/dp/B0D5QRXBS4?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">Picaridin →</a>
+      </div>
+      <div class="gear-card">
+        <div class="gear-icon">📷</div>
+        <div class="gear-name">ND Filter for Waterfall Shots</div>
+        <div class="gear-why">For that silky-water look. The K&amp;F Concept variable ND2-ND400 (67mm) lets you slow shutter speed even in daylight — check your lens thread size.</div>
+        <a class="gear-link" href="https://www.amazon.com/dp/B00JL4INW8?tag=blomblog-20" target="_blank" rel="nofollow sponsored noopener">View on Amazon →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ (great for SEO) ═══ -->
+  <div class="faq-section">
+    <div class="section-eyebrow">Frequently Asked</div>
+    <h2 class="section-title">UP Waterfalls FAQ</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">When is the best time of year to visit UP waterfalls?</div>
+      <div class="faq-a">Late April through early June is peak flow from snowmelt — the falls are at their most thunderous. Mid-September through mid-October pairs solid water with fall color. Summer is the easiest for hiking and swimming below smaller falls. Winter offers spectacular ice formations at Tahquamenon, Munising, and Bond — but most access roads aren't plowed past the parking lots.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need a Michigan Recreation Passport for UP waterfalls?</div>
+      <div class="faq-a">Yes for state park falls (Tahquamenon, Porcupine Mountains/Manabezho) — $14/year for Michigan residents, $40 for non-residents. National Park Service falls in Pictured Rocks (Munising, Miners, Sable) require the standard NPS entrance fee or an America the Beautiful pass. The Black River Falls and most others are free.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Which UP waterfalls are wheelchair / stroller accessible?</div>
+      <div class="faq-a">Upper Tahquamenon Falls has a paved viewing area accessible by paved path from the parking lot. Munising Falls has a paved path to the lower viewing platform. Bond Falls has a wooden boardwalk loop with multiple viewing platforms. Most other falls require some unpaved trail walking or stairs.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I swim at UP waterfalls?</div>
+      <div class="faq-a">A few yes, most no. Lower Tahquamenon has popular swimming holes below the cascades. Many of the smaller Pictured Rocks creeks have wadeable pools. Tahquamenon Upper Falls, Bond, and the Black River falls are off-limits to swimming due to currents and drop-offs. Always check posted signs.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What's the best base town for a UP waterfall trip?</div>
+      <div class="faq-a">For Eastern UP (Tahquamenon): Paradise or Newberry. For Central UP (Pictured Rocks waterfalls): Munising. For Western UP (Bond, Black River, Porcupines): Bergland, Bessemer, or Ontonagon. Marquette works as a base for everything except the deepest western falls.</div>
+    </div>
+  </div>
+
+  <!-- ═══ CROSS-LINK ═══ -->
+  <div style="margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Planning a trip to the UP?</div>
+    <a href="/#conditions" style="color:var(--accent);font-weight:700;font-size:15px;">→ Check live UP travel conditions on the dashboard</a>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  906 Travel Dashboard · Upper Peninsula Michigan · <a href="/">Main Dashboard</a> · <a href="/#cameras">Live Cameras</a> · <a href="trails.html">Trails</a> · <a href="fall.html">Fall Colors</a> · <a href="hunting.html">Hunting</a> · <a href="privacy.html">Privacy &amp; Disclosure</a><br>
+  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Weather data: NWS · Photos: Unsplash · ©2026</span>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ═══ AFFILIATE CONFIG ═══
+// Replace 'blomblog-20' globally with your Amazon Associates tracking ID
+// once your account is approved (typically 24-48 hours after signup).
+
+// ═══ WATERFALL DATA ═══
+// 12 hand-curated UP waterfalls with all metadata.
+// To swap photos: replace the `img` URL with your own image path or Unsplash URL.
+const WATERFALLS = [
+  {
+    id:'upper-tahq',
+    name:'Upper Tahquamenon Falls',
+    loc:'Paradise · Luce County',
+    region:'east',
+    nws:'KANJ',
+    diff:'driveup',
+    height:'50 ft drop · 200 ft wide',
+    drive:'5 min from Paradise',
+    hike:'Paved path · 0.1 mi',
+    season:'Year-round · best in May',
+    park:'Tahquamenon Falls State Park ($)',
+    desc:'One of the largest waterfalls east of the Mississippi. The amber-tinted water (stained by cedar tannins) thunders over a 50-foot drop. Paved viewing decks make this the most accessible major waterfall in the UP.',
+    img:'upper-tahquamenon.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Upper+Tahquamenon+Falls'
+  },
+  {
+    id:'lower-tahq',
+    name:'Lower Tahquamenon Falls',
+    loc:'Paradise · Luce County',
+    region:'east',
+    nws:'KANJ',
+    diff:'easy',
+    height:'5 cascades · ~22 ft total',
+    drive:'10 min from Paradise',
+    hike:'0.8 mi loop',
+    season:'Spring–Fall · best swimming July',
+    park:'Tahquamenon Falls State Park ($)',
+    desc:'A series of five cascades flow around an island in the Tahquamenon River. You can wade between the islands in summer. Less dramatic than the Upper Falls but more interactive — and far less crowded.',
+    img:'lower-tahquamenon.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Lower+Tahquamenon+Falls'
+  },
+  {
+    id:'bond',
+    name:'Bond Falls',
+    loc:'Paulding · Ontonagon County',
+    region:'west',
+    nws:'KIWD',
+    diff:'driveup',
+    height:'40 ft tall · 50 ft wide',
+    drive:'2 min from US-45',
+    hike:'Boardwalk · 0.2 mi loop',
+    season:'Year-round · stunning in fall',
+    park:'Bond Falls Scenic Site (free)',
+    desc:'A wide cascade on the Middle Branch Ontonagon River with multiple drops over basalt ledges. The boardwalk loop offers five distinct viewing angles. One of the most photographed waterfalls in Michigan.',
+    img:'bond-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Bond+Falls+Michigan'
+  },
+  {
+    id:'munising',
+    name:'Munising Falls',
+    loc:'Munising · Alger County',
+    region:'central',
+    nws:'KSAW',
+    diff:'easy',
+    height:'50 ft',
+    drive:'2 min from downtown Munising',
+    hike:'Paved · 0.4 mi round-trip',
+    season:'Spring–Fall · ice in winter',
+    park:'Pictured Rocks NL ($)',
+    desc:'A ribbon-like waterfall plunging over sandstone in Pictured Rocks National Lakeshore. You can walk behind a notch in the cliff. The interpretive center at the trailhead is worth a stop.',
+    img:'munising-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Munising+Falls'
+  },
+  {
+    id:'wagner',
+    name:'Wagner Falls',
+    loc:'Munising · Alger County',
+    region:'central',
+    nws:'KSAW',
+    diff:'easy',
+    height:'20 ft cascade',
+    drive:'5 min south of Munising on M-94',
+    hike:'Boardwalk · 0.2 mi',
+    season:'Year-round · classic spring shot',
+    park:'Wagner Falls Scenic Site (free)',
+    desc:'A picturesque 20-foot cascade over moss-covered rocks — exactly what a UP waterfall is supposed to look like. The viewing platform sits at the base for a head-on shot.',
+    img:'wagner-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Wagner+Falls'
+  },
+  {
+    id:'miners',
+    name:'Miners Falls',
+    loc:'Munising · Alger County',
+    region:'central',
+    nws:'KSAW',
+    diff:'moderate',
+    height:'50 ft drop · high volume',
+    drive:'15 min east of Munising',
+    hike:'1.2 mi round-trip',
+    season:'Year-round',
+    park:'Pictured Rocks NL ($)',
+    desc:'A high-volume falls in Pictured Rocks National Lakeshore — water punches through a notch in the sandstone with serious force. The trail descends to two viewing platforms.',
+    img:'miners-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Miners+Falls+Michigan'
+  },
+  {
+    id:'sable',
+    name:'Sable Falls',
+    loc:'Grand Marais · Alger County',
+    region:'central',
+    nws:'KSAW',
+    diff:'moderate',
+    height:'75 ft tiered cascade',
+    drive:'2 min west of Grand Marais',
+    hike:'168 steps · 0.5 mi round-trip',
+    season:'Spring–Fall · stairs icy in winter',
+    park:'Pictured Rocks NL ($)',
+    desc:'A 75-foot cascade in three distinct tiers, dropping toward Lake Superior. Reached via 168 wooden steps. Continue to the beach below for one of the UP\'s prettiest Lake Superior overlooks.',
+    img:'sable-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Sable+Falls+Michigan'
+  },
+  {
+    id:'canyon',
+    name:'Canyon Falls',
+    loc:"L'Anse · Baraga County",
+    region:'central',
+    nws:'KCMX',
+    diff:'easy',
+    height:'15 ft into a gorge',
+    drive:'15 min south of L\'Anse on US-41',
+    hike:'0.6 mi round-trip',
+    season:'Spring–Fall',
+    park:'Roadside Park (free)',
+    desc:'Called the "Grand Canyon of the UP." The Sturgeon River plunges 15 feet into a narrow 250-foot-deep gorge. A short trail from the rest area leads to dramatic overlooks. Surprisingly underrated.',
+    img:'canyon-falls.webp',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Canyon+Falls+Michigan'
+  },
+  {
+    id:'agate',
+    name:'Agate Falls',
+    loc:'Trout Creek · Ontonagon County',
+    region:'west',
+    nws:'KIWD',
+    diff:'easy',
+    height:'39 ft',
+    drive:'Roadside parking off M-28',
+    hike:'0.5 mi round-trip',
+    season:'Year-round',
+    park:'Agate Falls Scenic Site (free)',
+    desc:'A wide 39-foot tiered cascade on the Middle Branch Ontonagon River, viewable from a vintage railroad trestle overlook. Best in spring runoff or fall when the surrounding maples turn.',
+    img:'agate-falls.webp',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Agate+Falls+Michigan'
+  },
+  {
+    id:'manabezho',
+    name:'Manabezho Falls',
+    loc:'Porcupine Mtns · Ontonagon County',
+    region:'west',
+    nws:'KCMX',
+    diff:'easy',
+    height:'25 ft wide cascade',
+    drive:'In Porcupine Mtns Wilderness SP',
+    hike:'0.3 mi round-trip',
+    season:'May–October (road closed in winter)',
+    park:'Porkies State Park ($)',
+    desc:'A wide rust-colored cascade on the Presque Isle River, the most accessible of three impressive falls along the river. Combine with Manido and Nawadaha Falls on the same loop hike.',
+    img:'manabezho-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Manabezho+Falls'
+  },
+  {
+    id:'rainbow',
+    name:'Rainbow Falls',
+    loc:'Bessemer · Gogebic County',
+    region:'west',
+    nws:'KIWD',
+    diff:'moderate',
+    height:'45 ft · biggest on Black River',
+    drive:'Black River Scenic Byway',
+    hike:'1.5 mi round-trip + stairs',
+    season:'Spring–Fall',
+    park:'Ottawa National Forest (free)',
+    desc:'The largest of five waterfalls along the Black River Scenic Byway. Two viewing platforms — one from the rim, one at river level via a long staircase. Rainbows appear in the mist on sunny afternoons.',
+    img:'rainbow-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Rainbow+Falls+Black+River+Michigan'
+  },
+  {
+    id:'laughing-whitefish',
+    name:'Laughing Whitefish Falls',
+    loc:'Sundell · Alger County',
+    region:'central',
+    nws:'KSAW',
+    diff:'moderate',
+    height:'100 ft tiered',
+    drive:'30 min east of Marquette',
+    hike:'2 mi round-trip',
+    season:'Spring–Fall',
+    park:'Laughing Whitefish Falls Scenic Site (free)',
+    desc:'A 100-foot tiered waterfall in a quiet forest setting. The hike in is mostly flat through hardwoods, then a wooden viewing platform at the rim. Much less crowded than Pictured Rocks falls.',
+    img:'laughing-whitefish-falls.jpg',
+    maps:'https://www.google.com/maps/dir/?api=1&destination=Laughing+Whitefish+Falls'
+  }
+];
+
+// ═══ RENDER WATERFALL CARDS ═══
+function renderWaterfalls() {
+  const grid = document.getElementById('wf-grid');
+  grid.innerHTML = WATERFALLS.map(w => `
+    <article class="wf-card" data-region="${w.region}" data-diff="${w.diff}" id="wf-${w.id}">
+      <div class="wf-img" style="background-image:url('${w.img}')">
+        ${w.diff === 'driveup' ? '<div class="wf-driveup">★ Drive-up</div>' : ''}
+        <div class="wf-difficulty ${w.diff === 'driveup' ? 'easy' : w.diff}">
+          ${w.diff === 'driveup' ? 'Easy access' : w.diff === 'easy' ? 'Easy walk' : w.diff === 'moderate' ? 'Moderate' : 'Hard'}
+        </div>
+      </div>
+      <div class="wf-body">
+        <h3 class="wf-name">${w.name}</h3>
+        <div class="wf-loc">${w.loc}</div>
+        <p class="wf-desc">${w.desc}</p>
+        <div class="wf-stats">
+          <div class="wf-stat"><span class="wf-stat-lbl">Height:</span> <span class="wf-stat-val">${w.height}</span></div>
+          <div class="wf-stat"><span class="wf-stat-lbl">Hike:</span> <span class="wf-stat-val">${w.hike}</span></div>
+          <div class="wf-stat"><span class="wf-stat-lbl">Drive:</span> <span class="wf-stat-val">${w.drive}</span></div>
+          <div class="wf-stat"><span class="wf-stat-lbl">Best:</span> <span class="wf-stat-val">${w.season}</span></div>
+          <div class="wf-stat" style="grid-column:span 2"><span class="wf-stat-lbl">Access:</span> <span class="wf-stat-val">${w.park}</span></div>
+        </div>
+        <div class="wf-footer">
+          <div class="wf-weather" id="wx-${w.nws}-${w.id}">📍 <b>${w.nws}</b> · loading…</div>
+          <a class="wf-map-btn" href="${w.maps}" target="_blank" rel="noopener">Directions →</a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+// ═══ LIVE WEATHER (NWS) ═══
+const WX_CACHE = {}; // {station: {temp_f, desc}}
+
+async function fetchStationWeather(station) {
+  if (WX_CACHE[station]) return WX_CACHE[station];
+  try {
+    const r = await fetch(`https://api.weather.gov/stations/${station}/observations/latest`,
+      {headers:{Accept:'application/geo+json'}});
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const p = (await r.json()).properties || {};
+    const c = p.temperature && p.temperature.value;
+    const result = {
+      temp_f: c != null ? Math.round(c * 9/5 + 32) : null,
+      desc:   p.textDescription || 'Clear'
+    };
+    WX_CACHE[station] = result;
+    return result;
+  } catch(e) {
+    return {temp_f:null, desc:'Unavailable'};
+  }
+}
+
+async function loadAllWeather() {
+  const stations = [...new Set(WATERFALLS.map(w => w.nws))];
+  await Promise.all(stations.map(async s => {
+    const wx = await fetchStationWeather(s);
+    WATERFALLS.filter(w => w.nws === s).forEach(w => {
+      const el = document.getElementById(`wx-${w.nws}-${w.id}`);
+      if (!el) return;
+      if (wx.temp_f != null) {
+        el.innerHTML = `🌤️ <b>${wx.temp_f}°F</b> · ${wx.desc} <span style="opacity:.6;font-size:9px;">(${w.nws})</span>`;
+      } else {
+        el.innerHTML = `📍 <b>${w.nws}</b> · regional weather`;
+      }
+    });
+  }));
+}
+
+// ═══ FILTERS ═══
+const filterState = { region: 'all', diff: 'all' };
+
+function applyFilters() {
+  document.querySelectorAll('.wf-card').forEach(card => {
+    const matchesRegion = filterState.region === 'all' || card.dataset.region === filterState.region;
+    const matchesDiff   = filterState.diff   === 'all' || card.dataset.diff   === filterState.diff;
+    card.style.display = (matchesRegion && matchesDiff) ? '' : 'none';
+  });
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const f = chip.dataset.filter;
+    const v = chip.dataset.val;
+    filterState[f] = v;
+    // Update active state in this group
+    document.querySelectorAll(`.chip[data-filter="${f}"]`).forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    applyFilters();
+  });
+});
+
+// ═══ SEASONAL BANNER ═══
+function renderSeasonBanner() {
+  const m = new Date().getMonth(); // 0–11
+  let icon, headline, detail;
+  if (m >= 3 && m <= 5) {            // Apr–Jun
+    icon = '🌊';
+    headline = 'Spring snowmelt — peak waterfall flow';
+    detail = 'Falls are at their thunderous best. Bring waterproof boots — trails are muddy. Top picks right now: Bond Falls, Upper Tahquamenon, Rainbow Falls.';
+  } else if (m >= 6 && m <= 7) {     // Jul–Aug
+    icon = '☀️';
+    headline = 'Summer — easiest hiking + swimming';
+    detail = 'Lower flow but perfect hiking weather. Try Lower Tahquamenon for swimming holes and Sable Falls for a beach combo. Bring bug spray (seriously).';
+  } else if (m >= 8 && m <= 9) {     // Sep–Oct
+    icon = '🍁';
+    headline = 'Fall colors + solid water flow';
+    detail = 'Arguably the best season. Peak color in the UP is typically late September to mid-October. Agate Falls and the Black River chain are spectacular.';
+  } else {                            // Nov–Mar
+    icon = '❄️';
+    headline = 'Winter — frozen falls and ice formations';
+    detail = 'Spectacular ice at Upper Tahquamenon, Munising Falls, and Bond Falls. Most other access roads are unplowed. Snowshoes recommended.';
+  }
+  document.getElementById('season-icon').textContent = icon;
+  document.getElementById('season-headline').textContent = headline;
+  document.getElementById('season-detail').textContent = detail;
+}
+
+// ═══ INIT ═══
+renderWaterfalls();
+renderSeasonBanner();
+loadAllWeather();
+</script>
+
+</body>
+</html>
