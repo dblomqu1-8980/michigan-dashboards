@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══ SEO ═══ -->
+  <title>Northern Michigan Skiing — Live Snow Depth, Resorts &amp; Nordic Trails | Up North Dashboard</title>
+  <meta name="description" content="Live snow depth, new snowfall and winter weather alerts for every downhill resort and groomed Nordic trail system in northern Lower Michigan — Boyne Mountain, The Highlands, Nub's Nob, Crystal Mountain, Caberfae Peaks, the VASA Pathway, Forbush Corner and more." />
+  <meta name="keywords" content="northern Michigan skiing, Boyne Mountain snow report, Nub's Nob conditions, Crystal Mountain Michigan, Caberfae Peaks, The Highlands Harbor Springs, Shanty Creek, Treetops Gaylord, VASA Pathway, Forbush Corner, cross country skiing northern Michigan, Traverse City skiing, Gaylord snow" />
+  <meta name="author" content="Up North Dashboard" />
+  <link rel="canonical" href="https://upnorthdashboard.com/ski.html" />
+
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:title" content="Northern Michigan Skiing — Live Snow, Downhill &amp; Nordic" />
+  <meta property="og:description" content="Pick a northern Michigan ski area and get live snow depth, new snowfall, the wind chill on the lift, and winter storm alerts — plus every groomed Nordic system Up North." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://upnorthdashboard.com/ski.html" />
+  <meta property="og:image" content="https://upnorthdashboard.com/Assets/og-banner.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Skiing in northern Lower Michigan — Up North Dashboard" />
+  <meta name="twitter:image" content="https://upnorthdashboard.com/Assets/og-banner.jpg" />
+  <meta property="og:site_name" content="Up North Dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ═══ SCHEMA.ORG STRUCTURED DATA ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"When does ski season start in northern Michigan?","acceptedAnswer":{"@type":"Answer","text":"Most northern Lower Michigan resorts open in mid-to-late December once snowmaking temperatures hold, and run through mid-to-late March. Nearly every downhill area Up North makes snow, so opening dates depend more on a sustained cold snap than on natural snowfall. Groomed Nordic trails need natural snow and typically start grooming in late December."}},
+      {"@type":"Question","name":"Which northern Michigan ski resort has the biggest vertical drop?","acceptedAnswer":{"@type":"Answer","text":"Caberfae Peaks near Cadillac has the largest lift-served vertical drop in Michigan's Lower Peninsula at 485 feet. The Highlands at Harbor Springs is close behind at 525 feet of listed vertical and holds the state's longest run, the 1.25-mile North Peak Pass. Boyne Mountain has 500 feet of vertical across 60 trails and 12 lifts, the largest lift network in the region."}},
+      {"@type":"Question","name":"Where can you cross-country ski in northern Michigan?","acceptedAnswer":{"@type":"Answer","text":"The best-known groomed systems are the VASA Pathway near Traverse City with 3 km, 5 km, 10 km and 25 km loops groomed by TART Trails, Forbush Corner near Frederic with about 37 km, Hanson Hills in Grayling with more than 35 km groomed daily, and Cross Country Ski Headquarters near Higgins Lake with more than 11 miles groomed each morning. Most are set for both skate and classic technique."}},
+      {"@type":"Question","name":"Do you need a trail pass to cross-country ski in northern Michigan?","acceptedAnswer":{"@type":"Answer","text":"It depends who grooms it. Private Nordic centers such as Forbush Corner and Cross Country Ski Headquarters charge a daily trail fee. Resort Nordic centers at Crystal Mountain and Shanty Creek sell their own passes. State park and state forest pathways such as Hartwick Pines require a Michigan Recreation Passport on your vehicle rather than a per-skier fee, and the VASA Pathway is free to ski with donations funding TART's grooming."}},
+      {"@type":"Question","name":"Why does Gaylord get so much more snow than Traverse City?","acceptedAnswer":{"@type":"Answer","text":"Both sit in the Lake Michigan snowbelt, but Gaylord sits on the high ground of the Gaylord plateau, several hundred feet above Grand Traverse Bay. Lake-effect air coming off Lake Michigan is forced up over that terrain, cools further and drops more snow. That elevation is why Gaylord, Frederic and Grayling hold a base weeks longer than the shoreline towns and why so much of the region's Nordic grooming is concentrated there."}}
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #2e9d63;   /* pine green — the Up North signature */
+      --accent2: #1a6fc4;   /* big-lake blue */
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+      --frost:   #56b3f0;   /* ice blue — this page's accent */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header (matches main site) ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+
+    /* Skiing makes this a 12-item nav. Pin the wordmark, keep labels whole and
+       let the row wrap rather than let flexbox squeeze the logo and break
+       labels mid-phrase. The mobile rules below still override this. */
+    .logo { flex-shrink: 0; }
+    .logo-text, .logo-sub { white-space: nowrap; }
+    .hdr-nav { flex-wrap: wrap; justify-content: flex-end; }
+    .hdr-nav a { white-space: nowrap; padding: 4px 8px; }
+    .live-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); font-weight: 600; }
+    .live-dot   { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 330px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(6,16,28,0.52) 0%, rgba(8,14,12,0.88) 100%),
+        url('https://images.unsplash.com/photo-1418985991508-e47386d96a71?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat,
+        #08121e;
+      padding: 56px 20px;
+    }
+    .hero-content { text-align: center; max-width: 840px; position: relative; z-index: 2; }
+    .hero-eyebrow { font-size: 12px; color: #a8d8ff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+    .hero-title { font-size: 38px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 16px; color: #d3e3f2; max-width: 680px; margin: 0 auto 22px; line-height: 1.55; }
+    .hero-meta { display: inline-flex; gap: 18px; font-size: 12px; color: #d3e3f2; opacity: 0.9; }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+    /* ── Section wrap ── */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px 20px; }
+    .section-eyebrow { font-size: 11px; color: var(--frost); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-weight: 700; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .section-lead  { color: var(--muted); font-size: 14px; margin-bottom: 20px; max-width: 780px; }
+
+    /* ── Area picker ── */
+    .picker {
+      background: linear-gradient(135deg, var(--surf2), var(--surface));
+      border: 1px solid var(--border); border-left: 4px solid var(--frost);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .picker-lbl { font-size: 10px; color: var(--frost); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 5px; }
+    .picker select {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit;
+      min-width: 280px; cursor: pointer;
+    }
+    .picker select:focus { outline: 2px solid var(--frost); outline-offset: 1px; }
+    .picker-note { font-size: 12px; color: var(--muted); flex: 1; min-width: 240px; line-height: 1.5; }
+    .picker-note b { color: #b8c4d0; }
+    .type-chip { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .5px; padding: 3px 8px; border-radius: 10px; background: rgba(86,179,240,.1); border: 1px solid rgba(86,179,240,.35); color: var(--frost); }
+
+    /* ── Model / caution notes ── */
+    .model-note {
+      background: rgba(86,179,240,0.07);
+      border: 1px solid rgba(86,179,240,0.24);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 12.5px; color: #c8d8e8; margin-bottom: 22px; line-height: 1.6;
+    }
+    .model-note b { color: var(--frost); }
+    .model-note a { color: var(--frost); font-weight: 600; }
+    .model-note a:hover { text-decoration: underline; }
+    .model-note.warn { background: rgba(234,179,8,.06); border-color: rgba(234,179,8,.28); }
+    .model-note.warn b { color: var(--yellow); }
+    .model-note.warn a { color: var(--yellow); }
+
+    /* ── Alert strip ── */
+    .alert-strip { margin-bottom: 14px; }
+    .alert-item {
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.32);
+      border-radius: 10px; padding: 11px 15px; margin-bottom: 8px;
+      font-size: 12.5px; line-height: 1.55; color: #ffd9d9;
+    }
+    .alert-item b { color: var(--red); }
+    .alert-item.watch { background: rgba(234,179,8,.07); border-color: rgba(234,179,8,.3); color: #f6e7bd; }
+    .alert-item.watch b { color: var(--yellow); }
+
+    /* ── Snow hero card ── */
+    .snow-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 22px 24px; margin-bottom: 14px;
+      display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px;
+    }
+    .snow-main { border-right: 1px solid var(--border); padding-right: 24px; }
+    .snow-status { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 6px; }
+    .snow-status.good { color: var(--green); }
+    .snow-status.thin { color: var(--yellow); }
+    .snow-status.none { color: var(--red); }
+    .snow-count { font-size: 34px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+    .snow-sub { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+    .snow-times { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .st-cell { background: var(--surf2); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; }
+    .st-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px; font-weight: 700; }
+    .st-val { font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .st-note { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+
+    /* ── Conditions grid ── */
+    .cond-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .cond-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 14px 16px; }
+    .cond-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; margin-bottom: 5px; }
+    .cond-val { font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
+    .cond-note { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+
+    /* ── Forecast strip ── */
+    .fc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .fc-cell { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; }
+    .fc-day { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; margin-bottom: 6px; }
+    .fc-snow { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--frost); }
+    .fc-temps { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Plan sections ── */
+    .plan-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px; margin-top: 30px; }
+
+    /* ── Area directory ── */
+    .area-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .area-card {
+      background: var(--surf2); border: 1px solid var(--border); border-radius: 11px;
+      padding: 15px 17px; display: flex; flex-direction: column;
+    }
+    .area-card.hl { border-color: rgba(86,179,240,.4); }
+    .area-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .area-town { font-size: 11px; color: var(--muted); margin-bottom: 9px; }
+    .area-stats { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+    .area-chip { font-size: 11px; background: var(--border); border-radius: 4px; padding: 2px 7px; color: var(--muted); }
+    .area-chip b { color: var(--text); font-weight: 700; }
+    .area-desc { font-size: 12.5px; color: #b8c4d0; line-height: 1.55; margin-bottom: 11px; flex: 1; }
+    .area-link { font-size: 12px; color: var(--frost); font-weight: 600; }
+    .area-link:hover { text-decoration: underline; }
+
+    /* ── Link cards ── */
+    .links-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .links-grid.three { grid-template-columns: repeat(3, 1fr); }
+    .link-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color .15s, transform .15s; display: block; }
+    .link-card:hover { border-color: var(--frost); transform: translateY(-2px); }
+    .lc-icon { font-size: 19px; margin-bottom: 6px; }
+    .lc-label { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .lc-sub { font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+
+    /* ── Explainer cards ── */
+    .exp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .exp-card { background: var(--surf2); border: 1px solid var(--border); border-radius: 11px; padding: 16px 18px; }
+    .exp-hd { font-size: 14px; font-weight: 700; margin-bottom: 7px; }
+    .exp-body { font-size: 12.5px; color: #b8c4d0; line-height: 1.6; }
+
+    /* ── FAQ ── */
+    .faq-section { margin-top: 30px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+    .faq-q { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .faq-a { font-size: 13px; color: #b8c4d0; line-height: 1.6; }
+    .faq-a a { color: var(--frost); font-weight: 600; }
+    .faq-a a:hover { text-decoration: underline; }
+
+    .verified { font-size: 11.5px; color: var(--muted); margin-top: 16px; line-height: 1.6; }
+    .verified b { color: #b8c4d0; }
+
+    /* ── Footer ── */
+    footer { background: var(--surface); border-top: 1px solid var(--border); padding: 30px 20px 24px; margin-top: 40px; text-align: center; color: var(--muted); font-size: 12px; }
+    footer a { color: var(--accent); }
+    footer a:hover { text-decoration: underline; }
+
+    .skel { color: var(--muted); font-style: italic; }
+
+    /* ── Responsive ── */
+    @media(max-width: 1100px) {
+      .cond-grid  { grid-template-columns: repeat(2, 1fr); }
+      .fc-grid    { grid-template-columns: repeat(2, 1fr); }
+      .links-grid { grid-template-columns: repeat(2, 1fr); }
+      .links-grid.three { grid-template-columns: repeat(2, 1fr); }
+      .area-grid, .exp-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 900px) {
+      .snow-card { grid-template-columns: 1fr; }
+      .snow-main { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 18px; }
+      .hero-title { font-size: 29px; }
+    }
+    @media(max-width: 640px) {
+      .cond-grid, .fc-grid, .links-grid, .links-grid.three, .area-grid,
+      .exp-grid, .snow-times { grid-template-columns: 1fr; }
+      .hero-title { font-size: 24px; }
+      header { flex-wrap: wrap; row-gap: 6px; }
+      .hdr-nav { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; gap: 6px 4px; }
+      .hdr-nav a { white-space: nowrap; padding: 7px 10px; }
+      .hero-meta { flex-direction: column; gap: 6px; }
+      .plan-section { padding: 18px; }
+      .picker select { width: 100%; min-width: 0; }
+    }
+  </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/ga4.js"></script>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">🌲</div>
+    <div>
+      <div class="logo-text">UP NORTH DASHBOARD</div>
+      <div class="logo-sub">Northern Lower Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="/#today">Today</a>
+    <a href="/#conditions">Conditions</a>
+    <a href="/#roads">Roads</a>
+    <a href="/#bridge">Bridge &amp; Ferries</a>
+    <a href="/#water">Beaches &amp; Water</a>
+    <a href="/#trails">Trails &amp; Snow</a>
+    <a href="ski.html" class="active">Skiing</a>
+    <a href="hunting.html">Hunting</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="/#weekend">This Weekend</a>
+    <a href="/#cameras">Cameras</a>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Northern Lower Michigan · Downhill &amp; Nordic</div>
+    <h1 class="hero-title">Skiing Up North — live snow, hill by hill</h1>
+    <p class="hero-subtitle">
+      Michigan's biggest resorts and its deepest Nordic grooming sit within an hour of each other
+      here. Pick an area and get live snow depth, new snowfall, the wind chill you'll actually
+      feel on the lift, and any winter storm warnings in force right now.
+    </p>
+    <div class="hero-meta">
+      <span>❄️ Live snow depth &amp; snowfall</span>
+      <span>⛷️ 10 downhill resorts</span>
+      <span>🎿 7 groomed Nordic systems</span>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ═══ PICKER ═══ -->
+  <div class="picker">
+    <div>
+      <div class="picker-lbl">Ski Area</div>
+      <select id="area-select" aria-label="Select a northern Michigan ski area or Nordic trail system"></select>
+    </div>
+    <div class="picker-note" id="picker-note">
+      Loading area conditions…
+    </div>
+  </div>
+
+  <div class="model-note" id="season-note">
+    <b>Checking the season…</b>
+  </div>
+
+  <!-- ═══ TODAY ═══ -->
+  <div class="section-eyebrow">Snow Right Now</div>
+  <h2 class="section-title" id="today-title">Conditions on the hill</h2>
+  <p class="section-lead" id="today-lead">Loading live snow and weather…</p>
+
+  <div id="alert-strip" class="alert-strip"></div>
+
+  <div class="snow-card">
+    <div class="snow-main">
+      <div class="snow-status" id="snow-status">Checking snowpack…</div>
+      <div class="snow-count" id="snow-count">—</div>
+      <div class="snow-sub" id="snow-sub">Pulling modelled snow depth and recent snowfall for this area from Open-Meteo.</div>
+    </div>
+    <div class="snow-times">
+      <div class="st-cell">
+        <div class="st-lbl">New — last 24h</div>
+        <div class="st-val" id="st-24h">—</div>
+        <div class="st-note">Snowfall total</div>
+      </div>
+      <div class="st-cell">
+        <div class="st-lbl">New — last 48h</div>
+        <div class="st-val" id="st-48h">—</div>
+        <div class="st-note">Snowfall total</div>
+      </div>
+      <div class="st-cell">
+        <div class="st-lbl">Next 3 days</div>
+        <div class="st-val" id="st-fc">—</div>
+        <div class="st-note">Forecast snowfall</div>
+      </div>
+      <div class="st-cell">
+        <div class="st-lbl">Freeze / thaw</div>
+        <div class="st-val" id="st-ft">—</div>
+        <div class="st-note" id="st-ft-note">Today's high &amp; low</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FIELD CONDITIONS ═══ -->
+  <div class="plan-section" id="conditions">
+    <div class="section-eyebrow">On The Mountain</div>
+    <h3 class="section-title" style="font-size:18px;margin-bottom:14px;">What it's doing out there right now</h3>
+    <div class="cond-grid" id="cond-grid"></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px;" id="cond-src">
+      Live weather from Open-Meteo · Winter alerts from the National Weather Service.
+    </div>
+  </div>
+
+  <!-- ═══ FORECAST ═══ -->
+  <div class="plan-section" id="forecast">
+    <div class="section-eyebrow">Snowfall Forecast</div>
+    <h2 class="section-title">What's coming in the next four days</h2>
+    <p class="section-lead">
+      Modelled snowfall for the selected area. Lake-effect off Lake Michigan is narrow and
+      wind-direction dependent — a band that buries Gaylord can leave the Bay shore dry.
+    </p>
+    <div class="fc-grid" id="fc-grid"></div>
+  </div>
+
+  <!-- ═══ DOWNHILL ═══ -->
+  <div class="plan-section" id="downhill">
+    <div class="section-eyebrow">Downhill</div>
+    <h2 class="section-title">Every lift-served resort Up North</h2>
+    <p class="section-lead">
+      Northern Lower Michigan holds the biggest ski resorts in the state. Vertical is modest,
+      but the lift networks, snowmaking coverage and slopeside infrastructure are the most
+      developed in the Midwest.
+    </p>
+    <div class="area-grid" id="downhill-grid"></div>
+  </div>
+
+  <!-- ═══ NORDIC ═══ -->
+  <div class="plan-section" id="nordic">
+    <div class="section-eyebrow">Nordic</div>
+    <h2 class="section-title">Groomed cross-country trail systems</h2>
+    <p class="section-lead">
+      The Grayling–Frederic–Higgins Lake corridor is the densest concentration of serious Nordic
+      grooming in Michigan, and the VASA near Traverse City is the best-known trail in the state.
+      Nearly all of these are set for both skate and classic.
+    </p>
+    <div class="area-grid" id="nordic-grid"></div>
+  </div>
+
+  <!-- ═══ SNOWBELT ═══ -->
+  <div class="plan-section" id="snowbelt">
+    <div class="section-eyebrow">Why Gaylord Gets More</div>
+    <h2 class="section-title">The Lake Michigan snowbelt, and how to read it</h2>
+    <p class="section-lead">
+      Snowfall Up North is uneven in a way that is completely predictable once you know what
+      drives it — and it explains where the grooming is.
+    </p>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-hd">❄️ How the bands form</div>
+        <div class="exp-body">
+          Cold air crosses the open water of Lake Michigan, picks up moisture and heat, then
+          drops it as snow when it hits land. Northwest flow is the classic setup that lights up
+          the whole western shore from Manistee to Charlevoix.
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-hd">⛰️ Why elevation decides it</div>
+        <div class="exp-body">
+          The Gaylord plateau sits several hundred feet above Grand Traverse Bay. Lake-effect air
+          forced up over that high ground cools further and snows harder — which is why Gaylord,
+          Frederic and Grayling hold a base weeks longer than shoreline towns.
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-hd">🌊 The ice-cover catch</div>
+        <div class="exp-body">
+          Lake-effect needs open water. A hard freeze on Lake Michigan shuts the machine off and
+          late-season snow then depends on passing storm systems. Check the
+          <a href="/#water" style="color:var(--frost);font-weight:600;">water panel</a> on the main
+          dashboard for current lake conditions.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ KNOW BEFORE YOU GO ═══ -->
+  <div class="plan-section" id="know">
+    <div class="section-eyebrow">Know Before You Go</div>
+    <h2 class="section-title">Passes, timing and the drive</h2>
+    <div class="exp-grid" style="margin-bottom:18px;">
+      <div class="exp-card">
+        <div class="exp-hd">🎟️ Trail passes</div>
+        <div class="exp-body">
+          Private Nordic centers such as Forbush Corner and Cross Country Ski Headquarters charge
+          a daily trail fee. Resort Nordic centers sell their own. State park and state forest
+          pathways need a Michigan Recreation Passport on the vehicle. The VASA is free to ski —
+          donations fund TART's grooming.
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-hd">🗓️ When to come</div>
+        <div class="exp-body">
+          Nearly every downhill area here makes snow, so openings depend on a sustained cold snap
+          more than natural snowfall — usually mid-to-late December through mid-to-late March.
+          Nordic grooming needs real snow and starts later.
+        </div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-hd">🚗 Getting there</div>
+        <div class="exp-body">
+          I-75 and US-131 both climb into the snowbelt, and lake-effect can close them fast.
+          Check <a href="/#roads" style="color:var(--frost);font-weight:600;">live road conditions</a>
+          before heading north, and give yourself extra time on a storm weekend.
+        </div>
+      </div>
+    </div>
+    <div class="links-grid">
+      <a href="https://www.michigan.gov/dnr/things-to-do/skiing" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🏔️</div>
+        <div class="lc-label">Michigan DNR — Skiing</div>
+        <div class="lc-sub">State pathways, park trails &amp; the Recreation Passport</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/trail-reports" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🛷</div>
+        <div class="lc-label">DNR Snow &amp; Trail Reports</div>
+        <div class="lc-sub">Statewide grooming and snow depth reports</div>
+      </a>
+      <a href="https://www.weather.gov/apx/" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🌨️</div>
+        <div class="lc-label">NWS Gaylord</div>
+        <div class="lc-sub">Lake-effect discussion &amp; winter storm warnings</div>
+      </a>
+      <a href="https://906dashboard.com/ski.html" target="_blank" rel="noopener" class="link-card" style="border-color:rgba(26,111,196,.35);">
+        <div class="lc-icon">⛷️</div>
+        <div class="lc-label">UP Skiing</div>
+        <div class="lc-sub">Bigger snow across the Bridge — the 906 ski dashboard</div>
+      </a>
+    </div>
+    <div class="verified">
+      <b>Where these numbers come from:</b> snow depth, snowfall totals and temperatures are
+      modelled values from Open-Meteo for the coordinates of each area — useful for judging
+      whether there is snow on the ground, but not a substitute for a resort's own groomed-run
+      report. Winter alerts come from the National Weather Service. Always check the official
+      conditions page before you drive.
+    </div>
+  </div>
+
+  <!-- ═══ STAY ═══ -->
+  <div class="plan-section" id="stay">
+    <div class="section-eyebrow">Where To Stay</div>
+    <h2 class="section-title">Slopeside and snowbelt lodging</h2>
+    <p class="section-lead">
+      Ski weekends Up North book out early, especially around the holidays and any big snow event.
+    </p>
+    <div class="links-grid three">
+      <a href="https://vrbo.com/affiliates/vrbo-home.CMuA2K2" target="_blank" rel="sponsored noopener" class="link-card" style="border-color:rgba(249,115,22,.35);">
+        <div class="lc-icon">🏡</div>
+        <div class="lc-label">Cottages &amp; Chalets</div>
+        <div class="lc-sub">Search VRBO for your town and dates</div>
+      </a>
+      <a href="https://www.michigan.org/cities" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🛎️</div>
+        <div class="lc-label">Pure Michigan Lodging</div>
+        <div class="lc-sub">Hotels and resorts across northern Michigan</div>
+      </a>
+      <a href="https://www.michigan.gov/dnr/places/state-parks" target="_blank" rel="noopener" class="link-card">
+        <div class="lc-icon">🏕️</div>
+        <div class="lc-label">State Park Cabins</div>
+        <div class="lc-sub">Rustic cabins and lodges, including Hartwick Pines</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ FAQ ═══ -->
+  <div class="faq-section" id="faq">
+    <div class="section-eyebrow">Frequently Asked</div>
+    <h2 class="section-title" style="margin-bottom:16px;">Northern Michigan skiing questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">When does ski season start in northern Michigan?</div>
+      <div class="faq-a">
+        Most resorts open in mid-to-late December once snowmaking temperatures hold, and run
+        through mid-to-late March. Nearly every downhill area Up North makes snow, so opening
+        dates depend more on a <b>sustained cold snap</b> than on natural snowfall. Groomed Nordic
+        trails need real snow and typically start grooming in late December.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Which northern Michigan resort has the biggest vertical drop?</div>
+      <div class="faq-a">
+        <b>Caberfae Peaks</b> near Cadillac has the largest lift-served vertical in the Lower
+        Peninsula at 485 feet. <b>The Highlands</b> at Harbor Springs lists 525 feet and holds the
+        state's longest run — the 1.25-mile North Peak Pass. <b>Boyne Mountain</b> has 500 feet
+        across 60 trails and 12 lifts, the largest lift network in the region.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Where can I cross-country ski in northern Michigan?</div>
+      <div class="faq-a">
+        The best-known systems are the <b>VASA Pathway</b> near Traverse City (3 km, 5 km, 10 km and
+        25 km loops groomed by TART Trails), <b>Forbush Corner</b> near Frederic (about 37 km),
+        <b>Hanson Hills</b> in Grayling (more than 35 km groomed daily) and <b>Cross Country Ski
+        Headquarters</b> near Higgins Lake (more than 11 miles groomed each morning). The full list
+        is in the <a href="#nordic">Nordic section</a>.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need a trail pass to cross-country ski up north?</div>
+      <div class="faq-a">
+        It depends who grooms it. Private centers such as Forbush Corner and Cross Country Ski
+        Headquarters charge a daily trail fee. Resort Nordic centers at Crystal Mountain and
+        Shanty Creek sell their own passes. State park and state forest pathways such as Hartwick
+        Pines require a <b>Michigan Recreation Passport</b> on your vehicle rather than a per-skier
+        fee. The VASA is free to ski, with donations funding TART's grooming.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why does Gaylord get so much more snow than Traverse City?</div>
+      <div class="faq-a">
+        Both sit in the Lake Michigan snowbelt, but Gaylord sits on high ground several hundred
+        feet above Grand Traverse Bay. Lake-effect air forced up over that plateau cools further
+        and drops more snow. That elevation is why Gaylord, Frederic and Grayling hold a base
+        weeks longer than the shoreline towns — and why so much of the region's Nordic grooming
+        is concentrated there.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Up North Dashboard · Northern Lower Michigan · <a href="/">Main Dashboard</a> · <a href="hunting.html">Hunting</a> · <a href="fall.html">Fall Colors</a> · <a href="aurora.html">Aurora</a> · <a href="https://906dashboard.com/ski.html">UP Skiing</a> · <a href="privacy.html">Privacy &amp; Disclosure</a><br>
+  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Resort lists and trail distances verified against operator and Pure Michigan sources on Sep 7, 2026 · Snow depth and snowfall are modelled Open-Meteo values, not resort-reported groomed-run depths · Always check the official conditions page before you drive · ©2026</span>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  NORTHERN MICHIGAN SKIING — live snow conditions
+//
+//  Data sources:
+//    · api.open-meteo.com      — snow depth, snowfall, temps, wind
+//    · api.weather.gov         — active winter watches/warnings
+//
+//  Same reasoning as the homepage SKI_AREAS list: northern Michigan resorts
+//  publish snow reports in wildly different formats and only in season, so
+//  scraping them cannot be tested in summer and breaks on every reskin.
+//  Modelled snow depth is testable year-round and degrades honestly; the
+//  official report is one click away on every card.
+// ═══════════════════════════════════════════════════════════════
+
+// ── Areas ──
+// lat/lon are the ski area itself, not the town, so snow depth reflects the
+// hill rather than the valley it is named after.
+const AREAS = [
+  // ── Downhill ──
+  { id:'boyne',     type:'downhill', name:'Boyne Mountain',      town:'Boyne Falls · Charlevoix', lat:45.1636, lon:-84.9308,
+    vert:'500 ft', trails:'60 trails', lifts:'12 lifts', acres:'415 acres',
+    desc:'The largest lift network in the region, with the most developed slopeside village in Michigan. Night skiing, terrain parks and a full resort base.',
+    url:'https://www.boynemountain.com/' },
+  { id:'highlands', type:'downhill', name:'The Highlands',       town:'Harbor Springs · Emmet', lat:45.4767, lon:-84.9297,
+    vert:'525 ft', trails:'55 trails', acres:'385 acres',
+    desc:'Formerly Boyne Highlands. Holds the longest run in Michigan — the 1.25-mile North Peak Pass — plus three terrain parks and a large Nordic network.',
+    url:'https://www.highlandsharborsprings.com/' },
+  { id:'nubs',      type:'downhill', name:"Nub's Nob",           town:'Harbor Springs · Emmet', lat:45.4831, lon:-84.9111,
+    vert:'427 ft', trails:'53 trails', acres:'248 acres',
+    desc:'Independent, family-run and repeatedly voted the best snow and grooming in the Midwest. Directly across the road from The Highlands.',
+    url:'https://www.nubsnob.com/' },
+  { id:'crystal',   type:'downhill', name:'Crystal Mountain',    town:'Thompsonville · Benzie', lat:44.5197, lon:-85.9822,
+    vert:'375 ft', trails:'58 trails', lit:'27 lit runs',
+    desc:'Family-owned year-round resort above the Betsie Valley with four terrain parks, extensive night skiing and its own Nordic center.',
+    url:'https://www.crystalmountain.com/ski/cams-conditions/mountain-report' },
+  { id:'shanty',    type:'downhill', name:'Shanty Creek',        town:'Bellaire · Antrim', lat:44.9092, lon:-85.1936,
+    trails:'53 runs',
+    desc:'Two hills under one resort — Schuss Mountain for the steeper terrain and Summit Mountain for the views over Lake Bellaire. Nordic trails on site.',
+    url:'https://www.shantycreek.com/' },
+  { id:'caberfae',  type:'downhill', name:'Caberfae Peaks',      town:'Cadillac · Wexford', lat:44.2589, lon:-85.7392,
+    vert:'485 ft', trails:'34 runs',
+    desc:'The biggest lift-served vertical drop in the Lower Peninsula, plus a wide-open lift-accessed backcountry area. One of Michigan’s oldest ski areas.',
+    url:'https://caberfaepeaks.com/snow-report/' },
+  { id:'otsego',    type:'downhill', name:'Otsego Resort',       town:'Gaylord · Otsego', lat:45.0439, lon:-84.6606,
+    trails:'31 runs',
+    desc:'Sits on the Gaylord plateau in the heart of the snowbelt, with short lift lines and a long history of training competitive riders.',
+    url:'https://www.otsegoresort.com/' },
+  { id:'treetops',  type:'downhill', name:'Treetops Resort',     town:'Gaylord · Otsego', lat:45.0733, lon:-84.5828,
+    trails:'23 runs',
+    desc:'Runs dropping into the Pigeon River valley with some of the best terrain views in the Lower Peninsula, plus a groomed Nordic network.',
+    url:'https://www.treetops.com/' },
+  { id:'hanson',    type:'downhill', name:'Hanson Hills',        town:'Grayling · Crawford', lat:44.6489, lon:-84.7481,
+    desc:'Community-run hill with downhill, tubing and one of the state’s best Nordic systems on the same property. Excellent value and rarely crowded.',
+    url:'https://hansonhills.org/' },
+  { id:'mcsauba',   type:'downhill', name:'Mt. McSauba',         town:'Charlevoix · Charlevoix', lat:45.3253, lon:-85.2597,
+    desc:'City-run hill right above Lake Michigan in Charlevoix — small, cheap, lit for night skiing, with a terrain park and Nordic trails alongside.',
+    url:'https://www.cityofcharlevoix.org/' },
+
+  // ── Nordic ──
+  { id:'vasa',      type:'nordic', name:'VASA Pathway',          town:'Williamsburg · Grand Traverse', lat:44.7431, lon:-85.4703,
+    km:'3 / 5 / 10 / 25 km loops', groom:'TART groomed',
+    desc:'The best-known Nordic trail in Michigan and home of the North American VASA race. A skate lane plus two classic tracks when conditions allow. Free to ski.',
+    url:'https://www.traversetrails.org/trail/vasa-pathway/' },
+  { id:'forbush',   type:'nordic', name:'Forbush Corner',        town:'Frederic · Crawford', lat:44.7561, lon:-84.6689,
+    km:'~37 km',
+    desc:'A national reputation for grooming, on high snowbelt ground north of Grayling. The 7 km Roller Coaster loop is genuinely technical with hairpin climbs.',
+    url:'https://forbushcorner.com/' },
+  { id:'hansonxc',  type:'nordic', name:'Hanson Hills Nordic',   town:'Grayling · Crawford', lat:44.6489, lon:-84.7481,
+    km:'35+ km', groom:'Groomed daily',
+    desc:'More than 35 km groomed every day for skate and classic, spanning beginner loops to genuinely challenging terrain. Lit loop for night skiing.',
+    url:'https://hansonhills.org/' },
+  { id:'xchq',      type:'nordic', name:'Cross Country Ski HQ',  town:'Roscommon · Roscommon', lat:44.5578, lon:-84.6483,
+    km:'11+ miles', groom:'Groomed each morning',
+    desc:'Full-service Nordic center by Higgins Lake with rentals, lessons and a lodge. Trails are groomed every morning, so early skiers get fresh tracks.',
+    url:'https://www.crosscountryski.com/' },
+  { id:'corsair',   type:'nordic', name:'Corsair Trails',        town:'Tawas City · Iosco', lat:44.4269, lon:-83.8461,
+    desc:'A long-standing groomed network in the Huron National Forest along the AuSable, on the quieter Lake Huron side of the region.',
+    url:'https://www.corsairtrails.org/' },
+  { id:'hartwick',  type:'nordic', name:'Hartwick Pines State Park', town:'Grayling · Crawford', lat:44.7444, lon:-84.6511,
+    desc:'Groomed pathways winding through one of Michigan’s last stands of old-growth white pine. Recreation Passport required on the vehicle.',
+    url:'https://www.michigan.gov/dnr/places/state-parks/hartwick-pines' },
+  { id:'crystalxc', type:'nordic', name:'Crystal Mountain Nordic', town:'Thompsonville · Benzie', lat:44.5197, lon:-85.9822,
+    desc:'The resort’s own groomed Nordic center, tracked for skate and classic with rentals and lessons on site — a good pairing with a downhill day.',
+    url:'https://www.crystalmountain.com/ski/cross-country' },
+];
+
+const DOWNHILL = AREAS.filter(a => a.type === 'downhill');
+const NORDIC   = AREAS.filter(a => a.type === 'nordic');
+
+// ── Utilities ──
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const el  = id => document.getElementById(id);
+const mToIn = m => m == null ? null : m * 39.3701;
+const r1 = n => Math.round(n * 10) / 10;
+
+// Wind chill (NWS formula, valid at or below 50°F and above 3 mph)
+function windChill(tF, mph) {
+  if (tF == null || mph == null || tF > 50 || mph <= 3) return null;
+  return Math.round(35.74 + 0.6215*tF - 35.75*Math.pow(mph,0.16) + 0.4275*tF*Math.pow(mph,0.16));
+}
+
+const WMO = {
+  0:'Clear', 1:'Mostly clear', 2:'Partly cloudy', 3:'Overcast',
+  45:'Fog', 48:'Freezing fog', 51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+  56:'Freezing drizzle', 57:'Freezing drizzle', 61:'Light rain', 63:'Rain', 65:'Heavy rain',
+  66:'Freezing rain', 67:'Freezing rain', 71:'Light snow', 73:'Snow', 75:'Heavy snow',
+  77:'Snow grains', 80:'Rain showers', 81:'Rain showers', 82:'Heavy showers',
+  85:'Snow showers', 86:'Heavy snow showers', 95:'Thunderstorm', 96:'Thunderstorm', 99:'Thunderstorm',
+};
+
+// ── Season gate ──
+// The main dashboard treats Dec–Mar as snow season. Downhill Up North runs
+// roughly the same window because nearly everything here makes snow; the
+// shoulder months get their own copy rather than a misleading zero.
+function seasonState() {
+  const m = new Date().getMonth(); // 0=Jan
+  if (m === 10)              return 'early';    // Nov
+  if (m === 11 || m <= 1)    return 'peak';     // Dec–Feb
+  if (m === 2)               return 'late';     // Mar
+  if (m === 3)               return 'spring';   // Apr
+  return 'off';                                 // May–Oct
+}
+
+function renderSeasonNote() {
+  const note = el('season-note');
+  const s = seasonState();
+  const copy = {
+    early:  ['warn', 'Early season.', 'Resorts are firing snowmaking guns but most have not opened yet. Nordic grooming needs natural snow and starts later. Check operating days before you drive.'],
+    peak:   ['',     'Peak season.',  'Every area below should be spinning lifts or grooming track. Snow depth and new snowfall update live as you change areas.'],
+    late:   ['',     'Late season.',  'March skis well on the Gaylord plateau, but shoreline hills go soft in the afternoon. Watch the freeze/thaw numbers below.'],
+    spring: ['warn', 'Spring skiing.', 'Most resorts have closed or are running a shortened weekend schedule. Check the official report before making the drive.'],
+    off:    ['warn', 'Out of season.', 'Northern Michigan ski areas are closed. Snow numbers below are live model values and will read zero — the resort directory, Nordic listings and planning notes stay useful year-round.'],
+  }[s];
+  note.className = 'model-note' + (copy[0] ? ' ' + copy[0] : '');
+  note.innerHTML = '<b>' + esc(copy[1]) + '</b> ' + copy[2];
+}
+
+// ═══ FEEDS ═══
+async function fetchWeather(a) {
+  const url = 'https://api.open-meteo.com/v1/forecast'
+    + '?latitude=' + a.lat + '&longitude=' + a.lon
+    + '&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,'
+    + 'wind_speed_10m,wind_gusts_10m,snow_depth'
+    + '&daily=snowfall_sum,temperature_2m_max,temperature_2m_min,precipitation_sum'
+    + '&past_days=2&forecast_days=4'
+    + '&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto';
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('Open-Meteo HTTP ' + r.status);
+  return r.json();
+}
+
+async function fetchAlerts(a) {
+  const url = 'https://api.weather.gov/alerts/active?point=' + a.lat + ',' + a.lon;
+  const r = await fetch(url, { headers: { 'Accept': 'application/geo+json' } });
+  if (!r.ok) throw new Error('NWS HTTP ' + r.status);
+  return r.json();
+}
+
+// ═══ RENDER ═══
+function renderSnow(a, wx) {
+  const cur   = wx.current || {};
+  const daily = wx.daily   || {};
+  const dates = daily.time || [];
+  const snows = daily.snowfall_sum || [];
+
+  // past_days=2 puts today at index 2 when the model returns the full window.
+  const todayIdx = Math.min(2, dates.length - 1);
+  const depthIn  = mToIn(cur.snow_depth);
+  const s24 = snows[todayIdx] != null ? snows[todayIdx] : null;
+  const s48 = (snows[todayIdx] != null && snows[todayIdx-1] != null)
+    ? snows[todayIdx] + snows[todayIdx-1] : null;
+  const fc3 = snows.slice(todayIdx + 1, todayIdx + 4)
+    .filter(v => v != null).reduce((t, v) => t + v, 0);
+
+  const status = el('snow-status'), count = el('snow-count'), sub = el('snow-sub');
+
+  if (depthIn == null) {
+    status.className = 'snow-status'; status.textContent = 'Snow depth unavailable';
+    count.textContent = '—';
+    sub.textContent = 'The model did not return a snow depth for this location. Check the area’s official report.';
+  } else if (depthIn < 1) {
+    status.className = 'snow-status none'; status.textContent = 'No natural snowpack';
+    count.textContent = r1(depthIn) + '"';
+    sub.textContent = seasonState() === 'off'
+      ? 'Expected — it is out of season. This figure goes live again as the snowpack builds in late autumn.'
+      : 'Bare ground at this elevation. Most resorts here make snow, so runs may still be open on manufactured cover — check the official report.';
+  } else if (depthIn < 12) {
+    status.className = 'snow-status thin'; status.textContent = 'Thin cover';
+    count.textContent = r1(depthIn) + '"';
+    sub.textContent = 'Enough for groomed runs on top of snowmaking, thin for Nordic track-setting. Watch for early-season hazards off-piste.';
+  } else {
+    status.className = 'snow-status good'; status.textContent = 'Good base';
+    count.textContent = Math.round(depthIn) + '"';
+    sub.textContent = 'A settled base at this depth supports full grooming, including classic track-setting, and holds through a thaw.';
+  }
+
+  el('st-24h').textContent = s24 != null ? r1(s24) + '"' : '—';
+  el('st-48h').textContent = s48 != null ? r1(s48) + '"' : '—';
+  el('st-fc').textContent  = fc3 ? r1(fc3) + '"' : '0"';
+
+  const hi = (daily.temperature_2m_max || [])[todayIdx];
+  const lo = (daily.temperature_2m_min || [])[todayIdx];
+  if (hi != null && lo != null) {
+    el('st-ft').textContent = Math.round(hi) + '° / ' + Math.round(lo) + '°';
+    el('st-ft-note').textContent = hi > 33 && lo < 30
+      ? 'Freeze-thaw cycle — expect crust'
+      : hi <= 32 ? 'Stays frozen all day' : 'Above freezing today';
+  }
+
+  el('today-title').textContent = 'Conditions at ' + a.name;
+  el('today-lead').textContent  = a.type === 'downhill'
+    ? 'Live snow and weather at the hill. Lift status and groomed-run counts come from the resort’s own report — linked on its card below.'
+    : 'Live snow and weather at the trailhead. Grooming status comes from the operator’s own report — linked on its card below.';
+}
+
+function renderConditions(a, wx) {
+  const cur = wx.current || {};
+  const t   = cur.temperature_2m;
+  const w   = cur.wind_speed_10m;
+  const chill = windChill(t, w);
+  const cells = [
+    { lbl:'Temperature', val: t != null ? Math.round(t) + '°F' : '—',
+      note: cur.apparent_temperature != null ? 'Feels like ' + Math.round(cur.apparent_temperature) + '°F' : '' },
+    { lbl:'Wind chill', val: chill != null ? chill + '°F' : '—',
+      note: chill != null && chill <= -18 ? 'Frostbite risk on exposed skin' : 'On an exposed lift or ridge' },
+    { lbl:'Wind', val: w != null ? Math.round(w) + ' mph' : '—',
+      note: cur.wind_gusts_10m != null ? 'Gusting ' + Math.round(cur.wind_gusts_10m) + ' mph' : '' },
+    { lbl:'Sky', val: WMO[cur.weather_code] || '—',
+      note: cur.relative_humidity_2m != null ? cur.relative_humidity_2m + '% humidity' : '' },
+  ];
+  el('cond-grid').innerHTML = cells.map(c =>
+    '<div class="cond-cell"><div class="cond-lbl">' + esc(c.lbl) + '</div>'
+    + '<div class="cond-val">' + esc(c.val) + '</div>'
+    + (c.note ? '<div class="cond-note">' + esc(c.note) + '</div>' : '') + '</div>').join('');
+}
+
+function renderForecast(wx) {
+  const daily = wx.daily || {};
+  const dates = daily.time || [];
+  const snows = daily.snowfall_sum || [];
+  const his   = daily.temperature_2m_max || [];
+  const los   = daily.temperature_2m_min || [];
+  const start = Math.min(2, dates.length - 1);
+  let out = '';
+  for (let i = start; i < Math.min(start + 4, dates.length); i++) {
+    const d = new Date(dates[i] + 'T12:00:00');
+    const label = i === start ? 'Today'
+      : d.toLocaleDateString('en-US', { weekday: 'short' });
+    const sn = snows[i] != null ? r1(snows[i]) : 0;
+    out += '<div class="fc-cell"><div class="fc-day">' + esc(label) + '</div>'
+      + '<div class="fc-snow">' + sn + '"</div>'
+      + '<div class="fc-temps">'
+      + (his[i] != null ? Math.round(his[i]) + '° / ' + Math.round(los[i]) + '°' : '—')
+      + '</div></div>';
+  }
+  el('fc-grid').innerHTML = out;
+}
+
+function renderAlerts(data) {
+  const strip = el('alert-strip');
+  const feats = (data && data.features) || [];
+  // Winter-relevant events only — a summer flood watch is noise on a ski page.
+  const re = /winter|snow|blizzard|ice|freez|wind chill|cold|avalanche/i;
+  const hits = feats.filter(f => re.test((f.properties && f.properties.event) || ''));
+  if (!hits.length) { strip.innerHTML = ''; return; }
+  strip.innerHTML = hits.slice(0, 4).map(f => {
+    const p = f.properties || {};
+    const watch = /watch|advisory/i.test(p.event || '');
+    return '<div class="alert-item' + (watch ? ' watch' : '') + '">'
+      + '<b>' + esc(p.event) + '</b> — ' + esc(p.headline || '') + '</div>';
+  }).join('');
+}
+
+function areaCard(a) {
+  const chips = [];
+  if (a.vert)   chips.push('<span class="area-chip">⛰️ <b>' + esc(a.vert) + '</b></span>');
+  if (a.trails) chips.push('<span class="area-chip">🎿 <b>' + esc(a.trails) + '</b></span>');
+  if (a.lifts)  chips.push('<span class="area-chip">🚡 <b>' + esc(a.lifts) + '</b></span>');
+  if (a.acres)  chips.push('<span class="area-chip">🗺️ <b>' + esc(a.acres) + '</b></span>');
+  if (a.km)     chips.push('<span class="area-chip">📏 <b>' + esc(a.km) + '</b></span>');
+  if (a.lit)    chips.push('<span class="area-chip">💡 <b>' + esc(a.lit) + '</b></span>');
+  if (a.groom)  chips.push('<span class="area-chip">🚜 <b>' + esc(a.groom) + '</b></span>');
+  return '<div class="area-card" id="card-' + esc(a.id) + '">'
+    + '<div class="area-name">' + esc(a.name) + '</div>'
+    + '<div class="area-town">' + esc(a.town) + '</div>'
+    + (chips.length ? '<div class="area-stats">' + chips.join('') + '</div>' : '')
+    + '<div class="area-desc">' + esc(a.desc) + '</div>'
+    + '<a class="area-link" href="' + esc(a.url) + '" target="_blank" rel="noopener">Official conditions →</a>'
+    + '</div>';
+}
+
+function renderDirectories() {
+  el('downhill-grid').innerHTML = DOWNHILL.map(areaCard).join('');
+  el('nordic-grid').innerHTML   = NORDIC.map(areaCard).join('');
+}
+
+function renderPickerNote(a) {
+  const chip = '<span class="type-chip">' + (a.type === 'downhill' ? 'DOWNHILL' : 'NORDIC') + '</span>';
+  const extra = a.type === 'downhill'
+    ? 'Snow depth and snowfall are modelled at the hill’s coordinates.'
+    : 'Snow depth and snowfall are modelled at the trailhead.';
+  el('picker-note').innerHTML = chip + ' <b>' + esc(a.name) + '</b> — ' + esc(a.town) + '. ' + extra;
+}
+
+function highlightCard(a) {
+  document.querySelectorAll('.area-card.hl').forEach(c => c.classList.remove('hl'));
+  const card = el('card-' + a.id);
+  if (card) card.classList.add('hl');
+}
+
+// ═══ ORCHESTRATION ═══
+let currentId = null;
+
+async function load(a) {
+  currentId = a.id;
+  renderPickerNote(a);
+  highlightCard(a);
+  try { localStorage.setItem('ski_area_upnorth', a.id); } catch (e) {}
+
+  const [wxRes, alRes] = await Promise.allSettled([fetchWeather(a), fetchAlerts(a)]);
+
+  if (currentId !== a.id) return; // a newer selection landed first
+
+  if (wxRes.status === 'fulfilled') {
+    renderSnow(a, wxRes.value);
+    renderConditions(a, wxRes.value);
+    renderForecast(wxRes.value);
+  } else {
+    el('snow-status').className = 'snow-status';
+    el('snow-status').textContent = 'Live data unavailable';
+    el('snow-count').textContent = '—';
+    el('snow-sub').textContent = 'Could not reach Open-Meteo. The resort directory below still works, and every card links to its official report.';
+    el('cond-grid').innerHTML = '<div class="cond-cell"><div class="cond-note skel">Weather feed unavailable.</div></div>';
+    el('fc-grid').innerHTML = '<div class="fc-cell"><div class="fc-temps skel">Forecast unavailable.</div></div>';
+  }
+
+  if (alRes.status === 'fulfilled') renderAlerts(alRes.value);
+  else el('alert-strip').innerHTML = '';
+}
+
+function buildPicker() {
+  const sel = el('area-select');
+  const group = (label, list) => {
+    const g = document.createElement('optgroup');
+    g.label = label;
+    list.forEach(a => {
+      const o = document.createElement('option');
+      o.value = a.id;
+      o.textContent = a.name + ' — ' + a.town.split(' · ')[0];
+      g.appendChild(o);
+    });
+    return g;
+  };
+  sel.appendChild(group('Downhill', DOWNHILL));
+  sel.appendChild(group('Nordic', NORDIC));
+
+  let start = DOWNHILL[0];
+  try {
+    const saved = localStorage.getItem('ski_area_upnorth');
+    const hit = AREAS.find(a => a.id === saved);
+    if (hit) start = hit;
+  } catch (e) {}
+  sel.value = start.id;
+
+  sel.addEventListener('change', () => {
+    const a = AREAS.find(x => x.id === sel.value);
+    if (a) load(a);
+  });
+  return start;
+}
+
+(function init() {
+  renderSeasonNote();
+  renderDirectories();
+  const start = buildPicker();
+  load(start);
+})();
+</script>
+
+</body>
+</html>
