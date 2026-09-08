@@ -614,7 +614,7 @@
 
     <div class="faq-item">
       <div class="faq-q">Can I ride in winter?</div>
-      <div class="faq-a">Yes — the UP is one of the best fat biking regions in the country. The NTN in Marquette and Swedetown in Calumet groom dedicated snow bike trails, with 200+ inches of annual lake-effect snow to work with. Fat bike rentals are available in Marquette, Houghton, and Calumet.</div>
+      <div class="faq-a">Yes — the UP is one of the best fat biking regions in the country. The NTN in Marquette and Swedetown in Calumet groom dedicated snow bike trails, with 200+ inches of annual lake-effect snow to work with. Fat bike rentals are available in Marquette, Houghton, and Calumet. Both of those networks also groom Nordic track in winter — the <a href="ski.html" style="color:var(--accent);">skiing dashboard</a> has live snow depth and the full downhill and cross-country listings.</div>
     </div>
 
     <div class="faq-item">
@@ -907,7 +907,14 @@ async function loadRideability() {
   const iconMap = { good:'✅', warn:'⚠️', bad:'🛑', snow:'❄️', '':'🚵' };
   document.getElementById('season-icon').textContent = iconMap[r.cls] || '🚵';
   document.getElementById('season-headline').textContent = r.label + (mq?.ok && mq.temp_f != null ? ` — ${mq.temp_f}°F in Marquette` : '');
-  document.getElementById('season-detail').textContent = r.note + '. Per-network status below uses the nearest NWS station.';
+  // When the verdict is snow the page has just told riders the MTB season is
+  // over, so that is the moment to hand them the ski page. r.note is a literal
+  // from rideability(); escape it anyway so the only markup here is our link.
+  const skiLink = r.cls === 'snow'
+    ? ' <a href="ski.html" style="color:var(--accent);font-weight:600;">Skiing conditions →</a>'
+    : '';
+  document.getElementById('season-detail').innerHTML =
+    esc(r.note + '. Per-network status below uses the nearest NWS station.') + skiLink;
 }
 
 // ═══ RACE WEEKEND BANNER ═══
