@@ -66,10 +66,47 @@ their snippet, the platform notes and a live preview.
 ### Checking their brand before you commit it
 
 The five verdict colours are **not** brandable — they carry the Kp forecast,
-not the styling — so a client's palette has to stay legible behind them. The
-widget picks the verdict pill's ink by luminance at runtime, which handles most
-cases, but a very low-contrast ground will still read badly. Check a candidate
-palette against the scale before shipping it.
+not the styling — so a client's palette has to stay legible *and distinguishable*
+beside them. Two different checks, and it is easy to run only the first:
+
+**Contrast (WCAG)** — can you read it. Every brand pairing needs 4.5:1 for text
+and each verdict colour needs 3:1 against both `bg` and `card`. The pill picks
+its own ink by luminance at runtime, so that part looks after itself.
+
+**Perceptual distance (ΔE)** — can you tell it apart from a verdict. This is the
+one that matters for an accent, and contrast ratio does **not** measure it:
+contrast compares lightness only, so two colours can sit at ratio 1.0 and still
+be obviously different if their hues diverge. Use ΔE76 in Lab space; under about
+15 reads as "a shade of the same colour" and should not be an accent.
+
+Travel Marquette is the worked example. Their green `#a4d584` sits at contrast
+1.03 against the LONG SHOT verdict `#4ade80` — alarming on the contrast check,
+and wrong. ΔE76 puts them 29 apart: a sage against a mint, plainly different,
+and confirmed by eye on a seeded LONG SHOT night where the two sit inches apart.
+Their green is a fine accent.
+
+Their gold `#F2BB05` is the one to avoid, and for a narrower reason than
+contrast suggested: ΔE 7.5 from FAIR `#facc15`, hues 85° and 89°. That is a
+genuine collision with **one** verdict level, not with several.
+
+### Brand fonts
+
+Opt-in per client via `font` in `clients.json`, currently `roboto` or
+`montserrat`. A client who sets nothing keeps the system stack and loads no
+webfont — the widget sits on someone else's page and should not spend their
+bandwidth on a face their brand never asked for.
+
+Families are a fixed keyed map in `aurora.html`, never interpolated from the
+config. `clients.json` is public; building a stylesheet URL out of a value in it
+would let anyone who can edit that file point the page at a font host of their
+choosing.
+
+**Commercial faces cannot be served from here.** Travel Marquette's header font
+is Gotham Bold (Hoefler&Co), which is licensed per-domain — a licence they hold
+covers `travelmarquette.com`, not `widgets.906dashboard.com`. The widget uses
+Roboto, their own copy face, for everything. If a client wants the geometric
+feel of Gotham for headings, `montserrat` is the closest free stand-in; say that
+it is a stand-in rather than implying it is their brand face.
 
 ### Name the spot their own site recommends
 

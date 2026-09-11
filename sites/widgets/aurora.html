@@ -49,11 +49,15 @@
 
   * { box-sizing:border-box; margin:0; padding:0; }
 
+  /* System stack by default — a webfont is a request on every embed, and the
+     widget should not spend a host page's bandwidth unasked. A client whose
+     brand specifies a face opts in via `font` in clients.json, which prepends
+     it here; everyone else keeps the stack below and loads nothing. */
+  :root { --brand-font: ; }
+
   html, body {
     background:transparent;
-    /* System stack on purpose: a webfont would be a network request on every
-       embed, and the widget should not fight the host page for bandwidth. */
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-family:var(--brand-font)-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
 
@@ -259,6 +263,40 @@
   // ── brand ───────────────────────────────────────────────────────────────
   var BRAND_KEYS = ["bg", "card", "ink", "muted", "line", "a1", "a2"];
 
+  /**
+   * Opt-in brand fonts. Keyed, never interpolated: clients.json is public, and
+   * building a stylesheet URL out of a value from it would let anyone who can
+   * edit that file point the page at a font host of their choosing.
+   *
+   * Off by default. A client who sets no font keeps the system stack and pays
+   * for no extra request — the widget sits on someone else's page and should
+   * not spend their bandwidth on a face their brand does not ask for.
+   */
+  var FONTS = {
+    roboto: {
+      stack: '"Roboto", ',
+      href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    },
+    montserrat: {
+      stack: '"Montserrat", ',
+      href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+    }
+  };
+
+  function applyFont(key) {
+    var font = FONTS[String(key || "").toLowerCase()];
+    if (!font) return;
+    var pre = document.createElement("link");
+    pre.rel = "preconnect"; pre.href = "https://fonts.gstatic.com"; pre.crossOrigin = "";
+    document.head.appendChild(pre);
+    var link = document.createElement("link");
+    link.rel = "stylesheet"; link.href = font.href;
+    document.head.appendChild(link);
+    // display=swap means the fallback paints first; ResizeObserver re-posts the
+    // height when the real face lands and the metrics shift.
+    document.documentElement.style.setProperty("--brand-font", font.stack);
+  }
+
   // Only needed when the feed is unreachable and the payload cannot supply it.
   var PLACE_NAMES = {
     mqt: "Marquette", cph: "Copper Harbor", wfp: "Whitefish Point",
@@ -307,7 +345,8 @@
     size: qs.get("size") || null,
     attribution: true,
     name: null,
-    spotLabel: null
+    spotLabel: null,
+    font: null
   };
 
   function setSize(size) {
@@ -325,6 +364,7 @@
         if (!c) return; // unknown client falls back to the 906 default look
         cfg.name = c.name || null;
         if (c.spotLabel) cfg.spotLabel = c.spotLabel;
+        if (c.font) applyFont(c.font);
         if (c.attribution === false) cfg.attribution = false;
         // An explicit query param always beats the stored default, so one
         // client can run a pinned widget on one page and the roll-up on another.

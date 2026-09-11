@@ -17,6 +17,8 @@
     "             differs from the default in tools/widget-api/worker.js. Applied",
     "             in the browser, so it never touches the cached data.",
     "  size     default form factor: 'card' | 'strip' | 'panel'",
+    "  font       optional: 'roboto' or 'montserrat'. Opt-in only \u2014 a client who",
+    "             sets none keeps the system stack and loads no webfont.",
     "  attribution  true keeps the 'Live data from 906 Dashboard' link.",
     "               false is the white-label tier \u2014 only sell it deliberately,",
     "               the link is the backlink and the referral traffic.",
@@ -83,17 +85,18 @@
     "spot": "mqt",
     "spotLabel": "M-28 Waysides",
     "size": "card",
+    "font": "roboto",
     "attribution": true,
-    "_provisional": "Brand PROVISIONAL \u2014 sampled from travelmarquette.com's live CSS, not from a brand guide. Confirm before launch. Their gold #F2BB05 and rust #D74E09 are deliberately NOT used: gold is within 1.0-1.6 contrast of four of the five verdict colours, so using it as the accent would make the Kp signal unreadable as a signal. Navy ground + teal accent clears every check.",
     "brand": {
-      "bg": "#304466",
-      "card": "#263756",
+      "bg": "#0b2f5e",
+      "card": "#133A6D",
       "ink": "#FFFFFF",
-      "muted": "#B7C4D8",
-      "line": "#435878",
-      "a1": "#007095",
-      "a2": "#008CBA"
+      "muted": "#A8BAD1",
+      "line": "#1E4A80",
+      "a1": "#a4d584",
+      "a2": "#a4d584"
     },
-    "_spotLabel_note": "Their own northern-lights page calls the M-28 Waysides in Chocolay Township \"easy access points in the dark\" \u2014 the right call for a visitor driving at night. It also names Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle Park, which is what 906dashboard's aurora page picks. Without this override the widget would contradict the copy above it."
+    "_spotLabel_note": "Their own northern-lights page calls the M-28 Waysides in Chocolay Township \"easy access points in the dark\" \u2014 the right call for a visitor driving at night. It also names Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle Park, which is what 906dashboard's aurora page picks. Without this override the widget would contradict the copy above it.",
+    "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md."
   }
 }
