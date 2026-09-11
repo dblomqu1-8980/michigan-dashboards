@@ -159,6 +159,46 @@
 
   .aw.size-card { max-width:360px; }
 
+  /* ── strip, under 480px ──
+     Five stats stop being a band on a phone: they stack into a block taller
+     than the card the strip is supposed to be lighter than. Keep the verdict
+     and the two numbers that decide it — Kp sets the ceiling, cloud decides
+     whether that ceiling matters at all — and drop the rest. Anyone who wants
+     the full detail on a phone should be given the card, not a strip
+     impersonating one.
+
+     Which two survive depends on the mode, because the same element means
+     different things: pinned, the single chip is the widget's own town and
+     says it by name; on the roll-up those five chips are a paragraph, and the
+     named clearest spot carries the same answer in one line. */
+  @media (max-width:479px) {
+    .aw.size-strip .aw-in { gap:9px 14px; padding:11px 13px; }
+    .aw.size-strip .aw-row.r-window,
+    .aw.size-strip .aw-row.r-moon { display:none; }
+    .aw.size-strip.is-pinned .aw-row.r-best { display:none; }
+    .aw.size-strip:not(.is-pinned) .aw-clouds { display:none; }
+    .aw.size-strip .aw-body { gap:10px 16px; padding-top:9px; }
+    .aw.size-strip .aw-lede { font-size:13px; }
+    /* Reading order beats the wide layout's grouping here: the numbers belong
+       under the sentence they qualify, with the timestamp last. On the wide
+       band the footer rides line one instead, to keep the attribution beside
+       the answer rather than stranded under a row of stats. */
+    .aw.size-strip .aw-foot { order:3; flex-basis:100%; font-size:10px; gap:8px; }
+
+    /* The chip's box is the tallest thing in the band and buys nothing once
+       there are only two stats: drop it so cloud reads as a stat like Kp,
+       same label, same baseline. The one hairline above the numbers is enough
+       separation in a band this short — a second one under them just makes a
+       140px component look like three stacked bars. */
+    .aw.size-strip .aw-clouds { gap:2px; }
+    .aw.size-strip .aw-chips { gap:4px 12px; }
+    .aw.size-strip .aw-chip {
+      background:none; border:0; padding:0;
+      font-size:13px; color:var(--ink);
+    }
+    .aw.size-strip .aw-chip.clear { border:0; }
+  }
+
   @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
 </style>
 </head>
@@ -176,10 +216,10 @@
 
     <div class="aw-body">
       <div class="aw-rows" id="aw-rows">
-        <div class="aw-row"><span class="k">Best viewing</span><span class="v" id="aw-window">—</span></div>
-        <div class="aw-row"><span class="k" id="aw-bestk">Best conditions</span><span class="v" id="aw-best">—</span></div>
-        <div class="aw-row"><span class="k">Kp forecast</span><span class="v" id="aw-kp">—</span></div>
-        <div class="aw-row"><span class="k">Moon</span><span class="v" id="aw-moon">—</span></div>
+        <div class="aw-row r-window"><span class="k">Best viewing</span><span class="v" id="aw-window">—</span></div>
+        <div class="aw-row r-best"><span class="k" id="aw-bestk">Best conditions</span><span class="v" id="aw-best">—</span></div>
+        <div class="aw-row r-kp"><span class="k">Kp forecast</span><span class="v" id="aw-kp">—</span></div>
+        <div class="aw-row r-moon"><span class="k">Moon</span><span class="v" id="aw-moon">—</span></div>
       </div>
 
       <div class="aw-clouds">
@@ -316,6 +356,10 @@
     var colour = getComputedStyle(document.documentElement)
       .getPropertyValue("--v-" + v.level).trim() || "#93a4c3";
 
+    // Mode as a class, so the narrow-strip rules can keep whichever of the
+    // two cloud treatments actually carries the answer in that mode.
+    root.classList.toggle("is-pinned", !!data.pinned);
+
     el("aw-place").textContent = data.pinned
       ? "Aurora tonight · " + data.place
       : "Tonight's Aurora Outlook";
@@ -396,6 +440,7 @@
     // track of which town it belongs to.
     if (cfg.spot && PLACE_NAMES[cfg.spot]) {
       el("aw-place").textContent = "Aurora tonight · " + PLACE_NAMES[cfg.spot];
+      root.classList.add("is-pinned");
       // Row label comes from config too, so a pinned widget does not fall back
       // to the roll-up's "Best conditions" while the feed is down.
       el("aw-bestk").textContent = "Viewing spot";
