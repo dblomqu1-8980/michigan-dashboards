@@ -43,6 +43,7 @@ Four steps, about ten minutes.
   "name": "Northwoods Inn",
   "region": "up",
   "spot": "mqt",
+  "spotLabel": "Sugarloaf Mountain",
   "size": "card",
   "attribution": true,
   "brand": { "bg": "#12100E", "card": "#1E1A16", "ink": "#F5EFE6",
@@ -69,6 +70,24 @@ not the styling — so a client's palette has to stay legible behind them. The
 widget picks the verdict pill's ink by luminance at runtime, which handles most
 cases, but a very low-contrast ground will still read badly. Check a candidate
 palette against the scale before shipping it.
+
+### Name the spot their own site recommends
+
+`spotLabel` overrides the viewing spot the widget names, for clients whose own
+copy points somewhere else. This is not cosmetic. Travel Marquette's
+northern-lights page sends readers to the M-28 waysides, Sugarloaf Mountain and
+Wetmore Landing, and never mentions Presque Isle Park — which is what
+`sites/906/aurora.html` picks for Marquette. Without the override the widget
+would sit on their page recommending a location the paragraph above it does
+not, which reads as a bolted-on third-party box rather than part of their site.
+
+It is applied in the browser, so it never reaches the cached payload, and it
+rewrites the Worker's composed verdict line too — both strings are known
+exactly at that point, so the substitution is defined rather than a guess at
+the sentence shape.
+
+Check a new client's own pages before setting this. If their copy names no spot
+at all, leave it unset and the default stands.
 
 ### The client id is not a secret
 
