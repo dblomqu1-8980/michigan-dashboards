@@ -27,6 +27,21 @@
 
 const CACHE_TTL_SECONDS = 300; // SWPC republishes Kp about every 5 minutes
 
+/**
+ * Bump whenever the payload's SHAPE changes — a new field, a renamed one, a
+ * different meaning for an existing one.
+ *
+ * The cache key is otherwise just (region, spot), which is right for the data
+ * but wrong across a deploy: after shipping `whyNoSpot` the edge went on
+ * serving payloads without it for the full TTL, so a freshly deployed Worker
+ * and a freshly deployed widget still disagreed. Including the version here
+ * makes a shape change invalidate its own cache the moment it deploys.
+ *
+ * Do NOT bump it for wording or threshold changes. Those want the old entries
+ * to age out normally rather than a stampede of misses on every deploy.
+ */
+const PAYLOAD_SCHEMA = 2;
+
 // Contact address in the UA is the part NWS actually cares about.
 const USER_AGENT = '906dashboard.com-widget/1.0 (https://906dashboard.com; aurora@906dashboard.com)';
 
@@ -303,8 +318,14 @@ function verdictFor(kp) {
  * the regional roll-up it names whichever spot is clearest, the way the page
  * does. Telling a guest in Marquette that Copper Harbor is clear is useless
  * to them, so a pinned widget never does it.
+ *
+ * `withSpot` false returns the same judgement without naming a viewing
+ * location, for clients whose own page already recommends where to stand.
+ * Both variants ship in every payload: composing them here keeps one copy of
+ * the sentence logic, and costs nothing at the cache, where the key is still
+ * just (region, spot).
  */
-function whyLine(kp, best, windowText, pinned) {
+function whyLine(kp, best, windowText, pinned, withSpot) {
   if (kp < 3) return 'Skip it tonight. Geomagnetic activity is too low to be worth the drive.';
 
   const when = windowText ? ' after ' + windowText.split('–')[0].trim() : ' between 10 PM and 2 AM';
@@ -318,12 +339,18 @@ function whyLine(kp, best, windowText, pinned) {
   if (pinned) {
     const where = best.spot;
     if (best.pct <= 35) {
-      return kp >= 5
-        ? 'Worth the drive' + when + ' — skies over ' + best.name + ' should be mostly clear. Head for ' + where + '.'
-        : 'Worth a look' + when + ' from ' + where + ' — skies should be mostly clear.';
+      if (kp >= 5) {
+        return 'Worth the drive' + when + ' — skies over ' + best.name + ' should be mostly clear.'
+          + (withSpot ? ' Head for ' + where + '.' : '');
+      }
+      return withSpot
+        ? 'Worth a look' + when + ' from ' + where + ' — skies should be mostly clear.'
+        : 'Worth a look' + when + ' — skies over ' + best.name + ' should be mostly clear.';
     }
     if (best.pct <= 69) {
-      return 'Mixed skies over ' + best.name + when + '. Worth checking from ' + where + ', but expect gaps.';
+      return withSpot
+        ? 'Mixed skies over ' + best.name + when + '. Worth checking from ' + where + ', but expect gaps.'
+        : 'Mixed skies over ' + best.name + when + ' — worth checking, but expect gaps.';
     }
     return 'Clouds over ' + best.name + ' are likely to block it tonight, whatever the Kp does.';
   }
@@ -390,7 +417,8 @@ async function buildAurora(region, spotKey) {
       level: v.level,
       pill: v.pill,
       text: v.text,
-      why: whyLine(kp, best, forecast ? forecast.window : null, pinned),
+      why: whyLine(kp, best, forecast ? forecast.window : null, pinned, true),
+      whyNoSpot: whyLine(kp, best, forecast ? forecast.window : null, pinned, false),
     },
     // Lets the widget say "showing last known conditions" instead of rendering
     // a box full of dashes, which is the failure mode that generates phone
@@ -465,7 +493,7 @@ export default {
     // any of them in here and the cache fragments per customer, which is the
     // whole economic argument for the widget gone.
     const cacheKey = new Request(
-      new URL(`/aurora?region=${region}&spot=${spot || 'all'}`, url.origin).toString(),
+      new URL(`/aurora?v=${PAYLOAD_SCHEMA}&region=${region}&spot=${spot || 'all'}`, url.origin).toString(),
       { method: 'GET' }
     );
     const cache = caches.default;

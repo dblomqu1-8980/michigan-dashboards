@@ -58,6 +58,19 @@ This is the step that actually grants access, and the one that is easy to
 forget — everything else will look fine and the widget will render a blank
 frame on their site. Include the `www` form if they use it.
 
+**`frame-ancestors` applies to every frame in the chain, not just the
+immediate parent.** This is the part that bites, and it bit on the first
+client. If their page is itself being viewed inside another frame — a CMS
+page-editor preview, a staging wrapper, a page-builder canvas — then *that*
+host has to be on the list too, or the browser refuses the whole chain and
+paints "refused to connect". The page looks correctly configured because it
+is; the wrapper is what is missing.
+
+So when someone reports the widget not loading, the first question is not
+"what is your domain" but **"what is in the address bar when you see it
+fail"**. A CMS preview answers differently from the live page, and only one of
+those two answers is the one already on the list.
+
 **3. Push to `main`.** Vercel redeploys `widgets` automatically.
 
 **4. Send them `https://widgets.906dashboard.com/`** — the install page, with
@@ -88,6 +101,23 @@ Their green is a fine accent.
 Their gold `#F2BB05` is the one to avoid, and for a narrower reason than
 contrast suggested: ΔE 7.5 from FAIR `#facc15`, hues 85° and 89°. That is a
 genuine collision with **one** verdict level, not with several.
+
+### Dropping rows a client's page already covers
+
+`hideRows` takes any of `window`, `spot`, `kp`, `moon`. Travel Marquette asked
+for `spot` to go: their northern-lights page recommends viewing locations in
+its own copy, so the widget naming one is duplication at best and a second
+opinion at worst.
+
+Hiding `spot` also switches the verdict sentence to the Worker's `whyNoSpot`
+variant, which makes the same judgement without naming a location. Both
+sentences ship in every payload — composing them server-side keeps one copy of
+the wording and costs nothing at the cache, where the key is still just
+`(region, spot)`.
+
+Note that `[hidden] { display:none !important }` is load-bearing here: the rows
+set `display:flex`, which otherwise beats the UA stylesheet and `el.hidden`
+does nothing at all.
 
 ### Brand fonts
 

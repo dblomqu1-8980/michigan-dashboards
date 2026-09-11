@@ -19,6 +19,9 @@
     "  size     default form factor: 'card' | 'strip' | 'panel'",
     "  font       optional: 'roboto' or 'montserrat'. Opt-in only \u2014 a client who",
     "             sets none keeps the system stack and loads no webfont.",
+    "  hideRows   optional: drop rows the client's own page already covers.",
+    "             Any of 'window' 'spot' 'kp' 'moon'. Hiding 'spot' also drops",
+    "             the viewing location from the verdict sentence.",
     "  attribution  true keeps the 'Live data from 906 Dashboard' link.",
     "               false is the white-label tier \u2014 only sell it deliberately,",
     "               the link is the backlink and the referral traffic.",
@@ -83,7 +86,9 @@
     "name": "Travel Marquette",
     "region": "up",
     "spot": "mqt",
-    "spotLabel": "M-28 Waysides",
+    "hideRows": [
+      "spot"
+    ],
     "size": "card",
     "font": "roboto",
     "attribution": true,
@@ -96,7 +101,7 @@
       "a1": "#a4d584",
       "a2": "#a4d584"
     },
-    "_spotLabel_note": "Their own northern-lights page calls the M-28 Waysides in Chocolay Township \"easy access points in the dark\" \u2014 the right call for a visitor driving at night. It also names Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle Park, which is what 906dashboard's aurora page picks. Without this override the widget would contradict the copy above it.",
+    "_spotLabel_note": "Viewing spot removed at the client's request (Katie Shimp, 11 Sep 2026): their northern-lights page already recommends locations, so the widget repeating one is duplication at best and a second opinion at worst. hideRows also switches the verdict sentence to the Worker's whyNoSpot variant, so no location is named in prose either. spotLabel is dropped as it now has nothing to label; restore both together if they ever want the row back.",
     "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md."
   }
 }
