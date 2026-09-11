@@ -49,6 +49,11 @@
 
   * { box-sizing:border-box; margin:0; padding:0; }
 
+  /* .aw-row and friends set display:flex, which beats the UA stylesheet's
+     display:none for [hidden]. Without this, el.hidden = true silently does
+     nothing and a row a client asked to remove stays on their page. */
+  [hidden] { display:none !important; }
+
   /* System stack by default — a webfont is a request on every embed, and the
      widget should not spend a host page's bandwidth unasked. A client whose
      brand specifies a face opts in via `font` in clients.json, which prepends
@@ -346,8 +351,27 @@
     attribution: true,
     name: null,
     spotLabel: null,
-    font: null
+    font: null,
+    hideRows: []
   };
+
+  /**
+   * Drop rows a client's own page already covers. Travel Marquette's
+   * northern-lights page recommends viewing locations in its own copy, so the
+   * widget repeating one under "Viewing spot" is duplication at best and a
+   * second opinion at worst.
+   */
+  var ROW_CLASS = { window: "r-window", spot: "r-best", kp: "r-kp", moon: "r-moon" };
+
+  function applyHiddenRows() {
+    cfg.hideRows.forEach(function (key) {
+      var cls = ROW_CLASS[String(key).toLowerCase()];
+      if (!cls) return;
+      var row = document.querySelector("." + cls);
+      if (row) row.hidden = true;
+    });
+  }
+  function rowHidden(key) { return cfg.hideRows.indexOf(key) >= 0; }
 
   function setSize(size) {
     var s = ["card", "strip", "panel"].indexOf(size) >= 0 ? size : "card";
@@ -365,6 +389,7 @@
         cfg.name = c.name || null;
         if (c.spotLabel) cfg.spotLabel = c.spotLabel;
         if (c.font) applyFont(c.font);
+        if (Array.isArray(c.hideRows)) cfg.hideRows = c.hideRows;
         if (c.attribution === false) cfg.attribution = false;
         // An explicit query param always beats the stored default, so one
         // client can run a pinned widget on one page and the roll-up on another.
@@ -448,8 +473,11 @@
     // The Worker composes the verdict line server-side and names the canonical
     // spot in it. Both strings are known exactly here, so this is a defined
     // substitution rather than a guess at the sentence's shape.
-    var why = v.why;
-    if (spotName && shownSpot && shownSpot !== spotName) {
+    // A client who hides the viewing-spot row does not want one recommended in
+    // prose either. The Worker ships both sentences, so this is a choice
+    // between two finished lines rather than surgery on one.
+    var why = (rowHidden("spot") && v.whyNoSpot) ? v.whyNoSpot : v.why;
+    if (!rowHidden("spot") && spotName && shownSpot && shownSpot !== spotName) {
       why = why.split(spotName).join(shownSpot);
     }
     el("aw-why").textContent = why;
@@ -556,6 +584,7 @@
   // ── boot ────────────────────────────────────────────────────────────────
   loadClient().then(function () {
     setSize(cfg.size);
+    applyHiddenRows();
     postHeight();
     load();
     setInterval(load, REFRESH_MS);

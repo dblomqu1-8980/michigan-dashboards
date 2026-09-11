@@ -36,8 +36,15 @@
   // The strip is two lines now, so 96 caused a visible jump on slow loads.
   var DEFAULT_HEIGHT = { card: 430, strip: 132, panel: 300 };
 
+  // A frame that is refused by frame-ancestors never runs our code, so the
+  // widget cannot report its own failure — the browser paints "refused to
+  // connect" and we hear nothing. The height handshake is the signal: if a
+  // frame has not reported in by now, it never started.
+  var LOAD_TIMEOUT_MS = 8000;
+
   var seq = 0;
   var frames = Object.create(null);
+  var reported = Object.create(null);
 
   function mount(node) {
     if (node.getAttribute("data-906-mounted") === "1") return;
@@ -71,6 +78,32 @@
 
     frames[fid] = frame;
     node.appendChild(frame);
+
+    setTimeout(function () {
+      if (reported[fid]) return;
+      // Two audiences, two messages. A visitor gets something calm and
+      // non-technical; whoever is installing it gets the actual cause in the
+      // console, because they are the only one who can fix it.
+      frame.style.display = "none";
+      var note = document.createElement("div");
+      note.setAttribute("role", "status");
+      note.style.cssText =
+        "font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
+        "color:#6b7280;padding:12px 14px;border:1px solid #d7dbe0;border-radius:8px;background:#f7f8f9;";
+      note.textContent = "Live aurora conditions are unavailable right now.";
+      node.appendChild(note);
+
+      console.error(
+        "[906 widget] The widget frame never loaded.\n" +
+        "Most likely this page's address is not on the widget's allowlist.\n" +
+        "  This page: " + location.origin + "\n" +
+        "  Widget:    " + ORIGIN + "\n" +
+        "Note that frame-ancestors applies to EVERY frame in the chain, not just\n" +
+        "the immediate parent — a CMS preview or staging host that wraps this page\n" +
+        "has to be on the allowlist too. Send the address above to 906dashboard.com\n" +
+        "and it will be added."
+      );
+    }, LOAD_TIMEOUT_MS);
   }
 
   window.addEventListener("message", function (e) {
@@ -92,6 +125,7 @@
 
     var h = Number(d.height);
     if (!isFinite(h) || h < 40 || h > 2000) return;
+    for (var id in frames) if (frames[id] === frame) reported[id] = true;
     frame.style.height = Math.ceil(h) + "px";
   });
 
