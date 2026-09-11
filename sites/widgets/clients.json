@@ -1,0 +1,94 @@
+{
+  "_readme": [
+    "Client registry for the embeddable widgets. One entry per customer.",
+    "",
+    "This file is PUBLIC \u2014 it is served from widgets.906dashboard.com and read by",
+    "the widget in the visitor's browser. Put nothing in it you would not publish.",
+    "The client id is not a secret and is not access control: embedding is gated by",
+    "the frame-ancestors header in vercel.json, which is the file to edit when",
+    "adding a customer. An id copied onto an unlisted domain renders a blank frame.",
+    "",
+    "Fields:",
+    "  name     display name, used in the attribution link's UTM tag only",
+    "  region   'up' \u2014 the only region with a widget today",
+    "  spot     pin the widget to one town, or null for the regional roll-up.",
+    "           Valid: mqt cph wfp mun irw grm pcm (see tools/widget-api/worker.js)",
+    "  size     default form factor: 'card' | 'strip' | 'panel'",
+    "  attribution  true keeps the 'Live data from 906 Dashboard' link.",
+    "               false is the white-label tier \u2014 only sell it deliberately,",
+    "               the link is the backlink and the referral traffic.",
+    "  brand    presentation only. Never reaches the data request, so every",
+    "           client on the same (region, spot) shares one cached payload.",
+    "",
+    "The five verdict colours are NOT brandable and are not listed here: they",
+    "carry the Kp forecast, not the styling. See tools/widget-api/README.md.",
+    "",
+    "light-demo exists to prove the widget works on a white site: the verdict",
+    "pill picks its own ink by luminance, so a pale brand does not wash it out."
+  ],
+  "demo": {
+    "name": "906 Dashboard",
+    "region": "up",
+    "spot": null,
+    "size": "card",
+    "attribution": true,
+    "brand": {
+      "bg": "#0b1220",
+      "card": "#16223a",
+      "ink": "#e8eefb",
+      "muted": "#93a4c3",
+      "line": "#24345a",
+      "a1": "#37d5b2",
+      "a2": "#7c6cf0"
+    }
+  },
+  "marquette-demo": {
+    "name": "Marquette Demo",
+    "region": "up",
+    "spot": "mqt",
+    "size": "card",
+    "attribution": true,
+    "brand": {
+      "bg": "#12100E",
+      "card": "#1E1A16",
+      "ink": "#F5EFE6",
+      "muted": "#A99781",
+      "line": "#332C24",
+      "a1": "#E0A43C",
+      "a2": "#8C5A2B"
+    }
+  },
+  "light-demo": {
+    "name": "Light Site Demo",
+    "region": "up",
+    "spot": "mqt",
+    "size": "card",
+    "attribution": true,
+    "brand": {
+      "bg": "#FFFFFF",
+      "card": "#F1F4F8",
+      "ink": "#0E2033",
+      "muted": "#5C7189",
+      "line": "#D6DEE7",
+      "a1": "#1B6CA8",
+      "a2": "#0E2033"
+    }
+  },
+  "travel-marquette": {
+    "name": "Travel Marquette",
+    "region": "up",
+    "spot": "mqt",
+    "size": "card",
+    "attribution": true,
+    "_provisional": "Brand PROVISIONAL \u2014 sampled from travelmarquette.com's live CSS, not from a brand guide. Confirm before launch. Their gold #F2BB05 and rust #D74E09 are deliberately NOT used: gold is within 1.0-1.6 contrast of four of the five verdict colours, so using it as the accent would make the Kp signal unreadable as a signal. Navy ground + teal accent clears every check.",
+    "brand": {
+      "bg": "#304466",
+      "card": "#263756",
+      "ink": "#FFFFFF",
+      "muted": "#B7C4D8",
+      "line": "#435878",
+      "a1": "#007095",
+      "a2": "#008CBA"
+    }
+  }
+}

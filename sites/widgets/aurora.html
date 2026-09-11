@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Aurora Forecast Widget — 906 Dashboard</title>
+<!--
+  Embeddable aurora widget. Rendered inside an iframe on a client's site.
+
+  Deliberately absent, and none of it by oversight:
+    - no Google Fonts        one less third-party request per embed
+    - no GA4 site tag        the dashboard's property must not count client traffic
+    - no affiliate scripts   sites/906/index.html carries one; this must not
+    - no email signup        it would collect addresses on a client's site into
+                             our list, and tools/aurora-alerts still has no
+                             POSTAL_ADDRESS set for CAN-SPAM. Out of v1 by decision.
+
+  Query params (all optional, all overridable by ?client=):
+    client  key into clients.json — supplies brand, spot, size, attribution
+    spot    mqt|cph|wfp|mun|irw|grm|pcm, or 'all' for the regional roll-up
+    region  up
+    size    card|strip|panel
+-->
+<style>
+  /* Verdict colours are fixed and deliberately not in the brand block below.
+     They encode the Kp forecast: red is a strong storm, not an error. Brand
+     one of these and the widget starts lying about the sky. */
+  :root {
+    --v-excellent:#f87171;
+    --v-good:#fb923c;
+    --v-fair:#facc15;
+    --v-long:#4ade80;
+    --v-quiet:#93a4c3;
+  }
+
+  /* Brand tokens. Defaults are the 906 aurora palette; ?client= overrides
+     them at runtime by setting the same properties inline on .aw. */
+  .aw {
+    --bg:#0b1220;
+    --card:#16223a;
+    --ink:#e8eefb;
+    --muted:#93a4c3;
+    --line:#24345a;
+    --a1:#37d5b2;
+    --a2:#7c6cf0;
+    --onaccent:#08101f;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  html, body {
+    background:transparent;
+    /* System stack on purpose: a webfont would be a network request on every
+       embed, and the widget should not fight the host page for bandwidth. */
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .aw {
+    background:var(--bg);
+    color:var(--ink);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  .aw-top { height:3px; background:linear-gradient(90deg,var(--a1),var(--a2)); }
+  .aw-in  { padding:15px 16px 13px; display:flex; flex-direction:column; gap:12px; }
+
+  .aw-head  { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .aw-title { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .aw-pill  {
+    font-size:10.5px; font-weight:800; letter-spacing:.09em;
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+    background:var(--muted); color:var(--onaccent);
+  }
+
+  .aw-lede { font-size:15px; line-height:1.42; font-weight:500; }
+
+  .aw-rows { display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .aw-row  {
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    padding:7px 0; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .aw-row .k { color:var(--muted); }
+  .aw-row .v { font-weight:600; text-align:right; font-variant-numeric:tabular-nums; }
+
+  .aw-clouds { display:flex; flex-direction:column; gap:7px; }
+  .aw-cl     { font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .aw-chips  { display:flex; flex-wrap:wrap; gap:5px; }
+  .aw-chip   {
+    font-size:11.5px; padding:3px 7px; border-radius:3px;
+    background:var(--card); border:1px solid var(--line); color:var(--muted);
+  }
+  .aw-chip b { color:var(--ink); font-variant-numeric:tabular-nums; }
+  /* Only the clearest spots get a highlight. An earlier version dimmed the
+     cloudy chips with opacity:.62, which dropped them to ~3.2:1 against every
+     brand ground tested — below AA — and dimmed exactly the number a reader
+     most needs ("Copper Harbor 83%" is the reason not to drive there). The
+     percentage carries the meaning on its own, so nothing is de-emphasised and
+     the highlight is redundant encoding rather than the only signal. */
+  .aw-chip.clear { border-color:var(--a1); }
+
+  .aw-verdict {
+    font-size:12.5px; line-height:1.45; color:var(--muted);
+    background:var(--card); border-left:2px solid var(--a1); padding:8px 10px;
+  }
+  .aw-verdict b { color:var(--ink); }
+
+  .aw-foot {
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+    border-top:1px solid var(--line); padding-top:9px; font-size:10.5px; color:var(--muted);
+  }
+  .aw-foot a { color:var(--a1); text-decoration:none; font-weight:600; }
+  .aw-foot a:hover, .aw-foot a:focus-visible { text-decoration:underline; }
+  :focus-visible { outline:2px solid var(--a1); outline-offset:2px; }
+
+  .aw-stale { color:var(--v-fair); }
+
+  /* ── strip: one horizontal row for a header or footer band ── */
+  .aw.size-strip .aw-in { flex-direction:row; align-items:center; gap:14px; padding:11px 15px; flex-wrap:wrap; }
+  .aw.size-strip .aw-head { flex:0 0 auto; }
+  .aw.size-strip .aw-title,
+  .aw.size-strip .aw-rows,
+  .aw.size-strip .aw-verdict,
+  .aw.size-strip .aw-cl { display:none; }
+  .aw.size-strip .aw-lede { flex:1 1 210px; font-size:13.5px; font-weight:400; }
+  .aw.size-strip .aw-clouds { flex:0 1 auto; }
+  .aw.size-strip .aw-foot { flex:0 0 auto; border:0; padding:0; }
+
+  /* ── panel: full-width block, rows and chips side by side ── */
+  @media (min-width:560px) {
+    .aw.size-panel .aw-body { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+  }
+  .aw.size-panel .aw-in { padding:18px 20px 15px; }
+
+  .aw.size-card { max-width:360px; }
+
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="aw size-card" id="aw" role="region" aria-label="Tonight's aurora outlook">
+  <div class="aw-top"></div>
+  <div class="aw-in">
+    <div class="aw-head">
+      <span class="aw-title" id="aw-place">Tonight's Aurora Outlook</span>
+      <span class="aw-pill" id="aw-pill">CHECKING</span>
+    </div>
+
+    <p class="aw-lede" id="aw-lede">Loading tonight's aurora outlook…</p>
+
+    <div class="aw-body">
+      <div class="aw-rows" id="aw-rows">
+        <div class="aw-row"><span class="k">Best viewing</span><span class="v" id="aw-window">—</span></div>
+        <div class="aw-row"><span class="k" id="aw-bestk">Best conditions</span><span class="v" id="aw-best">—</span></div>
+        <div class="aw-row"><span class="k">Kp forecast</span><span class="v" id="aw-kp">—</span></div>
+        <div class="aw-row"><span class="k">Moon</span><span class="v" id="aw-moon">—</span></div>
+      </div>
+
+      <div class="aw-clouds">
+        <div class="aw-cl" id="aw-cl">Cloud cover tonight</div>
+        <div class="aw-chips" id="aw-chips"></div>
+      </div>
+    </div>
+
+    <p class="aw-verdict"><b>Verdict:</b> <span id="aw-why">Pulling live data from NOAA's Space Weather Prediction Center.</span></p>
+
+    <div class="aw-foot">
+      <span id="aw-stamp">—</span>
+      <a id="aw-link" href="https://906dashboard.com/aurora.html" target="_blank" rel="noopener">Live data from 906 Dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Resolved from the host rather than a query param on purpose: letting a URL
+  // choose the API origin would let anyone point an embed at a server they
+  // control and render whatever they liked inside our frame.
+  var LOCAL_HOSTS = ["localhost", "127.0.0.1", "[::1]"];
+  var API = LOCAL_HOSTS.indexOf(location.hostname) >= 0
+    ? "http://127.0.0.1:8799/aurora"
+    : "https://aurora-widget-api.blomblog.workers.dev/aurora";
+
+  var LAST_GOOD_KEY = "906w:aurora:lastgood";
+  var REFRESH_MS = 5 * 60 * 1000;
+
+  var qs = new URLSearchParams(location.search);
+  var root = document.getElementById("aw");
+  var el = function (id) { return document.getElementById(id); };
+
+  // ── brand ───────────────────────────────────────────────────────────────
+  var BRAND_KEYS = ["bg", "card", "ink", "muted", "line", "a1", "a2"];
+
+  // Only needed when the feed is unreachable and the payload cannot supply it.
+  var PLACE_NAMES = {
+    mqt: "Marquette", cph: "Copper Harbor", wfp: "Whitefish Point",
+    mun: "Munising", irw: "Ironwood", grm: "Grand Marais", pcm: "Porcupine Mtns"
+  };
+
+  function toRgb(hex) {
+    hex = String(hex || "").replace("#", "");
+    if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    if (!/^[0-9a-f]{6}$/i.test(hex)) return null;
+    return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)];
+  }
+  function luminance(hex) {
+    var rgb = toRgb(hex);
+    if (!rgb) return 0;
+    return rgb.map(function (v) {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    }).reduce(function (a, c, i) { return a + c * [0.2126, 0.7152, 0.0722][i]; }, 0);
+  }
+  function contrast(a, b) {
+    var l1 = luminance(a), l2 = luminance(b);
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  }
+  /**
+   * Pick pill ink by luminance rather than assuming dark-on-accent.
+   * sites/906/aurora.html:642 hardcodes #08101f, which vanishes the moment a
+   * client picks a dark accent. This is that bug, fixed.
+   */
+  function inkFor(bg) {
+    return contrast("#08101f", bg) >= contrast("#ffffff", bg) ? "#08101f" : "#ffffff";
+  }
+
+  function applyBrand(brand) {
+    if (!brand) return;
+    BRAND_KEYS.forEach(function (k) {
+      if (brand[k] && toRgb(brand[k])) root.style.setProperty("--" + k, brand[k]);
+    });
+  }
+
+  // ── config ──────────────────────────────────────────────────────────────
+  var cfg = {
+    client: qs.get("client") || null,
+    spot: qs.get("spot") || null,
+    region: (qs.get("region") || "up").toLowerCase(),
+    size: qs.get("size") || null,
+    attribution: true,
+    name: null
+  };
+
+  function setSize(size) {
+    var s = ["card", "strip", "panel"].indexOf(size) >= 0 ? size : "card";
+    root.className = "aw size-" + s;
+  }
+
+  function loadClient() {
+    if (!cfg.client) return Promise.resolve();
+    // Same-origin, served and cached by Vercel alongside this page.
+    return fetch("./clients.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (all) {
+        var c = all && all[cfg.client];
+        if (!c) return; // unknown client falls back to the 906 default look
+        cfg.name = c.name || null;
+        if (c.attribution === false) cfg.attribution = false;
+        // An explicit query param always beats the stored default, so one
+        // client can run a pinned widget on one page and the roll-up on another.
+        if (!qs.get("spot") && c.spot) cfg.spot = c.spot;
+        if (!qs.get("region") && c.region) cfg.region = c.region;
+        if (!qs.get("size") && c.size) cfg.size = c.size;
+        applyBrand(c.brand);
+      })
+      .catch(function () { /* default look is a fine outcome */ });
+  }
+
+  // ── render ──────────────────────────────────────────────────────────────
+  function cloudClass(pct) {
+    if (pct == null) return "";
+    if (pct <= 35) return "clear";
+    if (pct <= 69) return "mixed";
+    return "cloudy";
+  }
+
+  function fmtStamp(iso, stale) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    var t = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    return (stale ? "Last known · " : "Updated ") + t;
+  }
+
+  function render(data, stale) {
+    var v = data.verdict;
+    var colour = getComputedStyle(document.documentElement)
+      .getPropertyValue("--v-" + v.level).trim() || "#93a4c3";
+
+    el("aw-place").textContent = data.pinned
+      ? "Aurora tonight · " + data.place
+      : "Tonight's Aurora Outlook";
+
+    var pill = el("aw-pill");
+    pill.textContent = v.pill;
+    pill.style.background = colour;
+    pill.style.color = inkFor(colour);
+
+    el("aw-lede").textContent = v.text;
+
+    el("aw-window").textContent = data.kp.window || "—";
+
+    // A pinned widget reports its own town's sky. The roll-up names whichever
+    // spot is clearest — useless information to a guest who is already in
+    // Marquette, which is why the label changes with the mode.
+    el("aw-bestk").textContent = data.pinned ? "Viewing spot" : "Best conditions";
+    el("aw-best").textContent = data.pinned
+      ? (data.best ? data.best.spot : "—")
+      : (data.best ? data.best.name : "—");
+
+    var kpText = data.kp.peak != null ? "Kp " + data.kp.peak.toFixed(1) : "—";
+    if (data.kp.scale) kpText += " · " + data.kp.scale;
+    var kpEl = el("aw-kp");
+    kpEl.textContent = kpText;
+    kpEl.style.color = data.kp.peak != null ? colour : "";
+
+    el("aw-moon").textContent = data.moon
+      ? data.moon.icon + " " + data.moon.name + " · " + data.moon.illum + "%"
+      : "—";
+
+    el("aw-chips").innerHTML = (data.clouds || []).map(function (c) {
+      var cls = cloudClass(c.pct);
+      return '<span class="aw-chip ' + cls + '">' +
+        esc(c.name) + ' <b>' + (c.pct == null ? "—" : c.pct + "%") + '</b></span>';
+    }).join("");
+
+    el("aw-why").textContent = v.why;
+    el("aw-stamp").textContent = fmtStamp(data.generated, stale);
+    el("aw-stamp").className = stale ? "aw-stale" : "";
+
+    var link = el("aw-link");
+    if (cfg.attribution) {
+      var utm = "?utm_source=widget&utm_medium=embed&utm_campaign=" +
+        encodeURIComponent(cfg.client || "unknown");
+      link.href = "https://906dashboard.com/aurora.html" + utm;
+      link.hidden = false;
+    } else {
+      link.hidden = true;
+    }
+
+    postHeight();
+  }
+
+  /**
+   * Never render a broken box on someone else's homepage. In order of
+   * preference: live data, last known good from this browser, then a plain
+   * unavailable line that still looks like a finished component.
+   */
+  function renderUnavailable() {
+    // The location comes from config, not from the feed, so it still holds
+    // when the feed is down. Keeping it avoids the widget looking like it lost
+    // track of which town it belongs to.
+    if (cfg.spot && PLACE_NAMES[cfg.spot]) {
+      el("aw-place").textContent = "Aurora tonight · " + PLACE_NAMES[cfg.spot];
+    }
+    el("aw-pill").textContent = "OFFLINE";
+    el("aw-pill").style.background = getComputedStyle(root).getPropertyValue("--muted").trim();
+    el("aw-pill").style.color = inkFor(getComputedStyle(root).getPropertyValue("--muted").trim());
+    el("aw-lede").textContent = "Aurora conditions are unavailable right now.";
+    el("aw-window").textContent = "—";
+    el("aw-best").textContent = "—";
+    el("aw-kp").textContent = "—";
+    el("aw-moon").textContent = "—";
+    el("aw-chips").innerHTML = "";
+    el("aw-why").textContent = "The forecast feed is not responding. This usually clears on its own within a few minutes.";
+    el("aw-stamp").textContent = "";
+    postHeight();
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[<>&"]/g, function (c) {
+      return { "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c];
+    });
+  }
+
+  // ── height handshake ────────────────────────────────────────────────────
+  var lastHeight = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h === lastHeight) return;
+    lastHeight = h;
+    // targetOrigin '*' because the widget genuinely does not know which of the
+    // allowlisted parents framed it, and the only thing sent is a number. The
+    // loader verifies event.source before trusting it.
+    window.parent.postMessage({ type: "906widget:height", id: qs.get("fid") || null, height: h }, "*");
+  }
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(postHeight).observe(document.documentElement);
+  } else {
+    window.addEventListener("resize", postHeight);
+  }
+
+  // ── data ────────────────────────────────────────────────────────────────
+  function cacheKey() {
+    return LAST_GOOD_KEY + ":" + cfg.region + ":" + (cfg.spot || "all");
+  }
+  function readLastGood() {
+    try { return JSON.parse(localStorage.getItem(cacheKey())); } catch (e) { return null; }
+  }
+  function writeLastGood(data) {
+    try { localStorage.setItem(cacheKey(), JSON.stringify(data)); } catch (e) { /* private mode */ }
+  }
+
+  function load() {
+    var url = API + "?region=" + encodeURIComponent(cfg.region) +
+      "&spot=" + encodeURIComponent(cfg.spot || "all");
+
+    return fetch(url, { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || data.ok !== true) throw new Error("bad payload");
+        writeLastGood(data);
+        render(data, false);
+      })
+      .catch(function () {
+        var last = readLastGood();
+        if (last) render(last, true);
+        else renderUnavailable();
+      });
+  }
+
+  // ── boot ────────────────────────────────────────────────────────────────
+  loadClient().then(function () {
+    setSize(cfg.size);
+    postHeight();
+    load();
+    setInterval(load, REFRESH_MS);
+  });
+})();
+</script>
+</body>
+</html>
