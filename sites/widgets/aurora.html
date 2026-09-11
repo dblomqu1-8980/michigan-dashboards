@@ -246,7 +246,8 @@
     region: (qs.get("region") || "up").toLowerCase(),
     size: qs.get("size") || null,
     attribution: true,
-    name: null
+    name: null,
+    spotLabel: null
   };
 
   function setSize(size) {
@@ -263,6 +264,7 @@
         var c = all && all[cfg.client];
         if (!c) return; // unknown client falls back to the 906 default look
         cfg.name = c.name || null;
+        if (c.spotLabel) cfg.spotLabel = c.spotLabel;
         if (c.attribution === false) cfg.attribution = false;
         // An explicit query param always beats the stored default, so one
         // client can run a pinned widget on one page and the roll-up on another.
@@ -310,9 +312,17 @@
     // A pinned widget reports its own town's sky. The roll-up names whichever
     // spot is clearest — useless information to a guest who is already in
     // Marquette, which is why the label changes with the mode.
+    // A client can name the spot their own site recommends. Travel Marquette's
+    // northern-lights page sends people to Sugarloaf Mountain and the M-28
+    // waysides and never mentions Presque Isle Park, so the widget must not sit
+    // on that page contradicting the copy above it. The override is applied
+    // here, in the browser, so the cache key stays data-only.
+    var spotName = data.best ? data.best.spot : null;
+    var shownSpot = (data.pinned && cfg.spotLabel) ? cfg.spotLabel : spotName;
+
     el("aw-bestk").textContent = data.pinned ? "Viewing spot" : "Best conditions";
     el("aw-best").textContent = data.pinned
-      ? (data.best ? data.best.spot : "—")
+      ? (shownSpot || "—")
       : (data.best ? data.best.name : "—");
 
     var kpText = data.kp.peak != null ? "Kp " + data.kp.peak.toFixed(1) : "—";
@@ -331,7 +341,14 @@
         esc(c.name) + ' <b>' + (c.pct == null ? "—" : c.pct + "%") + '</b></span>';
     }).join("");
 
-    el("aw-why").textContent = v.why;
+    // The Worker composes the verdict line server-side and names the canonical
+    // spot in it. Both strings are known exactly here, so this is a defined
+    // substitution rather than a guess at the sentence's shape.
+    var why = v.why;
+    if (spotName && shownSpot && shownSpot !== spotName) {
+      why = why.split(spotName).join(shownSpot);
+    }
+    el("aw-why").textContent = why;
     el("aw-stamp").textContent = fmtStamp(data.generated, stale);
     el("aw-stamp").className = stale ? "aw-stale" : "";
 
