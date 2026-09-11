@@ -120,16 +120,36 @@
 
   .aw-stale { color:var(--v-fair); }
 
-  /* ── strip: one horizontal row for a header or footer band ── */
-  .aw.size-strip .aw-in { flex-direction:row; align-items:center; gap:14px; padding:11px 15px; flex-wrap:wrap; }
-  .aw.size-strip .aw-head { flex:0 0 auto; }
+  /* ── strip: a two-line band for a header or footer ──
+     Line one is the answer — verdict pill, one sentence, attribution.
+     Line two carries the detail as compact labelled stats, so the strip is
+     genuinely useful rather than a teaser that sends people elsewhere.
+     `order` puts the footer on line one; without it the full-width stats row
+     would wrap between the sentence and the attribution. */
+  .aw.size-strip .aw-in { flex-direction:row; flex-wrap:wrap; align-items:center; gap:10px 16px; padding:12px 16px; }
   .aw.size-strip .aw-title,
-  .aw.size-strip .aw-rows,
-  .aw.size-strip .aw-verdict,
-  .aw.size-strip .aw-cl { display:none; }
-  .aw.size-strip .aw-lede { flex:1 1 210px; font-size:13.5px; font-weight:400; }
-  .aw.size-strip .aw-clouds { flex:0 1 auto; }
-  .aw.size-strip .aw-foot { flex:0 0 auto; border:0; padding:0; }
+  .aw.size-strip .aw-verdict { display:none; }
+  .aw.size-strip .aw-head { flex:0 0 auto; }
+  .aw.size-strip .aw-lede { flex:1 1 200px; font-size:13.5px; font-weight:500; }
+  .aw.size-strip .aw-foot { order:1; flex:0 0 auto; border:0; padding:0; gap:12px; }
+
+  .aw.size-strip .aw-body {
+    order:2; flex:1 1 100%;
+    display:flex; flex-wrap:wrap; align-items:flex-start; gap:11px 20px;
+    border-top:1px solid var(--line); padding-top:10px;
+  }
+  .aw.size-strip .aw-rows { flex-direction:row; flex-wrap:wrap; border-top:0; gap:11px 20px; }
+  .aw.size-strip .aw-row {
+    flex-direction:column; align-items:flex-start;
+    gap:2px; padding:0; border-bottom:0;
+  }
+  .aw.size-strip .aw-row .k,
+  .aw.size-strip .aw-cl {
+    font-size:9.5px; font-weight:700; letter-spacing:.09em;
+    text-transform:uppercase; white-space:nowrap;
+  }
+  .aw.size-strip .aw-row .v { font-size:13px; text-align:left; white-space:nowrap; }
+  .aw.size-strip .aw-clouds { gap:3px; }
 
   /* ── panel: full-width block, rows and chips side by side ── */
   @media (min-width:560px) {
@@ -376,6 +396,9 @@
     // track of which town it belongs to.
     if (cfg.spot && PLACE_NAMES[cfg.spot]) {
       el("aw-place").textContent = "Aurora tonight · " + PLACE_NAMES[cfg.spot];
+      // Row label comes from config too, so a pinned widget does not fall back
+      // to the roll-up's "Best conditions" while the feed is down.
+      el("aw-bestk").textContent = "Viewing spot";
     }
     el("aw-pill").textContent = "OFFLINE";
     el("aw-pill").style.background = getComputedStyle(root).getPropertyValue("--muted").trim();

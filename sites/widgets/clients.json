@@ -81,7 +81,7 @@
     "name": "Travel Marquette",
     "region": "up",
     "spot": "mqt",
-    "spotLabel": "Sugarloaf Mountain",
+    "spotLabel": "M-28 Waysides",
     "size": "card",
     "attribution": true,
     "_provisional": "Brand PROVISIONAL \u2014 sampled from travelmarquette.com's live CSS, not from a brand guide. Confirm before launch. Their gold #F2BB05 and rust #D74E09 are deliberately NOT used: gold is within 1.0-1.6 contrast of four of the five verdict colours, so using it as the accent would make the Kp signal unreadable as a signal. Navy ground + teal accent clears every check.",
@@ -94,6 +94,6 @@
       "a1": "#007095",
       "a2": "#008CBA"
     },
-    "_spotLabel_note": "Their own northern-lights page recommends the M-28 Waysides in Chocolay Township, Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle Park \u2014 which is what 906dashboard's aurora page picks. Without this override the widget would contradict the copy directly above it. Confirm which of their three they want named."
+    "_spotLabel_note": "Their own northern-lights page calls the M-28 Waysides in Chocolay Township \"easy access points in the dark\" \u2014 the right call for a visitor driving at night. It also names Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle Park, which is what 906dashboard's aurora page picks. Without this override the widget would contradict the copy above it."
   }
 }
