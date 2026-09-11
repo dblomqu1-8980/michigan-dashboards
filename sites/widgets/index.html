@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Aurora Widget — Install &amp; Preview · 906 Dashboard</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#8b949e;
+    --line:#2a3441; --accent:#37d5b2; --accent2:#7c6cf0; --warn:#facc15;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);line-height:1.6;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:15px;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px 80px}
+  header.hd{padding:44px 0 26px;border-bottom:1px solid var(--line)}
+  .kick{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  h1{font-size:32px;line-height:1.12;letter-spacing:-.02em;font-weight:800;margin-bottom:10px}
+  .lede{color:var(--muted);max-width:62ch;font-size:16px}
+  h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin:40px 0 8px}
+  h3{font-size:15px;font-weight:700;margin:24px 0 6px}
+  p{margin-bottom:12px;max-width:68ch}
+  .muted{color:var(--muted)}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:.08em .34em}
+  pre{
+    background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);
+    padding:13px 15px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.8px;line-height:1.6;margin:10px 0 4px;
+  }
+  .copy{
+    background:none;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+    font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    padding:5px 10px;border-radius:3px;margin-bottom:16px;
+  }
+  .copy:hover{color:var(--ink);border-color:var(--accent)}
+
+  .stage{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin:20px 0 8px}
+  .cell{display:flex;flex-direction:column;gap:9px}
+  .cell .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .cell .lbl b{color:var(--accent);font-weight:700}
+
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  td code{font-size:12px}
+
+  .note{
+    border:1px solid var(--warn);border-left-width:3px;background:rgba(250,204,21,.06);
+    padding:13px 15px;margin:16px 0;font-size:14px;
+  }
+  .note b{color:var(--warn)}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <div class="kick">906 Dashboard · Embeddable widgets</div>
+    <h1>Aurora forecast widget</h1>
+    <p class="lede">
+      Live northern-lights conditions for Michigan's Upper Peninsula, rendered and
+      maintained by 906 Dashboard. One line of HTML on your page; nothing to
+      install, nothing to update.
+    </p>
+  </header>
+
+  <h2>Install</h2>
+  <p>
+    Paste this where the widget should appear. The script can go anywhere on the
+    page — it finds the placeholder itself.
+  </p>
+  <pre id="snip-script">&lt;div data-906-widget="aurora" data-client="travel-marquette"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+  <button class="copy" data-copy="snip-script">Copy snippet</button>
+
+  <h3>If your CMS strips script tags</h3>
+  <p class="muted">
+    Some Simpleview templates escape <code>&lt;script&gt;</code> inside a content
+    widget. If the snippet above renders as visible text instead of a widget, use
+    this instead — same widget, no script tag, fixed height.
+  </p>
+  <pre id="snip-frame">&lt;iframe src="https://widgets.906dashboard.com/aurora.html?client=travel-marquette"
+        title="Tonight's aurora forecast — 906 Dashboard"
+        width="100%" height="430" loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        style="border:0;max-width:360px"&gt;&lt;/iframe&gt;</pre>
+  <button class="copy" data-copy="snip-frame">Copy snippet</button>
+
+  <div class="note">
+    <b>Your domains are already allowlisted.</b> <code>travelmarquette.com</code> and
+    <code>www.travelmarquette.com</code> are on the widget's <code>frame-ancestors</code>
+    list, so the snippet will render as soon as it is on the page. Any additional
+    hostname — a staging site, for instance — needs adding first, or it will show a
+    blank space.
+  </div>
+
+  <h3>On Simpleview</h3>
+  <p class="muted">
+    Your site runs on Simpleview CMS. Add the snippet through a
+    <b>Custom HTML</b> / <b>Raw HTML</b> widget on the page, the same mechanism
+    that already carries your Clicktripz and AudioEye embeds. If that widget type
+    escapes script tags on your template, use the iframe version above instead —
+    it behaves identically apart from a fixed height.
+  </p>
+  <p class="muted">
+    Your site sends no <code>Content-Security-Policy</code> header, so there is
+    nothing for your developers to allowlist on your side.
+  </p>
+
+  <h2>Live preview</h2>
+  <p class="muted">
+    Both of these are the real widget pulling live NOAA and NWS data right now.
+  </p>
+
+  <div class="stage">
+    <div class="cell">
+      <span class="lbl">Pinned to <b>Marquette</b> · Travel Marquette colors</span>
+      <div data-906-widget="aurora" data-client="travel-marquette" data-size="card"></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Regional roll-up · <b>906 default</b></span>
+      <div data-906-widget="aurora" data-client="demo" data-size="card"></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:34px">Full-width strip</h3>
+  <div data-906-widget="aurora" data-client="travel-marquette" data-size="strip"></div>
+
+  <h2>Options</h2>
+  <p>
+    Everything below has a sensible default stored against your client id, so the
+    snippet above is usually all you need. Add an attribute only to override.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Attribute</th><th>Values</th><th>What it does</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>data-client</code></td>
+        <td>your id</td>
+        <td>Loads your brand colors, default location and size. Required.</td>
+      </tr>
+      <tr>
+        <td><code>data-spot</code></td>
+        <td><code>mqt</code> <code>cph</code> <code>wfp</code> <code>mun</code> <code>irw</code> <code>grm</code> <code>pcm</code> <code>all</code></td>
+        <td>
+          Pin the forecast to one town, or <code>all</code> for the whole UP.
+          A pinned widget reports that town's own sky and names its viewing spot —
+          telling a guest already in Marquette that Copper Harbor is clearer does
+          them no good.
+        </td>
+      </tr>
+      <tr>
+        <td><code>data-size</code></td>
+        <td><code>card</code> <code>strip</code> <code>panel</code></td>
+        <td>
+          <code>card</code> for a sidebar (360&nbsp;px), <code>strip</code> for a
+          one-line band, <code>panel</code> for a full-width block.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Locations</h3>
+  <table>
+    <thead><tr><th>Code</th><th>Forecast for</th><th>Viewing spot named</th></tr></thead>
+    <tbody>
+      <tr><td><code>mqt</code></td><td>Marquette</td><td>Presque Isle Park</td></tr>
+      <tr><td><code>cph</code></td><td>Copper Harbor</td><td>Brockway Mountain</td></tr>
+      <tr><td><code>wfp</code></td><td>Whitefish Point</td><td>Whitefish Point</td></tr>
+      <tr><td><code>mun</code></td><td>Munising</td><td>Sand Point</td></tr>
+      <tr><td><code>irw</code></td><td>Ironwood</td><td>Little Girl's Point</td></tr>
+      <tr><td><code>grm</code></td><td>Grand Marais</td><td>Grand Marais Harbor</td></tr>
+      <tr><td><code>pcm</code></td><td>Porcupine Mountains</td><td>Union Bay</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Where it works hardest</h2>
+  <p>
+    You have five northern-lights posts and no page showing whether tonight is
+    worth going out:
+  </p>
+  <ul style="margin:0 0 14px 20px">
+    <li>4 Lookouts for the Northern Lights</li>
+    <li>5 Tips to See the Northern Lights</li>
+    <li>Aurora Q&amp;A with Shawn Malone</li>
+    <li>How to Catch the Northern Lights with Kids</li>
+    <li>Chasing the Northern Lights: a Leave No Trace Guide</li>
+  </ul>
+  <p>
+    The same snippet can sit on all of them — one client id, no extra setup. A
+    reader who has just finished "4 Lookouts" is exactly the person asking
+    whether tonight is the night, and right now the page cannot answer.
+  </p>
+
+  <h2>What it does on a quiet night</h2>
+  <p>
+    It says <b>QUIET</b>, in grey, honestly. Aurora activity is spiky — long
+    stretches of nothing, then an enormous night. A widget that manufactured
+    excitement on a Kp 1 evening would send your guests out for nothing, so this
+    one does not.
+  </p>
+  <p>
+    If the NOAA feed itself goes down, the widget shows the last conditions it
+    saw with a <b>Last known</b> timestamp rather than a broken box, and recovers
+    on its own when the feed returns.
+  </p>
+
+  <h2>Checking it worked</h2>
+  <p>Load your page and confirm:</p>
+  <ul style="margin:0 0 14px 20px">
+    <li>the widget shows real numbers, not dashes</li>
+    <li>it resizes to fit rather than scrolling inside its own box</li>
+    <li>at phone width it reflows instead of pushing the page sideways</li>
+  </ul>
+  <p class="muted">
+    If you see an empty space where the widget should be, your domain almost
+    certainly is not on the allowlist yet — the browser console will say so
+    explicitly, naming <code>frame-ancestors</code>. Send us the hostname.
+  </p>
+
+  <footer>
+    906 Travel Dashboard · Aurora data: NOAA SWPC · Cloud cover: NWS ·
+    Refreshes every 5 minutes · <a href="https://906dashboard.com/aurora.html">Full UP aurora forecast</a>
+  </footer>
+</div>
+
+<script src="./widget.js"></script>
+<script>
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-copy]");
+    if (!btn) return;
+    var pre = document.getElementById(btn.getAttribute("data-copy"));
+    if (!pre || !navigator.clipboard) return;
+    navigator.clipboard.writeText(pre.textContent).then(function () {
+      var was = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(function () { btn.textContent = was; }, 1400);
+    });
+  });
+</script>
+</body>
+</html>

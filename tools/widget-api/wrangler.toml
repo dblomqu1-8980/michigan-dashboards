@@ -1,0 +1,15 @@
+name = "aurora-widget-api"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# A third Worker rather than another route on up906-mdot-proxy. Same reasoning
+# aurora-alerts uses: the proxy is load-bearing for both dashboards' live data,
+# and this one is load-bearing for whatever a paying client has on their
+# homepage. Neither should be able to break the other with a bad deploy.
+#
+# No secrets and no bindings. Everything upstream is public federal data, so
+# there is nothing here to rotate and nothing to leak.
+
+# Free tier is 100,000 requests/day. Every embed on the same (region, spot)
+# shares one edge-cached response for 5 minutes, so the ceiling here is set by
+# distinct cache misses, not by client pageviews.
