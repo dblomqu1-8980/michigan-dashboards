@@ -43,7 +43,7 @@ Four steps, about ten minutes.
   "name": "Northwoods Inn",
   "region": "up",
   "spot": "mqt",
-  "spotLabel": "Sugarloaf Mountain",
+  "spotLabel": "M-28 Waysides",
   "size": "card",
   "attribution": true,
   "brand": { "bg": "#12100E", "card": "#1E1A16", "ink": "#F5EFE6",
@@ -75,9 +75,10 @@ palette against the scale before shipping it.
 
 `spotLabel` overrides the viewing spot the widget names, for clients whose own
 copy points somewhere else. This is not cosmetic. Travel Marquette's
-northern-lights page sends readers to the M-28 waysides, Sugarloaf Mountain and
-Wetmore Landing, and never mentions Presque Isle Park — which is what
-`sites/906/aurora.html` picks for Marquette. Without the override the widget
+northern-lights page calls the M-28 Waysides in Chocolay Township "easy access
+points in the dark" — the right call for a visitor driving at night. It also
+names Sugarloaf Mountain and Wetmore Landing, and never mentions Presque Isle
+Park, which is what `sites/906/aurora.html` picks for Marquette. Without the override the widget
 would sit on their page recommending a location the paragraph above it does
 not, which reads as a bolted-on third-party box rather than part of their site.
 

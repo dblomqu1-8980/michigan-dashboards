@@ -32,7 +32,9 @@
 
   var WIDGETS = { aurora: "aurora.html" };
 
-  var DEFAULT_HEIGHT = { card: 430, strip: 96, panel: 300 };
+  // Pre-resize guesses only; the frame posts its real height on load.
+  // The strip is two lines now, so 96 caused a visible jump on slow loads.
+  var DEFAULT_HEIGHT = { card: 430, strip: 132, panel: 300 };
 
   var seq = 0;
   var frames = Object.create(null);
