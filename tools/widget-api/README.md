@@ -5,7 +5,7 @@ An embeddable aurora forecast for client websites. Two pieces:
 | Piece | Lives in | Deploys to |
 |---|---|---|
 | Data API | `tools/widget-api/` | Cloudflare Worker `aurora-widget-api` |
-| Widget + loader | `sites/widgets/` | Vercel project, `widgets.906dashboard.com` |
+| Widget + loader | `sites/widgets/` | Vercel project `906widgets`, `widgets.906dashboard.com` |
 
 This file is the ops doc and deliberately sits **outside** `sites/`, for the
 same reason `DEPLOYMENT.md` gives: internal files can't leak because they
@@ -144,15 +144,53 @@ done
 
 The site half deploys with any push to `main` once the Vercel project exists.
 
-### First-time setup, not yet done
+### Setup status
 
-1. `cd tools/widget-api && npx wrangler deploy`
-2. Create a Vercel project `widgets` with **Root Directory** `sites/widgets`
-3. Add `widgets.906dashboard.com` in its Domains tab
-4. Add the `CNAME` at IONOS using the target **Vercel's Domains tab shows** —
-   not a guessed one. Change nothing else in that zone.
-5. Confirm the API URL in `sites/widgets/aurora.html` matches the deployed
-   Worker's hostname.
+Done:
+
+1. Worker deployed — `https://aurora-widget-api.blomblog.workers.dev`, verified
+   in production (`/health`, both widget modes, CORS reflection from
+   travelmarquette.com, cache HIT, 400 and 404 paths).
+2. Vercel project `906widgets` created: root directory `sites/widgets`, linked
+   to `dblomqu1-8980/michigan-dashboards`, production branch `main`.
+3. `sites/widgets/aurora.html` already points at the deployed Worker hostname.
+
+Outstanding:
+
+4. **Merge the PR.** The project's production branch is `main`; until the
+   widget files land there, production has nothing to build.
+5. **Add the `CNAME` at IONOS.** `widgets.906dashboard.com` is already added to
+   the Vercel project; it reads `misconfigured` only because the DNS record does
+   not exist yet. Vercel's own config endpoint currently gives:
+
+   | Type | Name | Value |
+   |---|---|---|
+   | `CNAME` | `widgets` | `ed3a4883bedc007a.vercel-dns-016.com.` |
+
+   That target is account- and region-specific — `DEPLOYMENT.md` is explicit
+   that a guessed one is an outage, so re-read it from the Domains tab at the
+   moment you create the record rather than trusting this table if time has
+   passed. Change nothing else in that zone: the apex `A`, `MX`, `SPF`, DKIM,
+   DMARC and Search Console records stay exactly as they are. This is the
+   safest possible change to these domains — one new subdomain record, nothing
+   edited, nothing deleted.
+6. **Decide the deployment-protection posture** — see below.
+
+### Deployment protection
+
+The project was created with Vercel's team default,
+`ssoProtection: all_except_custom_domains`. Both sibling projects
+(`906dashboard`, `upnorthdashboard`) have protection off entirely.
+
+Left as-is this is workable and arguably the safer posture: the custom domain
+is exempt, so `widgets.906dashboard.com` serves publicly and the widget works.
+Only preview deployments sit behind SSO — which means an unreleased widget
+cannot be embedded by accident, but also that `frame-ancestors` cannot be
+verified on a preview URL. The protection page answers every request with a
+302 and `x-frame-options: DENY`, so a framed preview shows nothing.
+
+Turn it off only if preview testing is worth more than that: Project Settings
+-> Deployment Protection -> Vercel Authentication -> Disabled.
 
 ---
 
