@@ -7,7 +7,7 @@
   <!-- ═══ SEO ═══ -->
   <title>UP Fall Colors 2026 — Live Peak Color Estimate, Scenic Drives, Orchards &amp; Cider | 906 Travel</title>
   <meta name="description" content="When Upper Peninsula fall color peaks, where to drive for it, and which UP orchards and farm stands have apples and fresh cider. Live cold-night-adjusted color estimate for the Keweenaw, western, central and eastern UP." />
-  <meta name="keywords" content="UP fall colors, Upper Peninsula fall color, Michigan fall color peak, Brockway Mountain fall color, Black River Byway, Tahquamenon fall, UP apple orchards, UP cider, Starz Orchard, Barron Orchards, fall color tour Michigan" />
+  <meta name="keywords" content="UP fall colors, Upper Peninsula fall color, Michigan fall color peak, Brockway Mountain fall color, Black River Byway, Tahquamenon fall, UP apple orchards, UP cider, Starz Orchard, fall color tour Michigan" />
   <meta name="author" content="906 Travel Dashboard" />
   <link rel="canonical" href="https://906dashboard.com/fall.html" />
 
@@ -37,8 +37,7 @@
       {"@type":"ListItem","position":3,"item":{"@type":"TouristAttraction","name":"M-26 Keweenaw Shoreline","description":"Eagle River to Copper Harbor along the Lake Superior shore.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Eagle River"}}},
       {"@type":"ListItem","position":4,"item":{"@type":"TouristAttraction","name":"Tahquamenon Falls & M-123 Loop","description":"Maple-heavy eastern UP loop linking Tahquamenon Falls, Paradise and Whitefish Point.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Paradise"}}},
       {"@type":"ListItem","position":5,"item":{"@type":"GroceryStore","name":"Starz Orchard","description":"Wallace-area orchard with apples, seasonal U-pick or self-serve sales, and fresh apple cider.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Wallace"}}},
-      {"@type":"ListItem","position":6,"item":{"@type":"GroceryStore","name":"Sunny G. Orchard","description":"Family-owned Stephenson orchard with more than 20 apple varieties.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Stephenson"}}},
-      {"@type":"ListItem","position":7,"item":{"@type":"GroceryStore","name":"Barron Orchards","description":"Rock, Michigan farm selling pre-picked apples, dried apples, honey and seasonal farm products.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Rock"}}}
+      {"@type":"ListItem","position":6,"item":{"@type":"GroceryStore","name":"Sunny G. Orchard","description":"Family-owned Stephenson orchard with more than 20 apple varieties.","address":{"@type":"PostalAddress","addressRegion":"MI","addressLocality":"Stephenson"}}}
     ]
   }
   </script>
@@ -399,7 +398,7 @@
   <div style="margin-top:34px;">
     <div class="section-eyebrow">🍎 Cider Mills, Orchards &amp; Fall Farms</div>
     <h2 class="section-title">Apples and cider in the UP</h2>
-    <p class="section-lead">Straight talk: the UP is not cider-mill country the way southern Michigan is. There is no comprehensive UP cider-mill directory because there aren't enough mills to fill one. What the UP does have is a small cluster of real working orchards — concentrated in Menominee and Delta counties where the growing season is longest — plus farmers markets in nearly every town selling apples, cider and baked goods in September and October. These are the stops we can actually verify.</p>
+    <p class="section-lead">Straight talk: the UP is not cider-mill country the way southern Michigan is. There is no comprehensive UP cider-mill directory because there aren't enough mills to fill one. What the UP does have is a small cluster of real working orchards — concentrated in Menominee County where the growing season is longest — plus farmers markets in nearly every town selling apples, cider and baked goods in September and October. These are the stops we can actually verify.</p>
 
     <div class="model-note" style="border-color:rgba(234,179,8,.28);background:rgba(234,179,8,.06);">
       <b style="color:var(--yellow);">Always check before you drive.</b> Orchard hours, U-pick availability and cider
@@ -419,7 +418,7 @@
     <div class="pair-list">
       <div class="pair-item">
         <div class="pair-route">US-41 / M-35 — Escanaba to Marquette</div>
-        <div class="pair-stop"><a href="https://www.uptravel.com/listing/barron-orchards/5487/" target="_blank" rel="noopener">Barron Orchards</a> in Rock is the one central-UP farm stop, roughly halfway between Escanaba and Marquette.</div>
+        <div class="pair-stop">No orchard stop on this stretch since Barron Orchards in Rock closed. Use the Escanaba or Marquette farmers markets instead — both run September and October — or buy in Menominee County on the way up.</div>
       </div>
       <div class="pair-item">
         <div class="pair-route">US-41 South — Menominee County approach</div>
@@ -662,6 +661,8 @@ const ROUTES = [
 // source. Deliberately excluded: Gitche Gumee Ciderworks (Hancock), whose site
 // carries visibly stale dates and product info. Contact the owner and confirm
 // current operation before adding it.
+// Removed: Barron Orchards (Rock, Delta County) — closed. Do not re-add without
+// confirming the farm is operating again.
 const FARMS = [
   {
     id:'starz', icon:'🍎',
@@ -682,17 +683,6 @@ const FARMS = [
     verified:'<b>Verified:</b> family-owned orchard with 20+ apple varieties, via UP Travel. Cider availability not independently confirmed — ask when you call.',
     check:'https://www.uptravel.com/listing/sunny-g-orchard/5485/', checkLabel:'Check today\'s hours →',
     maps:'https://www.google.com/maps/dir/?api=1&destination=Sunny+G+Orchard+Stephenson+MI'
-  },
-  {
-    id:'barron', icon:'🧺',
-    name:'Barron Orchards',
-    loc:'Rock · Delta County',
-    desc:'The central UP\'s farm stop, roughly halfway between Escanaba and Marquette on US-41. Pre-picked apples, dried apples, honey and seasonal farm products — a genuine roadside farm stand, and the only one you\'ll pass on that stretch.',
-    badges:[['','Pre-Picked Apples'],['','Dried Apples'],['','Honey'],['scenic','On US-41']],
-    verified:'<b>Verified:</b> pre-picked apples, dried apples, honey and seasonal products via UP Travel; current seasonal operation confirmed by a September 2025 WLUC report.',
-    check:'https://www.uptravel.com/listing/barron-orchards/5487/', checkLabel:'Check today\'s hours →',
-    maps:'https://www.google.com/maps/dir/?api=1&destination=Barron+Orchards+Rock+MI',
-    extra:{url:'https://www.uppermichiganssource.com/2025/09/02/barron-orchards-opens-season-friday-rock/', label:'WLUC report →'}
   },
   {
     id:'markets', icon:'🥧',
