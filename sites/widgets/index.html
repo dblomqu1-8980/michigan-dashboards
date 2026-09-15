@@ -83,9 +83,16 @@
   <p class="muted">
     Some Simpleview templates escape <code>&lt;script&gt;</code> inside a content
     widget. If the snippet above renders as visible text instead of a widget, use
-    this instead — same widget, no script tag, fixed height.
+    this instead — same widget, no script tag.
   </p>
-  <pre id="snip-frame">&lt;iframe src="https://widgets.906dashboard.com/aurora.html?client=travel-marquette"
+  <p class="muted">
+    One trade-off worth knowing: without the script there is nothing to report the
+    widget's height back to your page, so this version is a <b>fixed-size card</b>
+    rather than the automatic band-on-desktop, card-on-mobile above. It is pinned
+    to <code>size=card</code> deliberately — a card is the size that works at every
+    width.
+  </p>
+  <pre id="snip-frame">&lt;iframe src="https://widgets.906dashboard.com/aurora.html?client=travel-marquette&amp;size=card"
         title="Tonight's aurora forecast — 906 Dashboard"
         width="100%" height="430" loading="lazy"
         referrerpolicy="strict-origin-when-cross-origin"
@@ -120,7 +127,7 @@
 
   <div class="stage">
     <div class="cell">
-      <span class="lbl">Pinned to <b>Marquette</b> · Travel Marquette colors</span>
+      <span class="lbl">In a sidebar · <b>card</b></span>
       <div data-906-widget="aurora" data-client="travel-marquette" data-size="card"></div>
     </div>
     <div class="cell">
@@ -129,8 +136,13 @@
     </div>
   </div>
 
-  <h3 style="margin-top:34px">Full-width strip</h3>
-  <div data-906-widget="aurora" data-client="travel-marquette" data-size="strip"></div>
+  <h3 style="margin-top:34px">Full-width — how it looks in a wide column</h3>
+  <p class="muted">
+    This is the same embed as above. Narrow this browser window past
+    700&nbsp;px and it becomes the card on its own; there is no second snippet
+    and nothing to configure.
+  </p>
+  <div data-906-widget="aurora" data-client="travel-marquette"></div>
 
   <h2>Options</h2>
   <p>
@@ -160,10 +172,13 @@
       </tr>
       <tr>
         <td><code>data-size</code></td>
-        <td><code>card</code> <code>strip</code> <code>panel</code></td>
+        <td><code>auto</code> <code>card</code> <code>strip</code> <code>panel</code></td>
         <td>
-          <code>card</code> for a sidebar (360&nbsp;px), <code>strip</code> for a
-          one-line band, <code>panel</code> for a full-width block.
+          <code>auto</code> is the default on your account: a full-width band at
+          700&nbsp;px and wider, a card below that. It switches on the width the
+          widget is actually given rather than on the device, so a narrow sidebar
+          on a desktop gets the card too. Force one with <code>card</code>,
+          <code>strip</code> or <code>panel</code>.
         </td>
       </tr>
     </tbody>

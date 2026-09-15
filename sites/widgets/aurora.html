@@ -20,7 +20,7 @@
     client  key into clients.json — supplies brand, spot, size, attribution
     spot    mqt|cph|wfp|mun|irw|grm|pcm, or 'all' for the regional roll-up
     region  up
-    size    card|strip|panel
+    size    card|strip|panel|auto
 -->
 <style>
   /* Verdict colours are fixed and deliberately not in the brand block below.
@@ -167,6 +167,9 @@
   .aw.size-panel .aw-in { padding:18px 20px 15px; }
 
   .aw.size-card { max-width:360px; }
+  /* In auto mode the frame is already the width the host gave it, so capping
+     the card again would leave the host's background showing beside it. */
+  .aw.is-auto.size-card { max-width:100%; }
 
   /* ── strip, under 480px ──
      Five stats stop being a band on a phone: they stack into a block taller
@@ -373,9 +376,39 @@
   }
   function rowHidden(key) { return cfg.hideRows.indexOf(key) >= 0; }
 
+  /**
+   * Below this width the strip's stats stop fitting on one line and it stacks
+   * into something taller than the card it is supposed to be lighter than.
+   * Measured, not guessed — see tools/widget-api/README.md.
+   */
+  var AUTO_STRIP_MIN_WIDTH = 700;
+  var autoSize = null;
+
   function setSize(size) {
-    var s = ["card", "strip", "panel"].indexOf(size) >= 0 ? size : "card";
-    root.className = "aw size-" + s;
+    var s = ["card", "strip", "panel", "auto"].indexOf(size) >= 0 ? size : "card";
+    if (s !== "auto") { root.className = "aw size-" + s; return; }
+    applyAutoSize();
+  }
+
+  /**
+   * "auto" switches on the width the widget was actually given, not on the
+   * device. That is the more useful rule and it is strictly broader: a phone
+   * gets the card, and so does a 340px desktop sidebar, which is what a reader
+   * needs in both cases. Asking about the device would get the sidebar wrong.
+   *
+   * The frame's own viewport is its rendered width, so clientWidth here is the
+   * container width with no measurement crossing the origin boundary.
+   */
+  function applyAutoSize() {
+    var want = document.documentElement.clientWidth >= AUTO_STRIP_MIN_WIDTH ? "strip" : "card";
+    if (want === autoSize) return;
+    autoSize = want;
+    root.className = "aw is-auto size-" + want;
+  }
+
+  function autoSizeTick() {
+    if (cfg.size === "auto") applyAutoSize();
+    postHeight();
   }
 
   function loadClient() {
@@ -547,9 +580,9 @@
   }
 
   if (window.ResizeObserver) {
-    new ResizeObserver(postHeight).observe(document.documentElement);
+    new ResizeObserver(autoSizeTick).observe(document.documentElement);
   } else {
-    window.addEventListener("resize", postHeight);
+    window.addEventListener("resize", autoSizeTick);
   }
 
   // ── data ────────────────────────────────────────────────────────────────
