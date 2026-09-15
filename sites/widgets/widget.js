@@ -36,6 +36,10 @@
   // The strip is two lines now, so 96 caused a visible jump on slow loads.
   var DEFAULT_HEIGHT = { card: 430, strip: 132, panel: 300 };
 
+  // 'auto' picks its layout from the width it is given, so guess from the slot
+  // rather than from a fixed number. Keep in step with AUTO_STRIP_MIN_WIDTH.
+  var AUTO_STRIP_MIN_WIDTH = 700;
+
   // A frame that is refused by frame-ancestors never runs our code, so the
   // widget cannot report its own failure — the browser paints "refused to
   // connect" and we hear nothing. The height handshake is the signal: if a
@@ -45,6 +49,13 @@
   var seq = 0;
   var frames = Object.create(null);
   var reported = Object.create(null);
+
+  function guessHeight(node, size) {
+    if (size !== "auto") return DEFAULT_HEIGHT[size] || DEFAULT_HEIGHT.card;
+    var w = 0;
+    try { w = node.getBoundingClientRect().width; } catch (e) { /* detached */ }
+    return w >= AUTO_STRIP_MIN_WIDTH ? DEFAULT_HEIGHT.strip : DEFAULT_HEIGHT.card;
+  }
 
   function mount(node) {
     if (node.getAttribute("data-906-mounted") === "1") return;
@@ -73,7 +84,7 @@
     frame.setAttribute("allowtransparency", "true");
     frame.style.cssText =
       "width:100%;border:0;display:block;overflow:hidden;" +
-      "height:" + (DEFAULT_HEIGHT[size] || DEFAULT_HEIGHT.card) + "px;" +
+      "height:" + guessHeight(node, size) + "px;" +
       "max-width:" + (size === "card" ? "360px" : "100%") + ";";
 
     frames[fid] = frame;

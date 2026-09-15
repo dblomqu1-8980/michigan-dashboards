@@ -16,7 +16,9 @@
     "  spotLabel  optional: name the viewing spot THIS client recommends, when it",
     "             differs from the default in tools/widget-api/worker.js. Applied",
     "             in the browser, so it never touches the cached data.",
-    "  size     default form factor: 'card' | 'strip' | 'panel'",
+    "  size     'card' | 'strip' | 'panel' | 'auto'. 'auto' is strip at 700px and",
+    "           wider, card below \u2014 measured on the widget's own width, not the",
+    "           device, so a narrow desktop sidebar gets the card as well.",
     "  font       optional: 'roboto' or 'montserrat'. Opt-in only \u2014 a client who",
     "             sets none keeps the system stack and loads no webfont.",
     "  hideRows   optional: drop rows the client's own page already covers.",
@@ -89,7 +91,7 @@
     "hideRows": [
       "spot"
     ],
-    "size": "card",
+    "size": "auto",
     "font": "roboto",
     "attribution": true,
     "brand": {
@@ -102,6 +104,7 @@
       "a2": "#a4d584"
     },
     "_spotLabel_note": "Viewing spot removed at the client's request (Katie Shimp, 11 Sep 2026): their northern-lights page already recommends locations, so the widget repeating one is duplication at best and a second opinion at worst. hideRows also switches the verdict sentence to the Worker's whyNoSpot variant, so no location is named in prose either. spotLabel is dropped as it now has nothing to label; restore both together if they ever want the row back.",
-    "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md."
+    "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md.",
+    "_size_note": "auto at the client's request (15 Sep 2026): strip on desktop, card on mobile. It switches on the width the WIDGET is given, not the device \u2014 so a narrow desktop sidebar gets the card too, which is what a reader needs there. Breakpoint 700px, measured: both the pinned and roll-up strips reach their minimum height at exactly 700 and grow below it."
   }
 }
