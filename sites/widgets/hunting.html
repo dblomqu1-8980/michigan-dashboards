@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Legal Shooting Hours Widget — 906 Dashboard</title>
+<!--
+  Embeddable hunting widget: legal light, what is open today, field conditions.
+  Same shell as aurora.html — brand tokens, sizes, failure tiers all match.
+
+  The headline is a live countdown to the close of legal light, because that is
+  the question a hunter in the woods actually has. Everything else is context.
+
+  Query params (all optional, all overridable by ?client=):
+    client  key into clients.json
+    county  alger|baraga|chippewa|delta|dickinson|gogebic|houghton|iron|
+            keweenaw|luce|mackinac|marquette|menominee|ontonagon|schoolcraft
+    size    card|strip|panel|auto
+-->
+<style>
+  /* Status colours are fixed and NOT brandable, for the same reason the aurora
+     verdict scale is not: they carry whether shooting is legal right now. */
+  :root {
+    --s-open:#4ade80;     /* legal light, comfortable margin */
+    --s-closing:#facc15;  /* under an hour left */
+    --s-closed:#93a4c3;   /* outside legal hours */
+  }
+
+  .aw {
+    --bg:#0b1220; --card:#16223a; --ink:#e8eefb; --muted:#93a4c3;
+    --line:#24345a; --a1:#37d5b2; --a2:#7c6cf0; --onaccent:#08101f;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  [hidden] { display:none !important; }
+
+  :root { --brand-font: ; }
+  html, body {
+    background:transparent;
+    font-family:var(--brand-font)-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .aw {
+    background:var(--bg); color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    font-size:14px; line-height:1.5;
+  }
+  .aw-top { height:3px; background:linear-gradient(90deg,var(--a1),var(--a2)); }
+  .aw-in  { padding:15px 16px 13px; display:flex; flex-direction:column; gap:12px; }
+
+  .aw-head  { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .aw-title { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .aw-pill  {
+    font-size:10.5px; font-weight:800; letter-spacing:.09em;
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+    background:var(--muted); color:var(--onaccent);
+  }
+
+  /* The countdown is the point of the widget, so it gets the size. */
+  .aw-lede { font-size:15px; line-height:1.42; font-weight:500; }
+  .aw-count {
+    font-size:26px; font-weight:700; line-height:1.1; letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums;
+  }
+  .aw-countsub { font-size:12.5px; color:var(--muted); margin-top:2px; }
+
+  .aw-rows { display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .aw-row  {
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    padding:7px 0; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .aw-row .k { color:var(--muted); }
+  .aw-row .v { font-weight:600; text-align:right; font-variant-numeric:tabular-nums; }
+
+  .aw-open   { display:flex; flex-direction:column; gap:7px; }
+  .aw-ol     { font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .aw-chips  { display:flex; flex-wrap:wrap; gap:5px; }
+  .aw-chip   {
+    font-size:11.5px; padding:3px 7px; border-radius:3px;
+    background:var(--card); border:1px solid var(--line); color:var(--ink);
+  }
+
+  .aw-note {
+    font-size:12px; line-height:1.45; color:var(--muted);
+    background:var(--card); border-left:2px solid var(--a1); padding:8px 10px;
+  }
+  .aw-note b { color:var(--ink); }
+
+  .aw-foot {
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+    border-top:1px solid var(--line); padding-top:9px; font-size:10.5px; color:var(--muted);
+  }
+  .aw-foot a { color:var(--a1); text-decoration:none; font-weight:600; }
+  .aw-foot a:hover, .aw-foot a:focus-visible { text-decoration:underline; }
+  :focus-visible { outline:2px solid var(--a1); outline-offset:2px; }
+  .aw-stale { color:var(--s-closing); }
+
+  /* ── strip ── */
+  .aw.size-strip .aw-in { flex-direction:row; flex-wrap:wrap; align-items:center; gap:10px 16px; padding:12px 16px; }
+  .aw.size-strip .aw-title, .aw.size-strip .aw-note { display:none; }
+  .aw.size-strip .aw-head { flex:0 0 auto; }
+  .aw.size-strip .aw-hero { flex:1 1 220px; display:flex; align-items:baseline; gap:10px; }
+  .aw.size-strip .aw-count { font-size:19px; }
+  .aw.size-strip .aw-countsub { margin:0; }
+  .aw.size-strip .aw-foot { order:1; flex:0 0 auto; border:0; padding:0; gap:12px; }
+  .aw.size-strip .aw-body {
+    order:2; flex:1 1 100%; display:flex; flex-wrap:wrap; align-items:flex-start;
+    gap:11px 20px; border-top:1px solid var(--line); padding-top:10px;
+  }
+  .aw.size-strip .aw-rows { flex-direction:row; flex-wrap:wrap; border-top:0; gap:11px 20px; }
+  .aw.size-strip .aw-row { flex-direction:column; align-items:flex-start; gap:2px; padding:0; border-bottom:0; }
+  .aw.size-strip .aw-row .k, .aw.size-strip .aw-ol {
+    font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; white-space:nowrap;
+  }
+  .aw.size-strip .aw-row .v { font-size:13px; text-align:left; white-space:nowrap; }
+  .aw.size-strip .aw-open { gap:3px; }
+
+  @media (max-width:479px) {
+    .aw.size-strip .aw-in { gap:9px 14px; padding:11px 13px; }
+    .aw.size-strip .aw-row.r-sun, .aw.size-strip .aw-row.r-wind { display:none; }
+    .aw.size-strip .aw-body { gap:10px 16px; padding-top:9px; }
+    .aw.size-strip .aw-foot { order:3; flex-basis:100%; font-size:10px; gap:8px; }
+    .aw.size-strip .aw-chip { background:none; border:0; padding:0; font-size:12.5px; }
+    .aw.size-strip .aw-chips { gap:4px 12px; }
+  }
+
+  /* ── panel ── */
+  @media (min-width:560px) {
+    .aw.size-panel .aw-body { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+  }
+  .aw.size-panel .aw-in { padding:18px 20px 15px; }
+
+  .aw.size-card { max-width:360px; }
+  .aw.is-auto.size-card { max-width:100%; }
+
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="aw size-card" id="aw" role="region" aria-label="Legal shooting hours">
+  <div class="aw-top"></div>
+  <div class="aw-in">
+    <div class="aw-head">
+      <span class="aw-title" id="aw-place">Legal Shooting Hours</span>
+      <span class="aw-pill" id="aw-pill">CHECKING</span>
+    </div>
+
+    <div class="aw-hero">
+      <div>
+        <div class="aw-count" id="aw-count">—</div>
+        <div class="aw-countsub" id="aw-countsub">Working out today's legal light…</div>
+      </div>
+    </div>
+
+    <div class="aw-body">
+      <div class="aw-rows" id="aw-rows">
+        <div class="aw-row r-open"><span class="k">Opens</span><span class="v" id="aw-open">—</span></div>
+        <div class="aw-row r-close"><span class="k">Closes</span><span class="v" id="aw-close">—</span></div>
+        <div class="aw-row r-sun"><span class="k">Sunrise / sunset</span><span class="v" id="aw-sun">—</span></div>
+        <div class="aw-row r-wind"><span class="k">Conditions</span><span class="v" id="aw-cond">—</span></div>
+      </div>
+
+      <div class="aw-open">
+        <div class="aw-ol" id="aw-ol">Open today</div>
+        <div class="aw-chips" id="aw-chips"></div>
+      </div>
+    </div>
+
+    <p class="aw-note"><b>General hours.</b> <span id="aw-note">Some seasons run different hours — always check the DNR digest.</span></p>
+
+    <div class="aw-foot">
+      <span id="aw-stamp">—</span>
+      <a id="aw-link" href="https://906dashboard.com/hunting.html" target="_blank" rel="noopener">Live data from 906 Dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LOCAL_HOSTS = ["localhost", "127.0.0.1", "[::1]"];
+  var API = LOCAL_HOSTS.indexOf(location.hostname) >= 0
+    ? "http://127.0.0.1:8799/hunting"
+    : "https://aurora-widget-api.blomblog.workers.dev/hunting";
+
+  var LAST_GOOD_KEY = "906w:hunting:lastgood";
+  var REFRESH_MS = 15 * 60 * 1000;
+  var TICK_MS = 1000;
+
+  var qs = new URLSearchParams(location.search);
+  var root = document.getElementById("aw");
+  var el = function (id) { return document.getElementById(id); };
+
+  var BRAND_KEYS = ["bg", "card", "ink", "muted", "line", "a1", "a2"];
+  var FONTS = {
+    roboto: { stack: '"Roboto", ', href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" },
+    montserrat: { stack: '"Montserrat", ', href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" }
+  };
+
+  function toRgb(hex) {
+    hex = String(hex || "").replace("#", "");
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (!/^[0-9a-f]{6}$/i.test(hex)) return null;
+    return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+  }
+  function luminance(hex) {
+    var rgb = toRgb(hex); if (!rgb) return 0;
+    return rgb.map(function (v) { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); })
+      .reduce(function (a, c, i) { return a + c * [0.2126,0.7152,0.0722][i]; }, 0);
+  }
+  function contrast(a, b) {
+    var l1 = luminance(a), l2 = luminance(b);
+    return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+  }
+  function inkFor(bg) { return contrast("#08101f", bg) >= contrast("#ffffff", bg) ? "#08101f" : "#ffffff"; }
+
+  function applyBrand(brand) {
+    if (!brand) return;
+    BRAND_KEYS.forEach(function (k) {
+      if (brand[k] && toRgb(brand[k])) root.style.setProperty("--" + k, brand[k]);
+    });
+  }
+  function applyFont(key) {
+    var font = FONTS[String(key || "").toLowerCase()];
+    if (!font) return;
+    var pre = document.createElement("link");
+    pre.rel = "preconnect"; pre.href = "https://fonts.gstatic.com"; pre.crossOrigin = "";
+    document.head.appendChild(pre);
+    var link = document.createElement("link");
+    link.rel = "stylesheet"; link.href = font.href;
+    document.head.appendChild(link);
+    document.documentElement.style.setProperty("--brand-font", font.stack);
+  }
+
+  var cfg = {
+    client: qs.get("client") || null,
+    county: (qs.get("county") || "marquette").toLowerCase(),
+    size: qs.get("size") || null,
+    attribution: true,
+    font: null
+  };
+
+  var AUTO_STRIP_MIN_WIDTH = 700;
+  var autoSize = null;
+
+  function setSize(size) {
+    var s = ["card", "strip", "panel", "auto"].indexOf(size) >= 0 ? size : "card";
+    if (s !== "auto") { root.className = "aw size-" + s; return; }
+    applyAutoSize();
+  }
+  function applyAutoSize() {
+    var want = document.documentElement.clientWidth >= AUTO_STRIP_MIN_WIDTH ? "strip" : "card";
+    if (want === autoSize) return;
+    autoSize = want;
+    root.className = "aw is-auto size-" + want;
+  }
+
+  function loadClient() {
+    if (!cfg.client) return Promise.resolve();
+    return fetch("./clients.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (all) {
+        var c = all && all[cfg.client];
+        if (!c) return;
+        if (c.attribution === false) cfg.attribution = false;
+        if (!qs.get("county") && c.county) cfg.county = c.county;
+        if (!qs.get("size") && c.size) cfg.size = c.size;
+        if (c.font) applyFont(c.font);
+        applyBrand(c.brand);
+      })
+      .catch(function () {});
+  }
+
+  // ── state ───────────────────────────────────────────────────────────────
+  var data = null, stale = false, tickTimer = null;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[<>&"]/g, function (c) {
+      return { "<":"&lt;", ">":"&gt;", "&":"&amp;", '"':"&quot;" }[c];
+    });
+  }
+
+  function fmtGap(ms) {
+    var m = Math.floor(ms / 60000);
+    var h = Math.floor(m / 60);
+    m = m % 60;
+    if (h > 0) return h + "h " + (m < 10 ? "0" : "") + m + "m";
+    return m + "m";
+  }
+
+  /**
+   * The whole widget in one line. Three states, and which one you are in is
+   * decided by the clock, not by the fetch — so it stays right between
+   * refreshes and keeps counting if the feed goes away.
+   */
+  function statusNow() {
+    if (!data) return null;
+    var h = data.hours && data.hours.general;
+    if (!h) return null;
+    var now = Date.now();
+    var open = new Date(h.openAt).getTime();
+    var close = new Date(h.closeAt).getTime();
+
+    if (now < open) {
+      return { key: "closed", pill: "CLOSED", colour: "--s-closed",
+               count: "Opens in " + fmtGap(open - now),
+               sub: "Legal light starts at " + h.open + "." };
+    }
+    if (now >= close) {
+      return { key: "closed", pill: "CLOSED", colour: "--s-closed",
+               count: "Legal light is over",
+               sub: "Closed at " + h.close + ". Opens again tomorrow morning." };
+    }
+    var left = close - now;
+    var closing = left <= 60 * 60 * 1000;
+    return {
+      key: closing ? "closing" : "open",
+      pill: closing ? "CLOSING SOON" : "OPEN",
+      colour: closing ? "--s-closing" : "--s-open",
+      count: fmtGap(left) + " of legal light left",
+      sub: "Closes at " + h.close + " in " + esc(data.countyName) + " County."
+    };
+  }
+
+  function paintStatus() {
+    var st = statusNow();
+    if (!st) return;
+    var colour = getComputedStyle(document.documentElement).getPropertyValue(st.colour).trim() || "#93a4c3";
+    var pill = el("aw-pill");
+    pill.textContent = st.pill;
+    pill.style.background = colour;
+    pill.style.color = inkFor(colour);
+    el("aw-count").textContent = st.count;
+    el("aw-count").style.color = st.key === "closed" ? "" : colour;
+    el("aw-countsub").textContent = st.sub;
+    postHeight();
+  }
+
+  function render() {
+    if (!data) return;
+    var h = data.hours.general;
+
+    el("aw-place").textContent = "Legal light · " + data.countyName + " County";
+    el("aw-open").textContent = h.open;
+    el("aw-close").textContent = h.close;
+    el("aw-sun").textContent = data.sun.sunriseLabel + " / " + data.sun.sunsetLabel;
+
+    var c = data.conditions;
+    el("aw-cond").textContent = c && c.tempF != null
+      ? c.tempF + "°F · " + (c.windMph != null ? c.windMph + " mph " + (c.windDir || "") : "—")
+      : "—";
+
+    var open = data.openToday || [];
+    el("aw-ol").textContent = open.length ? "Open today · " + open.length : "Open today";
+    el("aw-chips").innerHTML = open.length
+      ? open.map(function (s) { return '<span class="aw-chip">' + esc(s.icon) + " " + esc(s.name) + "</span>"; }).join("")
+      : '<span class="aw-chip">Nothing open today</span>';
+
+    // Say it plainly: these are the general hours, and several seasons on the
+    // list above do not use them.
+    var differing = open.filter(function (s) { return s.hours !== "general"; });
+    el("aw-note").textContent = differing.length
+      ? differing.map(function (s) { return s.name; }).join(" and ") +
+        (differing.length > 1 ? " run" : " runs") + " different hours today — check the DNR digest."
+      : "Hours shown are the general season hours. The DNR digest governs.";
+
+    el("aw-stamp").textContent = (stale ? "Last known · " : "Updated ") +
+      new Date(data.generated).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    el("aw-stamp").className = stale ? "aw-stale" : "";
+
+    var link = el("aw-link");
+    if (cfg.attribution) {
+      link.href = "https://906dashboard.com/hunting.html?utm_source=widget&utm_medium=embed&utm_campaign=" +
+        encodeURIComponent(cfg.client || "unknown");
+      link.hidden = false;
+    } else {
+      link.hidden = true;
+    }
+
+    paintStatus();
+    if (!tickTimer) tickTimer = setInterval(paintStatus, TICK_MS);
+  }
+
+  function renderUnavailable() {
+    el("aw-pill").textContent = "OFFLINE";
+    var muted = getComputedStyle(root).getPropertyValue("--muted").trim();
+    el("aw-pill").style.background = muted;
+    el("aw-pill").style.color = inkFor(muted);
+    el("aw-count").textContent = "Hours unavailable";
+    el("aw-countsub").textContent = "Legal shooting hours could not be loaded right now.";
+    el("aw-open").textContent = "—"; el("aw-close").textContent = "—";
+    el("aw-sun").textContent = "—"; el("aw-cond").textContent = "—";
+    el("aw-chips").innerHTML = "";
+    el("aw-note").textContent = "Check the DNR digest for today's legal hours.";
+    el("aw-stamp").textContent = "";
+    postHeight();
+  }
+
+  // ── height handshake ────────────────────────────────────────────────────
+  var lastHeight = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h === lastHeight) return;
+    lastHeight = h;
+    window.parent.postMessage({ type: "906widget:height", id: qs.get("fid") || null, height: h }, "*");
+  }
+  function tick() {
+    if (cfg.size === "auto") applyAutoSize();
+    postHeight();
+  }
+  if (window.ResizeObserver) new ResizeObserver(tick).observe(document.documentElement);
+  else window.addEventListener("resize", tick);
+
+  // ── data ────────────────────────────────────────────────────────────────
+  function cacheKey() { return LAST_GOOD_KEY + ":" + cfg.county; }
+  function readLastGood() { try { return JSON.parse(localStorage.getItem(cacheKey())); } catch (e) { return null; } }
+  function writeLastGood(d) { try { localStorage.setItem(cacheKey(), JSON.stringify(d)); } catch (e) {} }
+
+  function load() {
+    return fetch(API + "?county=" + encodeURIComponent(cfg.county), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.ok !== true) throw new Error("bad payload");
+        // Legal light is a property of the date, so yesterday's cached copy is
+        // not merely old, it is wrong. Refuse it rather than count down to a
+        // close time that already happened.
+        data = d; stale = false;
+        writeLastGood(d);
+        render();
+      })
+      .catch(function () {
+        var last = readLastGood();
+        if (last && last.date === todayInET()) { data = last; stale = true; render(); }
+        else renderUnavailable();
+      });
+  }
+
+  function todayInET() {
+    var p = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Detroit", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(new Date());
+    return p; // en-CA gives YYYY-MM-DD
+  }
+
+  loadClient().then(function () {
+    setSize(cfg.size);
+    postHeight();
+    load();
+    setInterval(load, REFRESH_MS);
+  });
+})();
+</script>
+</body>
+</html>

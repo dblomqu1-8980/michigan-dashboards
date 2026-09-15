@@ -33,6 +33,9 @@
     "The five verdict colours are NOT brandable and are not listed here: they",
     "carry the Kp forecast, not the styling. See tools/widget-api/README.md.",
     "",
+    "",
+    "county   hunting widget only: which UP county's legal light to show.",
+    "         Fifteen valid keys, see tools/widget-api/hunting-data.js.",
     "light-demo exists to prove the widget works on a white site: the verdict",
     "pill picks its own ink by luminance, so a pale brand does not wash it out."
   ],
@@ -106,5 +109,20 @@
     "_spotLabel_note": "Viewing spot removed at the client's request (Katie Shimp, 11 Sep 2026): their northern-lights page already recommends locations, so the widget repeating one is duplication at best and a second opinion at worst. hideRows also switches the verdict sentence to the Worker's whyNoSpot variant, so no location is named in prose either. spotLabel is dropped as it now has nothing to label; restore both together if they ever want the row back.",
     "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md.",
     "_size_note": "auto at the client's request (15 Sep 2026): strip on desktop, card on mobile. It switches on the width the WIDGET is given, not the device \u2014 so a narrow desktop sidebar gets the card too, which is what a reader needs there. Breakpoint 700px, measured: both the pinned and roll-up strips reach their minimum height at exactly 700 and grow below it."
+  },
+  "hunting-demo": {
+    "name": "Hunting Demo",
+    "county": "marquette",
+    "size": "auto",
+    "attribution": true,
+    "brand": {
+      "bg": "#14180F",
+      "card": "#1E2416",
+      "ink": "#F2F5EA",
+      "muted": "#A7B292",
+      "line": "#2E3722",
+      "a1": "#C2D64A",
+      "a2": "#6B8E23"
+    }
   }
 }

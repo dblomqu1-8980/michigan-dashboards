@@ -1,6 +1,8 @@
-# Aurora widget
+# Embeddable widgets
 
-An embeddable aurora forecast for client websites. Two pieces:
+Two widgets for client websites — **aurora** (is tonight worth going out) and
+**hunting** (legal shooting hours, what is open today, field conditions).
+Two pieces:
 
 | Piece | Lives in | Deploys to |
 |---|---|---|
@@ -10,6 +12,53 @@ An embeddable aurora forecast for client websites. Two pieces:
 This file is the ops doc and deliberately sits **outside** `sites/`, for the
 same reason `DEPLOYMENT.md` gives: internal files can't leak because they
 aren't inside a site root, not because a blocklist remembered them.
+
+---
+
+## The hunting widget
+
+`GET /hunting?county=marquette` — one of fifteen UP county keys.
+
+The headline is a live countdown to the close of legal light, because that is
+the question a hunter in the woods actually has. Everything else is context:
+opens, closes, sunrise/sunset, what is in season today, current conditions.
+
+### Sunrise is computed, not fetched
+
+`sites/906/hunting.html` gets sunrise and sunset from Open-Meteo, whose free
+tier is non-commercial — exactly the licensing question that would land on a
+paying client. There is no need to ask anyone: sunrise is a function of date,
+latitude and longitude. `sun.js` implements the NOAA Solar Calculator and
+agrees with Open-Meteo to within **1.1 minutes across all fifteen counties**,
+checked against every one. No key, no quota, no upstream to fail.
+
+### Rounding runs inward, on purpose
+
+This is the one place in either widget where being wrong has a legal cost. The
+opening time rounds **up** and the closing time rounds **down**, so the window
+shown is never wider than the real one and every rounding error lands on the
+side of staying legal. The residual bias in the solar algorithm runs late on
+both events — harmless on sunrise (a later opening is a stricter one), not
+harmless on sunset, which is what the inward rounding absorbs.
+
+The widget says "the DNR digest governs" because it does. This is a
+convenience, not an authority.
+
+### The season data is extracted, never retyped
+
+`hunting-data.js` holds COUNTIES, HOURS and SEASONS lifted mechanically out of
+`sites/906/hunting.html`. These are legal dates and legal hours: a
+transcription slip tells someone they may shoot when they may not. Re-extract
+rather than hand-edit, and decode HTML entities when you do — the page holds
+`&amp;` because it renders through innerHTML, and a JSON payload wants the raw
+ampersand.
+
+### Yesterday's hours are refused, not reused
+
+Legal light is a property of the date, so a cached copy from yesterday is not
+merely stale, it is wrong. The widget checks the payload's date against the
+Michigan date before falling back to it, and shows the offline state instead of
+counting down to a close time that already passed.
 
 ---
 
