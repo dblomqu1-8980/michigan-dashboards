@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Live UP Widgets — 906 Dashboard</title>
+<!--
+  Showcase page. This is the one to send a prospect: both widgets, live data,
+  their own colours, and the single line it takes to install.
+
+  Deliberately NOT the same page as index.html — that one is written to one
+  client, says their domains are already allowlisted, and carries their
+  snippet. Sending it to someone else would be confusing at best.
+-->
+<style>
+  :root{
+    --bg:#0c1016; --panel:#141a22; --panel2:#1a222c; --ink:#e8eef6; --muted:#8a99a9;
+    --line:#242f3b; --accent:#37d5b2; --accent2:#7c6cf0; --green:#c2d64a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);line-height:1.6;font-size:15.5px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 22px 90px}
+  a{color:var(--accent)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.87em;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:.08em .34em}
+
+  header.hd{padding:54px 0 30px;border-bottom:1px solid var(--line)}
+  .kick{font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.08;letter-spacing:-.022em;font-weight:800;margin-bottom:12px;max-width:17ch}
+  .lede{color:var(--muted);max-width:60ch;font-size:17px}
+
+  section{padding-top:52px}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.012em;margin-bottom:6px}
+  .sub{color:var(--muted);max-width:64ch;margin-bottom:20px}
+  h3{font-size:14px;font-weight:700;margin:26px 0 10px;letter-spacing:.02em}
+
+  .stage{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+  .cell{display:flex;flex-direction:column;gap:10px}
+  .lbl{font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+  .lbl b{color:var(--accent);font-weight:700}
+  .lbl.g b{color:var(--green)}
+
+  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 16px}
+  .controls label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  select{
+    background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:4px;
+    padding:7px 10px;font:inherit;font-size:14px;cursor:pointer;
+  }
+  select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* Wrap rather than scroll: this page is for someone deciding, and a snippet
+     cut off mid-URL reads as broken even though it scrolls. */
+  pre{
+    background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--accent);
+    padding:13px 15px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.4px;line-height:1.65;margin:10px 0 0;
+    white-space:pre-wrap;word-break:break-word;
+  }
+  .copy{
+    background:none;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+    font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+    padding:5px 11px;border-radius:3px;margin-top:10px;
+  }
+  .copy:hover{color:var(--ink);border-color:var(--accent)}
+
+  .points{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:22px}
+  .pt{background:var(--panel);padding:18px 19px;display:flex;flex-direction:column;gap:6px}
+  .pt h4{font-size:14.5px;font-weight:700}
+  .pt p{font-size:14px;color:var(--muted);line-height:1.5}
+
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hd">
+    <div class="kick">906 Dashboard · Embeddable widgets</div>
+    <h1>Live UP conditions, on your site</h1>
+    <p class="lede">
+      One line of HTML. Real NOAA and National Weather Service data, in your own
+      colours, updating on its own. Nothing to install and nothing to maintain —
+      when the data changes, your page changes.
+    </p>
+  </header>
+
+  <section>
+    <h2>Legal shooting hours</h2>
+    <p class="sub">
+      The question a hunter actually has: can I shoot right now, and for how
+      long? Counts down live to the close of legal light for any of the fifteen
+      UP counties, with what's in season today and current field conditions.
+    </p>
+
+    <div class="controls">
+      <label for="county">County</label>
+      <select id="county">
+        <option value="alger">Alger</option>
+        <option value="baraga">Baraga</option>
+        <option value="chippewa">Chippewa</option>
+        <option value="delta">Delta</option>
+        <option value="dickinson">Dickinson</option>
+        <option value="gogebic">Gogebic</option>
+        <option value="houghton">Houghton</option>
+        <option value="iron">Iron</option>
+        <option value="keweenaw">Keweenaw</option>
+        <option value="luce">Luce</option>
+        <option value="mackinac">Mackinac</option>
+        <option value="marquette" selected>Marquette</option>
+        <option value="menominee">Menominee</option>
+        <option value="ontonagon">Ontonagon</option>
+        <option value="schoolcraft">Schoolcraft</option>
+      </select>
+    </div>
+
+    <div id="hunt-wide"></div>
+
+    <h3>In a sidebar</h3>
+    <div class="stage">
+      <div class="cell">
+        <span class="lbl g">Card · <b>your colours</b></span>
+        <div id="hunt-card"></div>
+      </div>
+      <div class="cell">
+        <span class="lbl">One line of HTML</span>
+        <pre id="snip-hunt">&lt;div data-906-widget="hunting" data-county="marquette"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+        <button class="copy" data-copy="snip-hunt">Copy snippet</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tonight's aurora</h2>
+    <p class="sub">
+      Whether tonight is worth going out, from NOAA's Space Weather Prediction
+      Center and the cloud forecast. Pin it to one town and it reports that
+      town's own sky, or run the regional roll-up and it names whichever spot is
+      clearest.
+    </p>
+
+    <div class="stage">
+      <div class="cell">
+        <span class="lbl">Pinned to <b>Marquette</b></span>
+        <div data-906-widget="aurora" data-client="travel-marquette" data-size="card"></div>
+      </div>
+      <div class="cell">
+        <span class="lbl">Regional roll-up · <b>all five towns</b></span>
+        <div data-906-widget="aurora" data-client="demo" data-size="card"></div>
+      </div>
+    </div>
+
+    <h3>As a full-width band</h3>
+    <div data-906-widget="aurora" data-client="demo" data-spot="all" data-size="strip"></div>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <div class="points">
+      <div class="pt">
+        <h4>Your colours</h4>
+        <p>We set the palette from your brand guide. Only the status colours stay fixed — they carry the forecast, not the styling.</p>
+      </div>
+      <div class="pt">
+        <h4>One size that fits</h4>
+        <p>A band in a wide column, a card in a narrow one. It reads the space it is given, so the same snippet works anywhere on the page.</p>
+      </div>
+      <div class="pt">
+        <h4>Never a broken box</h4>
+        <p>If a feed goes quiet it shows the last conditions it saw, with the time. If it cannot reach anything, it says so plainly and recovers on its own.</p>
+      </div>
+      <div class="pt">
+        <h4>Nothing to maintain</h4>
+        <p>Updates ship from our side. Your page keeps the one line you pasted, and no one on your team has to think about it again.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    906 Travel Dashboard · Aurora: NOAA SWPC · Weather: National Weather Service ·
+    Legal light computed from the NOAA solar algorithm ·
+    Season dates from the Michigan DNR digest, which governs —
+    <a href="https://906dashboard.com/hunting.html">full hunting dashboard</a>
+  </footer>
+</div>
+
+<script src="./widget.js"></script>
+<script>
+  // The county picker rebuilds the two hunting embeds. Re-mounting is just
+  // replacing the placeholder: the loader's MutationObserver picks it up.
+  function huntEmbeds(county) {
+    var wide = document.getElementById("hunt-wide");
+    var card = document.getElementById("hunt-card");
+    wide.innerHTML = '<div data-906-widget="hunting" data-client="hunting-demo" data-county="' + county + '" data-size="strip"></div>';
+    card.innerHTML = '<div data-906-widget="hunting" data-client="hunting-demo" data-county="' + county + '" data-size="card"></div>';
+  }
+  var sel = document.getElementById("county");
+  sel.addEventListener("change", function () { huntEmbeds(sel.value); });
+  huntEmbeds(sel.value);
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-copy]");
+    if (!btn || !navigator.clipboard) return;
+    var pre = document.getElementById(btn.getAttribute("data-copy"));
+    navigator.clipboard.writeText(pre.textContent).then(function () {
+      var was = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(function () { btn.textContent = was; }, 1400);
+    });
+  });
+</script>
+</body>
+</html>

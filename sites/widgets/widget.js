@@ -30,7 +30,7 @@
     return "https://widgets.906dashboard.com";
   })();
 
-  var WIDGETS = { aurora: "aurora.html" };
+  var WIDGETS = { aurora: "aurora.html", hunting: "hunting.html" };
 
   // Pre-resize guesses only; the frame posts its real height on load.
   // The strip is two lines now, so 96 caused a visible jump on slow loads.
@@ -70,14 +70,16 @@
 
     var params = new URLSearchParams();
     params.set("fid", fid);
-    ["client", "spot", "region", "size"].forEach(function (k) {
+    ["client", "spot", "region", "county", "size"].forEach(function (k) {
       var v = node.getAttribute("data-" + k);
       if (v) params.set(k, v);
     });
 
     var frame = document.createElement("iframe");
     frame.src = ORIGIN + "/" + page + "?" + params.toString();
-    frame.title = "Tonight's aurora forecast — 906 Dashboard";
+    frame.title = (kind === "hunting"
+      ? "Legal shooting hours — 906 Dashboard"
+      : "Tonight's aurora forecast — 906 Dashboard");
     frame.loading = "lazy";
     frame.referrerPolicy = "strict-origin-when-cross-origin";
     frame.setAttribute("scrolling", "no");

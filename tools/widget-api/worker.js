@@ -21,9 +21,19 @@
  * able to take down the dashboards' live data or the subscriber list.
  *
  * Endpoints:
- *   GET /aurora?region=up[&spot=mqt]   composed aurora payload
- *   GET /health                        liveness, no upstream calls
+ *   GET /aurora?region=up[&spot=mqt]      composed aurora payload
+ *   GET /hunting?county=marquette         legal light, open seasons, conditions
+ *   GET /health                           liveness, no upstream calls
+ *
+ * Two widgets, one Worker. They share the Eastern Time helpers, the NWS
+ * gridpoint fetch, the CORS headers and the cache discipline, and each handler
+ * has its own try/catch so a fault in one cannot take the other down. The name
+ * says "aurora" only because that shipped first; renaming a deployed Worker
+ * changes its URL, and the aurora widget is live on a client's site.
  */
+
+import { COUNTIES, HOURS, SEASONS } from './hunting-data.js';
+import { sunTimes } from './sun.js';
 
 const CACHE_TTL_SECONDS = 300; // SWPC republishes Kp about every 5 minutes
 
@@ -41,6 +51,13 @@ const CACHE_TTL_SECONDS = 300; // SWPC republishes Kp about every 5 minutes
  * to age out normally rather than a stampede of misses on every deploy.
  */
 const PAYLOAD_SCHEMA = 2;
+
+// Hunting's payload versions independently — the two widgets share a Worker
+// but not a shape, and bumping one should not stampede the other's cache.
+const HUNTING_SCHEMA = 1;
+
+// Legal light moves by a minute a day; conditions are the only volatile part.
+const HUNTING_CACHE_TTL_SECONDS = 900;
 
 // Contact address in the UA is the part NWS actually cares about.
 const USER_AGENT = '906dashboard.com-widget/1.0 (https://906dashboard.com; aurora@906dashboard.com)';
@@ -432,6 +449,125 @@ async function buildAurora(region, spotKey) {
   };
 }
 
+
+// ── hunting ───────────────────────────────────────────────────────────────
+
+const countyKey = (name) => name.toLowerCase().replace(/[^a-z]+/g, '-');
+
+/** ET clock time, "6:57 AM". */
+function etTime(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: ET, hour: 'numeric', minute: '2-digit', hour12: true,
+  }).format(date).replace(/\s/g, ' ');
+}
+
+/**
+ * Round the legal window INWARD — opening up to the next minute, closing down
+ * to the one just passed.
+ *
+ * This is the one place in either widget where being wrong has a legal cost
+ * rather than a cosmetic one. The solar algorithm agrees with Open-Meteo to
+ * within about a minute, and its residual bias runs late on both events: late
+ * on sunrise is harmless (a later opening is a stricter one), late on sunset is
+ * not (it would invite a shot after legal light). Rounding inward makes the
+ * displayed window never wider than the real one, so every rounding error
+ * lands on the side of staying legal.
+ */
+const ceilMinute  = (d) => new Date(Math.ceil(d.getTime() / 60000) * 60000);
+const floorMinute = (d) => new Date(Math.floor(d.getTime() / 60000) * 60000);
+
+/** The gridpoint value covering a given instant. */
+function valueAt(series, when) {
+  for (const v of (series && series.values) || []) {
+    if (v.value == null) continue;
+    const [startStr, durStr] = String(v.validTime).split('/');
+    const start = new Date(startStr);
+    const end = new Date(start.getTime() + isoDurationMs(durStr));
+    if (when >= start && when < end) return v.value;
+  }
+  return null;
+}
+
+const cToF = (c) => (c == null ? null : Math.round(c * 9 / 5 + 32));
+const kmhToMph = (k) => (k == null ? null : Math.round(k / 1.609344));
+const mmToIn = (m) => (m == null ? null : Math.round((m / 25.4) * 10) / 10);
+
+function compass(deg) {
+  if (deg == null) return null;
+  return ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW']
+    [Math.round(deg / 22.5) % 16];
+}
+
+async function fetchConditions(county, now) {
+  const point = await getJson(`https://api.weather.gov/points/${county.lat},${county.lon}`, 86400);
+  const grid = await getJson(point.properties.forecastGridData, 900);
+  const g = grid.properties;
+  return {
+    tempF: cToF(valueAt(g.temperature, now)),
+    windMph: kmhToMph(valueAt(g.windSpeed, now)),
+    gustMph: kmhToMph(valueAt(g.windGust, now)),
+    windDir: compass(valueAt(g.windDirection, now)),
+    skyPct: valueAt(g.skyCover, now),
+    snowIn: mmToIn(valueAt(g.snowfallAmount, now)),
+  };
+}
+
+async function buildHunting(key) {
+  const county = COUNTIES.find((c) => countyKey(c.name) === key);
+  const now = new Date();
+
+  // "Today" is the Michigan calendar date, not the Worker's. A hunter checking
+  // at 9 PM ET is on 2026-09-15; the Worker's own clock already says the 16th.
+  const p = etParts(now);
+  const todayISO = `${p.year}-${p.month}-${p.day}`;
+  const noonUtc = new Date(Date.UTC(+p.year, +p.month - 1, +p.day, 12));
+
+  const sun = sunTimes(noonUtc, county.lat, county.lon);
+
+  const hours = {};
+  for (const [name, h] of Object.entries(HOURS)) {
+    const open = ceilMinute(new Date(sun.sunrise.getTime() + h.open * 60000));
+    const close = floorMinute(new Date(sun.sunset.getTime() + h.close * 60000));
+    hours[name] = {
+      openAt: open.toISOString(),
+      closeAt: close.toISOString(),
+      open: etTime(open),
+      close: etTime(close),
+      label: h.label,
+      src: h.src,
+    };
+  }
+
+  const openToday = SEASONS
+    .filter((s) => s.ranges.some(([a, b]) => todayISO >= a && todayISO <= b))
+    .map((s) => ({ name: s.name, icon: s.icon, hours: s.hours, note: s.note, src: s.src }));
+
+  const conditions = await fetchConditions(county, now).catch(() => null);
+
+  return {
+    ok: true,
+    county: key,
+    countyName: county.name,
+    seat: county.seat,
+    date: todayISO,
+    // Flags the page carries per county, worth surfacing because they change
+    // what is legal rather than merely what is likely.
+    coreTb: Boolean(county.ct),
+    cwd: Boolean(county.cwd),
+    sun: {
+      sunrise: sun.sunrise.toISOString(),
+      sunset: sun.sunset.toISOString(),
+      sunriseLabel: etTime(sun.sunrise),
+      sunsetLabel: etTime(sun.sunset),
+    },
+    hours,
+    openToday,
+    conditions,
+    sources: { sun: 'computed', conditions: conditions ? 'ok' : 'fail' },
+    generated: now.toISOString(),
+  };
+}
+
 // ── http ──────────────────────────────────────────────────────────────────
 
 function corsHeaders(origin) {
@@ -457,6 +593,44 @@ function json(body, origin, ttl) {
   });
 }
 
+
+/**
+ * Fetch-or-build against the edge cache.
+ *
+ * `path` is the cache key and is DATA-ONLY on purpose — no client, no brand,
+ * no size. Those are presentation and get applied in the browser. Bake any of
+ * them in here and the cache fragments per customer, which removes the whole
+ * economic argument for a widget: fifty clients would cost fifty times the
+ * upstream calls instead of the same as one.
+ *
+ * The stored copy carries no CORS headers, so the `Vary: Origin` on the way
+ * out cannot hand one origin's Allow-Origin to the next requester. That bit us
+ * for real on up906-mdot-proxy — see that Worker's comment.
+ */
+async function serveCached(path, build, ttl, url, origin, ctx) {
+  const cache = caches.default;
+  const cacheKey = new Request(new URL(path, url.origin).toString(), { method: 'GET' });
+
+  const hit = await cache.match(cacheKey);
+  if (hit) {
+    return new Response(await hit.text(), {
+      headers: { ...corsHeaders(origin), 'Cache-Control': `public, max-age=${ttl}`, 'X-Cache': 'HIT' },
+    });
+  }
+
+  try {
+    const body = JSON.stringify(await build());
+    ctx.waitUntil(cache.put(cacheKey, new Response(body, {
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${ttl}` },
+    })));
+    return new Response(body, {
+      headers: { ...corsHeaders(origin), 'Cache-Control': `public, max-age=${ttl}`, 'X-Cache': 'MISS' },
+    });
+  } catch (err) {
+    return json({ ok: false, status: 502, error: 'upstream failure', detail: String((err && err.message) || err) }, origin);
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -471,6 +645,19 @@ export default {
 
     if (url.pathname === '/health') {
       return json({ ok: true, service: 'aurora-widget-api', time: new Date().toISOString() }, origin);
+    }
+
+    if (url.pathname === '/hunting') {
+      const key = (url.searchParams.get('county') || 'marquette').toLowerCase();
+      if (!COUNTIES.some((c) => countyKey(c.name) === key)) {
+        return json({ ok: false, status: 400, error: 'unknown county: ' + key }, origin);
+      }
+      return serveCached(
+        `/hunting?v=${HUNTING_SCHEMA}&county=${key}`,
+        () => buildHunting(key),
+        HUNTING_CACHE_TTL_SECONDS,
+        url, origin, ctx
+      );
     }
 
     if (url.pathname !== '/aurora') {
@@ -492,42 +679,11 @@ export default {
     // brand or the size. Those are presentation, applied in the browser. Bake
     // any of them in here and the cache fragments per customer, which is the
     // whole economic argument for the widget gone.
-    const cacheKey = new Request(
-      new URL(`/aurora?v=${PAYLOAD_SCHEMA}&region=${region}&spot=${spot || 'all'}`, url.origin).toString(),
-      { method: 'GET' }
+    return serveCached(
+      `/aurora?v=${PAYLOAD_SCHEMA}&region=${region}&spot=${spot || 'all'}`,
+      () => buildAurora(region, spot),
+      CACHE_TTL_SECONDS,
+      url, origin, ctx
     );
-    const cache = caches.default;
-
-    const hit = await cache.match(cacheKey);
-    if (hit) {
-      const body = await hit.text();
-      return new Response(body, {
-        headers: { ...corsHeaders(origin), 'Cache-Control': `public, max-age=${CACHE_TTL_SECONDS}`, 'X-Cache': 'HIT' },
-      });
-    }
-
-    try {
-      const payload = await buildAurora(region, spot);
-      const body = JSON.stringify(payload);
-
-      const response = new Response(body, {
-        headers: {
-          ...corsHeaders(origin),
-          'Cache-Control': `public, max-age=${CACHE_TTL_SECONDS}`,
-          'X-Cache': 'MISS',
-        },
-      });
-
-      // Cache the body under the data-only key, with no CORS headers attached
-      // to the stored copy, so the Vary above cannot leak one origin's header
-      // to the next requester.
-      ctx.waitUntil(cache.put(cacheKey, new Response(body, {
-        headers: { 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${CACHE_TTL_SECONDS}` },
-      })));
-
-      return response;
-    } catch (err) {
-      return json({ ok: false, status: 502, error: 'upstream failure', detail: String(err && err.message || err) }, origin);
-    }
   },
 };
