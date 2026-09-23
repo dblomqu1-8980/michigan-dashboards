@@ -29,7 +29,7 @@ Both gates must open, per region:
    level in practice. Sending UP-grade alerts to Up North subscribers would be
    sending them outside to look at nothing.
 2. **At least one of that region's five viewing spots is under 60% cloud.**
-   Live NWS gridpoint `skyCover`, averaged over 10 PM – 2 PM local.
+   Live NWS gridpoint `skyCover`, averaged over 10 PM – 2 AM Eastern.
 
 Then an 18-hour cooldown per region, so a three-night storm produces three
 emails rather than thirty. The two daily crons are "check twice, send at most
@@ -37,6 +37,27 @@ once a night" — the first favourable pass wins and the second is a no-op.
 
 Thresholds match the FAIR/GOOD boundary on each site's own aurora page, so the
 email and the page can never contradict each other.
+
+### Which night "tonight" means
+
+Both gates read the same night, resolved once per run by `tonightET()`:
+6 PM → 6 AM Eastern for Kp, 10 PM → 2 AM Eastern for cloud. Before 6 AM
+Eastern the run is still inside the night that began the previous evening —
+the same guard `aurora.html` applies, which is what keeps the email and the
+page naming the same night.
+
+**Never derive this from the UTC date.** The 9 PM Eastern cron fires at
+01:00 UTC, so the UTC calendar day has already rolled over by the time the
+code runs. That is exactly how the 2026-09-22 misfire happened: the 6 PM pass
+read Tuesday night correctly and skipped at Kp 2.0, then the 9 PM pass read
+`setUTCHours(22)` off an already-advanced date, landed on *Wednesday* 6 PM →
+Thursday 6 AM, found Wednesday's Kp 5.3 and mailed the list a day early.
+The window is now built from Eastern wall-clock via `Intl` with the
+`America/Detroit` zone, which also means the EDT/EST switch is handled in
+code and the crons never have to move for it.
+
+`/run-alerts` echoes the resolved window back in its `night` field, so which
+night a run judged is visible rather than inferred.
 
 ## Setup
 
