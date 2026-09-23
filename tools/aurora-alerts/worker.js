@@ -24,7 +24,66 @@
 
 const ALERT_COOLDOWN_HOURS = 18; // at most one alert per region per night
 const CLOUD_CEILING        = 60; // % — above this, nowhere in the region is worth a drive
-const DARK_WINDOW          = {startHour: 22, hours: 4}; // 10 PM - 2 AM local
+
+// Both windows are Eastern wall-clock hours, and both belong to the SAME night:
+// the Kp gate asks how active the night gets, the cloud gate asks whether the
+// darkest part of it is see-through.
+const NIGHT_WINDOW         = {startHour: 18, endHour: 6};  // 6 PM - 6 AM ET
+const DARK_WINDOW          = {startHour: 22, endHour: 2};  // 10 PM - 2 AM ET
+
+// ── which night is "tonight" ──
+// This has to be computed from Eastern wall-clock, never from the UTC date.
+// The 9 PM Eastern cron fires at 01:00 UTC, by which point the UTC calendar
+// day has already rolled over — so anything anchored to the UTC date lands on
+// tomorrow evening and the alert goes out a day early. Intl handles the
+// EDT/EST switch, so the crons never need to move for daylight saving.
+const ZONE = 'America/Detroit';
+
+function easternParts(date) {
+  const p = {};
+  for (const {type, value} of new Intl.DateTimeFormat('en-US', {
+    timeZone: ZONE, hour12: false,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  }).formatToParts(date)) p[type] = value;
+  // hourCycle h24 renders midnight as "24"; h23 renders it as "00".
+  return {year: +p.year, month: +p.month, day: +p.day,
+          hour: +p.hour % 24, minute: +p.minute, second: +p.second};
+}
+
+// The UTC instant at which Eastern wall-clock reads y-m-d h:00. Month and day
+// may overflow (day + 1 past the end of a month is fine) — Date.UTC normalises.
+function easternToUTC(y, m, d, h) {
+  const target = Date.UTC(y, m - 1, d, h);
+  // The offset depends on the instant we are solving for, so apply it twice:
+  // the first pass lands within an hour, the second lands exactly, including
+  // on the two nights a year when the offset changes mid-window.
+  let t = target;
+  for (let i = 0; i < 2; i++) {
+    const p = easternParts(new Date(t));
+    const wall = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+    t = target - (wall - t);
+  }
+  return new Date(t);
+}
+
+// The night currently in progress. Before 6 AM Eastern we are still inside the
+// night that began yesterday evening — the same guard aurora.html applies, so
+// the email and the page can never name different nights.
+function tonightET(now = new Date()) {
+  const p = easternParts(now);
+  let {year, month, day} = p;
+  if (p.hour < NIGHT_WINDOW.endHour) {
+    const prev = new Date(Date.UTC(year, month - 1, day - 1));
+    year = prev.getUTCFullYear(); month = prev.getUTCMonth() + 1; day = prev.getUTCDate();
+  }
+  const span = w => ({
+    start: easternToUTC(year, month, day, w.startHour),
+    end:   easternToUTC(year, month, day + 1, w.endHour),
+  });
+  return {evening: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+          kp: span(NIGHT_WINDOW), dark: span(DARK_WINDOW)};
+}
 
 const REGIONS = {
   up: {
@@ -155,15 +214,12 @@ async function sendResendBatch(env, messages) {
 }
 
 // ── NOAA: tonight's peak Kp ──
-async function tonightPeakKp() {
+async function tonightPeakKp(window) {
   const r = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json');
   if (!r.ok) throw new Error(`SWPC HTTP ${r.status}`);
   const rows = await r.json();
 
-  // Same window the pages use: 6 PM -> 6 AM Eastern.
-  const now = new Date();
-  const start = new Date(now); start.setUTCHours(22, 0, 0, 0); // ~6 PM EDT
-  const end   = new Date(start.getTime() + 12 * 3600 * 1000);
+  const {start, end} = window; // 6 PM -> 6 AM Eastern, same window the pages use
 
   let peak = 0, scale = null;
   const order = {G1:1, G2:2, G3:3, G4:4, G5:5};
@@ -186,16 +242,14 @@ function isoDurationMs(s) {
   return ((+m[1] || 0) * 86400 + (+m[2] || 0) * 3600 + (+m[3] || 0) * 60) * 1000;
 }
 
-async function spotCloud(spot) {
+async function spotCloud(spot, window) {
   try {
     const p = await (await fetch(`https://api.weather.gov/points/${spot.lat},${spot.lon}`,
       {headers: {'User-Agent': 'aurora-alerts/1.0 (+https://906dashboard.com)'}})).json();
     const g = await (await fetch(p.properties.forecastGridData,
       {headers: {'User-Agent': 'aurora-alerts/1.0 (+https://906dashboard.com)'}})).json();
 
-    const start = new Date();
-    start.setHours(DARK_WINDOW.startHour, 0, 0, 0);
-    const end = new Date(start.getTime() + DARK_WINDOW.hours * 3600 * 1000);
+    const {start, end} = window; // 10 PM -> 2 AM Eastern on the same night
 
     let total = 0, ms = 0;
     for (const v of (g.properties.skyCover.values || [])) {
@@ -211,8 +265,8 @@ async function spotCloud(spot) {
   }
 }
 
-async function clearestSpot(region) {
-  const results = await Promise.all(region.spots.map(spotCloud));
+async function clearestSpot(region, window) {
+  const results = await Promise.all(region.spots.map(s => spotCloud(s, window)));
   const usable = results.filter(r => r.pct != null).sort((a, b) => a.pct - b.pct);
   return usable.length ? usable[0] : null;
 }
@@ -349,8 +403,14 @@ async function runAlerts(env, opts = {}) {
     summary.warning = 'POSTAL_ADDRESS is unset — alerts are going out without the CAN-SPAM postal line';
   }
 
+  // Resolved once, so both gates and every region judge the same night.
+  const night = tonightET();
+  summary.night = {evening: night.evening,
+                   kpWindow: `${night.kp.start.toISOString()} -> ${night.kp.end.toISOString()}`,
+                   darkWindow: `${night.dark.start.toISOString()} -> ${night.dark.end.toISOString()}`};
+
   let forecast;
-  try { forecast = await tonightPeakKp(); }
+  try { forecast = await tonightPeakKp(night.kp); }
   catch (e) { summary.error = e.message; return summary; }
 
   for (const [key, region] of Object.entries(REGIONS)) {
@@ -367,7 +427,7 @@ async function runAlerts(env, opts = {}) {
       if (hrs < ALERT_COOLDOWN_HOURS) { s.action = `skip: alerted ${hrs.toFixed(1)}h ago`; summary.regions[key] = s; continue; }
     }
 
-    const spot = await clearestSpot(region);
+    const spot = await clearestSpot(region, night.dark);
     s.clearest = spot;
     if (!spot || spot.pct > CLOUD_CEILING) { s.action = 'skip: nowhere clear enough'; summary.regions[key] = s; continue; }
 
