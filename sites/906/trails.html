@@ -844,9 +844,21 @@ async function fetchStationWx(station) {
       desc:    p.textDescription || '',
       precip1: mmToIn(p.precipitationLastHour?.value),
       precip3: mmToIn(p.precipitationLast3Hours?.value),
-      precip6: mmToIn(p.precipitationLast6Hours?.value),
-      snow:    mmToIn(p.snowDepth?.value) // snowDepth arrives in mm too
+      precip6: mmToIn(p.precipitationLast6Hours?.value)
     };
+    // There is deliberately no snow depth here. This used to read
+    // `snow: mmToIn(p.snowDepth?.value)`, which was always undefined: NWS
+    // station observations carry no `snowDepth` key at all — not null in
+    // summer, absent, and absent at Barrow and Fairbanks in October too
+    // (checked 2026-10-07). mmToIn turns that into 0, so the `wx.snow > 1`
+    // test below it could never once have been true.
+    //
+    // NWS does publish observed depth, but only in the daily CLI climate
+    // product, and Michigan has just three of those sites. One Marquette
+    // reading does not belong on a page that reports per-network conditions
+    // from each network's own station — Copper Harbor's snow is not
+    // Marquette's. So the snow verdict leans on the text description and the
+    // cold-month heuristic instead. See tools/widget-api/cli.js.
     WX_CACHE[station] = wx;
     return wx;
   } catch(e) {
@@ -860,7 +872,7 @@ function rideability(wx) {
 
   const d = (wx.desc || '').toLowerCase();
   const recentRain = wx.precip6 > 0.1 || wx.precip3 > 0.05 || wx.precip1 > 0;
-  const snowy = d.includes('snow') || d.includes('blizzard') || wx.snow > 1;
+  const snowy = d.includes('snow') || d.includes('blizzard');
   const freezing = d.includes('freezing') || d.includes('sleet') || d.includes('ice');
 
   if (snowy || (wx.temp_f != null && wx.temp_f < 28 && (month >= 10 || month <= 2))) {
