@@ -4,7 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Aurora Widget — Install &amp; Preview · 906 Dashboard</title>
+<title>Embeddable Widgets — Install &amp; Preview · 906 Dashboard</title>
+<!--
+  The neutral install page — the one safe to send to anybody.
+
+  It used to be Travel Marquette's onboarding doc, written to them in second
+  person and naming their CMS and their other vendors, which meant every new
+  prospect sent "widgets.906dashboard.com" landed on another customer's
+  paperwork. That page still exists, verbatim, at /travel-marquette.html.
+
+  Client-specific notes belong on a client's own page. Keep this one generic:
+  anything here is read by people who have not bought anything yet.
+-->
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --ink:#e6edf3; --muted:#8b949e;
@@ -54,6 +65,18 @@
     padding:13px 15px;margin:16px 0;font-size:14px;
   }
   .note b{color:var(--warn)}
+
+  /* Widget chooser at the top — three cards, one per product. */
+  .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:22px 0 8px}
+  .pick{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:15px 17px;display:flex;flex-direction:column;gap:6px;
+  }
+  .pick h4{font-size:15px;font-weight:700;margin:0}
+  .pick p{font-size:13.5px;color:var(--muted);margin:0;max-width:none}
+  .pick a{font-size:13px;font-weight:600;margin-top:auto;padding-top:6px}
+  .sec{border-top:1px solid var(--line);margin-top:46px;padding-top:6px}
+
   footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 </style>
 </head>
@@ -62,124 +85,178 @@
 
   <header class="hd">
     <div class="kick">906 Dashboard · Embeddable widgets</div>
-    <h1>Aurora forecast widget</h1>
+    <h1>Live Upper Peninsula conditions, on your site</h1>
     <p class="lede">
-      Live northern-lights conditions for Michigan's Upper Peninsula, rendered and
-      maintained by 906 Dashboard. One line of HTML on your page; nothing to
-      install, nothing to update.
+      Three widgets, rendered and maintained by 906 Dashboard from NOAA and
+      National Weather Service data. One line of HTML on your page; nothing to
+      install, nothing to update, and nothing to keep accurate yourself.
     </p>
   </header>
 
-  <h2>Install</h2>
+  <div class="picks">
+    <div class="pick">
+      <h4>⛷️ Snow report</h4>
+      <p>Base depth, what fell overnight, and what is forecast at the hill. For lodging, rentals and anyone whose winter guests ask "is there snow yet".</p>
+      <a href="#ski">Install the ski widget →</a>
+    </div>
+    <div class="pick">
+      <h4>🌌 Aurora forecast</h4>
+      <p>Whether tonight is worth going out, from NOAA space-weather data and NWS cloud cover. Honest on a quiet night.</p>
+      <a href="#aurora">Install the aurora widget →</a>
+    </div>
+    <div class="pick">
+      <h4>🎯 Legal shooting hours</h4>
+      <p>A live countdown to the close of legal light for any UP county, with what is in season today.</p>
+      <a href="#hunting">Install the hunting widget →</a>
+    </div>
+  </div>
+
+  <h2>How installing works</h2>
   <p>
-    Paste this where the widget should appear. The script can go anywhere on the
-    page — it finds the placeholder itself.
+    Every widget installs the same way. Paste the placeholder where the widget
+    should appear and the loader script anywhere on the page — it finds the
+    placeholder itself, and one script handles any number of widgets.
   </p>
-  <pre id="snip-script">&lt;div data-906-widget="aurora" data-client="travel-marquette"&gt;&lt;/div&gt;
+  <pre id="snip-generic">&lt;div data-906-widget="ski" data-client="your-id"&gt;&lt;/div&gt;
 &lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
-  <button class="copy" data-copy="snip-script">Copy snippet</button>
+  <button class="copy" data-copy="snip-generic">Copy snippet</button>
+  <p class="muted">
+    Your client id carries your brand colours, your default location and your
+    preferred size, so the snippet above is usually the whole job. The
+    per-widget sections below list the attributes worth overriding.
+  </p>
+
+  <div class="note">
+    <b>Your domain has to be allowlisted first.</b> Embedding is gated by a
+    <code>frame-ancestors</code> header on our side. Until your hostname is on
+    that list the widget renders as blank space — send us the address and it is
+    a one-line change. Include any staging or preview host too:
+    <code>frame-ancestors</code> applies to <em>every</em> frame in the chain, so
+    a CMS page-builder preview that wraps your page needs listing as well as the
+    live site.
+  </div>
 
   <h3>If your CMS strips script tags</h3>
   <p class="muted">
-    Some Simpleview templates escape <code>&lt;script&gt;</code> inside a content
-    widget. If the snippet above renders as visible text instead of a widget, use
-    this instead — same widget, no script tag.
+    Some templates escape <code>&lt;script&gt;</code> inside a content block. If
+    the snippet renders as visible text instead of a widget, use an iframe
+    instead — same widget, no script tag. Swap <code>ski.html</code> for
+    <code>aurora.html</code> or <code>hunting.html</code> as needed.
   </p>
   <p class="muted">
-    One trade-off worth knowing: without the script there is nothing to report the
-    widget's height back to your page, so this version is a <b>fixed-size card</b>
-    rather than the automatic band-on-desktop, card-on-mobile above. It is pinned
-    to <code>size=card</code> deliberately — a card is the size that works at every
-    width.
+    One trade-off worth knowing: without the script there is nothing to report
+    the widget's height back to your page, so this version is a
+    <b>fixed-size card</b> rather than the automatic band-on-desktop,
+    card-on-mobile. It is pinned to <code>size=card</code> deliberately — a card
+    is the size that works at every width.
   </p>
-  <pre id="snip-frame">&lt;iframe src="https://widgets.906dashboard.com/aurora.html?client=travel-marquette&amp;size=card"
-        title="Tonight's aurora forecast — 906 Dashboard"
-        width="100%" height="430" loading="lazy"
+  <pre id="snip-frame">&lt;iframe src="https://widgets.906dashboard.com/ski.html?client=your-id&amp;size=card"
+        title="Snow report — 906 Dashboard"
+        width="100%" height="400" loading="lazy"
         referrerpolicy="strict-origin-when-cross-origin"
         style="border:0;max-width:360px"&gt;&lt;/iframe&gt;</pre>
   <button class="copy" data-copy="snip-frame">Copy snippet</button>
 
-  <div class="note">
-    <b>Your domains are already allowlisted.</b> <code>travelmarquette.com</code> and
-    <code>www.travelmarquette.com</code> are on the widget's <code>frame-ancestors</code>
-    list, so the snippet will render as soon as it is on the page. Any additional
-    hostname — a staging site, for instance — needs adding first, or it will show a
-    blank space.
-  </div>
-
-  <h3>On Simpleview</h3>
-  <p class="muted">
-    Your site runs on Simpleview CMS. Add the snippet through a
-    <b>Custom HTML</b> / <b>Raw HTML</b> widget on the page, the same mechanism
-    that already carries your Clicktripz and AudioEye embeds. If that widget type
-    escapes script tags on your template, use the iframe version above instead —
-    it behaves identically apart from a fixed height.
-  </p>
-  <p class="muted">
-    Your site sends no <code>Content-Security-Policy</code> header, so there is
-    nothing for your developers to allowlist on your side.
-  </p>
-
-  <h2>Live preview</h2>
-  <p class="muted">
-    Both of these are the real widget pulling live NOAA and NWS data right now.
-  </p>
-
-  <div class="stage">
-    <div class="cell">
-      <span class="lbl">In a sidebar · <b>card</b></span>
-      <div data-906-widget="aurora" data-client="travel-marquette" data-size="card"></div>
-    </div>
-    <div class="cell">
-      <span class="lbl">Regional roll-up · <b>906 default</b></span>
-      <div data-906-widget="aurora" data-client="demo" data-size="card"></div>
-    </div>
-  </div>
-
-  <h3 style="margin-top:34px">Full-width — how it looks in a wide column</h3>
-  <p class="muted">
-    This is the same embed as above. Narrow this browser window past
-    700&nbsp;px and it becomes the card on its own; there is no second snippet
-    and nothing to configure.
-  </p>
-  <div data-906-widget="aurora" data-client="travel-marquette"></div>
-
-  <h2>Options</h2>
+  <!-- ══ SKI ══ -->
+  <div class="sec" id="ski"></div>
+  <h2>⛷️ Snow report</h2>
   <p>
-    Everything below has a sensible default stored against your client id, so the
-    snippet above is usually all you need. Add an attribute only to override.
+    The headline is the <b>base depth</b>, because "is there anything to ski" is
+    what decides whether somebody makes the drive. Below it: what fell in the
+    last 24 hours, what is forecast over the next three days, and the
+    temperature and wind at the hill.
   </p>
+
+  <div class="note">
+    <b>Two scales, and the widget says which is which.</b> Base depth and
+    observed snowfall come from the nearest National Weather Service climate
+    station — Michigan has only three, so that number is regional and the widget
+    names the station under it. The three-day forecast is the hill's own. We
+    label it rather than implying a summit reading, because a widget that sends
+    someone up a bare mountain is worse than no widget.
+  </div>
+
+  <pre id="snip-ski">&lt;div data-906-widget="ski" data-client="your-id"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+  <button class="copy" data-copy="snip-ski">Copy snippet</button>
 
   <table>
-    <thead>
-      <tr><th>Attribute</th><th>Values</th><th>What it does</th></tr>
-    </thead>
+    <thead><tr><th>Attribute</th><th>Values</th><th>What it does</th></tr></thead>
     <tbody>
       <tr>
-        <td><code>data-client</code></td>
-        <td>your id</td>
-        <td>Loads your brand colors, default location and size. Required.</td>
+        <td><code>data-region</code></td>
+        <td><code>up</code> <code>nlp</code></td>
+        <td>
+          <code>up</code> is the Upper Peninsula, reported against Marquette.
+          <code>nlp</code> is northern Lower Michigan, reported against Gaylord.
+        </td>
       </tr>
       <tr>
-        <td><code>data-spot</code></td>
-        <td><code>mqt</code> <code>cph</code> <code>wfp</code> <code>mun</code> <code>irw</code> <code>grm</code> <code>pcm</code> <code>all</code></td>
+        <td><code>data-area</code></td>
+        <td>a hill or trail id</td>
         <td>
-          Pin the forecast to one town, or <code>all</code> for the whole UP.
-          A pinned widget reports that town's own sky and names its viewing spot —
-          telling a guest already in Marquette that Copper Harbor is clearer does
-          them no good.
+          Pins the <em>forecast</em> to one ski area — ten downhill and seven
+          Nordic systems per region. Omit it for the regional roll-up. Ask us for
+          the id for your hill; it is usually the obvious short name.
         </td>
       </tr>
       <tr>
         <td><code>data-size</code></td>
         <td><code>auto</code> <code>card</code> <code>strip</code> <code>panel</code></td>
+        <td>See <a href="#sizes">Sizes</a> below. <code>auto</code> suits most pages.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="stage">
+    <div class="cell">
+      <span class="lbl">In a sidebar · <b>card</b></span>
+      <div data-906-widget="ski" data-client="ski-demo" data-region="up" data-area="bohemia" data-size="card"></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Northern Lower · <b>Boyne Mountain</b></span>
+      <div data-906-widget="ski" data-client="ski-demo" data-region="nlp" data-area="boyne" data-size="card"></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:34px">Full width</h3>
+  <div data-906-widget="ski" data-client="ski-demo" data-region="up" data-area="bohemia" data-size="strip"></div>
+
+  <p class="muted" style="margin-top:14px">
+    Out of ski season the widget says <b>CLOSED</b> rather than reporting a
+    truthful zero that reads as bad news about a mountain nobody is trying to
+    ski. It returns on its own in November.
+  </p>
+
+  <!-- ══ AURORA ══ -->
+  <div class="sec" id="aurora"></div>
+  <h2>🌌 Aurora forecast</h2>
+  <p>
+    Whether tonight is worth going out, combining NOAA's space-weather forecast
+    with NWS cloud cover for a specific town. A pinned widget reports that
+    town's own sky and names the viewing spot people should drive to.
+  </p>
+
+  <pre id="snip-aurora">&lt;div data-906-widget="aurora" data-client="your-id"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+  <button class="copy" data-copy="snip-aurora">Copy snippet</button>
+
+  <table>
+    <thead><tr><th>Attribute</th><th>Values</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>data-spot</code></td>
+        <td><code>mqt</code> <code>cph</code> <code>wfp</code> <code>mun</code> <code>irw</code> <code>grm</code> <code>pcm</code> <code>all</code></td>
         <td>
-          <code>auto</code> is the default on your account: a full-width band at
-          700&nbsp;px and wider, a card below that. It switches on the width the
-          widget is actually given rather than on the device, so a narrow sidebar
-          on a desktop gets the card too. Force one with <code>card</code>,
-          <code>strip</code> or <code>panel</code>.
+          Pin the forecast to one town, or <code>all</code> for the whole UP.
+          Telling a guest already in Marquette that Copper Harbor is clearer does
+          them no good, so a pinned widget never does it.
         </td>
+      </tr>
+      <tr>
+        <td><code>data-size</code></td>
+        <td><code>auto</code> <code>card</code> <code>strip</code> <code>panel</code></td>
+        <td>See <a href="#sizes">Sizes</a> below.</td>
       </tr>
     </tbody>
   </table>
@@ -197,18 +274,100 @@
       <tr><td><code>pcm</code></td><td>Porcupine Mountains</td><td>Union Bay</td></tr>
     </tbody>
   </table>
-
-  <h2>What it does on a quiet night</h2>
-  <p>
-    It says <b>QUIET</b>, in grey, honestly. Aurora activity is spiky — long
-    stretches of nothing, then an enormous night. A widget that manufactured
-    excitement on a Kp 1 evening would send your guests out for nothing, so this
-    one does not.
+  <p class="muted">
+    If your own pages already recommend viewing locations, we can point the
+    widget at yours instead, or drop the row entirely so it does not offer a
+    second opinion beside your copy.
   </p>
+
+  <div class="stage">
+    <div class="cell">
+      <span class="lbl">Pinned to a town · <b>card</b></span>
+      <div data-906-widget="aurora" data-client="marquette-demo" data-size="card"></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Regional roll-up · <b>906 default</b></span>
+      <div data-906-widget="aurora" data-client="demo" data-size="card"></div>
+    </div>
+  </div>
+
+  <p class="muted" style="margin-top:14px">
+    On a quiet night it says <b>QUIET</b>, in grey, honestly. Aurora activity is
+    spiky — long stretches of nothing, then an enormous night. A widget that
+    manufactured excitement on a Kp 1 evening would send your guests out for
+    nothing.
+  </p>
+
+  <!-- ══ HUNTING ══ -->
+  <div class="sec" id="hunting"></div>
+  <h2>🎯 Legal shooting hours</h2>
   <p>
-    If the NOAA feed itself goes down, the widget shows the last conditions it
-    saw with a <b>Last known</b> timestamp rather than a broken box, and recovers
-    on its own when the feed returns.
+    The question a hunter in the woods actually has: can I shoot right now, and
+    for how long? A live countdown to the close of legal light for any of the
+    fifteen UP counties, with what is in season today and current field
+    conditions.
+  </p>
+
+  <pre id="snip-hunting">&lt;div data-906-widget="hunting" data-client="your-id"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+  <button class="copy" data-copy="snip-hunting">Copy snippet</button>
+
+  <table>
+    <thead><tr><th>Attribute</th><th>Values</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>data-county</code></td>
+        <td>any of the fifteen UP counties</td>
+        <td>
+          Which county's legal light to count down. Four UP counties sit in
+          Central Time and the widget handles that for you.
+        </td>
+      </tr>
+      <tr>
+        <td><code>data-size</code></td>
+        <td><code>auto</code> <code>card</code> <code>strip</code> <code>panel</code></td>
+        <td>See <a href="#sizes">Sizes</a> below.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="stage">
+    <div class="cell">
+      <span class="lbl">In a sidebar · <b>card</b></span>
+      <div data-906-widget="hunting" data-client="hunting-demo" data-county="marquette" data-size="card"></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">Another county · <b>Gogebic</b></span>
+      <div data-906-widget="hunting" data-client="hunting-demo" data-county="gogebic" data-size="card"></div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:20px">
+    <b>It is a convenience, not an authority.</b> Opening times round up and
+    closing times round down, so the window shown is never wider than the real
+    one — but the DNR digest governs, and the widget says so.
+  </div>
+
+  <!-- ══ SHARED ══ -->
+  <div class="sec" id="sizes"></div>
+  <h2>Sizes</h2>
+  <table>
+    <thead><tr><th>Value</th><th>Shape</th><th>Use it when</th></tr></thead>
+    <tbody>
+      <tr><td><code>auto</code></td><td>Band at 700&nbsp;px and wider, card below</td><td>The usual choice. It switches on the width the widget is actually given, so a narrow sidebar on a desktop gets the card too.</td></tr>
+      <tr><td><code>card</code></td><td>Fixed card, max 360&nbsp;px</td><td>A sidebar, or anywhere you want a predictable block.</td></tr>
+      <tr><td><code>strip</code></td><td>Full-width band</td><td>Under a page header, or across the top of a landing page.</td></tr>
+      <tr><td><code>panel</code></td><td>Two-column card</td><td>A wide content column where a band would look stretched.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>When a feed goes down</h2>
+  <p>
+    This sits on your homepage, so a dead upstream should be our problem rather
+    than your phone call. Three tiers, in order: live data; then the last good
+    reading that visitor saw, stamped <b>Last known</b> with a timestamp; then a
+    complete, correctly-branded component saying conditions are unavailable.
+    Never a broken box or an empty frame. It recovers on its own.
   </p>
 
   <h2>Checking it worked</h2>
@@ -221,12 +380,15 @@
   <p class="muted">
     If you see an empty space where the widget should be, your domain almost
     certainly is not on the allowlist yet — the browser console will say so
-    explicitly, naming <code>frame-ancestors</code>. Send us the hostname.
+    explicitly, naming <code>frame-ancestors</code>. The question we will ask is
+    not "what is your domain" but <b>what is in the address bar when you see it
+    fail</b>, because a CMS preview answers that differently from the live page.
   </p>
 
   <footer>
-    906 Travel Dashboard · Aurora data: NOAA SWPC · Cloud cover: NWS ·
-    Refreshes every 5 minutes · <a href="https://906dashboard.com/aurora.html">Full UP aurora forecast</a>
+    906 Travel Dashboard · Aurora: NOAA SWPC · Weather, snow and legal light: NWS ·
+    <a href="./demo.html">Side-by-side demo</a> ·
+    <a href="https://906dashboard.com/">906dashboard.com</a>
   </footer>
 </div>
 
