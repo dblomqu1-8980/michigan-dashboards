@@ -135,6 +135,65 @@
   </section>
 
   <section>
+    <h2>Snow report</h2>
+    <p class="sub">
+      What decides the drive: how deep the base is, how much fell overnight, and
+      how much is coming. Base depth and observed snowfall are the nearest NWS
+      climate station's — Michigan has only three — and the forecast is the
+      hill's own. The widget labels which is which rather than implying a
+      summit reading.
+    </p>
+
+    <div class="controls">
+      <label for="ski-region">Region</label>
+      <select id="ski-region">
+        <option value="up" selected>Upper Peninsula</option>
+        <option value="nlp">Northern Lower</option>
+      </select>
+      <label for="ski-area">Area</label>
+      <select id="ski-area">
+        <optgroup label="Downhill">
+          <option value="bohemia" selected>Mount Bohemia</option>
+          <option value="snowriver">Snowriver Mountain Resort</option>
+          <option value="powderhorn">Big Powderhorn Mountain</option>
+          <option value="ripley">Mont Ripley</option>
+          <option value="marquette">Marquette Mountain</option>
+          <option value="brule">Ski Brule</option>
+          <option value="pine">Pine Mountain</option>
+          <option value="porkies">Porcupine Mountains</option>
+          <option value="norway">Norway Mountain</option>
+          <option value="zion">Mount Zion</option>
+        </optgroup>
+        <optgroup label="Nordic">
+          <option value="abr">ABR Trails</option>
+          <option value="valleyspur">Valley Spur</option>
+          <option value="swedetown">Swedetown Trails</option>
+          <option value="blueberry">Blueberry Ridge Pathway</option>
+          <option value="mtu">Michigan Tech Trails</option>
+          <option value="maasto">Maasto Hiihto & Churning Rapids</option>
+          <option value="wolverine">Wolverine Nordic Trails</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div id="ski-wide"></div>
+
+    <h3>In a sidebar</h3>
+    <div class="stage">
+      <div class="cell">
+        <span class="lbl g">Card · <b>your colours</b></span>
+        <div id="ski-card"></div>
+      </div>
+      <div class="cell">
+        <span class="lbl">One line of HTML</span>
+        <pre id="snip-ski">&lt;div data-906-widget="ski" data-region="up" data-area="bohemia"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+        <button class="copy" data-copy="snip-ski">Copy snippet</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>Tonight's aurora</h2>
     <p class="sub">
       Whether tonight is worth going out, from NOAA's Space Weather Prediction
@@ -201,6 +260,37 @@
   var sel = document.getElementById("county");
   sel.addEventListener("change", function () { huntEmbeds(sel.value); });
   huntEmbeds(sel.value);
+
+  // Ski: the area list depends on the region, so the region picker rebuilds
+  // the area <select> before re-mounting. Area ids are unique within a region
+  // but not across one, so a stale id from the other region would 400.
+  var SKI_AREAS = {"up": [{"id": "bohemia", "type": "downhill", "name": "Mount Bohemia"}, {"id": "snowriver", "type": "downhill", "name": "Snowriver Mountain Resort"}, {"id": "powderhorn", "type": "downhill", "name": "Big Powderhorn Mountain"}, {"id": "ripley", "type": "downhill", "name": "Mont Ripley"}, {"id": "marquette", "type": "downhill", "name": "Marquette Mountain"}, {"id": "brule", "type": "downhill", "name": "Ski Brule"}, {"id": "pine", "type": "downhill", "name": "Pine Mountain"}, {"id": "porkies", "type": "downhill", "name": "Porcupine Mountains"}, {"id": "norway", "type": "downhill", "name": "Norway Mountain"}, {"id": "zion", "type": "downhill", "name": "Mount Zion"}, {"id": "abr", "type": "nordic", "name": "ABR Trails"}, {"id": "valleyspur", "type": "nordic", "name": "Valley Spur"}, {"id": "swedetown", "type": "nordic", "name": "Swedetown Trails"}, {"id": "blueberry", "type": "nordic", "name": "Blueberry Ridge Pathway"}, {"id": "mtu", "type": "nordic", "name": "Michigan Tech Trails"}, {"id": "maasto", "type": "nordic", "name": "Maasto Hiihto & Churning Rapids"}, {"id": "wolverine", "type": "nordic", "name": "Wolverine Nordic Trails"}], "nlp": [{"id": "boyne", "type": "downhill", "name": "Boyne Mountain"}, {"id": "highlands", "type": "downhill", "name": "The Highlands"}, {"id": "nubs", "type": "downhill", "name": "Nub's Nob"}, {"id": "crystal", "type": "downhill", "name": "Crystal Mountain"}, {"id": "shanty", "type": "downhill", "name": "Shanty Creek"}, {"id": "caberfae", "type": "downhill", "name": "Caberfae Peaks"}, {"id": "otsego", "type": "downhill", "name": "Otsego Resort"}, {"id": "treetops", "type": "downhill", "name": "Treetops Resort"}, {"id": "hanson", "type": "downhill", "name": "Hanson Hills"}, {"id": "mcsauba", "type": "downhill", "name": "Mt. McSauba"}, {"id": "vasa", "type": "nordic", "name": "VASA Pathway"}, {"id": "forbush", "type": "nordic", "name": "Forbush Corner"}, {"id": "hansonxc", "type": "nordic", "name": "Hanson Hills Nordic"}, {"id": "xchq", "type": "nordic", "name": "Cross Country Ski HQ"}, {"id": "corsair", "type": "nordic", "name": "Corsair Trails"}, {"id": "hartwick", "type": "nordic", "name": "Hartwick Pines State Park"}, {"id": "crystalxc", "type": "nordic", "name": "Crystal Mountain Nordic"}]};
+  var regionSel = document.getElementById("ski-region");
+  var areaSel = document.getElementById("ski-area");
+
+  function fillAreas(region) {
+    var list = SKI_AREAS[region] || [];
+    var groups = { downhill: "Downhill", nordic: "Nordic" };
+    areaSel.innerHTML = Object.keys(groups).map(function (type) {
+      var items = list.filter(function (a) { return a.type === type; });
+      if (!items.length) return "";
+      return '<optgroup label="' + groups[type] + '">' + items.map(function (a) {
+        return '<option value="' + a.id + '">' + a.name + "</option>";
+      }).join("") + "</optgroup>";
+    }).join("");
+  }
+
+  function skiEmbeds() {
+    var region = regionSel.value, area = areaSel.value;
+    document.getElementById("ski-wide").innerHTML =
+      '<div data-906-widget="ski" data-client="ski-demo" data-region="' + region + '" data-area="' + area + '" data-size="strip"></div>';
+    document.getElementById("ski-card").innerHTML =
+      '<div data-906-widget="ski" data-client="ski-demo" data-region="' + region + '" data-area="' + area + '" data-size="card"></div>';
+  }
+
+  regionSel.addEventListener("change", function () { fillAreas(regionSel.value); skiEmbeds(); });
+  areaSel.addEventListener("change", skiEmbeds);
+  skiEmbeds();
 
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("[data-copy]");

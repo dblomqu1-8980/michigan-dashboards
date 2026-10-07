@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Snow Report Widget — 906 Dashboard</title>
+<!--
+  Embeddable ski widget: base depth, new snow, what is forecast at the hill.
+  Same shell as aurora.html and hunting.html — brand tokens, sizes, failure
+  tiers all match.
+
+  The headline is the BASE DEPTH, because "is there anything to ski" is the
+  question that decides whether someone makes the drive.
+
+  Two scales of truth in one widget, and the copy is explicit about which is
+  which. Base depth and observed snowfall are REGIONAL, from the nearest NWS
+  climate station — Michigan has only three. The forecast is PER-HILL, from
+  that area's own gridpoint. The base row names its station for that reason;
+  implying a summit reading from a valley airport is how a widget sends
+  someone up a bare mountain.
+
+  Query params (all optional, all overridable by ?client=):
+    client  key into clients.json
+    region  up | nlp
+    area    an area id for that region (see tools/widget-api/ski-data.js),
+            or omitted for the regional roll-up
+    size    card|strip|panel|auto
+-->
+<style>
+  /* Verdict colours are fixed and NOT brandable, for the same reason the
+     aurora scale is not: they carry whether there is snow on the ground. */
+  :root {
+    --s-good:#4ade80;    /* settled base, full grooming */
+    --s-thin:#facc15;    /* skiable but thin */
+    --s-none:#f87171;    /* bare ground */
+    --s-closed:#93a4c3;  /* out of season, or no depth published */
+  }
+
+  .aw {
+    --bg:#0b1220; --card:#16223a; --ink:#e8eefb; --muted:#93a4c3;
+    --line:#24345a; --a1:#56b3f0; --a2:#7c6cf0; --onaccent:#08101f;
+  }
+
+  * { box-sizing:border-box; margin:0; padding:0; }
+  [hidden] { display:none !important; }
+
+  :root { --brand-font: ; }
+  html, body {
+    background:transparent;
+    font-family:var(--brand-font)-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .aw {
+    background:var(--bg); color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    font-size:14px; line-height:1.5;
+  }
+  .aw-top { height:3px; background:linear-gradient(90deg,var(--a1),var(--a2)); }
+  .aw-in  { padding:15px 16px 13px; display:flex; flex-direction:column; gap:12px; }
+
+  .aw-head  { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .aw-title { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); }
+  .aw-pill  {
+    font-size:10.5px; font-weight:800; letter-spacing:.09em;
+    padding:3px 8px; border-radius:3px; white-space:nowrap;
+    background:var(--muted); color:var(--onaccent);
+  }
+
+  /* The base depth is the point of the widget, so it gets the size. */
+  .aw-count {
+    font-size:26px; font-weight:700; line-height:1.1; letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums;
+  }
+  .aw-countsub { font-size:12.5px; color:var(--muted); margin-top:2px; }
+
+  .aw-rows { display:flex; flex-direction:column; border-top:1px solid var(--line); }
+  .aw-row  {
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    padding:7px 0; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .aw-row .k { color:var(--muted); }
+  .aw-row .v { font-weight:600; text-align:right; font-variant-numeric:tabular-nums; }
+
+  .aw-open   { display:flex; flex-direction:column; gap:7px; }
+  .aw-ol     { font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .aw-chips  { display:flex; flex-wrap:wrap; gap:5px; }
+  .aw-chip   {
+    font-size:11.5px; padding:3px 7px; border-radius:3px;
+    background:var(--card); border:1px solid var(--line); color:var(--ink);
+  }
+  .aw-chip.warn { border-color:var(--s-thin); color:var(--s-thin); }
+
+  .aw-note {
+    font-size:12px; line-height:1.45; color:var(--muted);
+    background:var(--card); border-left:2px solid var(--a1); padding:8px 10px;
+  }
+  .aw-note b { color:var(--ink); }
+
+  .aw-foot {
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+    border-top:1px solid var(--line); padding-top:9px; font-size:10.5px; color:var(--muted);
+  }
+  .aw-foot a { color:var(--a1); text-decoration:none; font-weight:600; }
+  .aw-foot a:hover, .aw-foot a:focus-visible { text-decoration:underline; }
+  :focus-visible { outline:2px solid var(--a1); outline-offset:2px; }
+  .aw-stale { color:var(--s-thin); }
+
+  /* ── strip ── */
+  .aw.size-strip .aw-in { flex-direction:row; flex-wrap:wrap; align-items:center; gap:10px 16px; padding:12px 16px; }
+  .aw.size-strip .aw-title, .aw.size-strip .aw-note { display:none; }
+  .aw.size-strip .aw-head { flex:0 0 auto; }
+  .aw.size-strip .aw-hero { flex:1 1 220px; display:flex; align-items:baseline; gap:10px; }
+  .aw.size-strip .aw-count { font-size:19px; }
+  .aw.size-strip .aw-countsub { margin:0; }
+  .aw.size-strip .aw-foot { order:1; flex:0 0 auto; border:0; padding:0; gap:12px; }
+  .aw.size-strip .aw-body {
+    order:2; flex:1 1 100%; display:flex; flex-wrap:wrap; align-items:flex-start;
+    gap:11px 20px; border-top:1px solid var(--line); padding-top:10px;
+  }
+  .aw.size-strip .aw-rows { flex-direction:row; flex-wrap:wrap; border-top:0; gap:11px 20px; }
+  .aw.size-strip .aw-row { flex-direction:column; align-items:flex-start; gap:2px; padding:0; border-bottom:0; }
+  .aw.size-strip .aw-row .k, .aw.size-strip .aw-ol {
+    font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; white-space:nowrap;
+  }
+  .aw.size-strip .aw-row .v { font-size:13px; text-align:left; white-space:nowrap; }
+  .aw.size-strip .aw-open { gap:3px; }
+
+  /* Below 480 the strip keeps only the two numbers that decide the drive:
+     what is on the ground, and what is coming. Same trim the aurora strip
+     makes at this width. */
+  @media (max-width:479px) {
+    .aw.size-strip .aw-in { gap:9px 14px; padding:11px 13px; }
+    .aw.size-strip .aw-row.r-season, .aw.size-strip .aw-row.r-cond { display:none; }
+    .aw.size-strip .aw-body { gap:10px 16px; padding-top:9px; }
+    .aw.size-strip .aw-foot { order:3; flex-basis:100%; font-size:10px; gap:8px; }
+    .aw.size-strip .aw-chip { background:none; border:0; padding:0; font-size:12.5px; }
+    .aw.size-strip .aw-chips { gap:4px 12px; }
+  }
+
+  /* ── panel ── */
+  @media (min-width:560px) {
+    .aw.size-panel .aw-body { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
+  }
+  .aw.size-panel .aw-in { padding:18px 20px 15px; }
+
+  .aw.size-card { max-width:360px; }
+  .aw.is-auto.size-card { max-width:100%; }
+
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="aw size-card" id="aw" role="region" aria-label="Snow report">
+  <div class="aw-top"></div>
+  <div class="aw-in">
+    <div class="aw-head">
+      <span class="aw-title" id="aw-place">Snow Report</span>
+      <span class="aw-pill" id="aw-pill">CHECKING</span>
+    </div>
+
+    <div class="aw-hero">
+      <div>
+        <div class="aw-count" id="aw-count">—</div>
+        <div class="aw-countsub" id="aw-countsub">Loading the latest snow report…</div>
+      </div>
+    </div>
+
+    <div class="aw-body">
+      <div class="aw-rows" id="aw-rows">
+        <div class="aw-row r-new"><span class="k">New snow</span><span class="v" id="aw-new">—</span></div>
+        <div class="aw-row r-fc"><span class="k">Next 3 days</span><span class="v" id="aw-fc">—</span></div>
+        <div class="aw-row r-season"><span class="k">Season to date</span><span class="v" id="aw-season">—</span></div>
+        <div class="aw-row r-cond"><span class="k">Conditions</span><span class="v" id="aw-cond">—</span></div>
+      </div>
+
+      <div class="aw-open" id="aw-alerts-wrap" hidden>
+        <div class="aw-ol">Active alerts</div>
+        <div class="aw-chips" id="aw-chips"></div>
+      </div>
+    </div>
+
+    <p class="aw-note"><b id="aw-noteb">Base depth.</b> <span id="aw-note">Loading…</span></p>
+
+    <div class="aw-foot">
+      <span id="aw-stamp">—</span>
+      <a id="aw-link" href="https://906dashboard.com/ski.html" target="_blank" rel="noopener">Live data from 906 Dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LOCAL_HOSTS = ["localhost", "127.0.0.1", "[::1]"];
+  var API = LOCAL_HOSTS.indexOf(location.hostname) >= 0
+    ? "http://127.0.0.1:8799/ski"
+    : "https://aurora-widget-api.blomblog.workers.dev/ski";
+
+  var LAST_GOOD_KEY = "906w:ski:lastgood";
+  var REFRESH_MS = 30 * 60 * 1000;
+
+  // A base depth is a fact about a morning. A day old it is still the best
+  // answer anyone has; a week old it is fiction dressed as data. Past this
+  // the widget shows its offline state rather than a confident stale number.
+  var LAST_GOOD_MAX_MS = 36 * 60 * 60 * 1000;
+
+  var qs = new URLSearchParams(location.search);
+  var root = document.getElementById("aw");
+  var el = function (id) { return document.getElementById(id); };
+
+  var BRAND_KEYS = ["bg", "card", "ink", "muted", "line", "a1", "a2"];
+  var FONTS = {
+    roboto: { stack: '"Roboto", ', href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" },
+    montserrat: { stack: '"Montserrat", ', href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" }
+  };
+
+  function toRgb(hex) {
+    hex = String(hex || "").replace("#", "");
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (!/^[0-9a-f]{6}$/i.test(hex)) return null;
+    return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+  }
+  function luminance(hex) {
+    var rgb = toRgb(hex); if (!rgb) return 0;
+    return rgb.map(function (v) { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); })
+      .reduce(function (a, c, i) { return a + c * [0.2126,0.7152,0.0722][i]; }, 0);
+  }
+  function contrast(a, b) {
+    var l1 = luminance(a), l2 = luminance(b);
+    return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+  }
+  function inkFor(bg) { return contrast("#08101f", bg) >= contrast("#ffffff", bg) ? "#08101f" : "#ffffff"; }
+
+  function applyBrand(brand) {
+    if (!brand) return;
+    BRAND_KEYS.forEach(function (k) {
+      if (brand[k] && toRgb(brand[k])) root.style.setProperty("--" + k, brand[k]);
+    });
+  }
+  function applyFont(key) {
+    var font = FONTS[String(key || "").toLowerCase()];
+    if (!font) return;
+    var pre = document.createElement("link");
+    pre.rel = "preconnect"; pre.href = "https://fonts.gstatic.com"; pre.crossOrigin = "";
+    document.head.appendChild(pre);
+    var link = document.createElement("link");
+    link.rel = "stylesheet"; link.href = font.href;
+    document.head.appendChild(link);
+    document.documentElement.style.setProperty("--brand-font", font.stack);
+  }
+
+  var cfg = {
+    client: qs.get("client") || null,
+    region: (qs.get("region") || "up").toLowerCase(),
+    area: (qs.get("area") || "").toLowerCase() || null,
+    size: qs.get("size") || null,
+    hideRows: [],
+    attribution: true
+  };
+
+  var AUTO_STRIP_MIN_WIDTH = 700;
+  var autoSize = null;
+
+  function setSize(size) {
+    var s = ["card", "strip", "panel", "auto"].indexOf(size) >= 0 ? size : "card";
+    if (s !== "auto") { root.className = "aw size-" + s; return; }
+    applyAutoSize();
+  }
+  function applyAutoSize() {
+    var want = document.documentElement.clientWidth >= AUTO_STRIP_MIN_WIDTH ? "strip" : "card";
+    if (want === autoSize) return;
+    autoSize = want;
+    root.className = "aw is-auto size-" + want;
+  }
+
+  function loadClient() {
+    if (!cfg.client) return Promise.resolve();
+    return fetch("./clients.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (all) {
+        var c = all && all[cfg.client];
+        if (!c) return;
+        if (c.attribution === false) cfg.attribution = false;
+        if (!qs.get("region") && c.region) cfg.region = c.region;
+        if (!qs.get("area") && c.area) cfg.area = c.area;
+        if (!qs.get("size") && c.size) cfg.size = c.size;
+        if (c.hideRows && c.hideRows.length) cfg.hideRows = c.hideRows;
+        if (c.font) applyFont(c.font);
+        applyBrand(c.brand);
+      })
+      .catch(function () {});
+  }
+
+  // ── state ───────────────────────────────────────────────────────────────
+  var data = null, stale = false;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[<>&"]/g, function (c) {
+      return { "<":"&lt;", ">":"&gt;", "&":"&amp;", '"':"&quot;" }[c];
+    });
+  }
+
+  /** Inches, with the trailing ".0" dropped — 6" reads better than 6.0". */
+  function inches(n) {
+    if (n == null) return null;
+    var r = Math.round(n * 10) / 10;
+    return (Number.isInteger(r) ? r : r.toFixed(1)) + '"';
+  }
+
+  function prettyDate(iso) {
+    if (!iso) return "";
+    var p = String(iso).split("-");
+    if (p.length !== 3) return "";
+    var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2], 12));
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  }
+
+  var PILL_COLOUR = {
+    good: "--s-good", thin: "--s-thin", none: "--s-none",
+    closed: "--s-closed", unknown: "--s-closed"
+  };
+
+  function paintPill(level, label) {
+    var pill = el("aw-pill");
+    pill.textContent = label;
+    var token = PILL_COLOUR[level] || "--muted";
+    var colour = getComputedStyle(root).getPropertyValue(token).trim() ||
+                 getComputedStyle(root).getPropertyValue("--muted").trim();
+    pill.style.background = colour;
+    // The pill picks its own ink by luminance, so a pale brand cannot wash it out.
+    pill.style.color = inkFor(colour);
+  }
+
+  function applyHidden() {
+    var map = { base: null, "new": "r-new", forecast: "r-fc", season: "r-season", conditions: "r-cond" };
+    cfg.hideRows.forEach(function (k) {
+      var cls = map[String(k).toLowerCase()];
+      if (!cls) return;
+      var row = root.querySelector("." + cls);
+      if (row) row.hidden = true;
+    });
+  }
+
+  function render() {
+    if (!data) return renderUnavailable();
+
+    var base = data.base || {};
+    var obs = data.observed || {};
+    var area = data.area || null;
+
+    el("aw-place").textContent = area ? area.name : (data.regionLabel || "Snow Report");
+    paintPill(data.verdict.level, data.verdict.pill);
+
+    // Headline. Depth when there is one; otherwise lead with the season total,
+    // which is the next most useful true number rather than a dash.
+    if (base.available && base.depthIn != null) {
+      el("aw-count").textContent = inches(base.depthIn) + " base";
+      el("aw-countsub").textContent =
+        base.stationName + " climate station" + (base.asOf ? " · " + prettyDate(base.asOf) : "");
+    } else if (obs.seasonToDateIn != null) {
+      el("aw-count").textContent = inches(obs.seasonToDateIn) + " this season";
+      el("aw-countsub").textContent = "No base depth published at " + base.stationName + " yet";
+    } else {
+      el("aw-count").textContent = data.verdict.pill === "CLOSED" ? "Closed for the season" : "No report yet";
+      el("aw-countsub").textContent = data.seasonText || "";
+    }
+
+    var y = obs.yesterdayIn;
+    el("aw-new").textContent =
+      y == null ? "—" : (obs.yesterdayTrace ? "Trace" : inches(y)) + (y != null ? " · 24h" : "");
+
+    el("aw-fc").textContent = area && area.next72In != null
+      ? inches(area.next72In) + " forecast"
+      : "—";
+
+    el("aw-season").textContent = obs.seasonToDateIn != null ? inches(obs.seasonToDateIn) : "—";
+
+    el("aw-cond").textContent = area && area.tempF != null
+      ? area.tempF + "°F" + (area.windMph != null ? " · " + area.windMph + " mph" : "")
+      : "—";
+
+    var alerts = data.alerts || [];
+    el("aw-alerts-wrap").hidden = alerts.length === 0;
+    el("aw-chips").innerHTML = alerts.map(function (a) {
+      return '<span class="aw-chip warn">' + esc(a.event) + "</span>";
+    }).join("");
+
+    // The honest-labelling line. Two scales of truth in one widget, and this
+    // is where the widget says which number came from where.
+    el("aw-noteb").textContent = "Base depth.";
+    el("aw-note").textContent = base.available
+      ? "Measured at the " + base.stationName + " climate station, not at the hill. " +
+        (area ? "The forecast above is for " + area.name + " itself." : "")
+      : data.verdict.text || "";
+
+    el("aw-stamp").textContent = (stale ? "Last known · " : "Updated ") +
+      new Date(data.generated).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    el("aw-stamp").className = stale ? "aw-stale" : "";
+
+    var link = el("aw-link");
+    if (cfg.attribution) {
+      link.hidden = false;
+      link.href = (data.page || "https://906dashboard.com/ski.html") +
+        "?utm_source=widget&utm_medium=embed&utm_campaign=" +
+        encodeURIComponent(cfg.client || "direct");
+    } else {
+      link.hidden = true;
+    }
+
+    applyHidden();
+    postHeight();
+  }
+
+  function renderUnavailable() {
+    paintPill("closed", "OFFLINE");
+    el("aw-count").textContent = "Snow report unavailable";
+    el("aw-countsub").textContent = "Conditions could not be loaded right now.";
+    ["aw-new", "aw-fc", "aw-season", "aw-cond"].forEach(function (id) { el(id).textContent = "—"; });
+    el("aw-alerts-wrap").hidden = true;
+    el("aw-chips").innerHTML = "";
+    el("aw-noteb").textContent = "";
+    el("aw-note").textContent = "Check the resort's own snow report before travelling.";
+    el("aw-stamp").textContent = "";
+    postHeight();
+  }
+
+  // ── height handshake ────────────────────────────────────────────────────
+  var lastHeight = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h === lastHeight) return;
+    lastHeight = h;
+    window.parent.postMessage({ type: "906widget:height", id: qs.get("fid") || null, height: h }, "*");
+  }
+  function tick() {
+    if (cfg.size === "auto") applyAutoSize();
+    postHeight();
+  }
+  if (window.ResizeObserver) new ResizeObserver(tick).observe(document.documentElement);
+  else window.addEventListener("resize", tick);
+
+  // ── data ────────────────────────────────────────────────────────────────
+  function cacheKey() { return LAST_GOOD_KEY + ":" + cfg.region + ":" + (cfg.area || "all"); }
+  function readLastGood() { try { return JSON.parse(localStorage.getItem(cacheKey())); } catch (e) { return null; } }
+  function writeLastGood(d) { try { localStorage.setItem(cacheKey(), JSON.stringify(d)); } catch (e) {} }
+
+  function load() {
+    var u = API + "?region=" + encodeURIComponent(cfg.region) +
+            (cfg.area ? "&area=" + encodeURIComponent(cfg.area) : "");
+    return fetch(u)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.ok !== true) throw new Error("bad payload");
+        data = d; stale = false;
+        writeLastGood(d);
+        render();
+      })
+      .catch(function () {
+        var last = readLastGood();
+        var age = last && last.generated ? Date.now() - new Date(last.generated).getTime() : Infinity;
+        if (last && age < LAST_GOOD_MAX_MS) { data = last; stale = true; render(); }
+        else renderUnavailable();
+      });
+  }
+
+  loadClient().then(function () {
+    setSize(cfg.size || "card");
+    applyHidden();
+    load();
+    setInterval(load, REFRESH_MS);
+    postHeight();
+  });
+})();
+</script>
+
+</body>
+</html>

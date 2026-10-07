@@ -16,7 +16,7 @@
       ]
     },
     {
-      "source": "/(aurora|hunting).html",
+      "source": "/(aurora|hunting|ski).html",
       "headers": [
         {
           "key": "Content-Security-Policy",
