@@ -213,8 +213,22 @@ those two answers is the one already on the list.
 
 **3. Push to `main`.** Vercel redeploys `widgets` automatically.
 
-**4. Send them `https://widgets.906dashboard.com/`** — the install page, with
-their snippet, the platform notes and a live preview.
+**4. Send them `https://widgets.906dashboard.com/`** — the neutral install
+page: all three widgets, the snippet, sizes, the allowlist warning and live
+previews. Safe to send anyone.
+
+### Client-specific install pages
+
+`index.html` is deliberately generic. Anything written *to* one customer —
+their CMS, their other embeds, "your domains are already allowlisted" — goes on
+its own page named for them, as `travel-marquette.html` does.
+
+This was not always true, and the failure mode is worth remembering: the root
+page was originally written as Travel Marquette's onboarding doc, in second
+person, naming their Simpleview template and their Clicktripz and AudioEye
+embeds. Every prospect sent the install link was reading another customer's
+paperwork. If you write client-specific copy, give it a client-specific URL and
+send *that* link instead.
 
 ### Checking their brand before you commit it
 
