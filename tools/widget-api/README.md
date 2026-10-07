@@ -1,7 +1,8 @@
 # Embeddable widgets
 
-Two widgets for client websites — **aurora** (is tonight worth going out) and
-**hunting** (legal shooting hours, what is open today, field conditions).
+Three widgets for client websites — **aurora** (is tonight worth going out),
+**hunting** (legal shooting hours, what is open today, field conditions) and
+**ski** (base depth, new snow, what is forecast at the hill).
 Two pieces:
 
 | Piece | Lives in | Deploys to |
@@ -59,6 +60,96 @@ Legal light is a property of the date, so a cached copy from yesterday is not
 merely stale, it is wrong. The widget checks the payload's date against the
 Michigan date before falling back to it, and shows the offline state instead of
 counting down to a close time that already passed.
+
+---
+
+## The ski widget
+
+`GET /ski?region=up&area=bohemia` — `region` is `up` or `nlp`, `area` is any id
+from `ski-data.js` for that region, or omitted for the regional roll-up.
+
+The headline is the **base depth**, because "is there anything to ski" is what
+decides whether someone makes the drive.
+
+### Two scales of truth in one widget
+
+This is the thing to understand before changing anything here.
+
+| Number | Scale | Source |
+|---|---|---|
+| Base depth, snow yesterday, season to date | **Regional** | NWS CLI product for the region's climate station |
+| Next 3 days' snowfall, temp, wind | **Per-hill** | That area's own NWS gridpoint |
+
+So the widget can tell a lodge at Mount Bohemia exactly what is forecast *at
+Mount Bohemia*, but the base depth it shows is Marquette's — 100 miles away.
+That is why the hero subtitle reads "Marquette climate station" and the note
+says "not at the hill". Remove that labelling and the widget starts implying a
+summit reading it does not have.
+
+### Snow depth is not where you would look for it
+
+Verified against live NWS on 2026-10-07, because the obvious sources do not
+have it:
+
+- **`gridpoints`** carries `snowfallAmount`, `snowLevel` and `iceAccumulation`
+  — all forecasts. There is no snow-depth field at all.
+- **`stations/<id>/observations/latest`** has no `snowDepth` key. Not null in
+  October — *absent*, and absent at Barrow and Fairbanks too. (`sites/906/trails.html`
+  reads `p.snowDepth?.value`, which is therefore always undefined. It fails
+  safe through the `?.`, but it is dead code and the snow verdict there falls
+  through to the description-text check instead.)
+- **CLI products** — the daily climate report — publish `SNOW DEPTH` along with
+  snowfall yesterday, month-to-date and season-to-date. Observed, not modelled,
+  which is strictly better than what `sites/906/ski.html` shows from Open-Meteo.
+
+The cost is coverage. **Michigan has exactly three CLI sites**: Marquette
+(MQT), Gaylord (APX) and Grand Rapids (GRR). Hence regional depth, and hence
+the labelling.
+
+Coverage is also uneven *between* those sites. In October MQT publishes the
+full block (depth, yesterday, month-to-date, season-to-date) and APX publishes
+`YESTERDAY` and nothing else. Every field in `cli.js` is therefore optional and
+the widget has a distinct `NO DEPTH REPORT` verdict for it — which is not the
+same statement as "no snow" and must not collapse into it.
+
+### The season gate matters more here than on the page
+
+A widget sits on a lodge's homepage all year. In July every snow field is
+honestly zero, which renders as a confident `NO SNOWPACK` verdict about a
+mountain nobody is trying to ski. `skiSeason()` is ported from `ski.html` and
+out of season the verdict becomes `CLOSED` regardless of depth — a true number
+that reads as bad news is still the wrong thing to show.
+
+### Keeping the scale in sync
+
+`SKI_VERDICTS` in `worker.js` is ported from `sites/906/ski.html`'s
+`renderSnow()`: under 1" is bare, under 12" is thin, 12" and over is a base.
+Same rule as the aurora `VERDICTS` — change it in both places or the widget and
+the page describe the same hill differently on the same morning.
+
+### This is the first widget to serve Up North
+
+`REGIONS` in `ski-data.js` has both `up` and `nlp`, where the aurora Worker has
+only `up`. That is not an oversight there and not a shortcut here: aurora needs
+a *different verdict table* for northern Lower Michigan because its geomagnetic
+latitude runs a full Kp level higher. Snow needs no such table. Twelve inches
+is twelve inches in Gaylord and in Ironwood, so one scale covers both.
+
+### Parsing a text product
+
+`cli.js` reads a bulletin written for humans, so it is deliberately strict: it
+reads only the SNOWFALL block, only labels it knows, and returns null rather
+than guessing. `T` (trace) comes back as `0` with `trace: true` rather than
+being flattened to zero — on the first fall of the season that distinction is
+the whole story. `MM` is missing and becomes null.
+
+The block ends at the next section header, not at the next blank line. MQT has
+no blank line before `SNOW DEPTH`; reading to a blank would truncate the table
+mid-way at some offices and silently drop the depth.
+
+The report describes **yesterday**, so `date` is the climate date from the
+product's own text and the widget prints it. A depth reading is a fact about a
+morning.
 
 ---
 
@@ -219,6 +310,9 @@ an unlisted domain renders a blank frame, which is the intended behaviour.
 ```
 GET https://aurora-widget-api.blomblog.workers.dev/aurora?region=up&spot=mqt
 GET .../aurora?region=up            # regional roll-up, all five towns
+GET .../hunting?county=marquette    # legal light, seasons, conditions
+GET .../ski?region=up&area=bohemia  # base depth, new snow, hill forecast
+GET .../ski?region=nlp              # regional roll-up, no per-hill forecast
 GET .../health
 ```
 
@@ -270,10 +364,14 @@ cd tools/widget-api
 npx wrangler deploy
 ```
 
-Verify:
+Verify — the last two should be 400, not 200. A typo in a client config has to
+surface at the Worker rather than quietly serving the roll-up:
 
 ```bash
-for p in "/health" "/aurora?region=up" "/aurora?region=up&spot=mqt"; do
+for p in "/health" "/aurora?region=up" "/aurora?region=up&spot=mqt" \
+         "/hunting?county=marquette" \
+         "/ski?region=up&area=bohemia" "/ski?region=nlp" \
+         "/ski?region=xx" "/ski?region=up&area=nope"; do
   echo "$(curl -s -o /dev/null -w '%{http_code}' "https://aurora-widget-api.blomblog.workers.dev$p")  $p"
 done
 ```
@@ -357,6 +455,22 @@ strip and panel; dark, light and default palettes; pinned and roll-up; live,
 last-known-good and fully offline; mobile reflow; and the loader's height
 handshake.
 
+The ski widget needs the same treatment for the opposite reason — it was built
+in October, when every real number is zero:
+
+```js
+localStorage.setItem('906w:ski:lastgood:up:marquette', JSON.stringify(payload));
+```
+
+One catch that will waste your time: the payload is served with
+`Cache-Control: max-age=1800`, so stopping the Worker is **not** enough to
+force the fallback — the browser keeps answering that exact URL from its own
+cache. Seed and test an `area` the tab has not already fetched.
+
+Verified this way: `GOOD BASE`, `THIN COVER`, `NO SNOWPACK`, `NO DEPTH REPORT`
+and `CLOSED`; the stale marker; the full-offline tier; card and strip; the
+mobile trim to two numbers; and both regions.
+
 ---
 
 ## Failure behaviour
@@ -391,6 +505,18 @@ It recovers on its own; there is nothing to restart.
 ## Licensing
 
 NOAA SWPC and `api.weather.gov` are US federal data and fine to redistribute
-with a proper User-Agent and a cache in front. This is the one widget on the
-menu with no licensing question — the Open-Meteo non-commercial limit that
-affects any future fall-colour or ski widget does not apply here.
+with a proper User-Agent and a cache in front. All three widgets are clean on
+this point: aurora by its sources, hunting because `sun.js` computes sunrise
+instead of fetching it, and ski because `cli.js` takes observed depth from NWS
+climate products rather than Open-Meteo.
+
+The Open-Meteo non-commercial limit still applies to the **pages** —
+`ski.html`, `fall.html` and `hunting.html` all call it — but the pages are the
+owner's own sites. It is the widget, sitting on a paying client's domain, that
+cannot.
+
+A **fall-colour widget remains blocked** on this and is a sourcing decision,
+not a build: its model needs `past_days=14` of daily min/max history, NWS
+gridpoints are forecast-only, and station observations reach back about six
+days. That needs NOAA NCEI, a cut-down model that would disagree with
+`fall.html`, or Open-Meteo's paid tier.

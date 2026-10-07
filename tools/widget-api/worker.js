@@ -33,7 +33,9 @@
  */
 
 import { COUNTIES, HOURS, SEASONS } from './hunting-data.js';
+import { AREAS, REGIONS as SKI_REGIONS, findArea } from './ski-data.js';
 import { sunTimes } from './sun.js';
+import { fetchCli } from './cli.js';
 
 const CACHE_TTL_SECONDS = 300; // SWPC republishes Kp about every 5 minutes
 
@@ -58,6 +60,14 @@ const HUNTING_SCHEMA = 1;
 
 // Legal light moves by a minute a day; conditions are the only volatile part.
 const HUNTING_CACHE_TTL_SECONDS = 900;
+
+// Ski versions independently too, for the same reason hunting does.
+const SKI_SCHEMA = 1;
+
+// The base depth under this is a CLI product that updates once a day, and the
+// forecast half is a gridpoint that updates hourly. Half an hour is already
+// far fresher than the slowest input and keeps the upstream call count flat.
+const SKI_CACHE_TTL_SECONDS = 1800;
 
 // Contact address in the UA is the part NWS actually cares about.
 const USER_AGENT = '906dashboard.com-widget/1.0 (https://906dashboard.com; aurora@906dashboard.com)';
@@ -568,6 +578,179 @@ async function buildHunting(key) {
   };
 }
 
+// ── ski ───────────────────────────────────────────────────────────────────
+
+/**
+ * Base-depth scale, ported verbatim from sites/906/ski.html's renderSnow().
+ *
+ * Same rule as VERDICTS above: if the page's thresholds change, change them
+ * here too, or the widget and the page will describe the same hill
+ * differently on the same morning.
+ */
+const SKI_VERDICTS = [
+  { max: 1,        level: 'none', pill: 'NO SNOWPACK' },
+  { max: 12,       level: 'thin', pill: 'THIN COVER' },
+  { max: Infinity, level: 'good', pill: 'GOOD BASE' },
+];
+
+/**
+ * Season gate, ported from ski.html's seasonState().
+ *
+ * This matters more here than on the page. A widget sits on a lodge's
+ * homepage all year, and in July the honest reading of every snow field is
+ * zero — which renders as a confident "NO SNOWPACK" verdict about a mountain
+ * nobody is trying to ski. Out of season the widget says so instead of
+ * reporting a true number that reads as bad news.
+ */
+function skiSeason(now) {
+  const m = Number(etParts(now).month); // 1-12 in Michigan's calendar, not UTC
+  if (m === 11) return 'early';
+  if (m === 12 || m <= 2) return 'peak';
+  if (m === 3) return 'late';
+  if (m === 4) return 'spring';
+  return 'off';
+}
+
+const SEASON_TEXT = {
+  early: 'Early season — natural-snow terrain is still filling in.',
+  peak: 'Peak season.',
+  late: 'Late season — watch the afternoon thaw.',
+  spring: 'Spring skiing — most areas have closed.',
+  off: 'Out of season — Michigan ski areas are closed.',
+};
+
+function skiVerdict(depthIn, season) {
+  if (season === 'off' || season === 'spring') {
+    return { level: 'closed', pill: 'CLOSED', text: SEASON_TEXT[season] };
+  }
+  if (depthIn == null) {
+    // No depth is a real state, not a failure: Gaylord's CLI omits the field
+    // outside deep winter. Say what is unknown rather than implying bare ground.
+    return { level: 'unknown', pill: 'NO DEPTH REPORT', text: 'No base depth published yet. ' + SEASON_TEXT[season] };
+  }
+  const v = SKI_VERDICTS.find((x) => depthIn < x.max);
+  const text = v.level === 'good'
+    ? 'A settled base at this depth supports full grooming.'
+    : v.level === 'thin'
+      ? 'Enough for groomed runs; thin for off-piste and classic track.'
+      : 'Bare ground at the climate station. Snowmaking hills may still be open.';
+  return { level: v.level, pill: v.pill, text };
+}
+
+/**
+ * Forecast snowfall for one area's own gridpoint.
+ *
+ * This is the half of the payload that IS per-hill. snowfallAmount comes in
+ * millimetres on a list of ISO8601 intervals, so it is summed into Michigan
+ * calendar days rather than reported raw.
+ */
+async function fetchAreaForecast(area, now) {
+  const point = await getJson(`https://api.weather.gov/points/${area.lat},${area.lon}`, 86400);
+  const grid = await getJson(point.properties.forecastGridData, 1800);
+  const g = grid.properties;
+
+  const byDay = new Map();
+  for (const v of (g.snowfallAmount && g.snowfallAmount.values) || []) {
+    if (v.value == null) continue;
+    const startIso = String(v.validTime).split('/')[0];
+    const start = new Date(startIso);
+    if (isNaN(start.getTime())) continue;
+    const p = etParts(start);
+    const day = `${p.year}-${p.month}-${p.day}`;
+    byDay.set(day, (byDay.get(day) || 0) + v.value);
+  }
+
+  const p = etParts(now);
+  const todayISO = `${p.year}-${p.month}-${p.day}`;
+  const days = [...byDay.entries()]
+    .filter(([d]) => d >= todayISO)
+    .sort((a, b) => (a[0] < b[0] ? -1 : 1))
+    .slice(0, 3)
+    .map(([date, mm]) => ({ date, snowIn: mmToIn(mm) }));
+
+  const next72In = Math.round(days.reduce((t, d) => t + (d.snowIn || 0), 0) * 10) / 10;
+
+  return {
+    days,
+    next72In,
+    tempF: cToF(valueAt(g.temperature, now)),
+    windMph: kmhToMph(valueAt(g.windSpeed, now)),
+  };
+}
+
+/** Winter-relevant alerts only — a summer flood watch is noise on a ski widget. */
+async function fetchSkiAlerts(lat, lon) {
+  const d = await getJson(`https://api.weather.gov/alerts/active?point=${lat},${lon}`, 600);
+  const re = /winter|snow|blizzard|ice|freez|wind chill|cold|avalanche/i;
+  return ((d && d.features) || [])
+    .filter((f) => f.properties && re.test(f.properties.event || ''))
+    .slice(0, 2)
+    .map((f) => ({ event: f.properties.event, headline: f.properties.headline || null }));
+}
+
+async function buildSki(region, areaId) {
+  const reg = SKI_REGIONS[region];
+  const now = new Date();
+  const season = skiSeason(now);
+  const area = areaId ? findArea(region, areaId) : null;
+
+  // Each half fails on its own. A dead CLI must still leave the forecast
+  // showing, and vice versa — this sits on someone's homepage.
+  const [cliRes, fcRes, alertRes] = await Promise.allSettled([
+    fetchCli(reg.station, getJson),
+    area ? fetchAreaForecast(area, now) : Promise.resolve(null),
+    fetchSkiAlerts(area ? area.lat : reg.lat, area ? area.lon : reg.lon),
+  ]);
+
+  const cli = cliRes.status === 'fulfilled' ? cliRes.value : null;
+  const fc = fcRes.status === 'fulfilled' ? fcRes.value : null;
+  const alerts = alertRes.status === 'fulfilled' ? alertRes.value : [];
+
+  const snow = (cli && cli.snow) || {};
+  const pick = (c) => (c && !c.missing ? c.value : null);
+  const depthIn = pick(snow.depth);
+
+  return {
+    ok: true,
+    region,
+    regionLabel: reg.label,
+    season,
+    seasonText: SEASON_TEXT[season],
+    verdict: skiVerdict(depthIn, season),
+    // Regional, and labelled with the station it actually came from. The
+    // widget prints stationName beside the number for exactly this reason.
+    base: {
+      depthIn,
+      station: reg.station,
+      stationName: reg.stationName,
+      asOf: (cli && cli.date) || null,
+      available: depthIn != null,
+    },
+    observed: {
+      yesterdayIn: pick(snow.yesterday),
+      yesterdayTrace: Boolean(snow.yesterday && snow.yesterday.trace),
+      monthToDateIn: pick(snow.monthToDate),
+      seasonToDateIn: pick(snow.sinceJul1) != null ? pick(snow.sinceJul1) : pick(snow.sinceSep1),
+    },
+    area: area
+      ? {
+          id: area.id, name: area.name, town: area.town, type: area.type, url: area.url,
+          forecast: fc ? fc.days : null,
+          next72In: fc ? fc.next72In : null,
+          tempF: fc ? fc.tempF : null,
+          windMph: fc ? fc.windMph : null,
+        }
+      : null,
+    alerts,
+    page: reg.page,
+    sources: {
+      base: cli ? 'ok' : 'fail',
+      forecast: area ? (fc ? 'ok' : 'fail') : 'n/a',
+    },
+    generated: now.toISOString(),
+  };
+}
+
 // ── http ──────────────────────────────────────────────────────────────────
 
 function corsHeaders(origin) {
@@ -656,6 +839,28 @@ export default {
         `/hunting?v=${HUNTING_SCHEMA}&county=${key}`,
         () => buildHunting(key),
         HUNTING_CACHE_TTL_SECONDS,
+        url, origin, ctx
+      );
+    }
+
+    if (url.pathname === '/ski') {
+      const region = (url.searchParams.get('region') || 'up').toLowerCase();
+      const areaRaw = (url.searchParams.get('area') || '').toLowerCase();
+      const area = areaRaw && areaRaw !== 'all' ? areaRaw : null;
+
+      if (!SKI_REGIONS[region]) {
+        return json({ ok: false, status: 400, error: 'unknown region: ' + region }, origin);
+      }
+      // Rejected rather than silently ignored, so a typo in a client config
+      // surfaces at once instead of quietly serving the regional roll-up.
+      if (area && !findArea(region, area)) {
+        return json({ ok: false, status: 400, error: 'unknown area: ' + area }, origin);
+      }
+
+      return serveCached(
+        `/ski?v=${SKI_SCHEMA}&region=${region}&area=${area || 'all'}`,
+        () => buildSki(region, area),
+        SKI_CACHE_TTL_SECONDS,
         url, origin, ctx
       );
     }

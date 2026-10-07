@@ -2,7 +2,7 @@
   "_readme": [
     "Client registry for the embeddable widgets. One entry per customer.",
     "",
-    "This file is PUBLIC \u2014 it is served from widgets.906dashboard.com and read by",
+    "This file is PUBLIC — it is served from widgets.906dashboard.com and read by",
     "the widget in the visitor's browser. Put nothing in it you would not publish.",
     "The client id is not a secret and is not access control: embedding is gated by",
     "the frame-ancestors header in vercel.json, which is the file to edit when",
@@ -10,22 +10,22 @@
     "",
     "Fields:",
     "  name     display name, used in the attribution link's UTM tag only",
-    "  region   'up' \u2014 the only region with a widget today",
+    "  region   'up' — the only region with a widget today",
     "  spot     pin the widget to one town, or null for the regional roll-up.",
     "           Valid: mqt cph wfp mun irw grm pcm (see tools/widget-api/worker.js)",
     "  spotLabel  optional: name the viewing spot THIS client recommends, when it",
     "             differs from the default in tools/widget-api/worker.js. Applied",
     "             in the browser, so it never touches the cached data.",
     "  size     'card' | 'strip' | 'panel' | 'auto'. 'auto' is strip at 700px and",
-    "           wider, card below \u2014 measured on the widget's own width, not the",
+    "           wider, card below — measured on the widget's own width, not the",
     "           device, so a narrow desktop sidebar gets the card as well.",
-    "  font       optional: 'roboto' or 'montserrat'. Opt-in only \u2014 a client who",
+    "  font       optional: 'roboto' or 'montserrat'. Opt-in only — a client who",
     "             sets none keeps the system stack and loads no webfont.",
     "  hideRows   optional: drop rows the client's own page already covers.",
     "             Any of 'window' 'spot' 'kp' 'moon'. Hiding 'spot' also drops",
     "             the viewing location from the verdict sentence.",
     "  attribution  true keeps the 'Live data from 906 Dashboard' link.",
-    "               false is the white-label tier \u2014 only sell it deliberately,",
+    "               false is the white-label tier — only sell it deliberately,",
     "               the link is the backlink and the referral traffic.",
     "  brand    presentation only. Never reaches the data request, so every",
     "           client on the same (region, spot) shares one cached payload.",
@@ -37,7 +37,15 @@
     "county   hunting widget only: which UP county's legal light to show.",
     "         Fifteen valid keys, see tools/widget-api/hunting-data.js.",
     "light-demo exists to prove the widget works on a white site: the verdict",
-    "pill picks its own ink by luminance, so a pale brand does not wash it out."
+    "pill picks its own ink by luminance, so a pale brand does not wash it out.",
+    "",
+    "region   ski widget only: 'up' (Upper Peninsula) or 'nlp' (northern Lower).",
+    "         The ski widget is the first to serve both — snow needs no separate",
+    "         verdict table the way the aurora Kp scale does.",
+    "area     ski widget only: pin to one hill for the FORECAST half. Base depth",
+    "         stays regional either way; see tools/widget-api/ski-data.js.",
+    "         Omit for the regional roll-up.",
+    "hideRows ski widget: any of 'new' 'forecast' 'season' 'conditions'."
   ],
   "demo": {
     "name": "906 Dashboard",
@@ -107,8 +115,8 @@
       "a2": "#a4d584"
     },
     "_spotLabel_note": "Viewing spot removed at the client's request (Katie Shimp, 11 Sep 2026): their northern-lights page already recommends locations, so the widget repeating one is duplication at best and a second opinion at worst. hideRows also switches the verdict sentence to the Worker's whyNoSpot variant, so no location is named in prose either. spotLabel is dropped as it now has nothing to label; restore both together if they ever want the row back.",
-    "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin \u2014 see tools/widget-api/README.md.",
-    "_size_note": "auto at the client's request (15 Sep 2026): strip on desktop, card on mobile. It switches on the width the WIDGET is given, not the device \u2014 so a narrow desktop sidebar gets the card too, which is what a reader needs there. Breakpoint 700px, measured: both the pinned and roll-up strips reach their minimum height at exactly 700 and grow below it."
+    "_brand_note": "Brand colours are theirs, from the brand sheet: navy #0b2f5e, green #a4d584. card/muted/line are derived tints of the navy; every pairing clears WCAG AA (ink 13.3:1, muted 6.7:1, accent 7.9:1) and all five verdict colours clear 4.5:1 on both surfaces. Their green is SAFE beside the verdict scale: dE76 29+ from every level including LONG SHOT, which shares its hue family. Font is Roboto, their copy face. Their header face is Gotham Bold, which is commercial and cannot be served from this origin — see tools/widget-api/README.md.",
+    "_size_note": "auto at the client's request (15 Sep 2026): strip on desktop, card on mobile. It switches on the width the WIDGET is given, not the device — so a narrow desktop sidebar gets the card too, which is what a reader needs there. Breakpoint 700px, measured: both the pinned and roll-up strips reach their minimum height at exactly 700 and grow below it."
   },
   "hunting-demo": {
     "name": "Hunting Demo",
@@ -123,6 +131,22 @@
       "line": "#2E3722",
       "a1": "#C2D64A",
       "a2": "#6B8E23"
+    }
+  },
+  "ski-demo": {
+    "name": "Ski Demo",
+    "region": "up",
+    "area": "bohemia",
+    "size": "auto",
+    "attribution": true,
+    "brand": {
+      "bg": "#0C1A26",
+      "card": "#14283A",
+      "ink": "#EAF4FF",
+      "muted": "#8FA9C2",
+      "line": "#1F3A52",
+      "a1": "#56B3F0",
+      "a2": "#7C6CF0"
     }
   }
 }
