@@ -44,6 +44,15 @@
   // widget cannot report its own failure — the browser paints "refused to
   // connect" and we hear nothing. The height handshake is the signal: if a
   // frame has not reported in by now, it never started.
+  //
+  // The clock starts on the frame's own `load`, NOT at mount. These frames are
+  // loading="lazy", so one below the fold does not fetch anything until the
+  // reader scrolls near it — which can be minutes, or never. Starting the
+  // timer at mount meant any embed far enough down a long page was replaced
+  // with "unavailable" eight seconds in, while the console blamed the
+  // allowlist for a frame that had simply not been reached yet. A refused
+  // frame still fires `load` for the browser's own error document, so the real
+  // failure is still caught.
   var LOAD_TIMEOUT_MS = 8000;
 
   var seq = 0;
@@ -93,34 +102,42 @@
     frames[fid] = frame;
     node.appendChild(frame);
 
-    setTimeout(function () {
-      if (reported[fid]) return;
-      // Two audiences, two messages. A visitor gets something calm and
-      // non-technical; whoever is installing it gets the actual cause in the
-      // console, because they are the only one who can fix it.
-      frame.style.display = "none";
-      var note = document.createElement("div");
-      note.setAttribute("role", "status");
-      note.style.cssText =
-        "font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
-        "color:#6b7280;padding:12px 14px;border:1px solid #d7dbe0;border-radius:8px;background:#f7f8f9;";
-      note.textContent = ({
-        hunting: "Legal shooting hours are unavailable right now.",
-        ski: "Snow conditions are unavailable right now."
-      })[kind] || "Live aurora conditions are unavailable right now.";
-      node.appendChild(note);
+    // Armed on the frame's first load, once. A lazy frame that is never
+    // scrolled to never loads, never arms this, and is left alone.
+    var armed = false;
+    frame.addEventListener("load", function () {
+      if (armed) return;
+      armed = true;
 
-      console.error(
-        "[906 widget] The widget frame never loaded.\n" +
-        "Most likely this page's address is not on the widget's allowlist.\n" +
-        "  This page: " + location.origin + "\n" +
-        "  Widget:    " + ORIGIN + "\n" +
-        "Note that frame-ancestors applies to EVERY frame in the chain, not just\n" +
-        "the immediate parent — a CMS preview or staging host that wraps this page\n" +
-        "has to be on the allowlist too. Send the address above to 906dashboard.com\n" +
-        "and it will be added."
-      );
-    }, LOAD_TIMEOUT_MS);
+      setTimeout(function () {
+        if (reported[fid]) return;
+        // Two audiences, two messages. A visitor gets something calm and
+        // non-technical; whoever is installing it gets the actual cause in the
+        // console, because they are the only one who can fix it.
+        frame.style.display = "none";
+        var note = document.createElement("div");
+        note.setAttribute("role", "status");
+        note.style.cssText =
+          "font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" +
+          "color:#6b7280;padding:12px 14px;border:1px solid #d7dbe0;border-radius:8px;background:#f7f8f9;";
+        note.textContent = ({
+          hunting: "Legal shooting hours are unavailable right now.",
+          ski: "Snow conditions are unavailable right now."
+        })[kind] || "Live aurora conditions are unavailable right now.";
+        node.appendChild(note);
+
+        console.error(
+          "[906 widget] The widget frame never loaded.\n" +
+          "Most likely this page's address is not on the widget's allowlist.\n" +
+          "  This page: " + location.origin + "\n" +
+          "  Widget:    " + ORIGIN + "\n" +
+          "Note that frame-ancestors applies to EVERY frame in the chain, not just\n" +
+          "the immediate parent — a CMS preview or staging host that wraps this page\n" +
+          "has to be on the allowlist too. Send the address above to 906dashboard.com\n" +
+          "and it will be added."
+        );
+      }, LOAD_TIMEOUT_MS);
+    });
   }
 
   window.addEventListener("message", function (e) {
