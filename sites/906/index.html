@@ -742,6 +742,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/ga4.js"></script>
   <link rel="stylesheet" href="/yooper-buddy/hero.css">
+  <link rel="stylesheet" href="/home-refresh.css">
 </head>
 <body>
 
@@ -2071,7 +2072,7 @@ function renderWeather(data){
         <div class="wx-lbl">Wind</div><div class="wx-val">${fmt(s.wind_dir,'')} ${fmt(s.wind_mph,' mph')}</div>
         <div class="wx-lbl">Gust</div><div class="wx-val">${fmt(s.wind_gust_mph,' mph')}</div>
         <div class="wx-lbl">Humid</div><div class="wx-val">${fmt(s.humidity,'%')}</div>
-        <div class="wx-val">${fmt(s.visibility_mi,' mi')}</div>
+        <div class="wx-lbl">Visibility</div><div class="wx-val">${fmt(s.visibility_mi,' mi')}</div>
       </div>
     </div>`;
   }).join('');

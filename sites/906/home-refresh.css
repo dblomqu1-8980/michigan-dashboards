@@ -1,0 +1,240 @@
+/* Homepage-only presentation refresh. The existing content and behavior are
+   kept in the document; these rules do not change the shared navigation. */
+
+/* Keep all six current conditions visible without horizontal scrolling. */
+.status-bar {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  padding: 18px max(20px, calc((100% - 1360px) / 2));
+  overflow: visible;
+  border-bottom: 1px solid var(--border);
+}
+
+.status-bar .sb-item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-areas: "icon label" "icon value";
+  align-content: center;
+  align-items: start;
+  gap: 4px 10px;
+  min-width: 0;
+  min-height: 78px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surf2);
+}
+
+.status-bar .sb-icon {
+  grid-area: icon;
+  align-self: center;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.status-bar .sb-label {
+  grid-area: label;
+  color: #b8c8d4;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.status-bar .sb-val {
+  grid-area: value;
+  width: auto;
+  min-width: 0;
+  overflow: visible;
+  overflow-wrap: break-word;
+  text-overflow: clip;
+  white-space: normal;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+/* Give section labels, summaries, and supporting information more contrast. */
+.today-section .tc-topic,
+.today-section .aurora-signal-label,
+.today-section .signal-label {
+  color: #b7c9d5;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: .06em;
+}
+
+.today-section .tc-desc,
+.today-section .aurora-tip,
+.today-section .feature-tip,
+.today-section .tc-signal,
+.today-section .aurora-source,
+.today-section .signal-src {
+  color: #c1cdd7;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.today-section .tc-signal span:first-child { color: #b7c9d5; }
+.today-section .today-card { padding: 20px; }
+
+.featured-cams-section .cam-subtitle,
+.featured-cams-section .cam-label,
+.trip-section .trip-card-sub,
+.events-section .weekend-range,
+.events-section .event-empty,
+.events-section .event-where,
+.events-section .lc-sub {
+  color: #bbcbd6;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.featured-cams-section .cam-label { padding: 10px 12px; }
+.featured-cams-section .cam-label strong { font-size: 13px; }
+.trip-section .trip-card-title { font-size: 15px; }
+.trip-section .trip-card-link { font-size: 12px; }
+.events-section .lc-label { font-size: 13px; }
+.events-section .links-hdr { color: #b7c9d5; font-size: 12px; }
+
+/* Make the expandable live-data sections easier to scan. */
+.dashboard-section .dashboard-header {
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.dashboard-section .panel-toggle { margin-bottom: 12px; }
+.dashboard-section .panel-hdr {
+  gap: 12px;
+  min-height: 54px;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.dashboard-section .panel-inner-grid {
+  gap: 14px;
+  padding: 14px;
+  background: #111820;
+}
+
+.dashboard-section .card-head {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 16px;
+}
+
+.dashboard-section .card-title {
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.dashboard-section .card-body { padding: 16px; }
+.dashboard-section .wx-city {
+  color: #c3d1db;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.dashboard-section .wx-desc {
+  height: auto;
+  min-height: 2.8em;
+  color: #bbcbd6;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.dashboard-section .wx-meta {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.dashboard-section .wx-meta > * { overflow-wrap: break-word; }
+.dashboard-section .wx-val { text-align: right; }
+
+.dashboard-section .wx-lbl,
+.dashboard-section .stat-lbl,
+.dashboard-section .bridge-detail,
+.dashboard-section .bcell-lbl,
+.dashboard-section .bcell-sub,
+.dashboard-section .lake-stat,
+.dashboard-section .route-meta,
+.dashboard-section .alert-desc,
+.dashboard-section .no-alerts,
+.dashboard-section .src-note,
+.dashboard-section .ferry-route,
+.dashboard-section .ferry-season,
+.dashboard-section .beach-meta,
+.dashboard-section .fall-places,
+.dashboard-section .fall-note,
+.dashboard-section .snow-row,
+.dashboard-section .lc-sub {
+  color: #b8c8d4;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dashboard-section .route-name { font-size: 13px; }
+.dashboard-section .route-hdr,
+.dashboard-section .route-meta { gap: 8px; flex-wrap: wrap; }
+.dashboard-section .water-copy h3 { font-size: 14px; }
+.dashboard-section .water-copy p {
+  color: #c2ced8;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 1100px) {
+  .status-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* The unchanged mobile navigation is taller than the desktop header. */
+@media (max-width: 700px) {
+  #today, #cameras, #conditions, #roads, #bridge, #water, #trails,
+  #fallcolor, #oredock, #weekend, #trip-planning {
+    scroll-margin-top: clamp(120px, calc(400px - 50vw), 240px);
+  }
+}
+
+@media (max-width: 600px) {
+  .status-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 14px 16px;
+  }
+  .status-bar .sb-item { padding: 11px; }
+  .dashboard-section .panel-inner-grid { gap: 10px; padding: 10px; }
+  .dashboard-section .card-body { padding: 13px; }
+  .dashboard-section .wx-grid { grid-template-columns: 1fr; }
+  .dashboard-section .wx-card {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    grid-template-areas: "city city" "icon temp" "icon desc" "meta meta";
+    align-items: center;
+    gap: 3px 10px;
+    text-align: left;
+  }
+  .dashboard-section .wx-city { grid-area: city; }
+  .dashboard-section .wx-icon { grid-area: icon; margin: 0; text-align: center; }
+  .dashboard-section .wx-temp { grid-area: temp; margin: 0; }
+  .dashboard-section .wx-desc { grid-area: desc; min-height: 0; margin: 0; }
+  .dashboard-section .wx-meta {
+    grid-area: meta;
+    grid-template-columns: auto minmax(82px, 1fr) auto minmax(30px, 1fr);
+    margin-top: 7px;
+  }
+}
+
+@media (max-width: 370px) {
+  .dashboard-section .wx-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 340px) {
+  .status-bar { grid-template-columns: 1fr; }
+}
