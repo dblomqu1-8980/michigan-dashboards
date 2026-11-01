@@ -515,6 +515,7 @@
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/ga4.js"></script>
+  <link rel="stylesheet" href="/goose-buddy/hero.css">
 </head>
 <body>
 
@@ -550,20 +551,38 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="hero">
-  <div class="hero-slide active" id="hero-slide-0" style="background-image:url('https://images.unsplash.com/photo-1694759421163-f2fac730da5a?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-1" style="background-image:url('https://images.unsplash.com/photo-1546869357-184a730b0a31?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-2" style="background-image:url('https://images.unsplash.com/photo-1658550812668-0233e3a24a26?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-3" style="background-image:url('https://images.unsplash.com/photo-1571079526232-4359c36885b4?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-credit">Photography: Unsplash</div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Northern Lower Michigan</div>
-    <h1 class="hero-title">Up North Dashboard —<br>What to Do, See &amp; Expect Today</h1>
-    <p class="hero-subtitle">Traverse City · Petoskey · Gaylord · Alpena · Cadillac · Mackinaw City</p>
-    <p class="hero-desc">Live weather, road and bridge conditions, ferry status, beach and marine reports, trail closures, snow and fall-color progress — everything you need before you head north.</p>
-    <div class="hero-ctas">
-      <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
-      <a href="#roads" class="cta-secondary">🛣️ Check Travel Conditions</a>
+  <div class="goose-layout">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Northern Lower Michigan</div>
+      <h1 class="hero-title">Up North Dashboard —<br>What to Do, See &amp; Expect Today</h1>
+      <p class="hero-subtitle">Traverse City · Petoskey · Gaylord · Alpena · Cadillac · Mackinaw City</p>
+      <p class="hero-desc">Live weather, road and bridge conditions, ferry status, beach and marine reports, trail closures, snow and fall-color progress — everything you need before you head north.</p>
+      <div class="hero-ctas">
+        <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
+        <a href="#roads" class="cta-secondary">🛣️ Check Travel Conditions</a>
+      </div>
+    </div>
+    <div class="goose-stage" id="goose-stage" data-weather="loading">
+      <div class="goose-glow" aria-hidden="true"></div>
+      <div class="goose-cloud goose-cloud-a" aria-hidden="true"></div>
+      <div class="goose-cloud goose-cloud-b" aria-hidden="true"></div>
+      <div class="goose-hills" aria-hidden="true"><svg viewBox="0 0 600 190" preserveAspectRatio="none"><path d="M0 142 83 89l55 31L228 49l63 54 54-39 80 62 69-48 106 77v35H0z" fill="#4e7768" opacity=".32"/><path d="M0 169 94 128l61 28 74-41 74 43 67-34 98 41 70-32 62 35v22H0z" fill="#37675a" opacity=".28"/></svg></div>
+      <div class="goose-ground" aria-hidden="true"></div>
+      <div class="goose-porch" aria-hidden="true"></div>
+      <div class="goose-rain" aria-hidden="true"></div><div class="goose-snow" aria-hidden="true">✦ <span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
+      <div class="goose-kicker"><span aria-hidden="true">✳</span> YOUR UP NORTH WEATHER GOOSE</div>
+      <label class="goose-visually-hidden" for="goose-city">Weather buddy location</label>
+      <select class="goose-select" id="goose-city" aria-label="Choose a location for the weather buddy"><option value="traversecity">Traverse City, MI</option></select>
+      <img class="goose-mascot" id="goose-mascot" src="/goose-buddy/goose-wind.webp" alt="A friendly porch goose checking the weather" width="649" height="649">
+      <div class="goose-quote" id="goose-quote">“Honk! Checking the weather...”</div>
+      <div class="goose-readout">
+        <div class="goose-live" id="goose-status" role="status" aria-live="polite">● CHECKING THE SKY</div>
+        <div class="goose-reading"><strong id="goose-temp">—</strong><span id="goose-unit"></span></div>
+        <div class="goose-description" id="goose-description">Looking outside...</div>
+        <div class="goose-source" id="goose-source">National Weather Service</div>
+        <div class="goose-divider"></div>
+        <div class="goose-time-row"><span>LOCAL TIME</span><time id="goose-clock">--:--:--</time></div>
+      </div>
     </div>
   </div>
 </section>
@@ -993,6 +1012,7 @@ Sun | Farmers Market | Petoskey"></textarea>
 </footer>
 
 <!-- ═══ JAVASCRIPT ═══ -->
+<script src="/goose-buddy/hero.js"></script>
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
 //  Up North Dashboard — Northern Lower Michigan
@@ -1272,7 +1292,16 @@ const SKI_AREAS = [
 
 // ── Utilities ──
 const cToF     = c => c!=null ? Math.round(c*9/5+32)        : null;
-const mpsToMph = v => v!=null ? Math.round(v*2.23694)       : null;
+// NWS station observations normally report wind in km/h, not m/s.
+function nwsWindToMph(measurement) {
+  if (measurement?.value == null || !Number.isFinite(Number(measurement.value))) return null;
+  const value = Number(measurement.value), unit = String(measurement.unitCode || '');
+  if (/km_h|km\/h/i.test(unit)) return Math.round(value * 0.621371);
+  if (/m_s|m\/s/i.test(unit)) return Math.round(value * 2.23694);
+  if (/mi_h|mph/i.test(unit)) return Math.round(value);
+  if (/\bkt\b|knots?|wmoUnit:kn/i.test(unit)) return Math.round(value * 1.15078);
+  return null;
+}
 const mToMi    = v => v!=null ? Math.round(v/1609.34*10)/10 : null;
 const mmToIn   = v => v!=null ? Math.round(v/25.4*10)/10    : null;
 
@@ -1367,7 +1396,7 @@ async function fetchAllWeather() {
   const results = await Promise.all(NWS_STATIONS.map(async s => {
     try {
       const p  = await fetchNWSStation(s.station);
-      const w  = gv(p,'windSpeed','value'), g = gv(p,'windGust','value');
+      window.dispatchEvent(new CustomEvent('goose:nws-station', {detail:{station:s.station,observation:p}}));
       const wc = gv(p,'windChill','value'), hi = gv(p,'heatIndex','value');
       return {
         name:s.name, station:s.station, sub:s.sub,
@@ -1375,8 +1404,8 @@ async function fetchAllWeather() {
         feels_f:       cToF(wc!=null?wc:hi),
         dewpoint_f:    cToF(gv(p,'dewpoint','value')),
         humidity:      Math.round(gv(p,'relativeHumidity','value')||0),
-        wind_mph:      mpsToMph(w),
-        wind_gust_mph: mpsToMph(g),
+        wind_mph:      nwsWindToMph(p.windSpeed),
+        wind_gust_mph: nwsWindToMph(p.windGust),
         wind_dir:      compass(gv(p,'windDirection','value')),
         visibility_mi: mToMi(gv(p,'visibility','value')),
         description:   p.textDescription||'Unknown',
@@ -1387,7 +1416,7 @@ async function fetchAllWeather() {
         timestamp:     p.timestamp,
         ok:true,
       };
-    } catch(e){ return {name:s.name, station:s.station, sub:s.sub, ok:false, error:e.message}; }
+    } catch(e){ window.dispatchEvent(new CustomEvent('goose:nws-station-error', {detail:{station:s.station}})); return {name:s.name, station:s.station, sub:s.sub, ok:false, error:e.message}; }
   }));
   return {stations:results, updated:new Date().toISOString()};
 }
@@ -2688,17 +2717,6 @@ function renderStatusBarSkeleton() {
     if (el) el.innerHTML = '<span class="skeleton" style="display:inline-block;width:60px;height:11px;vertical-align:middle;"></span>';
   });
 }
-
-// ── Hero rotation ──
-let heroIdx = 0;
-function rotateHero() {
-  const slides = document.querySelectorAll('.hero-slide');
-  if (!slides.length) return;
-  slides[heroIdx].classList.remove('active');
-  heroIdx = (heroIdx + 1) % slides.length;
-  slides[heroIdx].classList.add('active');
-}
-setInterval(rotateHero, 7000);
 
 // ── Init ──
 initAdminMode();
