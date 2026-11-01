@@ -741,6 +741,7 @@
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/ga4.js"></script>
+  <link rel="stylesheet" href="/yooper-buddy/hero.css">
 </head>
 <body>
 
@@ -776,23 +777,39 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="hero">
-  <!-- Rotating background slides — images load progressively, gradient fallback always shows -->
-  <div class="hero-slide active" id="hero-slide-0" style="background-image:url('https://images.unsplash.com/photo-1658550812668-0233e3a24a26?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-1" style="background-image:url('https://images.unsplash.com/photo-1694759421163-f2fac730da5a?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-2" style="background-image:url('https://images.unsplash.com/photo-1546869357-184a730b0a31?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-slide"        id="hero-slide-3" style="background-image:url('https://images.unsplash.com/photo-1571079526232-4359c36885b4?auto=format&fit=crop&w=1600&q=80')"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-stars"></div>
-  <div class="hero-aurora"></div>
-  <div class="hero-caption" id="hero-caption">Pictured Rocks National Lakeshore</div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Michigan's Upper Peninsula</div>
-    <h1 class="hero-title">906 Travel Dashboard —<br>What to Do, See &amp; Expect Today</h1>
-    <p class="hero-subtitle">Your real-time guide to the UP</p>
-    <p class="hero-desc">Live weather, road conditions, northern lights forecasts, and local insights — everything you need before you head out.</p>
-    <div class="hero-ctas">
-      <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
-      <a href="#conditions" class="cta-secondary">🛣️ Check Travel Conditions</a>
+  <div class="hero-stars" aria-hidden="true"></div>
+  <div class="hero-aurora" aria-hidden="true"></div>
+  <div class="yooper-layout">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Michigan's Upper Peninsula</div>
+      <h1 class="hero-title">906 Travel Dashboard —<br>What to Do, See &amp; Expect Today</h1>
+      <p class="hero-subtitle">Your real-time guide to the UP</p>
+      <p class="hero-desc">Live weather, road conditions, northern lights forecasts, and local insights — everything you need before you head out.</p>
+      <div class="hero-ctas">
+        <a href="#today" class="cta-primary">📍 What Should I Do Today?</a>
+        <a href="#conditions" class="cta-secondary">🛣️ Check Travel Conditions</a>
+      </div>
+    </div>
+    <div class="yooper-stage" id="yooper-stage" data-weather="loading">
+      <div class="yooper-glow" aria-hidden="true"></div>
+      <div class="yooper-cloud yooper-cloud-a" aria-hidden="true"></div>
+      <div class="yooper-cloud yooper-cloud-b" aria-hidden="true"></div>
+      <div class="yooper-hills" aria-hidden="true"><svg viewBox="0 0 600 190" preserveAspectRatio="none"><path d="M0 142 83 89l55 31L228 49l63 54 54-39 80 62 69-48 106 77v35H0z" fill="#4e7768" opacity=".32"/><path d="M0 169 94 128l61 28 74-41 74 43 67-34 98 41 70-32 62 35v22H0z" fill="#37675a" opacity=".28"/></svg></div>
+      <div class="yooper-ground" aria-hidden="true"></div>
+      <div class="yooper-rain" aria-hidden="true"></div><div class="yooper-snow" aria-hidden="true">✦ <span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
+      <div class="yooper-kicker"><span aria-hidden="true">✳</span> YOUR U.P. WEATHER BUDDY</div>
+      <label class="yooper-visually-hidden" for="yooper-city">Weather buddy location</label>
+      <select class="yooper-select" id="yooper-city" aria-label="Choose a location for the weather buddy"><option value="marquette">Marquette, MI</option></select>
+      <img class="yooper-mascot" id="yooper-mascot" src="/yooper-buddy/moose-wind.webp" alt="A friendly moose checking the weather" width="649" height="649">
+      <div class="yooper-quote" id="yooper-quote">“Ope! Checking the weather...”</div>
+      <div class="yooper-readout">
+        <div class="yooper-live" id="yooper-status" role="status" aria-live="polite">● CHECKING THE SKY</div>
+        <div class="yooper-reading"><strong id="yooper-temp">—</strong><span id="yooper-unit"></span></div>
+        <div class="yooper-description" id="yooper-description">Looking outside...</div>
+        <div class="yooper-source" id="yooper-source">National Weather Service</div>
+        <div class="yooper-divider"></div>
+        <div class="yooper-time-row"><span>LOCAL TIME</span><time id="yooper-clock">--:--:--</time></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1265,6 +1282,7 @@
 </footer>
 
 <!-- ═══ JAVASCRIPT ═══ -->
+<script src="/yooper-buddy/hero.js"></script>
 <script>
 // MDOT's own API blocks direct browser calls from this domain (no CORS header
 // on their end), so their real incident and construction data comes through a
@@ -1338,7 +1356,16 @@ const FEATURED_CAMS = [
 
 // ── Utilities ──
 const cToF    = c => c!=null ? Math.round(c*9/5+32)        : null;
-const mpsToMph= v => v!=null ? Math.round(v*2.23694)       : null;
+// NWS station observations normally report wind in km/h, not m/s.
+function nwsWindToMph(measurement) {
+  if (measurement?.value == null || !Number.isFinite(Number(measurement.value))) return null;
+  const value = Number(measurement.value), unit = String(measurement.unitCode || '');
+  if (/km_h|km\/h/i.test(unit)) return Math.round(value * 0.621371);
+  if (/m_s|m\/s/i.test(unit)) return Math.round(value * 2.23694);
+  if (/mi_h|mph/i.test(unit)) return Math.round(value);
+  if (/\bkt\b|knots?|wmoUnit:kn/i.test(unit)) return Math.round(value * 1.15078);
+  return null;
+}
 const mToMi   = v => v!=null ? Math.round(v/1609.34*10)/10 : null;
 const mmToIn  = v => v!=null ? Math.round(v/25.4*10)/10    : null;
 
@@ -1799,15 +1826,15 @@ async function fetchAllWeather() {
   const results = await Promise.all(NWS_STATIONS.map(async s => {
     try {
       const p=await fetchNWSStation(s.station);
-      const w=gv(p,'windSpeed','value'), g=gv(p,'windGust','value');
+      window.dispatchEvent(new CustomEvent('yooper:nws-station', {detail:{station:s.station,observation:p}}));
       const wc=gv(p,'windChill','value'), hi=gv(p,'heatIndex','value');
       return {
         name:s.name, station:s.station,
         temp_f:        cToF(gv(p,'temperature','value')),
         feels_f:       cToF(wc!=null?wc:hi),
         humidity:      Math.round(gv(p,'relativeHumidity','value')||0),
-        wind_mph:      mpsToMph(w),
-        wind_gust_mph: mpsToMph(g),
+        wind_mph:      nwsWindToMph(p.windSpeed),
+        wind_gust_mph: nwsWindToMph(p.windGust),
         wind_dir:      compass(gv(p,'windDirection','value')),
         visibility_mi: mToMi(gv(p,'visibility','value')),
         description:   p.textDescription||'Unknown',
@@ -1818,7 +1845,7 @@ async function fetchAllWeather() {
         timestamp:     p.timestamp,
         ok:true,
       };
-    } catch(e){ return {name:s.name,station:s.station,ok:false,error:e.message}; }
+    } catch(e){ window.dispatchEvent(new CustomEvent('yooper:nws-station-error', {detail:{station:s.station}})); return {name:s.name,station:s.station,ok:false,error:e.message}; }
   }));
   return {stations:results, updated:new Date().toISOString()};
 }
@@ -2516,24 +2543,6 @@ function renderStatusBarSkeleton() {
     if (el) { el.innerHTML = '<span class="skeleton" style="display:inline-block;width:60px;height:11px;vertical-align:middle;"></span>'; }
   });
 }
-
-// ── Hero image rotation ──
-const HERO_SLIDES = [
-  { id: 'hero-slide-0', caption: 'Lake Superior — Michigan\'s Upper Peninsula' },
-  { id: 'hero-slide-1', caption: 'Fall Colors — UP Northwoods'                 },
-  { id: 'hero-slide-2', caption: 'Waterfall Country — Pictured Rocks region'   },
-  { id: 'hero-slide-3', caption: 'Winter in the UP — Pure Michigan'             },
-];
-let heroIdx = 0;
-function rotateHero() {
-  const slides  = document.querySelectorAll('.hero-slide');
-  const caption = document.getElementById('hero-caption');
-  slides[heroIdx].classList.remove('active');
-  heroIdx = (heroIdx + 1) % HERO_SLIDES.length;
-  slides[heroIdx].classList.add('active');
-  if (caption) caption.textContent = HERO_SLIDES[heroIdx].caption;
-}
-setInterval(rotateHero, 7000); // rotate every 7s, 1.8s crossfade
 
 // ── Init ──
 initAdminMode();

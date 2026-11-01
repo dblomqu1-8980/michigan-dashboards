@@ -1,0 +1,41 @@
+/* A self-contained hero; the rest of the dashboard keeps its existing styles. */
+.hero{display:block;min-height:0;background:radial-gradient(ellipse at 72% 35%,#183b39 0%,#102727 32%,#081421 76%)}
+.hero-stars,.hero-aurora{pointer-events:none}
+.hero::after{z-index:1;pointer-events:none;height:90px}
+.yooper-layout{position:relative;z-index:3;width:min(1200px,calc(100% - 64px));margin:auto;padding:48px 0 105px;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);align-items:center;gap:40px}
+.hero-content{text-align:left;padding:0;max-width:none}
+.hero-title{font-size:clamp(30px,3.35vw,46px)}
+.hero-desc{margin:0 0 27px;max-width:510px}
+.hero-ctas{justify-content:flex-start}
+.yooper-stage{position:relative;isolation:isolate;height:390px;overflow:hidden;border-radius:17px;background:linear-gradient(165deg,#c6dfce 0%,#e4ead1 70%,#d5e0c8);box-shadow:0 18px 55px rgba(0,0,0,.2);border:1px solid rgba(222,243,225,.45);color:#193e32}
+.yooper-stage[data-weather="rain"]{background:linear-gradient(165deg,#aec6c9,#d7e0d4 70%,#c8d6c8)}
+.yooper-stage[data-weather="snow"]{background:linear-gradient(165deg,#c8dfe1,#e2ebdc 72%,#e9f0e6)}
+.yooper-stage.is-night{background:linear-gradient(165deg,#405961,#879d91 72%,#adbca6)}
+.yooper-glow{position:absolute;left:13%;top:20%;width:62px;height:62px;border-radius:50%;background:#f6ce77;box-shadow:0 0 0 12px rgba(255,236,177,.23);opacity:.8}
+.yooper-stage.is-night .yooper-glow{width:52px;height:52px;background:#f5e8c2;box-shadow:0 0 0 9px rgba(255,255,255,.1)}
+.yooper-stage.is-cloudy .yooper-glow,.yooper-stage[data-weather="rain"] .yooper-glow,.yooper-stage[data-weather="snow"] .yooper-glow{opacity:.2}
+.yooper-cloud{position:absolute;width:90px;height:25px;background:rgba(255,255,249,.4);border-radius:30px;animation:yooper-cloud 23s ease-in-out infinite alternate}
+.yooper-cloud:before,.yooper-cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}
+.yooper-cloud:before{width:42px;height:42px;left:15px;bottom:0}.yooper-cloud:after{width:34px;height:34px;right:14px;bottom:0}
+.yooper-cloud-a{right:12%;top:22%}.yooper-cloud-b{left:11%;top:44%;transform:scale(.65);animation-delay:-8s}
+.yooper-hills{position:absolute;left:0;right:0;bottom:37px;height:175px;z-index:0}.yooper-hills svg{height:100%;width:100%}
+.yooper-ground{position:absolute;bottom:-82px;left:-10%;width:120%;height:145px;background:#92ad94;border-radius:50% 50% 0 0;opacity:.85}
+.yooper-stage[data-weather="snow"] .yooper-ground{background:#e4efdf}
+.yooper-kicker{position:absolute;top:18px;left:17px;z-index:4;font-size:9px;line-height:1.3;font-weight:800;letter-spacing:.12em;color:#416b57}
+.yooper-kicker span{font-size:14px;margin-right:3px}.is-night .yooper-kicker{color:#ecf5e8}
+.yooper-select{position:absolute;right:14px;top:12px;z-index:5;width:145px;max-width:44%;border:1px solid rgba(57,99,73,.22);border-radius:7px;background:rgba(255,255,249,.9);color:#214b3b;font-family:inherit;font-size:11px;font-weight:700;padding:8px 9px;cursor:pointer}
+.yooper-select:focus-visible{outline:3px solid #1a6fc4;outline-offset:2px}
+.yooper-mascot{display:block;position:absolute;z-index:2;left:1%;bottom:-4px;width:min(73%,365px);height:auto;filter:drop-shadow(0 7px 5px rgba(30,60,40,.12));animation:yooper-bob 4.5s ease-in-out infinite;pointer-events:none}
+.yooper-quote{position:absolute;left:14px;bottom:17px;z-index:4;max-width:160px;background:#fffef8;color:#355447;padding:10px 12px;border-radius:11px 11px 11px 2px;box-shadow:0 5px 18px rgba(31,65,47,.15);font-family:Georgia,serif;font-size:13px;font-style:italic;line-height:1.3}
+.yooper-readout{position:absolute;z-index:4;right:14px;bottom:17px;width:190px;max-width:43%;padding:14px 15px 12px;border-radius:11px;background:rgba(255,254,249,.96);box-shadow:0 6px 25px rgba(31,65,47,.15)}
+.yooper-live{color:#628b6a;font-size:8px;font-weight:800;letter-spacing:.11em;line-height:1.25}
+.yooper-reading{display:flex;align-items:flex-start;line-height:1;margin-top:9px}.yooper-reading strong{font-family:Georgia,serif;font-size:48px;line-height:1;font-weight:400;letter-spacing:-.06em;color:#173d31}.yooper-reading span{font-family:Georgia,serif;font-size:17px;padding:4px 0 0 3px}
+.yooper-description{font-size:12px;font-weight:700;margin-top:5px;color:#315543}.yooper-source{font-size:9px;line-height:1.35;color:#738b79;margin-top:5px}.yooper-divider{height:1px;background:#e3ebe0;margin:11px 0 9px}.yooper-time-row{display:flex;justify-content:space-between;align-items:center;gap:5px;color:#829b87;font-size:9px;letter-spacing:.08em;font-weight:700}.yooper-time-row time{color:#345544;letter-spacing:0;font-size:11px;white-space:nowrap}
+.yooper-rain,.yooper-snow{display:none;position:absolute;inset:0;z-index:3;pointer-events:none}
+.yooper-stage[data-weather="rain"] .yooper-rain{display:block;background-image:repeating-linear-gradient(110deg,transparent 0 30px,rgba(255,255,255,.55) 31px 33px,transparent 34px 58px);background-size:110px 80px;opacity:.45;animation:yooper-rain .6s linear infinite}
+.yooper-stage[data-weather="snow"] .yooper-snow{display:block;color:#fff;font-size:18px;animation:yooper-snow 8s linear infinite;top:-10%;left:5%;width:90%;height:110%}.yooper-snow span{position:absolute;font-size:12px}.yooper-snow span:nth-child(1){left:19%;top:22%}.yooper-snow span:nth-child(2){left:42%;top:47%}.yooper-snow span:nth-child(3){left:68%;top:17%}.yooper-snow span:nth-child(4){left:88%;top:69%}
+.yooper-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes yooper-bob{0%,100%{transform:translateY(0) rotate(-.3deg)}50%{transform:translateY(-5px) rotate(.3deg)}}@keyframes yooper-cloud{from{translate:0}to{translate:18px}}@keyframes yooper-rain{to{background-position:-28px 80px}}@keyframes yooper-snow{to{transform:translateY(35%)}}
+@media(max-width:850px){.yooper-layout{width:min(640px,calc(100% - 36px));grid-template-columns:1fr;gap:26px;padding:42px 0 88px}.hero-content{text-align:center}.hero-desc{margin:0 auto 24px}.hero-ctas{justify-content:center}.yooper-stage{width:100%;max-width:560px;margin:auto}}
+@media(max-width:480px){.yooper-layout{width:calc(100% - 26px);gap:23px;padding:32px 0 78px}.hero-title{font-size:27px}.hero-desc{font-size:13px}.hero-ctas{gap:8px}.hero-ctas a{padding:10px 14px;font-size:12px}.yooper-stage{height:325px;order:-1}.yooper-kicker{font-size:8px;left:12px;top:14px;max-width:46%}.yooper-select{width:130px;right:10px;top:9px;font-size:10px}.yooper-mascot{width:74%;left:0}.yooper-readout{width:157px;padding:12px 11px;right:10px;bottom:11px}.yooper-reading strong{font-size:40px}.yooper-quote{bottom:12px;left:10px;max-width:128px;padding:8px 9px;font-size:11px}.yooper-time-row{font-size:8px}.yooper-time-row time{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.yooper-mascot,.yooper-cloud,.yooper-rain,.yooper-snow{animation:none!important}}
