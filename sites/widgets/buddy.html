@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Weather Buddy Widget — 906 Dashboard</title>
+<!--
+  Embeddable weather buddy: a moose (Upper Peninsula) or a porch goose
+  (northern Lower) who dresses for the current weather, with the temperature
+  and the local time beside them.
+
+  Lifted from the 906dashboard.com and upnorthdashboard.com homepages. Unlike
+  aurora, hunting and ski it has NO Worker behind it: the weather is read in
+  the visitor's browser straight from api.weather.gov, exactly as the homepage
+  versions do. NWS is public, keyless and sends CORS headers, so there is
+  nothing to deploy and nothing to rate-limit on our side.
+
+  Weather logic (look(), observation(), isDaylight()) is the homepage logic
+  verbatim — change it there and here together, or the buddy dresses
+  differently on the widget than on the site it was taken from.
+
+  Query params (all optional, all overridable by ?client=):
+    client     key into clients.json
+    character  moose | goose           (default moose)
+    city       a key from CITIES below  (default: first city for the character)
+    picker     0 hides the city dropdown, for a client who pins one town
+    size       card|panel|auto
+-->
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none !important}
+  html,body{background:transparent;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+
+  .bd{max-width:560px;color:#193e32}
+  .bd.size-card{max-width:360px}
+  .bd-foot{display:flex;justify-content:flex-end;padding:7px 2px 0;font-size:10.5px}
+  .bd-foot a{color:#6b7280;text-decoration:none;font-weight:600}
+  .bd-foot a:hover,.bd-foot a:focus-visible{text-decoration:underline}
+
+  .bd-stage{position:relative;isolation:isolate;height:390px;overflow:hidden;border-radius:17px;background:linear-gradient(165deg,#c6dfce 0%,#e4ead1 70%,#d5e0c8);box-shadow:0 18px 55px rgba(0,0,0,.2);border:1px solid rgba(222,243,225,.45);color:#193e32}
+  .bd-stage[data-weather="rain"]{background:linear-gradient(165deg,#aec6c9,#d7e0d4 70%,#c8d6c8)}
+  .bd-stage[data-weather="snow"]{background:linear-gradient(165deg,#c8dfe1,#e2ebdc 72%,#e9f0e6)}
+  .bd-stage.is-night{background:linear-gradient(165deg,#405961,#879d91 72%,#adbca6)}
+  .bd-glow{position:absolute;left:13%;top:20%;width:62px;height:62px;border-radius:50%;background:#f6ce77;box-shadow:0 0 0 12px rgba(255,236,177,.23);opacity:.8}
+  .bd-stage.is-night .bd-glow{width:52px;height:52px;background:#f5e8c2;box-shadow:0 0 0 9px rgba(255,255,255,.1)}
+  .bd-stage.is-cloudy .bd-glow,.bd-stage[data-weather="rain"] .bd-glow,.bd-stage[data-weather="snow"] .bd-glow{opacity:.2}
+  .bd-cloud{position:absolute;width:90px;height:25px;background:rgba(255,255,249,.4);border-radius:30px;animation:bd-cloud 23s ease-in-out infinite alternate}
+  .bd-cloud:before,.bd-cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}
+  .bd-cloud:before{width:42px;height:42px;left:15px;bottom:0}.bd-cloud:after{width:34px;height:34px;right:14px;bottom:0}
+  .bd-cloud-a{right:12%;top:22%}.bd-cloud-b{left:11%;top:44%;transform:scale(.65);animation-delay:-8s}
+  .bd-hills{position:absolute;left:0;right:0;bottom:37px;height:175px;z-index:0}.bd-hills svg{height:100%;width:100%}
+  .bd-ground{position:absolute;bottom:-82px;left:-10%;width:120%;height:145px;background:#92ad94;border-radius:50% 50% 0 0;opacity:.85}
+  .bd-stage[data-weather="snow"] .bd-ground{background:#e4efdf}
+  /* The goose sits on a porch; the moose stands in the clearing. */
+  .bd-porch{display:none;position:absolute;z-index:1;left:0;right:0;bottom:0;height:33px;border-top:4px solid #b78b63;background:repeating-linear-gradient(90deg,#a67858 0 80px,#8e6148 80px 83px);opacity:.85}
+  .bd[data-character="goose"] .bd-porch{display:block}
+  .bd-kicker{position:absolute;top:18px;left:17px;z-index:4;font-size:9px;line-height:1.3;font-weight:800;letter-spacing:.12em;color:#416b57;max-width:48%}
+  .bd-kicker span{font-size:14px;margin-right:3px}.is-night .bd-kicker{color:#ecf5e8}
+  .bd-select{position:absolute;right:14px;top:12px;z-index:5;width:145px;max-width:44%;border:1px solid rgba(57,99,73,.22);border-radius:7px;background:rgba(255,255,249,.9);color:#214b3b;font-family:inherit;font-size:11px;font-weight:700;padding:8px 9px;cursor:pointer}
+  .bd-select:focus-visible{outline:3px solid #1a6fc4;outline-offset:2px}
+  .bd-place{position:absolute;right:14px;top:18px;z-index:5;font-size:11px;font-weight:800;letter-spacing:.06em;color:#214b3b}
+  .is-night .bd-place{color:#ecf5e8}
+  .bd-mascot{display:block;position:absolute;z-index:2;left:1%;bottom:-4px;width:min(73%,365px);height:auto;filter:drop-shadow(0 7px 5px rgba(30,60,40,.12));animation:bd-bob 4.5s ease-in-out infinite;pointer-events:none}
+  .bd-quote{position:absolute;left:14px;bottom:17px;z-index:4;max-width:160px;background:#fffef8;color:#355447;padding:10px 12px;border-radius:11px 11px 11px 2px;box-shadow:0 5px 18px rgba(31,65,47,.15);font-family:Georgia,serif;font-size:13px;font-style:italic;line-height:1.3}
+  .bd-readout{position:absolute;z-index:4;right:14px;bottom:17px;width:190px;max-width:43%;padding:14px 15px 12px;border-radius:11px;background:rgba(255,254,249,.96);box-shadow:0 6px 25px rgba(31,65,47,.15)}
+  .bd-live{color:#628b6a;font-size:8px;font-weight:800;letter-spacing:.11em;line-height:1.25}
+  .bd-reading{display:flex;align-items:flex-start;line-height:1;margin-top:9px}.bd-reading strong{font-family:Georgia,serif;font-size:48px;line-height:1;font-weight:400;letter-spacing:-.06em;color:#173d31}.bd-reading span{font-family:Georgia,serif;font-size:17px;padding:4px 0 0 3px}
+  .bd-description{font-size:12px;font-weight:700;margin-top:5px;color:#315543}.bd-source{font-size:9px;line-height:1.35;color:#738b79;margin-top:5px}.bd-divider{height:1px;background:#e3ebe0;margin:11px 0 9px}.bd-time-row{display:flex;justify-content:space-between;align-items:center;gap:5px;color:#829b87;font-size:9px;letter-spacing:.08em;font-weight:700}.bd-time-row time{color:#345544;letter-spacing:0;font-size:11px;white-space:nowrap}
+  .bd-rain,.bd-snow{display:none;position:absolute;inset:0;z-index:3;pointer-events:none}
+  .bd-stage[data-weather="rain"] .bd-rain{display:block;background-image:repeating-linear-gradient(110deg,transparent 0 30px,rgba(255,255,255,.55) 31px 33px,transparent 34px 58px);background-size:110px 80px;opacity:.45;animation:bd-rain .6s linear infinite}
+  .bd-stage[data-weather="snow"] .bd-snow{display:block;color:#fff;font-size:18px;animation:bd-snow 8s linear infinite;top:-10%;left:5%;width:90%;height:110%}.bd-snow span{position:absolute;font-size:12px}.bd-snow span:nth-child(1){left:19%;top:22%}.bd-snow span:nth-child(2){left:42%;top:47%}.bd-snow span:nth-child(3){left:68%;top:17%}.bd-snow span:nth-child(4){left:88%;top:69%}
+  .bd-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  @keyframes bd-bob{0%,100%{transform:translateY(0) rotate(-.3deg)}50%{transform:translateY(-5px) rotate(.3deg)}}
+  @keyframes bd-cloud{from{translate:0}to{translate:18px}}
+  @keyframes bd-rain{to{background-position:-28px 80px}}
+  @keyframes bd-snow{to{transform:translateY(35%)}}
+
+  /* Compact layout: the card, and any frame narrower than 480px. */
+  .bd.size-card .bd-stage{height:325px}
+  .bd.size-card .bd-kicker{font-size:8px;left:12px;top:14px;max-width:46%}
+  .bd.size-card .bd-select{width:130px;right:10px;top:9px;font-size:10px}
+  .bd.size-card .bd-place{right:10px;top:14px;font-size:10px}
+  .bd.size-card .bd-mascot{width:74%;left:0}
+  .bd[data-character="goose"].size-card .bd-mascot{width:85%;left:-2%}
+  .bd.size-card .bd-readout{width:157px;padding:12px 11px;right:10px;bottom:11px}
+  .bd.size-card .bd-reading strong{font-size:40px}
+  .bd.size-card .bd-quote{bottom:12px;left:10px;max-width:128px;padding:8px 9px;font-size:11px}
+  .bd.size-card .bd-time-row{font-size:8px}.bd.size-card .bd-time-row time{font-size:10px}
+
+  @media (prefers-reduced-motion:reduce){.bd-mascot,.bd-cloud,.bd-rain,.bd-snow{animation:none !important}}
+</style>
+</head>
+<body>
+
+<div class="bd size-card" id="bd" data-character="moose" role="region" aria-label="Weather buddy">
+  <div class="bd-stage" id="bd-stage" data-weather="loading">
+    <div class="bd-glow" aria-hidden="true"></div>
+    <div class="bd-cloud bd-cloud-a" aria-hidden="true"></div>
+    <div class="bd-cloud bd-cloud-b" aria-hidden="true"></div>
+    <div class="bd-hills" aria-hidden="true"><svg viewBox="0 0 600 190" preserveAspectRatio="none"><path d="M0 142 83 89l55 31L228 49l63 54 54-39 80 62 69-48 106 77v35H0z" fill="#4e7768" opacity=".32"/><path d="M0 169 94 128l61 28 74-41 74 43 67-34 98 41 70-32 62 35v22H0z" fill="#37675a" opacity=".28"/></svg></div>
+    <div class="bd-ground" aria-hidden="true"></div>
+    <div class="bd-porch" aria-hidden="true"></div>
+    <div class="bd-rain" aria-hidden="true"></div><div class="bd-snow" aria-hidden="true">✦ <span>✦</span><span>✦</span><span>✦</span><span>✦</span></div>
+    <div class="bd-kicker" id="bd-kicker"><span aria-hidden="true">✳</span> YOUR U.P. WEATHER BUDDY</div>
+    <label class="bd-hidden" for="bd-city">Weather buddy location</label>
+    <select class="bd-select" id="bd-city" aria-label="Choose a location for the weather buddy"></select>
+    <div class="bd-place" id="bd-place" hidden></div>
+    <img class="bd-mascot" id="bd-mascot" src="./buddy/moose-wind.webp" alt="A friendly moose checking the weather" width="649" height="649">
+    <div class="bd-quote" id="bd-quote">“Ope! Checking the weather...”</div>
+    <div class="bd-readout">
+      <div class="bd-live" id="bd-status" role="status" aria-live="polite">● CHECKING THE SKY</div>
+      <div class="bd-reading"><strong id="bd-temp">—</strong><span id="bd-unit"></span></div>
+      <div class="bd-description" id="bd-description">Looking outside...</div>
+      <div class="bd-source" id="bd-source">National Weather Service</div>
+      <div class="bd-divider"></div>
+      <div class="bd-time-row"><span>LOCAL TIME</span><time id="bd-clock">--:--:--</time></div>
+    </div>
+  </div>
+  <div class="bd-foot"><a id="bd-link" href="https://906dashboard.com/" target="_blank" rel="noopener">Live data from 906 Dashboard →</a></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ── the two buddies ─────────────────────────────────────────────────────
+  // Cities are the homepage lists. `station` is the NWS observation station;
+  // a city without one reads the nearest station from its gridpoint instead.
+  var DET = "America/Detroit", CHI = "America/Chicago";
+  var CHARACTERS = {
+    moose: {
+      label: "Moose", kicker: "YOUR U.P. WEATHER BUDDY", home: "marquette",
+      file: "moose", article: "moose", alt: "A friendly moose checking the weather",
+      loading: "Ope! Checking the weather...", summer: "A fine day to be a Yooper.",
+      summerAlt: "a T-shirt and sunglasses", rain: "Don’t forget your raincoat, eh?",
+      cities: {
+        marquette:{name:"Marquette",lat:46.5436,lon:-87.3954,zone:DET,station:"KSAW"},
+        munising:{name:"Munising",lat:46.4111,lon:-86.6471,zone:DET},
+        houghton:{name:"Houghton",lat:47.1219,lon:-88.5690,zone:DET,station:"KCMX"},
+        sault:{name:"Sault Ste. Marie",lat:46.4953,lon:-84.3453,zone:DET,station:"KANJ"},
+        escanaba:{name:"Escanaba",lat:45.7452,lon:-87.0646,zone:DET,station:"KESC"},
+        stignace:{name:"St. Ignace",lat:45.8686,lon:-84.7278,zone:DET,station:"KPLN"},
+        ironmountain:{name:"Iron Mountain",lat:45.8202,lon:-88.0650,zone:CHI,station:"KIMT"},
+        ironwood:{name:"Ironwood",lat:46.4547,lon:-90.1710,zone:CHI,station:"KIWD"},
+        menominee:{name:"Menominee",lat:45.1078,lon:-87.6143,zone:CHI},
+        copperharbor:{name:"Copper Harbor",lat:47.4674,lon:-87.8896,zone:DET}
+      }
+    },
+    goose: {
+      label: "Goose", kicker: "YOUR NORTHERN MICHIGAN WEATHER BUDDY", home: "traversecity",
+      file: "goose", article: "porch goose", alt: "A friendly porch goose checking the weather",
+      loading: "Honk! Checking the weather...", summer: "A fine day to be Up North.",
+      summerAlt: "a summer vest and sunglasses", rain: "Don’t forget your raincoat, eh?",
+      cities: {
+        traversecity:{name:"Traverse City",lat:44.7631,lon:-85.6206,zone:DET,station:"KTVC"},
+        petoskey:{name:"Petoskey",lat:45.3733,lon:-84.9553,zone:DET,station:"KPLN"},
+        gaylord:{name:"Gaylord",lat:45.0275,lon:-84.6748,zone:DET,station:"KGLR"},
+        alpena:{name:"Alpena",lat:45.0617,lon:-83.4328,zone:DET,station:"KAPN"},
+        cadillac:{name:"Cadillac",lat:44.2519,lon:-85.4012,zone:DET,station:"KCAD"},
+        charlevoix:{name:"Charlevoix",lat:45.3181,lon:-85.2584,zone:DET,station:"KCVX"},
+        houghtonlake:{name:"Houghton Lake",lat:44.3147,lon:-84.7648,zone:DET,station:"KHTL"},
+        manistee:{name:"Manistee",lat:44.2444,lon:-86.3243,zone:DET,station:"KMBL"},
+        mackinawcity:{name:"Mackinaw City",lat:45.7775,lon:-84.7278,zone:DET},
+        mackinacisland:{name:"Mackinac Island",lat:45.8492,lon:-84.6189,zone:DET},
+        grayling:{name:"Grayling",lat:44.6614,lon:-84.7148,zone:DET},
+        frankfort:{name:"Frankfort",lat:44.6333,lon:-86.2345,zone:DET}
+      }
+    }
+  };
+
+  var qs = new URLSearchParams(location.search);
+  var root = document.getElementById("bd");
+  var el = function (id) { return document.getElementById(id); };
+  var setText = function (id, t) { el(id).textContent = t; };
+
+  var cfg = {
+    client: qs.get("client") || null,
+    character: (qs.get("character") || "moose").toLowerCase(),
+    city: (qs.get("city") || "").toLowerCase() || null,
+    picker: qs.get("picker") !== "0",
+    size: qs.get("size") || null,
+    attribution: true
+  };
+
+  var AUTO_CARD_MAX = 480;       // narrower than this the compact scene fits; wider gets the full one
+  var autoSize = null;
+
+  function setSize(size) {
+    var s = ["card", "panel", "auto"].indexOf(size) >= 0 ? size : "card";
+    if (s !== "auto") { root.className = "bd size-" + s; return; }
+    applyAutoSize();
+  }
+  function applyAutoSize() {
+    var want = document.documentElement.clientWidth >= AUTO_CARD_MAX ? "panel" : "card";
+    if (want === autoSize) return;
+    autoSize = want;
+    root.className = "bd is-auto size-" + want;
+  }
+
+  function loadClient() {
+    if (!cfg.client) return Promise.resolve();
+    return fetch("./clients.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (all) {
+        var c = all && all[cfg.client];
+        if (!c) return;
+        if (c.attribution === false) cfg.attribution = false;
+        if (!qs.get("character") && c.character) cfg.character = String(c.character).toLowerCase();
+        if (!qs.get("city") && c.city) cfg.city = String(c.city).toLowerCase();
+        if (!qs.get("picker") && c.picker === false) cfg.picker = false;
+        if (!qs.get("size") && c.size) cfg.size = c.size;
+      })
+      .catch(function () {});
+  }
+
+  // ── weather logic (homepage logic, verbatim) ────────────────────────────
+  var buddy, CITIES, cityKey;
+
+  function fahrenheit(value, unit) {
+    unit = unit || "wmoUnit:degC";
+    if (value === null || value === undefined || !Number.isFinite(Number(value))) return null;
+    return Math.round(/^(f|degf|fahrenheit)$|degf/i.test(unit) ? Number(value) : Number(value) * 9 / 5 + 32);
+  }
+  function mph(value, unit) {
+    unit = unit || "";
+    if (value === null || value === undefined || !Number.isFinite(Number(value))) return null;
+    if (/m_s|m\/s/i.test(unit)) return Math.round(Number(value) * 2.236936);
+    if (/mph|mi_h/i.test(unit)) return Math.round(Number(value));
+    if (/km_h|km\/h/i.test(unit)) return Math.round(Number(value) * 0.621371);
+    if (/\bkt\b|knots?|wmoUnit:kn/i.test(unit)) return Math.round(Number(value) * 1.15078);
+    return null;
+  }
+  function look(w) {
+    var description = String(w.description || "").toLowerCase();
+    if (/snow|sleet|blizzard|flurr|ice pellets/.test(description)) return { outfit: "winter", scene: "snow", speech: "Ope! Looks like a snow day.", alt: "a winter coat and scarf" };
+    if (/rain|drizzle|shower|thunder/.test(description)) return { outfit: "rain", scene: "rain", speech: buddy.rain, alt: "a raincoat and holding an umbrella" };
+    var windy = (w.windMph || 0) >= 18 || /windy|breezy|gust/.test(description);
+    if (w.temperature <= 45) return { outfit: "winter", scene: windy ? "wind" : "calm", speech: windy ? "Bundle up—it’s windy out there." : "A little chilly out there, eh?", alt: "a winter coat and scarf" };
+    if (windy) return { outfit: "wind", scene: "wind", speech: "Hold onto your hat, eh?", alt: "flannel with a scarf blowing in the wind" };
+    if (w.temperature <= 62) return { outfit: "wind", scene: "calm", speech: "A good day for a little flannel.", alt: "flannel and a scarf" };
+    return { outfit: "summer", scene: "calm", speech: buddy.summer, alt: buddy.summerAlt };
+  }
+  function timeInZone(zone, date) {
+    return new Intl.DateTimeFormat("en-US", { timeZone: zone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }).format(date || new Date());
+  }
+  // Approximate solar elevation is sufficient for the scene's day/night colours.
+  function isDaylight(city, date) {
+    date = date || new Date();
+    var rad = Math.PI / 180, jd = date.getTime() / 86400000 + 2440587.5, n = jd - 2451545;
+    var meanLongitude = (280.460 + 0.9856474 * n) * rad, meanAnomaly = (357.528 + 0.9856003 * n) * rad;
+    var ecliptic = meanLongitude + (1.915 * Math.sin(meanAnomaly) + 0.020 * Math.sin(2 * meanAnomaly)) * rad;
+    var obliquity = (23.439 - 0.0000004 * n) * rad;
+    var declination = Math.asin(Math.sin(obliquity) * Math.sin(ecliptic));
+    var rightAscension = Math.atan2(Math.cos(obliquity) * Math.sin(ecliptic), Math.cos(ecliptic));
+    var hourAngle = (280.46061837 + 360.98564736629 * n + city.lon) * rad - rightAscension;
+    var latitude = city.lat * rad;
+    var altitude = Math.asin(Math.sin(latitude) * Math.sin(declination) + Math.cos(latitude) * Math.cos(declination) * Math.cos(hourAngle)) / rad;
+    return altitude > -0.833;
+  }
+  function observation(p, station) {
+    if (!p || typeof p !== "object") return null;
+    var now = Date.now();
+    var temperature = fahrenheit(p.temperature && p.temperature.value, p.temperature && p.temperature.unitCode);
+    var stamp = Date.parse(p.timestamp || "");
+    if (temperature === null || !Number.isFinite(stamp) || now - stamp > 3 * 3600000 || now - stamp < -10 * 60000) return null;
+    return {
+      kind: "observation", temperature: temperature,
+      description: p.textDescription || "Current conditions",
+      windMph: mph(p.windSpeed && p.windSpeed.value, p.windSpeed && p.windSpeed.unitCode),
+      time: p.timestamp, station: station
+    };
+  }
+
+  // ── NWS ─────────────────────────────────────────────────────────────────
+  function json(url) {
+    var parsed = new URL(url);
+    if (parsed.protocol !== "https:" || parsed.hostname !== "api.weather.gov") return Promise.reject(new Error("Untrusted weather endpoint"));
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 12000);
+    return fetch(url, { headers: { Accept: "application/geo+json, application/json" }, signal: controller.signal })
+      .then(function (r) { if (!r.ok) throw new Error("Weather unavailable"); return r.json(); })
+      .finally(function () { clearTimeout(timer); });
+  }
+
+  // The homepages are handed a station observation by the page's own feed
+  // loader. A widget has no such loader, so it does the whole read itself:
+  // gridpoint -> hourly forecast + station list, then the station's latest
+  // observation. An observation wins; the hourly forecast is the fallback.
+  var current = null, sequence = 0;
+  var LAST_GOOD_KEY = "906w:buddy:lastgood:";
+  var LAST_GOOD_MAX_MS = 3 * 3600000;
+
+  function fresh(w) {
+    if (!w || !Number.isFinite(Date.parse(w.time))) return false;
+    return Date.now() - Date.parse(w.time) <= (w.kind === "observation" ? 3 * 3600000 : 90 * 60000);
+  }
+
+  function fetchWeather(key) {
+    var city = CITIES[key];
+    return json("https://api.weather.gov/points/" + city.lat + "," + city.lon).then(function (point) {
+      var p = point.properties || {};
+      var hourly = p.forecastHourly ? json(p.forecastHourly).catch(function () { return null; }) : Promise.resolve(null);
+      var stationUrl = city.station
+        ? Promise.resolve("https://api.weather.gov/stations/" + city.station)
+        : (p.observationStations ? json(p.observationStations).then(function (s) { return s.features && s.features[0] && s.features[0].id; }).catch(function () { return null; }) : Promise.resolve(null));
+      var obs = stationUrl.then(function (u) {
+        if (!u) return null;
+        return json(u + "/observations/latest").then(function (o) { return observation(o.properties, u.split("/").pop()); }).catch(function () { return null; });
+      });
+      return Promise.all([hourly, obs]).then(function (r) {
+        var hour = r[0] && r[0].properties && r[0].properties.periods && r[0].properties.periods[0];
+        var o = r[1];
+        if (o) {
+          if (o.description === "Current conditions" && hour && hour.shortForecast) { o.description = hour.shortForecast; o.conditionForecast = true; }
+          return o;
+        }
+        var temp = hour ? fahrenheit(hour.temperature, hour.temperatureUnit) : null;
+        if (temp === null || !hour.startTime || !Number.isFinite(Date.parse(hour.startTime))) throw new Error("No forecast");
+        return { kind: "forecast", temperature: temp, description: hour.shortForecast || "Hourly forecast", windMph: parseInt(hour.windSpeed || "0", 10) || 0, time: hour.startTime };
+      });
+    });
+  }
+
+  // ── rendering ───────────────────────────────────────────────────────────
+  function clock() { setText("bd-clock", timeInZone(CITIES[cityKey].zone)); }
+
+  function showLoading() {
+    setText("bd-status", "● CHECKING THE SKY"); setText("bd-temp", "—"); setText("bd-unit", "");
+    setText("bd-description", "Looking outside..."); setText("bd-source", "National Weather Service");
+    setText("bd-quote", "“" + buddy.loading + "”"); el("bd-stage").dataset.weather = "loading";
+    el("bd-mascot").alt = buddy.alt; clock();
+  }
+  function showUnavailable() {
+    setText("bd-status", "● WEATHER UNAVAILABLE"); setText("bd-temp", "—"); setText("bd-unit", "");
+    setText("bd-description", "Please try again soon"); setText("bd-source", "NWS data is unavailable");
+    setText("bd-quote", "“Ope! Let’s try that again.”"); el("bd-stage").dataset.weather = "loading";
+    el("bd-mascot").alt = buddy.alt;
+  }
+  function show(w) {
+    current = w;
+    var city = CITIES[cityKey], style = look(w), stage = el("bd-stage");
+    stage.dataset.weather = style.scene;
+    stage.classList.toggle("is-night", !isDaylight(city));
+    stage.classList.toggle("is-cloudy", /cloud|overcast|fog|mist/i.test(w.description));
+    var image = el("bd-mascot"), src = "./buddy/" + buddy.file + "-" + style.outfit + ".webp";
+    if (image.getAttribute("src") !== src) image.setAttribute("src", src);
+    image.alt = "Friendly " + buddy.article + " wearing " + style.alt;
+    setText("bd-quote", "“" + style.speech + "”");
+    setText("bd-temp", String(w.temperature)); setText("bd-unit", "°F");
+    setText("bd-description", w.description);
+    setText("bd-status", w.kind === "observation" ? "● LATEST OBSERVATION" : "● HOURLY FORECAST");
+    var when = new Intl.DateTimeFormat("en-US", { timeZone: city.zone, hour: "numeric", minute: "2-digit" }).format(new Date(w.time));
+    setText("bd-source", w.kind === "observation" ? "NWS " + w.station + " · " + when + (w.conditionForecast ? " · forecast sky" : "") : "NWS forecast · " + when);
+    postHeight();
+  }
+
+  function readLastGood(key) {
+    try { var d = JSON.parse(localStorage.getItem(LAST_GOOD_KEY + key)); return d && fresh(d) && Date.now() - Date.parse(d.time) < LAST_GOOD_MAX_MS ? d : null; }
+    catch (e) { return null; }
+  }
+  function writeLastGood(key, w) { try { localStorage.setItem(LAST_GOOD_KEY + key, JSON.stringify(w)); } catch (e) {} }
+
+  function refresh() {
+    var token = sequence, key = cityKey;
+    fetchWeather(key).then(function (w) {
+      if (token !== sequence || key !== cityKey) return;
+      writeLastGood(key, w);
+      show(w);
+    }).catch(function () {
+      if (token !== sequence || key !== cityKey) return;
+      if (fresh(current)) return;               // keep showing what we have
+      var last = readLastGood(key);
+      if (last) show(last);
+      else { current = null; showUnavailable(); postHeight(); }
+    });
+  }
+
+  function selectCity(key) {
+    cityKey = Object.prototype.hasOwnProperty.call(CITIES, key) ? key : buddy.home;
+    sequence++; current = null; clock(); showLoading();
+    el("bd-city").value = cityKey;
+    if (!pinned()) { try { localStorage.setItem("906w:buddy:city:" + cfg.character, cityKey); } catch (e) {} }
+    refresh();
+  }
+  function pinned() { return !cfg.picker; }
+
+  // ── height handshake ────────────────────────────────────────────────────
+  var lastHeight = 0;
+  function postHeight() {
+    if (window.parent === window) return;
+    var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if (h === lastHeight) return;
+    lastHeight = h;
+    window.parent.postMessage({ type: "906widget:height", id: qs.get("fid") || null, height: h }, "*");
+  }
+  function tick() { if (cfg.size === "auto") applyAutoSize(); postHeight(); }
+  if (window.ResizeObserver) new ResizeObserver(tick).observe(document.documentElement);
+  else window.addEventListener("resize", tick);
+
+  // ── boot ────────────────────────────────────────────────────────────────
+  loadClient().then(function () {
+    if (!CHARACTERS[cfg.character]) cfg.character = "moose";
+    buddy = CHARACTERS[cfg.character]; CITIES = buddy.cities;
+    root.dataset.character = cfg.character;
+    setText("bd-kicker", "");
+    el("bd-kicker").innerHTML = '<span aria-hidden="true">✳</span> ' + buddy.kicker;
+    el("bd-mascot").src = "./buddy/" + buddy.file + "-wind.webp";
+    el("bd-mascot").alt = buddy.alt;
+
+    var sel = el("bd-city");
+    Object.keys(CITIES).forEach(function (k) {
+      var o = document.createElement("option"); o.value = k; o.textContent = CITIES[k].name + ", MI"; sel.appendChild(o);
+    });
+
+    var start = cfg.city && CITIES[cfg.city] ? cfg.city : null;
+    if (!start && cfg.picker) { try { var s = localStorage.getItem("906w:buddy:city:" + cfg.character); if (s && CITIES[s]) start = s; } catch (e) {} }
+    start = start || buddy.home;
+
+    // A client who pins one town gets a plain place name where the dropdown
+    // was, not a control that does nothing.
+    if (!cfg.picker) {
+      sel.hidden = true;
+      el("bd-place").hidden = false;
+      setText("bd-place", CITIES[start].name.toUpperCase());
+    }
+    sel.addEventListener("change", function () { selectCity(sel.value); });
+
+    var link = el("bd-link");
+    if (cfg.attribution) {
+      link.href = "https://906dashboard.com/?utm_source=widget&utm_medium=embed&utm_campaign=" + encodeURIComponent(cfg.client || "direct");
+    } else link.hidden = true;
+
+    setSize(cfg.size || "card");
+    selectCity(start);
+    setInterval(clock, 1000);
+    setInterval(refresh, 15 * 60 * 1000);
+    postHeight();
+  });
+})();
+</script>
+
+</body>
+</html>

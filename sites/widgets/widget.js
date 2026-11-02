@@ -30,7 +30,7 @@
     return "https://widgets.906dashboard.com";
   })();
 
-  var WIDGETS = { aurora: "aurora.html", hunting: "hunting.html", ski: "ski.html" };
+  var WIDGETS = { aurora: "aurora.html", hunting: "hunting.html", ski: "ski.html", buddy: "buddy.html" };
 
   // Pre-resize guesses only; the frame posts its real height on load.
   // The strip is two lines now, so 96 caused a visible jump on slow loads.
@@ -79,7 +79,7 @@
 
     var params = new URLSearchParams();
     params.set("fid", fid);
-    ["client", "spot", "region", "county", "area", "size"].forEach(function (k) {
+    ["client", "spot", "region", "county", "area", "character", "city", "picker", "size"].forEach(function (k) {
       var v = node.getAttribute("data-" + k);
       if (v) params.set(k, v);
     });
@@ -88,7 +88,8 @@
     frame.src = ORIGIN + "/" + page + "?" + params.toString();
     frame.title = ({
       hunting: "Legal shooting hours — 906 Dashboard",
-      ski: "Snow report — 906 Dashboard"
+      ski: "Snow report — 906 Dashboard",
+      buddy: "Weather buddy — 906 Dashboard"
     })[kind] || "Tonight's aurora forecast — 906 Dashboard";
     frame.loading = "lazy";
     frame.referrerPolicy = "strict-origin-when-cross-origin";
@@ -122,7 +123,8 @@
           "color:#6b7280;padding:12px 14px;border:1px solid #d7dbe0;border-radius:8px;background:#f7f8f9;";
         note.textContent = ({
           hunting: "Legal shooting hours are unavailable right now.",
-          ski: "Snow conditions are unavailable right now."
+          ski: "Snow conditions are unavailable right now.",
+          buddy: "The weather buddy is unavailable right now."
         })[kind] || "Live aurora conditions are unavailable right now.";
         node.appendChild(note);
 
