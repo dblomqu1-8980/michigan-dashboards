@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Live UP Widgets — 906 Dashboard</title>
 <!--
-  Showcase page. This is the one to send a prospect: both widgets, live data,
+  Showcase page. This is the one to send a prospect: every widget, live data,
   their own colours, and the single line it takes to install.
 
   Deliberately NOT the same page as index.html — that one is written to one
@@ -194,6 +194,42 @@
   </section>
 
   <section>
+    <h2>Weather buddy</h2>
+    <p class="sub">
+      A moose for the Upper Peninsula, a porch goose for northern Lower. They
+      dress for the weather outside right now &mdash; a winter coat in the snow,
+      a raincoat in the rain, sunglasses when it is fine &mdash; with the live
+      temperature and the local time beside them. Pick a buddy and a town.
+    </p>
+
+    <div class="controls">
+      <label for="buddy-char">Buddy</label>
+      <select id="buddy-char">
+        <option value="moose" selected>Moose &middot; Upper Peninsula</option>
+        <option value="goose">Goose &middot; Northern Lower</option>
+      </select>
+      <label for="buddy-city">Town</label>
+      <select id="buddy-city"></select>
+    </div>
+
+    <div id="buddy-wide"></div>
+
+    <h3>In a sidebar</h3>
+    <div class="stage">
+      <div class="cell">
+        <span class="lbl g">Card</span>
+        <div id="buddy-card"></div>
+      </div>
+      <div class="cell">
+        <span class="lbl">One line of HTML</span>
+        <pre id="snip-buddy">&lt;div data-906-widget="buddy" data-character="moose" data-city="marquette"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+        <button class="copy" data-copy="snip-buddy">Copy snippet</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>Tonight's aurora</h2>
     <p class="sub">
       Whether tonight is worth going out, from NOAA's Space Weather Prediction
@@ -291,6 +327,32 @@
   regionSel.addEventListener("change", function () { fillAreas(regionSel.value); skiEmbeds(); });
   areaSel.addEventListener("change", skiEmbeds);
   skiEmbeds();
+
+  // Weather buddy: the town list depends on the character, same as ski's
+  // region/area. Keep in step with CITIES in buddy.html.
+  var BUDDY_CITIES = {
+    moose: [["marquette","Marquette"],["munising","Munising"],["houghton","Houghton"],["sault","Sault Ste. Marie"],["escanaba","Escanaba"],["stignace","St. Ignace"],["ironmountain","Iron Mountain"],["ironwood","Ironwood"],["menominee","Menominee"],["copperharbor","Copper Harbor"]],
+    goose: [["traversecity","Traverse City"],["petoskey","Petoskey"],["gaylord","Gaylord"],["alpena","Alpena"],["cadillac","Cadillac"],["charlevoix","Charlevoix"],["houghtonlake","Houghton Lake"],["manistee","Manistee"],["mackinawcity","Mackinaw City"],["mackinacisland","Mackinac Island"],["grayling","Grayling"],["frankfort","Frankfort"]]
+  };
+  var buddyChar = document.getElementById("buddy-char");
+  var buddyCity = document.getElementById("buddy-city");
+  function fillBuddyCities() {
+    buddyCity.innerHTML = BUDDY_CITIES[buddyChar.value].map(function (c) {
+      return '<option value="' + c[0] + '">' + c[1] + "</option>";
+    }).join("");
+  }
+  function buddyEmbeds() {
+    var attrs = ' data-client="' + buddyChar.value + '-demo" data-character="' + buddyChar.value + '" data-city="' + buddyCity.value + '"';
+    document.getElementById("buddy-wide").innerHTML = '<div data-906-widget="buddy"' + attrs + ' data-size="panel"></div>';
+    document.getElementById("buddy-card").innerHTML = '<div data-906-widget="buddy"' + attrs + ' data-size="card"></div>';
+    document.getElementById("snip-buddy").textContent =
+      '<div data-906-widget="buddy" data-character="' + buddyChar.value + '" data-city="' + buddyCity.value + '"></div>\n' +
+      '<script async src="https://widgets.906dashboard.com/widget.js"><\/script>';
+  }
+  buddyChar.addEventListener("change", function () { fillBuddyCities(); buddyEmbeds(); });
+  buddyCity.addEventListener("change", buddyEmbeds);
+  fillBuddyCities();
+  buddyEmbeds();
 
   document.addEventListener("click", function (e) {
     var btn = e.target.closest("[data-copy]");
