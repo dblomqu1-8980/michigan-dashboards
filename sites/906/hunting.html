@@ -450,7 +450,7 @@
     <div class="section-eyebrow">Rules Affecting This Location</div>
     <h2 class="section-title" id="rules-title">The 2026 rules where you're hunting</h2>
     <p class="section-lead">This is a summary, not the digest. It covers the handful of rules that actually change from county to county, and every one of them links to the DNR page it came from.</p>
-    <div class="verified">📋 <b>Verified against DNR sources on Aug 23, 2026</b> · Rules change; re-check before opening day</div>
+    <div class="verified">📋 <b>Verified against DNR sources on Nov 2, 2026</b> · Rules change; re-check before opening day</div>
 
     <div class="model-note warn">
       <b>2026 was a real rule-change year in the UP.</b> The Natural Resources Commission eliminated the
@@ -653,7 +653,7 @@
 <!-- ═══ FOOTER ═══ -->
 <footer>
   906 Travel Dashboard · Upper Peninsula Michigan · <a href="/">Main Dashboard</a> · <a href="waterfalls.html">Waterfalls</a> · <a href="trails.html">Trails</a> · <a href="fall.html">Fall Colors</a> · <a href="aurora.html">Aurora</a> · <a href="ski.html">Skiing</a> · <a href="privacy.html">Privacy &amp; Disclosure</a><br>
-  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Season dates and regulations verified against Michigan DNR sources on Aug 23, 2026 · Legal hours computed from Open-Meteo sunrise/sunset — the DNR's printed hours table is the legal authority · This page is a summary, not the digest · ©2026</span>
+  <span style="font-size:10px;opacity:.6;margin-top:6px;display:inline-block;">Season dates and regulations verified against Michigan DNR sources on Nov 2, 2026 · Legal hours computed from Open-Meteo sunrise/sunset — the DNR's printed hours table is the legal authority · This page is a summary, not the digest · ©2026</span>
 </footer>
 
 <!-- ═══ JAVASCRIPT ═══ -->
@@ -676,7 +676,7 @@
 const MDOT_PROXY_URL = 'https://up906-mdot-proxy.blomblog.workers.dev';
 const MDOT_REGION    = 'up';
 const STORAGE_KEY    = 'up906-hunt-county';
-const VERIFIED_ON    = 'Aug 23, 2026';
+const VERIFIED_ON    = 'Nov 2, 2026';
 
 // ═══ COUNTIES ═══
 // lat/lon are the county seat (or the practical center of hunting activity).
@@ -718,7 +718,7 @@ const HOURS = {
 };
 
 // ═══ 2026–27 SEASONS — UPPER PENINSULA ═══
-// Dates from the DNR hunting season calendar, read 2026-08-23.
+// Dates from the DNR hunting season calendar, re-read 2026-11-02.
 // Lower-Peninsula-only seasons (December firearm, Late Antlerless) are
 // deliberately absent — they do not apply up here.
 const DEER_SRC  = 'https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer';
@@ -747,7 +747,7 @@ const SEASONS = [
     note:'All legal firearms. Crossbows are legal during firearm season in the UP.' },
   { name:'Muzzleloader deer (UP DMUs)', icon:'💨', hours:'general', src:DEER_SRC,
     ranges:[['2026-12-04','2026-12-06']],
-    note:"The DNR's 2026 season calendar lists Dec. 4–6; one FAQ answer in the digest still shows older dates. Confirm in your digest before you go." },
+    note:"Dec. 4–6, matching the DNR's 2026 season calendar and deer digest. After Dec. 6 only archery remains open in the UP." },
   { name:'Bear', icon:'🐻', hours:'general', src:BEAR_SRC,
     ranges:[['2026-09-09','2026-10-26']],
     note:'UP BMUs — Amasa, Baraga, Bergland, Carney, Drummond Island, Gwinn and Newberry. Hunt period 1 opens Sept. 9, period 2 Sept. 14, period 3 Sept. 25. Licensed by quota drawing.' },
