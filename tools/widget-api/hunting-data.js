@@ -72,7 +72,7 @@ const SEASONS = [
     note:'All legal firearms. Crossbows are legal during firearm season in the UP.' },
   { name:'Muzzleloader deer (UP DMUs)', icon:'💨', hours:'general', src:DEER_SRC,
     ranges:[['2026-12-04','2026-12-06']],
-    note:"The DNR's 2026 season calendar lists Dec. 4–6; one FAQ answer in the digest still shows older dates. Confirm in your digest before you go." },
+    note:"Dec. 4–6, matching the DNR's 2026 season calendar and deer digest. After Dec. 6 only archery remains open in the UP." },
   { name:'Bear', icon:'🐻', hours:'general', src:BEAR_SRC,
     ranges:[['2026-09-09','2026-10-26']],
     note:'UP BMUs — Amasa, Baraga, Bergland, Carney, Drummond Island, Gwinn and Newberry. Hunt period 1 opens Sept. 9, period 2 Sept. 14, period 3 Sept. 25. Licensed by quota drawing.' },
