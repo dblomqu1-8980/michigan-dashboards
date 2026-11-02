@@ -66,7 +66,7 @@
   }
   .note b{color:var(--warn)}
 
-  /* Widget chooser at the top — three cards, one per product. */
+  /* Widget chooser at the top — one card per product. */
   .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:22px 0 8px}
   .pick{
     background:var(--panel);border:1px solid var(--line);border-radius:8px;
@@ -87,7 +87,7 @@
     <div class="kick">906 Dashboard · Embeddable widgets</div>
     <h1>Live Upper Peninsula conditions, on your site</h1>
     <p class="lede">
-      Three widgets, rendered and maintained by 906 Dashboard from NOAA and
+      Four widgets, rendered and maintained by 906 Dashboard from NOAA and
       National Weather Service data. One line of HTML on your page; nothing to
       install, nothing to update, and nothing to keep accurate yourself.
     </p>
@@ -108,6 +108,11 @@
       <h4>🎯 Legal shooting hours</h4>
       <p>A live countdown to the close of legal light for any UP county, with what is in season today.</p>
       <a href="#hunting">Install the hunting widget →</a>
+    </div>
+    <div class="pick">
+      <h4>🫎 Weather buddy</h4>
+      <p>A moose or a porch goose who dresses for today's weather, with the temperature and local time. The friendliest thing on your homepage.</p>
+      <a href="#buddy">Install the weather buddy →</a>
     </div>
   </div>
 
@@ -141,7 +146,7 @@
     Some templates escape <code>&lt;script&gt;</code> inside a content block. If
     the snippet renders as visible text instead of a widget, use an iframe
     instead — same widget, no script tag. Swap <code>ski.html</code> for
-    <code>aurora.html</code> or <code>hunting.html</code> as needed.
+    <code>aurora.html</code>, <code>hunting.html</code> or <code>buddy.html</code> as needed.
   </p>
   <p class="muted">
     One trade-off worth knowing: without the script there is nothing to report
@@ -347,6 +352,82 @@
     closing times round down, so the window shown is never wider than the real
     one — but the DNR digest governs, and the widget says so.
   </div>
+
+  <!-- ══ BUDDY ══ -->
+  <div class="sec" id="buddy"></div>
+  <h2>🫎 Weather buddy</h2>
+  <p>
+    A character, not a data table. The <b>moose</b> is the Upper Peninsula's
+    and the <b>porch goose</b> is northern Lower Michigan's. They put on a
+    winter coat when it snows, a raincoat when it rains, flannel when it is
+    brisk and sunglasses when it is not, over a scene that turns to night after
+    sunset. Beside them: the live temperature, the sky, and the local time.
+  </p>
+
+  <pre id="snip-buddy">&lt;div data-906-widget="buddy" data-client="your-id" data-character="moose"&gt;&lt;/div&gt;
+&lt;script async src="https://widgets.906dashboard.com/widget.js"&gt;&lt;/script&gt;</pre>
+  <button class="copy" data-copy="snip-buddy">Copy snippet</button>
+
+  <table>
+    <thead><tr><th>Attribute</th><th>Values</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>data-character</code></td>
+        <td><code>moose</code> <code>goose</code></td>
+        <td>
+          Which buddy, and which towns they know. The moose covers ten UP towns
+          from Copper Harbor to Menominee; the goose covers twelve across
+          northern Lower, from Traverse City to Mackinac Island.
+        </td>
+      </tr>
+      <tr>
+        <td><code>data-city</code></td>
+        <td>a town, e.g. <code>marquette</code> <code>traversecity</code></td>
+        <td>
+          Pins the buddy to one town. Left out, visitors get a dropdown and the
+          widget remembers their pick.
+        </td>
+      </tr>
+      <tr>
+        <td><code>data-picker</code></td>
+        <td><code>0</code></td>
+        <td>
+          Hides the dropdown and shows the town's name instead. For a lodge that
+          only cares about its own weather.
+        </td>
+      </tr>
+      <tr>
+        <td><code>data-size</code></td>
+        <td><code>auto</code> <code>card</code> <code>panel</code></td>
+        <td>
+          <code>card</code> is the compact scene for a sidebar; <code>panel</code>
+          is the full one. <code>auto</code> picks on the width it is given.
+          There is no <code>strip</code> — a character does not fit in a band.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="stage">
+    <div class="cell">
+      <span class="lbl">The moose · <b>Upper Peninsula</b></span>
+      <div data-906-widget="buddy" data-client="moose-demo" data-character="moose" data-size="card"></div>
+    </div>
+    <div class="cell">
+      <span class="lbl">The goose · <b>northern Lower</b></span>
+      <div data-906-widget="buddy" data-client="goose-demo" data-character="goose" data-size="card"></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:34px">Pinned to one town · no dropdown</h3>
+  <div data-906-widget="buddy" data-client="moose-demo" data-character="moose" data-city="houghton" data-picker="0" data-size="panel"></div>
+
+  <p class="muted" style="margin-top:14px">
+    The buddy reads the National Weather Service directly, from the visitor's
+    browser, so there is no data feed of ours to go down. If NWS has a bad
+    minute the buddy keeps showing the last reading for up to three hours, then
+    says it is unavailable rather than dressing for weather that has passed.
+  </p>
 
   <!-- ══ SHARED ══ -->
   <div class="sec" id="sizes"></div>

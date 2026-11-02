@@ -45,7 +45,13 @@
     "area     ski widget only: pin to one hill for the FORECAST half. Base depth",
     "         stays regional either way; see tools/widget-api/ski-data.js.",
     "         Omit for the regional roll-up.",
-    "hideRows ski widget: any of 'new' 'forecast' 'season' 'conditions'."
+    "hideRows ski widget: any of 'new' 'forecast' 'season' 'conditions'.",
+    "",
+    "character  buddy widget only: 'moose' (Upper Peninsula) or 'goose' (northern",
+    "           Lower). Picks the mascot and the town list.",
+    "city       buddy widget only: pin one town (key from buddy.html CITIES). With",
+    "           picker:false the dropdown is replaced by the town name.",
+    "picker     buddy widget only: false hides the town dropdown."
   ],
   "demo": {
     "name": "906 Dashboard",
@@ -148,5 +154,17 @@
       "a1": "#56B3F0",
       "a2": "#7C6CF0"
     }
+  },
+  "moose-demo": {
+    "name": "Moose Buddy Demo",
+    "character": "moose",
+    "size": "auto",
+    "attribution": true
+  },
+  "goose-demo": {
+    "name": "Goose Buddy Demo",
+    "character": "goose",
+    "size": "auto",
+    "attribution": true
   }
 }

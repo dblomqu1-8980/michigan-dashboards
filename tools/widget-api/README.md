@@ -1,8 +1,9 @@
 # Embeddable widgets
 
-Three widgets for client websites — **aurora** (is tonight worth going out),
-**hunting** (legal shooting hours, what is open today, field conditions) and
-**ski** (base depth, new snow, what is forecast at the hill).
+Four widgets for client websites — **aurora** (is tonight worth going out),
+**hunting** (legal shooting hours, what is open today, field conditions),
+**ski** (base depth, new snow, what is forecast at the hill) and **buddy** (a
+moose or porch goose dressed for the weather).
 Two pieces:
 
 | Piece | Lives in | Deploys to |
@@ -13,6 +14,22 @@ Two pieces:
 This file is the ops doc and deliberately sits **outside** `sites/`, for the
 same reason `DEPLOYMENT.md` gives: internal files can't leak because they
 aren't inside a site root, not because a blocklist remembered them.
+
+---
+
+## The buddy widget
+
+`sites/widgets/buddy.html?character=moose|goose&city=marquette` — no Worker
+route. The page reads `api.weather.gov` from the visitor's browser, exactly as
+the 906dashboard.com and upnorthdashboard.com homepages do (NWS is keyless and
+sends CORS headers), so there is nothing here to deploy or rate-limit.
+
+`look()`, `observation()` and `isDaylight()` are copied from
+`sites/906/yooper-buddy/hero.js` and `sites/upnorth/goose-buddy/hero.js`, and the
+images from the same folders into `sites/widgets/buddy/`. Change the outfit
+rules in all three places or the widget dresses differently from the site.
+Brand colours do not apply: the scene is the product. Sizes are `card`,
+`panel` and `auto` — no `strip`.
 
 ---
 

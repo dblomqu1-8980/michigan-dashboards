@@ -16,7 +16,7 @@
       ]
     },
     {
-      "source": "/(aurora|hunting|ski).html",
+      "source": "/(aurora|hunting|ski|buddy).html",
       "headers": [
         {
           "key": "Content-Security-Policy",
@@ -25,6 +25,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=300, s-maxage=300"
+        }
+      ]
+    },
+    {
+      "source": "/buddy/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, s-maxage=86400"
         }
       ]
     },
