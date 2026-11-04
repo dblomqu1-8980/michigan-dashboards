@@ -312,6 +312,7 @@
       .picker select { width: 100%; min-width: 0; }
     }
   </style>
+  <link rel="stylesheet" href="/harvest-map.css" />
   <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/ga4.js"></script>
 </head>
@@ -509,12 +510,52 @@
     <p class="section-lead">Michigan's mandatory harvest reporting gives a near-real-time picture of the deer season, and the DNR's grouse and woodcock cooperator survey gives something even better for small game: county-level flushes per hour, reported by hunters, updated as the season runs.</p>
 
     <div class="model-note">
-      <b>We link to the DNR's own numbers rather than republishing them.</b> Reported harvest totals are
-      preliminary — they are what hunters have entered so far, not the DNR's final harvest estimate, and they
-      lag the actual kill by up to 72 hours because that's the reporting window. We are not scraping eLicense
-      pages to build our own tallies. If the DNR makes a supported feed available, we'll ask first and wire it
-      in properly.
+      <b>For this season's reported totals, use the DNR's current report.</b> The map below uses the DNR's
+      published 2024 county totals; it does not update live. Current-season numbers are preliminary and
+      can lag as reports come in. Hunters must report within 72 hours or before transferring possession,
+      whichever comes first. <a href="https://www.mdnr-elicense.com/HarvestReportSummary" target="_blank" rel="noopener">View the DNR's current deer harvest summary →</a>
     </div>
+
+    <section class="harvest-map-card" aria-labelledby="harvest-map-title">
+      <div class="hm-head">
+        <div>
+          <div class="hm-kicker">Historical data · 2024 hunting season</div>
+          <h3 class="hm-title" id="harvest-map-title">Michigan deer harvest by county</h3>
+          <p class="hm-intro">Explore the DNR's reported harvest across all 83 counties. Tap a county on the map or choose one below to see its count.</p>
+        </div>
+        <a class="hm-live-link" href="https://www.mdnr-elicense.com/HarvestReportSummary" target="_blank" rel="noopener">View current DNR totals ↗</a>
+      </div>
+      <div class="hm-layout">
+        <div class="hm-map-wrap">
+          <svg id="harvest-map-svg" viewBox="0 0 800 800" role="presentation" aria-hidden="true" focusable="false"></svg>
+          <noscript><p class="hm-note">Turn on JavaScript to explore the map, or view the <a href="https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/WLD/Reports/2024_online_harvest_summary.pdf">DNR's 2024 county table</a>.</p></noscript>
+        </div>
+        <div>
+          <label class="hm-select-label" for="harvest-county-select">Explore a Michigan county</label>
+          <select class="hm-select" id="harvest-county-select" aria-label="Choose a county for 2024 deer harvest totals"></select>
+          <p class="hm-hint">The map can show any Michigan county. This selection doesn't change the weather or hunting rules above.</p>
+          <div aria-live="polite" aria-atomic="true">
+            <div class="hm-stat-label" id="harvest-county-name">County harvest</div>
+            <div class="hm-stat-number" id="harvest-county-total">—</div>
+            <div class="hm-stat-caption">reported deer · 2024 season</div>
+            <div class="hm-breakdown">
+              <div class="hm-mini"><span>Antlered</span><strong id="harvest-antlered">—</strong></div>
+              <div class="hm-mini"><span>Antlerless</span><strong id="harvest-antlerless">—</strong></div>
+            </div>
+          </div>
+          <div class="hm-state">Michigan total in 2024: <strong id="harvest-state-total">—</strong> reported deer</div>
+        </div>
+      </div>
+      <div class="hm-legend" aria-label="Map color legend, reported deer in 2024">
+        <span class="hm-legend-title">Reported deer</span>
+        <span class="hm-legend-item"><i class="hm-swatch hm-bin-1"></i>Under 1,000</span>
+        <span class="hm-legend-item"><i class="hm-swatch hm-bin-2"></i>1,000–2,499</span>
+        <span class="hm-legend-item"><i class="hm-swatch hm-bin-3"></i>2,500–4,999</span>
+        <span class="hm-legend-item"><i class="hm-swatch hm-bin-4"></i>5,000–7,499</span>
+        <span class="hm-legend-item"><i class="hm-swatch hm-bin-5"></i>7,500+</span>
+      </div>
+      <p class="hm-note"><strong>Historical, not live:</strong> These are deer reported harvested during the 2024 hunting season, not a count of living deer or exact harvest locations. Harvest totals can reflect county size and hunting activity. Source: <a href="https://www.michigan.gov/dnr/-/media/Project/Websites/dnr/Documents/WLD/Reports/2024_online_harvest_summary.pdf" target="_blank" rel="noopener">Michigan DNR 2024 report, county totals</a>. Map boundaries: U.S. Census Bureau / <a href="https://github.com/topojson/us-atlas" target="_blank" rel="noopener">U.S. Atlas</a>, via <a href="https://github.com/vega/vega-datasets" target="_blank" rel="noopener">Vega Datasets</a>.</p>
+    </section>
 
     <div class="links-grid three">
       <a href="https://midnr.maps.arcgis.com/apps/dashboards/327e902be6784f3186eb80f8d4b77a8e" target="_blank" rel="noopener" class="link-card primary">
@@ -1354,5 +1395,7 @@ async function loadCounty(county) {
 })();
 </script>
 
+<script src="/harvest-map.js" defer></script>
 </body>
 </html>
+

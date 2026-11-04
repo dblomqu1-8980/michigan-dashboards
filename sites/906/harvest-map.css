@@ -1,0 +1,57 @@
+/* Historical deer harvest map: layout is shared by both hunting dashboards. */
+.harvest-map-card {
+  margin: 24px 0 26px;
+  padding: clamp(18px, 3vw, 28px);
+  color: #eef2f6;
+  background: linear-gradient(145deg, #1c2830 0%, #121b22 72%);
+  border: 1px solid #435047;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.hm-head { display: flex; justify-content: space-between; gap: 18px; align-items: start; flex-wrap: wrap; }
+.hm-kicker { color: #ffbd82; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+.hm-title { margin: 5px 0 6px; font-size: clamp(21px, 2.5vw, 27px); line-height: 1.2; letter-spacing: -.3px; }
+.hm-intro { margin: 0; color: #c2cbc6; font-size: 13px; line-height: 1.55; max-width: 610px; }
+.hm-live-link {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 42px;
+  padding: 9px 13px; color: #ffe6cb; border: 1px solid #bd7544; border-radius: 9px;
+  text-decoration: none; font-size: 12px; font-weight: 700; line-height: 1.3;
+  background: rgba(255, 122, 26, .08);
+}
+.hm-live-link:hover, .hm-live-link:focus-visible { background: rgba(255, 122, 26, .2); outline: 2px solid #ffd39d; outline-offset: 2px; }
+.hm-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(250px, .8fr); gap: 24px; align-items: center; margin-top: 20px; }
+.hm-map-wrap { background: #111c20; border: 1px solid #354840; border-radius: 12px; padding: 8px; }
+.hm-map-wrap svg { display: block; width: 100%; height: auto; max-height: 470px; }
+.hm-county { stroke: #21352f; stroke-width: 1.2; vector-effect: non-scaling-stroke; cursor: pointer; transition: opacity .15s, stroke-width .15s; }
+.hm-county:hover { opacity: .83; stroke: #fff4da; stroke-width: 2; }
+.hm-county.hm-selected { stroke: #fff1bd; stroke-width: 3; }
+.hm-bin-1 { fill: #b7d4be; background: #b7d4be; }
+.hm-bin-2 { fill: #83b891; background: #83b891; }
+.hm-bin-3 { fill: #4c9366; background: #4c9366; }
+.hm-bin-4 { fill: #246f49; background: #246f49; }
+.hm-bin-5 { fill: #115039; background: #115039; }
+.hm-select-label { display: block; color: #d3ddd7; font-size: 11px; font-weight: 750; letter-spacing: .8px; text-transform: uppercase; margin-bottom: 6px; }
+.hm-select { width: 100%; min-height: 44px; padding: 9px 12px; color: #f3f6f4; background: #111b20; border: 1px solid #60746a; border-radius: 8px; font: inherit; font-size: 15px; cursor: pointer; }
+.hm-select:focus { outline: 2px solid #ffbd82; outline-offset: 2px; }
+.hm-hint { margin: 7px 0 17px; color: #b2c0b7; font-size: 11.5px; line-height: 1.45; }
+.hm-stat-label { color: #c5d2c9; font-size: 12px; font-weight: 700; }
+.hm-stat-number { margin-top: 4px; font-size: clamp(35px, 4.4vw, 48px); font-weight: 800; letter-spacing: -1px; line-height: 1; font-variant-numeric: tabular-nums; }
+.hm-stat-caption { color: #c2cdc6; font-size: 12px; margin-top: 6px; }
+.hm-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 17px 0 12px; }
+.hm-mini { padding: 11px 12px; background: #202f2a; border: 1px solid #3d5749; border-radius: 9px; }
+.hm-mini span { display: block; color: #c2cec6; font-size: 11px; }
+.hm-mini strong { display: block; margin-top: 3px; color: #f7faf8; font-size: 19px; font-variant-numeric: tabular-nums; }
+.hm-state { color: #d7e0d9; font-size: 12.5px; line-height: 1.45; }
+.hm-state strong { color: #f4f7f4; }
+.hm-legend { display: flex; flex-wrap: wrap; gap: 7px 12px; align-items: center; margin-top: 16px; color: #cbd7cf; font-size: 11px; }
+.hm-legend-title { font-weight: 700; color: #e2ebe5; }
+.hm-legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.hm-swatch { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(255,255,255,.25); }
+.hm-note { margin: 14px 0 0; color: #bcc9bf; font-size: 11.5px; line-height: 1.6; }
+.hm-note a { color: #ffd0a4; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 700px) {
+  .hm-layout { grid-template-columns: 1fr; gap: 16px; }
+  .hm-map-wrap svg { max-height: 380px; }
+  .hm-live-link { width: 100%; }
+}
+
