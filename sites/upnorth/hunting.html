@@ -281,6 +281,19 @@
     }
     .verified b { color: #b8c4d0; }
 
+    /* ── Firearm opener notice (automatically removed Dec. 1, 2026) ── */
+    .opener-notice {
+      display: grid; grid-template-columns: auto 1fr; gap: 12px;
+      background: linear-gradient(135deg, rgba(255,122,26,.16), rgba(255,122,26,.07));
+      border: 1px solid rgba(255,122,26,.55); border-radius: 12px;
+      padding: 15px 18px; margin: 0 0 18px;
+    }
+    .opener-notice-icon { font-size: 25px; line-height: 1; padding-top: 2px; }
+    .opener-notice-title { color: var(--blaze); font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+    .opener-notice-copy { color: #c8d1dc; font-size: 12.5px; line-height: 1.6; }
+    .opener-notice-copy a { color: var(--blaze); font-weight: 700; }
+    .opener-notice-copy a:hover { text-decoration: underline; }
+
     /* ── Footer ── */
     footer { background: var(--surface); border-top: 1px solid var(--border); padding: 30px 20px 24px; margin-top: 40px; text-align: center; color: var(--muted); font-size: 12px; }
     footer a { color: var(--accent); }
@@ -380,6 +393,30 @@
   <p class="section-lead" id="today-lead">Loading live conditions…</p>
 
   <div id="alert-strip" class="alert-strip"></div>
+
+  <aside class="opener-notice" id="firearm-opener-notice" aria-label="Michigan firearm deer season reminder">
+    <div class="opener-notice-icon" aria-hidden="true">🦌</div>
+    <div>
+      <div class="opener-notice-title">Regular firearm season begins November 15</div>
+      <div class="opener-notice-copy">
+        Michigan's quiet period ends November 14, and regular firearm deer season runs November 15–30.
+        Hunter-orange and firearm-season rules apply. Report a successful harvest within 72 hours or before
+        transferring possession, whichever comes first.
+        <a href="https://www.michigan.gov/dnr/managing-resources/laws/regulations/deer" target="_blank" rel="noopener">Review the official DNR rules →</a>
+        &nbsp;·&nbsp;
+        <a href="https://www.mdnr-elicense.com/HarvestReportSummary" target="_blank" rel="noopener">View current reported harvest totals →</a>
+      </div>
+    </div>
+  </aside>
+  <script>
+    (() => {
+      const notice = document.getElementById('firearm-opener-notice');
+      const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).formatToParts(new Date()).filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+      if (`${parts.year}-${parts.month}-${parts.day}` >= '2026-12-01') notice.remove();
+    })();
+  </script>
 
   <div class="light-card">
     <div class="light-main">

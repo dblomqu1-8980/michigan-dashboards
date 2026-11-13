@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ═══ SEO ═══ -->
-  <title>Northern Michigan Fall Colors, Cider Mills &amp; Orchards — Live Peak Estimate | Up North Dashboard</title>
-  <meta name="description" content="When Up North fall color peaks, the scenic drives worth planning around it, and 9 curated Northern Michigan cider mills, orchards and fall farms — Pond Hill, Knaebe's, Friske, Royal Farms, King Orchards, Jacob's Farm and more." />
+  <title>Northern Michigan Fall Colors: Peak Guide, Cider Mills &amp; Orchards | Up North Dashboard</title>
+  <meta name="description" content="Plan a Northern Michigan fall color trip with seasonal peak guidance, eight scenic drives and nine curated cider mills, orchards and fall farms." />
   <meta name="keywords" content="Northern Michigan fall colors, Up North fall color peak, Tunnel of Trees fall color, Michigan cider mills, Northern Michigan orchards, Pond Hill Farm, Knaebe's Apple Farm, Friske Farm Market, King Orchards, Jacob's Farm Traverse City, U-pick apples Michigan, cider donuts Traverse City" />
   <meta name="author" content="Up North Dashboard" />
   <link rel="canonical" href="https://upnorthdashboard.com/fall.html" />
 
   <!-- OpenGraph / Twitter -->
   <meta property="og:title" content="Northern Michigan Fall Colors, Cider Mills & Orchards" />
-  <meta property="og:description" content="A live peak-color estimate for three Up North bands, the best fall drives, and 9 curated cider mills, orchards and fall farms paired to the routes they sit on." />
+  <meta property="og:description" content="Seasonal peak guidance for three Northern Michigan color bands, eight scenic drives and nine curated cider mills, orchards and fall farms." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://upnorthdashboard.com/fall.html" />
   <meta property="og:site_name" content="Up North Dashboard" />
@@ -331,16 +331,16 @@
     <a href="/#cameras">Cameras</a>
   </nav>
   <div class="hdr-right">
-    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="live-badge" style="color:var(--maple);"><div class="live-dot" style="background:var(--maple);animation:none;"></div>SEASONAL GUIDE</div>
   </div>
 </header>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-eyebrow">Up North Fall · Color, Cider &amp; Orchards</div>
+    <div class="hero-eyebrow">Up North Fall · Seasonal Color, Cider &amp; Orchards</div>
     <h1 class="hero-title">Northern Michigan Fall Colors<br>&amp; Cider Mill Country</h1>
-    <p class="hero-subtitle">A live, cold-night-adjusted peak color estimate for three Up North bands — plus the scenic drives worth planning around, and nine curated cider mills, orchards and fall farms paired to the routes they actually sit on.</p>
+    <p class="hero-subtitle">The 2026 color season is complete; live tracking returns in September 2027. Use this year-round guide to plan around three color bands, eight scenic drives, and nine curated cider mills, orchards and fall farms.</p>
     <div class="hero-meta">
       <span>🍁 3 Color Bands</span>
       <span>🚗 8 Scenic Drives</span>
@@ -355,9 +355,9 @@
   <div class="season-banner">
     <div class="season-icon" id="season-icon">🍁</div>
     <div class="season-body">
-      <div class="season-lbl">Up North Fall Color Right Now</div>
-      <div class="season-headline" id="season-headline">Loading the color model…</div>
-      <div class="season-detail"  id="season-detail">Pulling 14 days of overnight-low history from Open-Meteo for three regional sample points.</div>
+      <div class="season-lbl">Northern Michigan Fall Color</div>
+      <div class="season-headline" id="season-headline">2026 season complete</div>
+      <div class="season-detail"  id="season-detail">Live tracking returns in September 2027. Scenic drives, cider mills, orchards and planning information remain available year-round.</div>
     </div>
   </div>
 
@@ -459,7 +459,7 @@
   <div style="margin-top:34px;">
     <div class="section-eyebrow">Fall Color Tours</div>
     <h2 class="section-title">Drives worth planning a weekend around</h2>
-    <p class="section-lead">Each route carries the live color estimate for its band. The last weekend of September through the second weekend of October is the busiest stretch of the Up North year — start early, and expect the Tunnel of Trees and Pierce Stocking to be slow going by mid-morning.</p>
+    <p class="section-lead">Each route is paired with its typical peak window. The last weekend of September through the second weekend of October is the busiest stretch of the Up North year — start early, and expect the Tunnel of Trees and Pierce Stocking to be slow going by mid-morning.</p>
     <div class="rt-grid" id="rt-grid"></div>
   </div>
 
@@ -999,6 +999,17 @@ function renderBanner(bands) {
   const head = document.getElementById('season-headline');
   const det  = document.getElementById('season-detail');
 
+  const easternParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+  const easternDate = `${easternParts.year}-${easternParts.month}-${easternParts.day}`;
+  if (easternDate >= '2026-11-01' && easternDate < '2027-09-01') {
+    icon.textContent = '🍂';
+    head.textContent = '2026 season complete';
+    det.textContent = 'Live tracking returns in September 2027. Scenic drives, cider mills, orchards and planning information remain available year-round.';
+    return;
+  }
+
   const live = bands.filter(b => b.ok);
   if (!live.length) {
     icon.textContent = '🍁';
@@ -1022,8 +1033,8 @@ function renderBanner(bands) {
       + `${fmtDate(first.windowA)} – ${fmtDate(first.windowB)}. Orchards and farm markets open ahead of the color — most start in late August.`;
   } else if (allDone) {
     icon.textContent = '❄️';
-    head.textContent = 'Season over — leaves are down';
-    det.textContent = 'The color model resets next September. Snow and winter coverage runs on the main dashboard.';
+    head.textContent = 'Color season complete';
+    det.textContent = 'Live tracking returns next September. Snow and winter coverage runs on the main dashboard.';
   } else if (anyPeak) {
     const peaking = live.filter(b => b.status === 'PEAK COLOR').map(b => b.label);
     icon.textContent = '🍁';
