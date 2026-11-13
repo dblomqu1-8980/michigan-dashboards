@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ═══ SEO ═══ -->
-  <title>UP Fall Colors 2026 — Live Peak Color Estimate, Scenic Drives, Orchards &amp; Cider | 906 Travel</title>
-  <meta name="description" content="When Upper Peninsula fall color peaks, where to drive for it, and which UP orchards and farm stands have apples and fresh cider. Live cold-night-adjusted color estimate for the Keweenaw, western, central and eastern UP." />
+  <title>UP Fall Colors: Peak Guide, Scenic Drives &amp; Cider | 906 Dashboard</title>
+  <meta name="description" content="Plan an Upper Peninsula fall color trip with seasonal peak guidance, eight scenic drives, orchards, farm stands and fresh-cider stops." />
   <meta name="keywords" content="UP fall colors, Upper Peninsula fall color, Michigan fall color peak, Brockway Mountain fall color, Black River Byway, Tahquamenon fall, UP apple orchards, UP cider, Starz Orchard, fall color tour Michigan" />
   <meta name="author" content="906 Travel Dashboard" />
   <link rel="canonical" href="https://906dashboard.com/fall.html" />
 
   <!-- OpenGraph / Twitter -->
-  <meta property="og:title" content="UP Fall Colors — Live Peak Estimate, Scenic Drives & Cider Stops" />
-  <meta property="og:description" content="A live, cold-night-adjusted peak color estimate for four UP color bands, the best fall drives, and the orchards and farm stands actually selling apples and cider." />
+  <meta property="og:title" content="UP Fall Colors — Peak Guide, Scenic Drives & Cider Stops" />
+  <meta property="og:description" content="Seasonal peak guidance for four UP color bands, eight scenic drives, and Upper Peninsula orchards and cider stops." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://906dashboard.com/fall.html" />
   <meta property="og:image" content="https://906dashboard.com/og-banner.jpg" />
@@ -338,16 +338,16 @@
     <a href="/#cameras">Cameras</a>
   </nav>
   <div class="hdr-right">
-    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="live-badge" style="color:var(--maple);"><div class="live-dot" style="background:var(--maple);animation:none;"></div>SEASONAL GUIDE</div>
   </div>
 </header>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-eyebrow">UP Fall Color · Live Peak Estimate</div>
+    <div class="hero-eyebrow">UP Fall Color · Seasonal Peak Guide</div>
     <h1 class="hero-title">Upper Peninsula Fall Colors</h1>
-    <p class="hero-subtitle">The UP turns before the rest of Michigan does. Here's a live, cold-night-adjusted peak estimate for four color bands, the drives worth building a weekend around, and the handful of UP orchards and farm stands actually selling apples and fresh cider.</p>
+    <p class="hero-subtitle">The 2026 color season is complete; live tracking returns in September 2027. Use this year-round guide to plan around four color bands, eight scenic drives, and UP orchards and farm stands selling apples and fresh cider.</p>
     <div class="hero-meta">
       <span>🍁 4 Color Bands</span>
       <span>🚗 8 Scenic Drives</span>
@@ -362,9 +362,9 @@
   <div class="season-banner">
     <div class="season-icon" id="season-icon">🍁</div>
     <div class="season-body">
-      <div class="season-lbl">UP Fall Color Right Now</div>
-      <div class="season-headline" id="season-headline">Loading the color model…</div>
-      <div class="season-detail"  id="season-detail">Pulling 14 days of overnight-low history from Open-Meteo for four UP sample points.</div>
+      <div class="season-lbl">Upper Peninsula Fall Color</div>
+      <div class="season-headline" id="season-headline">2026 season complete</div>
+      <div class="season-detail"  id="season-detail">Live tracking returns in September 2027. Scenic drives, orchards and planning information remain available year-round.</div>
     </div>
   </div>
 
@@ -390,7 +390,7 @@
   <div style="margin-top:34px;">
     <div class="section-eyebrow">Fall Color Tours</div>
     <h2 class="section-title">Drives worth planning a weekend around</h2>
-    <p class="section-lead">Each route below carries the live color estimate for its band. Weekends from about the third week of September through the first week of October are the busiest of the UP's year outside of snowmobile season — book lodging early and start drives before 10am if you want the pullouts to yourself.</p>
+    <p class="section-lead">Each route below is paired with its typical peak window. Weekends from about the third week of September through the first week of October are the busiest of the UP's year outside of snowmobile season — book lodging early and start drives before 10am if you want the pullouts to yourself.</p>
     <div class="rt-grid" id="rt-grid"></div>
   </div>
 
@@ -897,6 +897,17 @@ function renderBanner(bands) {
   const head = document.getElementById('season-headline');
   const det  = document.getElementById('season-detail');
 
+  const easternParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Detroit', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+  const easternDate = `${easternParts.year}-${easternParts.month}-${easternParts.day}`;
+  if (easternDate >= '2026-11-01' && easternDate < '2027-09-01') {
+    icon.textContent = '🍂';
+    head.textContent = '2026 season complete';
+    det.textContent = 'Live tracking returns in September 2027. Scenic drives, orchards and planning information remain available year-round.';
+    return;
+  }
+
   const live = bands.filter(b => b.ok);
   if (!live.length) {
     icon.textContent = '🍁';
@@ -921,8 +932,8 @@ function renderBanner(bands) {
       + `${fmtDate(first.windowA)} – ${fmtDate(first.windowB)}.`;
   } else if (allDone) {
     icon.textContent = '❄️';
-    head.textContent = 'Season over — leaves are down';
-    det.textContent = 'The color model resets next September. Snow season coverage runs on the main dashboard.';
+    head.textContent = 'Color season complete';
+    det.textContent = 'Live tracking returns next September. Snow-season coverage runs on the main dashboard.';
   } else if (anyPeak) {
     const peaking = live.filter(b => b.status === 'PEAK COLOR').map(b => b.label);
     icon.textContent = '🍁';
