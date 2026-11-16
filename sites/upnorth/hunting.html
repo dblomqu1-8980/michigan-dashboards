@@ -324,6 +324,20 @@
       .plan-section { padding: 18px; }
       .picker select { width: 100%; min-width: 0; }
     }
+
+    .hunt-nav, .hunt-filters, .hunt-resources { display:flex; flex-wrap:wrap; gap:8px; }
+    .hunt-nav { margin:16px 0 24px; }
+    .hunt-nav a, .hunt-filters button, .hunt-share, .hunt-resources a { border:1px solid var(--border, #ccd5ca); border-radius:8px; padding:9px 12px; background:var(--surface, #172129); color:var(--text, #f2f4ed); font:inherit; font-size:13px; font-weight:700; text-decoration:none; cursor:pointer; }
+    .hunt-nav a:hover, .hunt-filters button:hover, .hunt-share:hover, .hunt-resources a:hover { outline:2px solid #55805a; }
+    .hunt-filters { margin:12px 0 16px; }
+    .hunt-filters button[aria-pressed="true"] { background:#315e3b; color:#fff; border-color:#315e3b; }
+    .hunt-share { margin-top:9px; }
+    .hunt-share-status { display:block; font-size:12px; margin-top:5px; }
+    .hunt-local { margin-top:24px; padding:18px; border:1px solid var(--border, #ccd5ca); border-radius:12px; }
+    .hunt-local p { margin:8px 0 14px; font-size:13px; line-height:1.5; }
+    .hunt-resources a { flex:1 1 180px; }
+    .hunt-share-url { display:none; width:100%; margin-top:8px; padding:8px; }
+    [id] { scroll-margin-top: 85px; }
   </style>
   <link rel="stylesheet" href="/harvest-map.css" />
   <script defer src="/_vercel/insights/script.js"></script>
@@ -381,12 +395,16 @@
       <div class="picker-lbl">Your County</div>
       <select id="county-select" aria-label="Select your Northern Michigan county"></select>
     </div>
+    <div><button class="hunt-share" id="hunt-share" type="button">Share this county</button><span class="hunt-share-status" id="hunt-share-status" role="status" aria-live="polite"></span><input class="hunt-share-url" id="hunt-share-url" aria-label="County link to copy" readonly></div>
     <div class="picker-note" id="picker-note">
       Everything below re-computes for the county you pick — legal hours, weather, road incidents, antlerless
       limits and disease-testing priority. Your choice is saved on this device.
     </div>
   </div>
 
+  <nav class="hunt-nav" aria-label="Hunting page sections">
+    <a href="#today-title">Today</a><a href="#seasons" data-hunt-category="deer">Deer</a><a href="#seasons" data-hunt-category="small">Small game</a><a href="#rules">Rules</a><a href="#access">Public land</a><a href="#nearby">Nearby resources</a><a href="#after-the-shot">After the shot</a><a href="#season-so-far">Harvest map</a>
+  </nav>
   <!-- ═══ 1. HUNTING TODAY ═══ -->
   <div class="section-eyebrow">Hunting Today</div>
   <h2 class="section-title" id="today-title">Legal light &amp; conditions</h2>
@@ -477,10 +495,13 @@
   </div>
 
   <!-- ═══ SEASONS ═══ -->
-  <div style="margin-top:32px;">
+  <div id="seasons" style="margin-top:32px;">
     <div class="section-eyebrow">Open Seasons</div>
     <h2 class="section-title">What's in season Up North right now</h2>
     <p class="section-lead">2026–27 dates as published in the DNR's hunting season calendar. Bear, elk, turkey and waterfowl are unit- or zone-specific — the dates shown are the ones that apply to the northern Lower Peninsula.</p>
+    <div class="hunt-filters" role="group" aria-label="Filter seasons by species">
+      <button type="button" data-season-filter="all" aria-pressed="true">All</button><button type="button" data-season-filter="deer" aria-pressed="false">Deer</button><button type="button" data-season-filter="bear" aria-pressed="false">Bear</button><button type="button" data-season-filter="turkey" aria-pressed="false">Turkey</button><button type="button" data-season-filter="waterfowl" aria-pressed="false">Waterfowl</button><button type="button" data-season-filter="small" aria-pressed="false">Small game &amp; other</button>
+    </div>
     <div class="season-grid" id="season-grid"></div>
   </div>
 
@@ -504,6 +525,21 @@
   </div>
 
   <!-- ═══ 3. ACCESS & ROADS ═══ -->
+  <section class="hunt-local" id="nearby" aria-labelledby="nearby-title">
+    <div class="section-eyebrow">Near Your Hunting Area</div>
+    <h2 class="section-title" id="nearby-title">Local resources for your county</h2>
+    <p>Search near your selected county. Call businesses ahead to confirm hours, availability and whether they accept deer from your hunting area.</p>
+    <div class="hunt-resources">
+      <a id="near-processors" target="_blank" rel="noopener noreferrer">Deer processors ↗</a>
+      <a id="near-taxidermists" target="_blank" rel="noopener noreferrer">Taxidermists ↗</a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/deer/deer-stations-disease-sample" target="_blank" rel="noopener noreferrer">DNR check stations &amp; drop boxes ↗</a>
+      <a href="https://www.michigan.gov/dnr/things-to-do/hunting/where" target="_blank" rel="noopener noreferrer">DNR public-land &amp; HAP maps ↗</a>
+      <a id="near-lodging" target="_blank" rel="noopener noreferrer">Lodging ↗</a>
+      <a id="near-supplies" target="_blank" rel="noopener noreferrer">Hunting supplies ↗</a>
+    </div>
+    <p>Search results are not endorsements. Check access rules and confirm station hours before you travel.</p>
+  </section>
+
   <div class="plan-section" id="access">
     <div class="section-eyebrow">Access &amp; Road Conditions</div>
     <h2 class="section-title">Getting in — and back out</h2>
@@ -1277,7 +1313,22 @@ function renderAlerts(data) {
 }
 
 // ═══ RENDER: seasons ═══
+let seasonFilter = 'all';
+let latestSeasonDate = null;
+function seasonCategory(s) {
+  if (s.src === DEER_SRC) return 'deer';
+  if (s.src === BEAR_SRC) return 'bear';
+  if (s.src === TURK_SRC) return 'turkey';
+  if (s.src === WF_SRC) return 'waterfowl';
+  return 'small';
+}
+function setSeasonFilter(value) {
+  seasonFilter = value;
+  document.querySelectorAll('[data-season-filter]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.seasonFilter === value)));
+  if (latestSeasonDate) renderSeasons(latestSeasonDate);
+}
 function renderSeasons(todayISO) {
+  latestSeasonDate = todayISO;
   const enriched = SEASONS.map(s => {
     const open = isOpenOn(s.ranges, todayISO);
     const next = open ? null : nextOpening(s.ranges, todayISO);
@@ -1291,7 +1342,7 @@ function renderSeasons(todayISO) {
     return 0;
   });
 
-  document.getElementById('season-grid').innerHTML = enriched.map(s => {
+  document.getElementById('season-grid').innerHTML = enriched.filter(s => seasonFilter === 'all' || seasonCategory(s) === seasonFilter).map(s => {
     const soon = !s.open && s.days != null && s.days <= 30;
     const cls  = s.open ? 'open' : soon ? 'soon' : 'shut';
     const tag  = s.open ? '<span class="sn-tag open">Open now</span>'
@@ -1418,13 +1469,40 @@ async function loadCounty(county) {
 
   let saved = null;
   try { saved = localStorage.getItem(STORAGE_KEY); } catch(e) {}
-  const start = COUNTIES.find(c => c.name === saved) || COUNTIES.find(c => c.name === 'Otsego');
+  const shared = new URLSearchParams(location.search).get('county');
+  const start = COUNTIES.find(c => c.name.toLowerCase() === (shared || '').toLowerCase()) || COUNTIES.find(c => c.name === saved) || COUNTIES.find(c => c.name === 'Otsego');
   sel.value = start.name;
+  function updateLocal(c) {
+    document.getElementById('nearby-title').textContent = 'Local resources near ' + c.name + ' County';
+    const terms = { 'near-processors':'deer processors', 'near-taxidermists':'taxidermists', 'near-lodging':'lodging', 'near-supplies':'hunting supplies' };
+    Object.entries(terms).forEach(([id, term]) => {
+      document.getElementById(id).href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(term + ' near ' + c.name + ' County Michigan');
+    });
+  }
+  document.querySelectorAll('[data-season-filter]').forEach(b => b.addEventListener('click', () => setSeasonFilter(b.dataset.seasonFilter)));
+  document.querySelectorAll('[data-hunt-category]').forEach(a => a.addEventListener('click', () => setSeasonFilter(a.dataset.huntCategory)));
+  document.getElementById('hunt-share').addEventListener('click', async () => {
+    const url = new URL(location.origin + location.pathname);
+    url.searchParams.set('county', sel.value);
+    const status = document.getElementById('hunt-share-status');
+    const field = document.getElementById('hunt-share-url');
+    field.style.display = 'none';
+    try {
+      if (navigator.share) { await navigator.share({ title: sel.value + ' County hunting dashboard', url: url.href }); status.textContent = 'Share menu opened.'; }
+      else if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url.href); status.textContent = 'County link copied.'; }
+      else { field.value = url.href; field.style.display = 'block'; field.select(); status.textContent = 'Copy the selected county link below.'; }
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      field.value = url.href; field.style.display = 'block'; field.select(); status.textContent = 'Copy the selected county link below.';
+    }
+  });
+  updateLocal(start);
 
   sel.addEventListener('change', () => {
     const c = COUNTIES.find(x => x.name === sel.value);
     if (!c) return;
     try { localStorage.setItem(STORAGE_KEY, c.name); } catch(e) {}
+    updateLocal(c);
     loadCounty(c);
   });
 
@@ -1435,4 +1513,5 @@ async function loadCounty(county) {
 <script src="/harvest-map.js" defer></script>
 </body>
 </html>
+
 
