@@ -56,12 +56,19 @@
     article, aside { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
     article { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
     article h2, aside h2 { font-size: 1.25rem; }
-    article a { margin-top: auto; }
+    .notices { margin: 16px 0 26px; border-left: 4px solid #e2ad61; }
+    .notices p { margin: 7px 0; }
+    .metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; width: 100%; }
+    .metrics div { border-top: 1px solid var(--border); padding-top: 8px; }
+    .metrics dt, .weather-time { color: #afbecd; font-size: .84rem; }
+    .metrics dd { font-size: 1.38rem; font-weight: 700; }
+    .sources { display: grid; gap: 6px; margin-top: auto; }
     main a, footer a { color: #9bd5ff; text-decoration: underline; text-underline-offset: 3px; }
     .links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 12px; }
     .stamp { font-size: .88rem; }
     @media(max-width: 800px) { header { position: static; flex-wrap: wrap; gap: 10px; } .hdr-nav { justify-content: flex-start; } }
   </style>
+  <script defer src="/sled-weather.js"></script>
 </head>
 <body>
 <header>
@@ -91,25 +98,56 @@
 <main>
   <p class="region">Upper Peninsula</p>
   <h1>Snowmobile trail reports</h1>
-  <p>Compare local reports before you load the trailer. These summaries were reviewed November 25, 2026. Open the source for updates since the date shown.</p>
+  <aside class="notices" aria-labelledby="closures">
+    <h2 id="closures">Closures and detours</h2>
+    <p><strong>Keweenaw, winter 2026–27.</strong> The club announced season-long closures on trails 120, 121, 124 and 132W. Its November 25 notice also listed the Portage Lake Lift Bridge closed to sleds pending suitable canal conditions. <a href="https://www.keweenawsnowmobileclub.com/trail-conditions/">Check the club’s latest notice</a>.</p>
+    <div class="links"><a href="https://www.michigan.gov/dnr/about/newsroom/closures">Michigan DNR closure notices</a>
+    <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where">State snowmobile trail map</a></div>
+  </aside>
+  <h2>Compare riding areas</h2>
+  <p>Snow depth is a town-level model estimate. Grooming reports describe the trail itself. Weather from <a href="https://open-meteo.com/">Open-Meteo</a> refreshes every 15 minutes. Local reports reviewed November 25, 2026.</p>
   <section class="reports" aria-label="Regional reports">
-    <article>
+    <article data-lat="46.41" data-lon="-86.65">
       <h2>Munising / Alger County</h2>
-      <p class="stamp">Club report · <time datetime="2026-11-18">Nov 18, 2026</time></p>
-      <p>Alger County SORVA reported no snowfall and rated its routes poor. Its report lists individual segments, including the Christmas and Wetmore approaches.</p>
-      <a href="https://www.algersorva.com/snowmobile-trail-report/">Alger County SORVA →</a>
+      <dl class="metrics">
+        <div><dt>Estimated snow depth</dt><dd data-depth>—</dd></div>
+        <div><dt>Tomorrow’s snowfall</dt><dd data-forecast>—</dd></div>
+      </dl>
+      <p class="weather-time">Munising · <span data-weather-time>Weather requires a connection and JavaScript.</span></p>
+      <h3>Grooming update</h3>
+      <p class="stamp">Club report · <time data-age datetime="2026-11-18">Nov 18, 2026</time><span></span></p>
+      <p>Alger County SORVA reported poor conditions and no snowfall. The club gave no grooming date.</p>
+      <div class="sources"><a href="https://www.algersorva.com/snowmobile-trail-report/">Alger County SORVA →</a>
+        <a href="https://www.exploremunising.com/web-cams/">Wetmore M-28 road camera →</a>
+      </div>
     </article>
-    <article>
+    <article data-lat="46.82" data-lon="-87.73">
       <h2>Marquette / Big Bay</h2>
-      <p class="stamp">Last season · last groomed · <time datetime="2026-03-28">Mar 28, 2026</time></p>
-      <p>The Big Bay/550 entry still lists a grooming run from last winter. Check Travel Marquette for a new report before planning the ride from Big Bay to Marquette.</p>
-      <a href="https://www.travelmarquette.com/things-to-do/winter-activities/trail-conditions/">Travel Marquette →</a>
+      <dl class="metrics">
+        <div><dt>Estimated snow depth</dt><dd data-depth>—</dd></div>
+        <div><dt>Tomorrow’s snowfall</dt><dd data-forecast>—</dd></div>
+      </dl>
+      <p class="weather-time">Big Bay · <span data-weather-time>Weather requires a connection and JavaScript.</span></p>
+      <h3>Grooming update</h3>
+      <p class="stamp">Last season · last groomed · <time data-age datetime="2026-03-28">Mar 28, 2026</time><span></span></p>
+      <p>Big Bay/550 last listed a grooming run on March 28, last season.</p>
+      <div class="sources"><a href="https://www.travelmarquette.com/things-to-do/winter-activities/trail-conditions/">Travel Marquette →</a>
+        <a href="https://bigbay550snowmobileclub.com/">Big Bay town camera at Cram’s →</a>
+      </div>
     </article>
-    <article>
+    <article data-lat="47.12" data-lon="-88.57">
       <h2>Houghton / Keweenaw</h2>
-      <p class="stamp">Club report · <time datetime="2026-11-25">Nov 25, 2026</time></p>
-      <p>The club was waiting for a snow base and reported the Portage Lake Lift Bridge closed to sleds. It also announced full-season closures on trails 120, 121, 124 and 132W for winter 2026–27.</p>
-      <a href="https://www.keweenawsnowmobileclub.com/trail-conditions/">Keweenaw Snowmobile Club →</a>
+      <dl class="metrics">
+        <div><dt>Estimated snow depth</dt><dd data-depth>—</dd></div>
+        <div><dt>Tomorrow’s snowfall</dt><dd data-forecast>—</dd></div>
+      </dl>
+      <p class="weather-time">Houghton · <span data-weather-time>Weather requires a connection and JavaScript.</span></p>
+      <h3>Grooming update</h3>
+      <p class="stamp">Club report · <time data-age datetime="2026-11-25">Nov 25, 2026</time><span></span></p>
+      <p>The club was waiting for a snow base. No grooming run was dated.</p>
+      <div class="sources"><a href="https://www.keweenawsnowmobileclub.com/trail-conditions/">Keweenaw Snowmobile Club →</a>
+        <a href="https://www.keweenawsnowmobileclub.com/calumet-trail-cam/">Calumet Trail 17 camera →</a>
+      </div>
     </article>
   </section>
   <aside>
