@@ -238,3 +238,7 @@
 @media (max-width: 340px) {
   .status-bar { grid-template-columns: 1fr; }
 }
+
+.sled-promo { margin: 18px 0; padding: 20px 24px; border-left: 4px solid #56b3f0; }
+.sled-promo h2 { font-size: 1.35rem; }
+.sled-promo strong { color: #8dd1ff; }

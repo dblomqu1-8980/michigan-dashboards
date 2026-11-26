@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upper Peninsula Snowmobile Trail Reports | 906dashboard.com</title>
+  <meta name="description" content="Compare dated Upper Peninsula snowmobile trail reports, check closure notices and find trail maps and trailer parking.">
+  <link rel="canonical" href="https://906dashboard.com/snowmobiling.html">
+  <script defer src="/ga4.js"></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    :root {
+      --bg:      #0d1117;
+      --surface: #161b22;
+      --surf2:   #1c2230;
+      --border:  #2a3441;
+      --accent:  #1a6fc4;
+      --text:    #e6edf3;
+      --muted:   #7d8996;
+      --green:   #22c55e;
+      --yellow:  #eab308;
+      --red:     #ef4444;
+      --blue:    #3b82f6;
+      --orange:  #f97316;
+      --frost:   #56b3f0;   /* ice blue — this page's accent */
+      --pine:    #2e9d63;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 62px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header (matches main site) ── */
+    header { background: rgba(13,17,23,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 38px; height: 38px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #fff; }
+    .logo-text  { font-size: 20px; font-weight: 700; letter-spacing: 1px; }
+    .logo-sub   { font-size: 11px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+    .hdr-right  { display: flex; align-items: center; gap: 18px; }
+    .hdr-nav    { display: flex; gap: 4px; }
+    .hdr-nav a  { color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 5px; transition: color .15s, background .15s; }
+    .hdr-nav a:hover, .hdr-nav a.active { color: var(--text); background: var(--surf2); }
+
+    /* Skiing makes this a 12-item nav. Same treatment the Lake Superior link
+       forced: pin the wordmark, keep labels whole, let the row wrap rather
+       than squeeze the logo and break labels mid-phrase. */
+    .logo { flex-shrink: 0; }
+    .logo-text, .logo-sub { white-space: nowrap; }
+    .hdr-nav { flex-wrap: wrap; justify-content: flex-end; }
+    .hdr-nav a { white-space: nowrap; padding: 4px 8px; }
+
+    main, footer { max-width: 1160px; margin: auto; padding: 26px 20px; }
+    .region, .stamp { color: #a6dfff; font-weight: 650; }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.05; margin: 10px 0 16px; }
+    .reports { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); gap: 14px; margin: 26px 0; }
+    article, aside { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+    article { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+    article h2, aside h2 { font-size: 1.25rem; }
+    article a { margin-top: auto; }
+    main a, footer a { color: #9bd5ff; text-decoration: underline; text-underline-offset: 3px; }
+    .links { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 12px; }
+    .stamp { font-size: .88rem; }
+    @media(max-width: 800px) { header { position: static; flex-wrap: wrap; gap: 10px; } .hdr-nav { justify-content: flex-start; } }
+  </style>
+</head>
+<body>
+<header>
+  <a href="/" class="logo" style="text-decoration:none;color:inherit;">
+    <div class="logo-icon">906</div>
+    <div>
+      <div class="logo-text">UP DASHBOARD</div>
+      <div class="logo-sub">Upper Peninsula Michigan</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <a href="/#today">Today</a>
+    <a href="/#trip-planning">Plan a Trip</a>
+    <a href="/#conditions">Conditions</a>
+    <a href="/#water">Lake Superior</a>
+    <a href="/#oredock">Ore Dock</a>
+    <a href="waterfalls.html">Waterfalls</a>
+    <a href="trails.html">Trails</a>
+    <a href="ski.html">Skiing</a>
+    <a href="snowmobiling.html" class="active" aria-current="page">Snowmobiling</a>
+    <a href="hunting.html">Hunting</a>
+    <a href="fall.html">Fall Colors</a>
+    <a href="aurora.html">Aurora</a>
+    <a href="/#cameras">Cameras</a>
+  </nav>
+</header>
+<main>
+  <p class="region">Upper Peninsula</p>
+  <h1>Snowmobile trail reports</h1>
+  <p>Compare local reports before you load the trailer. These summaries were reviewed November 25, 2026. Open the source for updates since the date shown.</p>
+  <section class="reports" aria-label="Regional reports">
+    <article>
+      <h2>Munising / Alger County</h2>
+      <p class="stamp">Club report · <time datetime="2026-11-18">Nov 18, 2026</time></p>
+      <p>Alger County SORVA reported no snowfall and rated its routes poor. Its report lists individual segments, including the Christmas and Wetmore approaches.</p>
+      <a href="https://www.algersorva.com/snowmobile-trail-report/">Alger County SORVA →</a>
+    </article>
+    <article>
+      <h2>Marquette / Big Bay</h2>
+      <p class="stamp">Last season · last groomed · <time datetime="2026-03-28">Mar 28, 2026</time></p>
+      <p>The Big Bay/550 entry still lists a grooming run from last winter. Check Travel Marquette for a new report before planning the ride from Big Bay to Marquette.</p>
+      <a href="https://www.travelmarquette.com/things-to-do/winter-activities/trail-conditions/">Travel Marquette →</a>
+    </article>
+    <article>
+      <h2>Houghton / Keweenaw</h2>
+      <p class="stamp">Club report · <time datetime="2026-11-25">Nov 25, 2026</time></p>
+      <p>The club was waiting for a snow base and reported the Portage Lake Lift Bridge closed to sleds. It also announced full-season closures on trails 120, 121, 124 and 132W for winter 2026–27.</p>
+      <a href="https://www.keweenawsnowmobileclub.com/trail-conditions/">Keweenaw Snowmobile Club →</a>
+    </article>
+  </section>
+  <aside>
+    <h2>Plan your ride</h2>
+    <div class="links">
+      <a href="https://www.michigan.gov/dnr/things-to-do/snowmobiling/where">DNR trail map, closures and parking</a>
+      <a href="/#conditions">Weather and road conditions</a>
+      <a href="/#cameras">Road cameras</a>
+    </div>
+  </aside>
+</main>
+<footer><a href="https://upnorthdashboard.com/snowmobiling.html">Northern Lower Michigan trail reports</a> · <a href="/">Back to the dashboard</a></footer>
+</body>
+</html>
