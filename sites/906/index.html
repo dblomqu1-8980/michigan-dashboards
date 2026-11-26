@@ -1133,7 +1133,10 @@
               <div class="card-title">🥾 UP Trail Conditions &amp; Resources — All Seasons</div>
               <span class="badge bg-muted" id="trails-badge">DNR Live Notices</span>
             </div>
-            <div class="card-body" id="trails-body"></div>
+            <div class="card-body">
+              <p><a href="https://www.michigan.gov/dnr/about/newsroom/closures">Official Michigan DNR closure notices</a></p>
+              <div id="trails-body"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2387,12 +2390,15 @@ async function fetchTrailClosures(){
       +`?where=Year%3D${yr}&outFields=Comments%2CCounty%2CSnowmobile_Name%2CBike_Name%2CHiking_Name%2CEditDate`
       +`&geometry=${bbox}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&f=json`;
     const res=await fetch(url);
+    if(!res.ok)throw new Error('Trail feed HTTP '+res.status);
     const d=await res.json();
+    if(d?.error||!Array.isArray(d?.features))throw new Error('Invalid DNR trail feed response');
     const seen=new Set(); const closures=[];
     const month=new Date().getMonth();            // 0=Jan
     const isSnowSeason=month>=11||month<=2;       // Dec–Mar
-    for(const f of(d.features||[])){
-      const a=f.attributes;
+    for(const f of d.features){
+      const a=f?.attributes;
+      if(!a||typeof a!=='object'||Array.isArray(a))throw new Error('Invalid DNR trail notice');
       const comment=(a.Comments||'').trim();
       // Hide stale snowmobile-only notices outside snow season (>60 days since DNR last edit)
       const edit=a.EditDate?new Date(a.EditDate):null;
@@ -2423,12 +2429,14 @@ async function fetchTrailClosures(){
 
 function renderTrails(data){
   const badge=document.getElementById('trails-badge'),body=document.getElementById('trails-body');
-  if(!data?.ok){body.innerHTML=`<div class="err-msg">${esc(data?.error||'Unavailable')}</div>`;return;}
-  const{closures}=data;
-  badge.textContent=closures.length?`${closures.length} UP notices`:'No active notices';
-  badge.className='badge '+(closures.some(c=>c.status==='closed')?'bg-red':closures.length?'bg-yellow':'bg-green');
+  const ok=data?.ok===true&&Array.isArray(data.closures);
+  const closures=ok?data.closures:[];
+  badge.textContent=!ok?'Live feed unavailable':closures.length?`${closures.length} UP notices`:'No records returned';
+  badge.className='badge '+(closures.some(c=>c.status==='closed')?'bg-red':closures.length?'bg-yellow':'bg-muted');
   const sLabel={open:'Open',closed:'Closed',rerouted:'Rerouted',caution:'Caution',modified:'Updated'};
-  const cHtml=closures.length
+  const cHtml=!ok
+    ?`<div class="err-msg">Live feed unavailable. Check the official DNR notices before heading out.</div>`
+    :closures.length
     ?`<div class="trail-closure-list">`+closures.map(c=>`
       <div class="trail-closure-item">
         <div class="tcl-status ${c.status}">${sLabel[c.status]||'Notice'}</div>
@@ -2438,7 +2446,7 @@ function renderTrails(data){
           <div class="tcl-comment">${esc(c.comment)}</div>
         </div>
       </div>`).join('')+`</div>`
-    :`<div style="color:var(--muted);font-size:13px;margin-bottom:14px;">✅ No active UP trail closure notices from DNR for ${new Date().getFullYear()}.</div>`;
+    :`<div style="color:var(--muted);font-size:13px;margin-bottom:14px;">No records returned by the live map. This does not confirm that trails are open.</div>`;
   body.innerHTML=cHtml+`<div class="trail-links-hdr">UP Trail Resources</div>
   <div class="trail-links-grid">
     <a href="trails.html" class="trail-link-card" style="border-color:var(--accent);"><div class="tlc-icon">🚵</div><div class="tlc-label">UP MTB Guide</div><div class="tlc-sub">Live rideability · 8 trail systems</div></a>
